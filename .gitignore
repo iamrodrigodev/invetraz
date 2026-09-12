@@ -37,3 +37,6 @@ Thumbs.db
 *.log
 .env
 .env.local
+
+# Credenciales de Google Cloud (No subir a GitHub)
+google-credentials.json
