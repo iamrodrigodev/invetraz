@@ -6,33 +6,25 @@ import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.ClassroomScopes;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ClienteClassroomConfig {
 
-    @Value("${app.google.credentials-json}")
-    private String credentialsJson;
-
     @Bean
     public Classroom googleClassroomClient() {
         try {
-            if (credentialsJson == null || credentialsJson.isBlank()) {
+            InputStream resourceStream = getClass().getResourceAsStream("/google-credentials.json");
+            if (resourceStream == null) {
                 throw new RuntimeException(
-                        "Falta la propiedad app.google.credentials-json en el application.yml");
+                        "Falta el archivo google-credentials.json en src/main/resources");
             }
 
-            InputStream credentialsStream =
-                    new ByteArrayInputStream(credentialsJson.getBytes(StandardCharsets.UTF_8));
-
             GoogleCredentials credentials =
-                    GoogleCredentials.fromStream(credentialsStream)
+                    GoogleCredentials.fromStream(resourceStream)
                             .createScoped(Collections.singleton(ClassroomScopes.CLASSROOM_COURSES));
 
             return new Classroom.Builder(
