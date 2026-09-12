@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada;
+import pe.edu.ulasalle.sistemainvestigacion.enums.EstadoClase;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoArchivarClase;
 
 @Slf4j
@@ -18,7 +19,7 @@ public class ArchivarClaseImpl implements CasoUsoArchivarClase {
     @Override
     public void ejecutar(String idClassroom) {
         try {
-            Course cursoCambios = new Course().setCourseState("ARCHIVED");
+            Course cursoCambios = new Course().setCourseState(EstadoClase.ARCHIVED.name());
             clienteGoogle
                     .courses()
                     .patch(idClassroom, cursoCambios)
