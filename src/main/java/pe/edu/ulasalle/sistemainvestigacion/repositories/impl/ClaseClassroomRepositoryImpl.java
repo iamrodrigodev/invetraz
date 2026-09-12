@@ -66,7 +66,12 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
     @Override
     public List<ClaseClassroom> listarTodas() {
         try {
-            var response = clienteGoogle.courses().list().execute();
+            var response =
+                    clienteGoogle
+                            .courses()
+                            .list()
+                            .setFields("courses(id,name,courseState,alternateLink)")
+                            .execute();
             List<Course> cursos = response.getCourses();
             if (cursos == null || cursos.isEmpty()) {
                 return Collections.emptyList();

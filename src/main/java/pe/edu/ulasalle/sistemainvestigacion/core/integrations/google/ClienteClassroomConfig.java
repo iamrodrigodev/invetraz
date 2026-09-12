@@ -1,5 +1,6 @@
 package pe.edu.ulasalle.sistemainvestigacion.core.integrations.google;
 
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.classroom.Classroom;
@@ -29,9 +30,11 @@ public class ClienteClassroomConfig {
                     GoogleCredentials.fromStream(resourceStream)
                             .createScoped(Collections.singleton(ClassroomScopes.CLASSROOM_COURSES));
 
+            NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+
             return new Classroom.Builder(
-                            new NetHttpTransport(),
-                            new GsonFactory(),
+                            httpTransport,
+                            GsonFactory.getDefaultInstance(),
                             new HttpCredentialsAdapter(credentials))
                     .setApplicationName("SistemaDeInvestigacion")
                     .build();
