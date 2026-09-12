@@ -40,3 +40,5 @@ Thumbs.db
 
 # Credenciales de Google Cloud (No subir a GitHub)
 google-credentials.json
+
+tokens/
