@@ -234,42 +234,4 @@
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>sin-pruebas-en-produccion</id>
-            <activation>
-                <property>
-                    <name>entorno</name>
-                    <value>prod</value>
-                </property>
-            </activation>
-            <properties>
-                <skipTests>true</skipTests>
-            </properties>
-        </profile>
-        <profile>
-            <id>sin-pruebas-en-prd</id>
-            <activation>
-                <property>
-                    <name>entorno</name>
-                    <value>prd</value>
-                </property>
-            </activation>
-            <properties>
-                <skipTests>true</skipTests>
-            </properties>
-        </profile>
-        <profile>
-            <id>sin-pruebas-en-production</id>
-            <activation>
-                <property>
-                    <name>entorno</name>
-                    <value>production</value>
-                </property>
-            </activation>
-            <properties>
-                <skipTests>true</skipTests>
-            </properties>
-        </profile>
-    </profiles>
-</project>
+    </project>
