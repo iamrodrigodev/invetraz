@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada;
+import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 import pe.edu.ulasalle.sistemainvestigacion.dto.peticion.CrearClasePeticion;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.ClaseRespuesta;
 import pe.edu.ulasalle.sistemainvestigacion.enums.EstadoClase;
@@ -38,8 +39,8 @@ public class CrearClaseImpl implements CasoUsoCrearClase {
                     .build();
 
         } catch (Exception e) {
-            log.error("Error", e);
-            throw new ExcepcionPersonalizada("Error", 500);
+            log.error("Error al crear la clase en Google Classroom", e);
+            throw new ExcepcionPersonalizada(MensajesDeError.ERROR_INTERNO);
         }
     }
 }
