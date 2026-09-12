@@ -1,4 +1,4 @@
-package pe.edu.ulasalle.sistemainvestigacion.repositories;
+package pe.edu.ulasalle.sistemainvestigacion.repositories.impl;
 
 import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.model.Course;
@@ -8,6 +8,7 @@ import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonaliza
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 import pe.edu.ulasalle.sistemainvestigacion.enums.EstadoClase;
 import pe.edu.ulasalle.sistemainvestigacion.models.ClaseClassroom;
+import pe.edu.ulasalle.sistemainvestigacion.repositories.ClaseRepository;
 
 @Slf4j
 @Repository
