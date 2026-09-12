@@ -12,9 +12,7 @@ import pe.edu.ulasalle.sistemainvestigacion.core.response.MensajeConfirmacion;
 public class HealthController {
 
     @GetMapping
-    public ResponseEntity<ApiRespuesta<String>> checkHealth() {
-        return ApiRespuesta.ok(
-                MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(),
-                MensajeConfirmacion.SISTEMA_OPERATIVO.getMensaje());
+    public ResponseEntity<ApiRespuesta<Void>> checkHealth() {
+        return ApiRespuesta.ok(MensajeConfirmacion.SISTEMA_OPERATIVO.getMensaje());
     }
 }
