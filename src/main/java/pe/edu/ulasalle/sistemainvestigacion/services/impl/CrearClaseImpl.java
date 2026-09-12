@@ -2,7 +2,6 @@ package pe.edu.ulasalle.sistemainvestigacion.services.impl;
 
 import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.model.Course;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada;
@@ -14,10 +13,13 @@ import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoCrearClas
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class CrearClaseImpl implements CasoUsoCrearClase {
 
     private final Classroom clienteGoogle;
+
+    public CrearClaseImpl(Classroom clienteGoogle) {
+        this.clienteGoogle = clienteGoogle;
+    }
 
     @Override
     public ClaseRespuesta ejecutar(CrearClasePeticion peticion) {

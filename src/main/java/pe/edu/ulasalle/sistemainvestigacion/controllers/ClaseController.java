@@ -1,7 +1,6 @@
 package pe.edu.ulasalle.sistemainvestigacion.controllers;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,11 +16,16 @@ import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoCrearClas
 
 @RestController
 @RequestMapping("/api/v1/clases")
-@RequiredArgsConstructor
 public class ClaseController {
 
     private final CasoUsoCrearClase casoUsoCrearClase;
     private final CasoUsoArchivarClase casoUsoArchivarClase;
+
+    public ClaseController(
+            CasoUsoCrearClase casoUsoCrearClase, CasoUsoArchivarClase casoUsoArchivarClase) {
+        this.casoUsoCrearClase = casoUsoCrearClase;
+        this.casoUsoArchivarClase = casoUsoArchivarClase;
+    }
 
     @PostMapping
     public ResponseEntity<ApiRespuesta<ClaseRespuesta>> crearClase(
