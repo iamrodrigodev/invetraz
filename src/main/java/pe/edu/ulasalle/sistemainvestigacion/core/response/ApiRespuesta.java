@@ -22,7 +22,7 @@ public class ApiRespuesta<T> {
     private T datos;
     private Object detalles;
     private String ruta;
-    private String traceId;
+    private String idRastreo;
     private String fecha;
     private String hora;
     private Object errores;
@@ -37,7 +37,7 @@ public class ApiRespuesta<T> {
             T datos,
             Object detalles,
             String ruta,
-            String traceId,
+            String idRastreo,
             String fecha,
             String hora,
             Object errores) {
@@ -46,7 +46,7 @@ public class ApiRespuesta<T> {
         this.datos = datos;
         this.detalles = detalles;
         this.ruta = ruta;
-        this.traceId = traceId;
+        this.idRastreo = idRastreo;
         this.fecha = fecha;
         this.hora = hora;
         this.errores = errores;
@@ -69,7 +69,7 @@ public class ApiRespuesta<T> {
                 .estado(codigo)
                 .mensaje(mensaje)
                 .datos(datos)
-                .traceId(obtenerTraceIdActual())
+                .idRastreo(obtenerTraceIdActual())
                 .build();
     }
 
@@ -93,7 +93,7 @@ public class ApiRespuesta<T> {
                 .mensaje(mensaje)
                 .detalles(detalles)
                 .ruta(ruta)
-                .traceId(obtenerTraceIdActual())
+                .idRastreo(obtenerTraceIdActual())
                 .fecha(LocalDate.now().toString())
                 .hora(LocalTime.now().format(FORMATO_HORA))
                 .errores(errores)
