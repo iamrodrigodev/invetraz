@@ -33,7 +33,7 @@ public class ClienteClassroomConfig {
                             new NetHttpTransport(),
                             new GsonFactory(),
                             new HttpCredentialsAdapter(credentials))
-                    .setApplicationName("SistemaInvestigacion")
+                    .setApplicationName("SistemaDeInvestigacion")
                     .build();
         } catch (ExcepcionPersonalizada e) {
             throw e;

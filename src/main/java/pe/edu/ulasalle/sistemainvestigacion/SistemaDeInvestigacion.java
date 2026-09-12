@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @SpringBootApplication
 @ConfigurationPropertiesScan
-public class SistemaInvestigacion {
+public class SistemaDeInvestigacion {
 
     @PostConstruct
     public void init() {
@@ -20,6 +20,6 @@ public class SistemaInvestigacion {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(SistemaInvestigacion.class, args);
+        SpringApplication.run(SistemaDeInvestigacion.class, args);
     }
 }

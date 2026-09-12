@@ -82,7 +82,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>pe.edu.ulasalle.sistemainvestigacion.SistemaInvestigacion</mainClass>
+                    <mainClass>pe.edu.ulasalle.sistemainvestigacion.SistemaDeInvestigacion</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -180,7 +180,7 @@
                 </executions>
                 <configuration>
                     <excludes>
-                        <exclude>pe/edu/ulasalle/sistemainvestigacion/SistemaInvestigacion.class</exclude></excludes>
+                        <exclude>pe/edu/ulasalle/sistemainvestigacion/SistemaDeInvestigacion.class</exclude></excludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -196,3 +196,4 @@
     </build>
 
     </project>
+
