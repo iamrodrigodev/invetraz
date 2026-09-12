@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada;
+import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 
 @Configuration
 public class ClienteClassroomConfig {
@@ -19,8 +21,8 @@ public class ClienteClassroomConfig {
         try {
             InputStream resourceStream = getClass().getResourceAsStream("/google-credentials.json");
             if (resourceStream == null) {
-                throw new RuntimeException(
-                        "Falta el archivo google-credentials.json en src/main/resources");
+                throw new ExcepcionPersonalizada(
+                        MensajesDeError.ERROR_CREDENCIALES_GOOGLE_NO_ENCONTRADAS.getMensaje(), 500);
             }
 
             GoogleCredentials credentials =
@@ -33,8 +35,11 @@ public class ClienteClassroomConfig {
                             new HttpCredentialsAdapter(credentials))
                     .setApplicationName("SistemaInvestigacion")
                     .build();
+        } catch (ExcepcionPersonalizada e) {
+            throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Error al configurar el cliente de Google Classroom", e);
+            throw new ExcepcionPersonalizada(
+                    MensajesDeError.ERROR_CREDENCIALES_GOOGLE_INVALIDAS.getMensaje(), 500);
         }
     }
 }
