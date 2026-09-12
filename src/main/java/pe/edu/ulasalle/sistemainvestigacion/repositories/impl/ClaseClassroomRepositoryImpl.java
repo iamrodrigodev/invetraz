@@ -2,6 +2,8 @@ package pe.edu.ulasalle.sistemainvestigacion.repositories.impl;
 
 import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.model.Course;
+import com.google.api.services.classroom.model.ListInvitationsResponse;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,10 +68,26 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
     @Override
     public List<ClaseClassroom> listarTodas() {
         try {
+            try {
+                ListInvitationsResponse invitaciones =
+                        clienteGoogle.invitations().list().setUserId("me").execute();
+                if (invitaciones.getInvitations() != null) {
+                    for (var inv : invitaciones.getInvitations()) {
+                        clienteGoogle.invitations().accept(inv.getId()).execute();
+                        log.info(
+                                "Invitacion aceptada automaticamente para curso: {}",
+                                inv.getCourseId());
+                    }
+                }
+            } catch (Exception e) {
+                log.warn("Verificacion de invitaciones omitida: {}", e.getMessage());
+            }
+
             var response =
                     clienteGoogle
                             .courses()
                             .list()
+                            .setCourseStates(Arrays.asList("ACTIVE", "PROVISIONED"))
                             .setFields("courses(id,name,courseState,alternateLink)")
                             .execute();
             List<Course> cursos = response.getCourses();
