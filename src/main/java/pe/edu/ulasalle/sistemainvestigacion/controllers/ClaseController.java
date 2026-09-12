@@ -26,12 +26,19 @@ public class ClaseController {
     @PostMapping
     public ResponseEntity<ApiRespuesta<ClaseRespuesta>> crearClase(
             @Valid @RequestBody CrearClasePeticion peticion) {
-        return ApiRespuesta.creado("OK", casoUsoCrearClase.ejecutar(peticion));
+        return ApiRespuesta.creado(
+                pe.edu.ulasalle.sistemainvestigacion.core.responses.MensajeConfirmacion
+                        .RECURSO_CREADO
+                        .getMensaje(),
+                casoUsoCrearClase.ejecutar(peticion));
     }
 
     @PatchMapping("/{id}/archivar")
     public ResponseEntity<ApiRespuesta<Void>> archivarClase(@PathVariable String id) {
         casoUsoArchivarClase.ejecutar(id);
-        return ApiRespuesta.ok("OK");
+        return ApiRespuesta.ok(
+                pe.edu.ulasalle.sistemainvestigacion.core.responses.MensajeConfirmacion
+                        .OPERACION_EXITOSA
+                        .getMensaje());
     }
 }
