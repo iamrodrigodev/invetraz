@@ -1,7 +1,9 @@
 package pe.edu.ulasalle.sistemainvestigacion.controllers;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +15,7 @@ import pe.edu.ulasalle.sistemainvestigacion.dto.peticion.CrearClasePeticion;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.ClaseRespuesta;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoArchivarClase;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoCrearClase;
+import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarClases;
 
 @RestController
 @RequestMapping("/api/v1/clases")
@@ -20,11 +23,13 @@ public class ClaseController {
 
     private final CasoUsoCrearClase casoUsoCrearClase;
     private final CasoUsoArchivarClase casoUsoArchivarClase;
+    private final CasoUsoListarClases casoUsoListarClases;
 
     public ClaseController(
             CasoUsoCrearClase casoUsoCrearClase, CasoUsoArchivarClase casoUsoArchivarClase) {
         this.casoUsoCrearClase = casoUsoCrearClase;
         this.casoUsoArchivarClase = casoUsoArchivarClase;
+        this.casoUsoListarClases = casoUsoListarClases;
     }
 
     @PostMapping
@@ -44,5 +49,11 @@ public class ClaseController {
                 pe.edu.ulasalle.sistemainvestigacion.core.response.MensajeConfirmacion
                         .OPERACION_EXITOSA
                         .getMensaje());
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiRespuesta<List<ClaseRespuesta>>> listarClases() {
+        return ApiRespuesta.ok(
+                MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(), casoUsoListarClases.ejecutar());
     }
 }

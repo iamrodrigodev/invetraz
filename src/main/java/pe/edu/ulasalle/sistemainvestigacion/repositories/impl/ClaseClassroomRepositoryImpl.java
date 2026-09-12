@@ -2,6 +2,9 @@ package pe.edu.ulasalle.sistemainvestigacion.repositories.impl;
 
 import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.model.Course;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada;
@@ -56,6 +59,30 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
                     .execute();
         } catch (Exception e) {
             log.error("Error al archivar la clase en Google Classroom", e);
+            throw new ExcepcionPersonalizada(MensajesDeError.ERROR_INTERNO);
+        }
+    }
+
+    @Override
+    public List<ClaseClassroom> listarTodas() {
+        try {
+            var response = clienteGoogle.courses().list().execute();
+            List<Course> cursos = response.getCourses();
+            if (cursos == null || cursos.isEmpty()) {
+                return Collections.emptyList();
+            }
+            return cursos.stream()
+                    .map(
+                            curso ->
+                                    ClaseClassroom.builder()
+                                            .idClassroom(curso.getId())
+                                            .nombre(curso.getName())
+                                            .estado(EstadoClase.valueOf(curso.getCourseState()))
+                                            .enlaceClase(curso.getAlternateLink())
+                                            .build())
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            log.error("Error al listar las clases en Google Classroom", e);
             throw new ExcepcionPersonalizada(MensajesDeError.ERROR_INTERNO);
         }
     }
