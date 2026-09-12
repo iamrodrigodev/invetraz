@@ -9,11 +9,11 @@
         <relativePath />
     </parent>
 
-    <groupId>com.pichangueo</groupId>
-    <artifactId>saas-back-end-spring</artifactId>
+    <groupId>pe.edu.ulasalle.sistemainvestigacion</groupId>
+    <artifactId>sistema-de-investigacion-back-end</artifactId>
     <version>1.0.0</version>
-    <name>saas-back-end-spring</name>
-    <description>Backend SaaS Pichangueo</description>
+    <name>sistema-de-investigacion-back-end</name>
+    <description>Backend del Sistema de Investigacion ULaSalle</description>
 
     <properties>
         <java.version>21</java.version>
@@ -196,4 +196,5 @@
     </build>
 
     </project>
+
 
