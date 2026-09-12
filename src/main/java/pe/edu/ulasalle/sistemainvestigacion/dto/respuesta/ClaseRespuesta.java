@@ -8,6 +8,6 @@ import lombok.Data;
 public class ClaseRespuesta {
     private String idClassroom;
     private String nombre;
-    private pe.edu.ulasalle.sistemainvestigacion.models.EstadoClase estado;
+    private pe.edu.ulasalle.sistemainvestigacion.enums.EstadoClase estado;
     private String enlaceClase;
 }

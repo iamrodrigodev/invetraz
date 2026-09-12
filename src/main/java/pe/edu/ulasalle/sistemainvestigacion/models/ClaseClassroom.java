@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pe.edu.ulasalle.sistemainvestigacion.enums.EstadoClase;
 
 @Data
 @Builder

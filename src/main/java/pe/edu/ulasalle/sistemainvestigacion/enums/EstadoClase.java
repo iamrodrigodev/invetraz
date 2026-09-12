@@ -1,4 +1,4 @@
-package pe.edu.ulasalle.sistemainvestigacion.models;
+package pe.edu.ulasalle.sistemainvestigacion.enums;
 
 public enum EstadoClase {
     PROVISIONED,

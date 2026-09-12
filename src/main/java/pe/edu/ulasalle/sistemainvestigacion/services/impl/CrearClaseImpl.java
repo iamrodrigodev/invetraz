@@ -33,7 +33,7 @@ public class CrearClaseImpl implements CasoUsoCrearClase {
                     .idClassroom(cursoCreado.getId())
                     .nombre(cursoCreado.getName())
                     .estado(
-                            pe.edu.ulasalle.sistemainvestigacion.models.EstadoClase.valueOf(
+                            pe.edu.ulasalle.sistemainvestigacion.enums.EstadoClase.valueOf(
                                     cursoCreado.getCourseState()))
                     .enlaceClase(cursoCreado.getAlternateLink())
                     .build();
