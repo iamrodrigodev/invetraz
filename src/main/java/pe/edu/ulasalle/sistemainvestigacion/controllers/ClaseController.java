@@ -26,7 +26,9 @@ public class ClaseController {
     private final CasoUsoListarClases casoUsoListarClases;
 
     public ClaseController(
-            CasoUsoCrearClase casoUsoCrearClase, CasoUsoArchivarClase casoUsoArchivarClase) {
+            CasoUsoCrearClase casoUsoCrearClase,
+            CasoUsoArchivarClase casoUsoArchivarClase,
+            CasoUsoListarClases casoUsoListarClases) {
         this.casoUsoCrearClase = casoUsoCrearClase;
         this.casoUsoArchivarClase = casoUsoArchivarClase;
         this.casoUsoListarClases = casoUsoListarClases;
@@ -54,6 +56,9 @@ public class ClaseController {
     @GetMapping
     public ResponseEntity<ApiRespuesta<List<ClaseRespuesta>>> listarClases() {
         return ApiRespuesta.ok(
-                MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(), casoUsoListarClases.ejecutar());
+                pe.edu.ulasalle.sistemainvestigacion.core.response.MensajeConfirmacion
+                        .OPERACION_EXITOSA
+                        .getMensaje(),
+                casoUsoListarClases.ejecutar());
     }
 }
