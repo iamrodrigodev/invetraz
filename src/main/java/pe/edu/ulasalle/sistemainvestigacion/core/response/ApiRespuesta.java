@@ -1,4 +1,4 @@
-package pe.edu.ulasalle.sistemainvestigacion.core.responses;
+package pe.edu.ulasalle.sistemainvestigacion.core.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDate;

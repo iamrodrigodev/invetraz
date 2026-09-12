@@ -1,4 +1,4 @@
-package pe.edu.ulasalle.sistemainvestigacion.core.responses;
+package pe.edu.ulasalle.sistemainvestigacion.core.response;
 
 import lombok.Getter;
 

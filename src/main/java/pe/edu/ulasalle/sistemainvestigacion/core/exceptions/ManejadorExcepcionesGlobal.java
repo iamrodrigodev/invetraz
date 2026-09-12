@@ -16,7 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-import pe.edu.ulasalle.sistemainvestigacion.core.responses.ApiRespuesta;
+import pe.edu.ulasalle.sistemainvestigacion.core.response.ApiRespuesta;
 
 @Slf4j
 @RestControllerAdvice
