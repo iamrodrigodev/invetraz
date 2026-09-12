@@ -8,11 +8,11 @@ import pe.edu.ulasalle.sistemainvestigacion.core.response.ApiRespuesta;
 import pe.edu.ulasalle.sistemainvestigacion.core.response.MensajeConfirmacion;
 
 @RestController
-@RequestMapping("/api/v1/health")
-public class HealthController {
+@RequestMapping("/api/v1/estado")
+public class EstadoController {
 
     @GetMapping
-    public ResponseEntity<ApiRespuesta<Void>> checkHealth() {
+    public ResponseEntity<ApiRespuesta<Void>> verificarEstado() {
         return ApiRespuesta.ok(MensajeConfirmacion.SISTEMA_OPERATIVO.getMensaje());
     }
 }
