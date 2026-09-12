@@ -8,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -105,34 +103,6 @@ public class ManejadorExcepcionesGlobal {
                         solicitud.getRequestURI(),
                         null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
-    }
-
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ApiRespuesta<Void>> manejarErrorAutenticacion(
-            AuthenticationException excepcion, HttpServletRequest solicitud) {
-        log.warn("Error de autenticacion en {}", solicitud.getRequestURI());
-        ApiRespuesta<Void> respuesta =
-                ApiRespuesta.error(
-                        MensajesDeError.NO_AUTORIZADO.getCodigo(),
-                        MensajesDeError.NO_AUTORIZADO.getMensaje(),
-                        excepcion.getMessage(),
-                        solicitud.getRequestURI(),
-                        null);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(respuesta);
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiRespuesta<Void>> manejarAccesoDenegado(
-            AccessDeniedException excepcion, HttpServletRequest solicitud) {
-        log.warn("Acceso denegado en {}", solicitud.getRequestURI());
-        ApiRespuesta<Void> respuesta =
-                ApiRespuesta.error(
-                        MensajesDeError.ACCESO_DENEGADO.getCodigo(),
-                        MensajesDeError.ACCESO_DENEGADO.getMensaje(),
-                        excepcion.getMessage(),
-                        solicitud.getRequestURI(),
-                        null);
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(respuesta);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
