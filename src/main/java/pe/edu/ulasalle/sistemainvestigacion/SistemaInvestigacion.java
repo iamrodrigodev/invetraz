@@ -16,6 +16,3 @@ public class SistemaInvestigacion {
         SpringApplication.run(SistemaInvestigacion.class, args);
     }
 }
-
-
-

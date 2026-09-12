@@ -1,6 +1,5 @@
 package pe.edu.ulasalle.sistemainvestigacion.core.exceptions;
 
-import pe.edu.ulasalle.sistemainvestigacion.core.responses.ApiRespuesta;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Locale;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import pe.edu.ulasalle.sistemainvestigacion.core.responses.ApiRespuesta;
 
 @Slf4j
 @RestControllerAdvice
@@ -25,35 +25,34 @@ public class ManejadorExcepcionesGlobal {
     @ExceptionHandler(ExcepcionDeNegocio.class)
     public ResponseEntity<ApiRespuesta<Void>> manejarErrorDeNegocio(
             ExcepcionDeNegocio excepcion, HttpServletRequest solicitud) {
-        log.warn("Excepcion de negocio en {}: {}", solicitud.getRequestURI(), excepcion.getMessage());
+        log.warn(
+                "Excepcion de negocio en {}: {}",
+                solicitud.getRequestURI(),
+                excepcion.getMessage());
         ApiRespuesta<Void> respuesta =
                 ApiRespuesta.error(
-                        400,
-                        excepcion.getMessage(),
-                        null,
-                        solicitud.getRequestURI(),
-                        null);
+                        400, excepcion.getMessage(), null, solicitud.getRequestURI(), null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
     }
 
     @ExceptionHandler(ExcepcionDeRecursoNoEncontrado.class)
     public ResponseEntity<ApiRespuesta<Void>> manejarRecursoNoEncontradoDeNegocio(
             ExcepcionDeRecursoNoEncontrado excepcion, HttpServletRequest solicitud) {
-        log.warn("Recurso no encontrado en {}: {}", solicitud.getRequestURI(), excepcion.getMessage());
+        log.warn(
+                "Recurso no encontrado en {}: {}",
+                solicitud.getRequestURI(),
+                excepcion.getMessage());
         ApiRespuesta<Void> respuesta =
                 ApiRespuesta.error(
-                        404,
-                        excepcion.getMessage(),
-                        null,
-                        solicitud.getRequestURI(),
-                        null);
+                        404, excepcion.getMessage(), null, solicitud.getRequestURI(), null);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(respuesta);
     }
 
     @ExceptionHandler(ExcepcionPersonalizada.class)
     public ResponseEntity<ApiRespuesta<Void>> manejarErrorPersonalizado(
             ExcepcionPersonalizada excepcion, HttpServletRequest solicitud) {
-        log.warn("Error personalizado en {}: {}", solicitud.getRequestURI(), excepcion.getMessage());
+        log.warn(
+                "Error personalizado en {}: {}", solicitud.getRequestURI(), excepcion.getMessage());
         ApiRespuesta<Void> respuesta =
                 ApiRespuesta.error(
                         excepcion.getCodigo(),
@@ -180,4 +179,3 @@ public class ManejadorExcepcionesGlobal {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuesta);
     }
 }
-

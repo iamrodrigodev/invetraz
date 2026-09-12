@@ -1,7 +1,7 @@
 package pe.edu.ulasalle.sistemainvestigacion.core.security;
 
-import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada;
 import java.util.regex.Pattern;
+import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada;
 
 public final class ValidadorClaves {
 
@@ -41,5 +41,3 @@ public final class ValidadorClaves {
         }
     }
 }
-
-

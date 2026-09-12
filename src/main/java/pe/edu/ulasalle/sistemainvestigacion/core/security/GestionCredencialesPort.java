@@ -12,5 +12,3 @@ public interface GestionCredencialesPort {
 
     void revocarSesiones(UUID usuarioId);
 }
-
-

@@ -22,5 +22,3 @@ public class ExcepcionDeNegocio extends ExcepcionPersonalizada {
         super(mensaje, codigo, detalles);
     }
 }
-
-

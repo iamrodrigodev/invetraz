@@ -23,5 +23,3 @@ public record RespuestaErrorSwagger(
         @Schema(description = "Hora de la ocurrencia (HH:mm:ss)", example = "10:00:00") String hora,
         @Schema(description = "Mapa de errores de validación de campos")
                 Map<String, String> errores) {}
-
-

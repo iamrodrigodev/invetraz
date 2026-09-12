@@ -8,5 +8,3 @@ public interface IdentidadPort {
 
     Optional<Identidad> buscarActiva(UUID id);
 }
-
-

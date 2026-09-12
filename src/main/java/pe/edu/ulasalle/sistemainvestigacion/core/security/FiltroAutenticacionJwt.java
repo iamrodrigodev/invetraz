@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
@@ -23,8 +24,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Slf4j
 @Component
@@ -36,9 +35,7 @@ public class FiltroAutenticacionJwt extends OncePerRequestFilter {
     private static final Pattern PATRON_CAMEL_CASE = Pattern.compile("([a-z])([A-Z])");
 
     public FiltroAutenticacionJwt(
-            ServicioJwt servicioJwt,
-            IdentidadPort usuarioRepository,
-            SesionVigentePort sesiones) {
+            ServicioJwt servicioJwt, IdentidadPort usuarioRepository, SesionVigentePort sesiones) {
         this.sesiones = sesiones;
         this.servicioJwt = servicioJwt;
         this.usuarioRepository = usuarioRepository;
@@ -66,13 +63,13 @@ public class FiltroAutenticacionJwt extends OncePerRequestFilter {
                 String asuntoUsuario = cuerpoToken.getSubject();
                 if (asuntoUsuario != null
                         && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    
+
                     Optional<UUID> idUsuarioOpt = parseUuid(asuntoUsuario);
                     if (idUsuarioOpt.isPresent()) {
                         UUID idUsuario = idUsuarioOpt.get();
                         String sid = cuerpoToken.get("sid", String.class);
                         Optional<UUID> idSesionOpt = parseUuid(sid);
-                        
+
                         if (idSesionOpt.isPresent()) {
                             UUID idSesion = idSesionOpt.get();
                             if (sesiones.vigente(idSesion, idUsuario, LocalDateTime.now())) {
@@ -90,7 +87,9 @@ public class FiltroAutenticacionJwt extends OncePerRequestFilter {
     }
 
     private Optional<UUID> parseUuid(String uuidStr) {
-        if (uuidStr == null) return Optional.empty();
+        if (uuidStr == null) {
+            return Optional.empty();
+        }
         try {
             return Optional.of(UUID.fromString(uuidStr));
         } catch (Exception e) {
@@ -135,4 +134,3 @@ public class FiltroAutenticacionJwt extends OncePerRequestFilter {
         return normalizado;
     }
 }
-

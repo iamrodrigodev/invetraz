@@ -14,5 +14,3 @@ public final class EntradaSegura {
         return Jsoup.clean(texto, Safelist.none()).trim();
     }
 }
-
-

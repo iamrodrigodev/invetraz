@@ -6,5 +6,3 @@ public interface IServicioHash {
 
     boolean verificar(String clavePlana, String hashAlmacenado);
 }
-
-

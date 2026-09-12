@@ -6,5 +6,3 @@ import java.util.UUID;
 public interface SesionVigentePort {
     boolean vigente(UUID sesionId, UUID usuarioId, LocalDateTime ahora);
 }
-
-

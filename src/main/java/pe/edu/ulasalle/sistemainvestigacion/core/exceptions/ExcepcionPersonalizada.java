@@ -40,5 +40,3 @@ public class ExcepcionPersonalizada extends RuntimeException {
         this.detalles = detalles;
     }
 }
-
-
