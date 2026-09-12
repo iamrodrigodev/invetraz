@@ -32,7 +32,9 @@ public class CrearClaseImpl implements CasoUsoCrearClase {
             return ClaseRespuesta.builder()
                     .idClassroom(cursoCreado.getId())
                     .nombre(cursoCreado.getName())
-                    .estado(cursoCreado.getCourseState())
+                    .estado(
+                            pe.edu.ulasalle.sistemainvestigacion.models.EstadoClase.valueOf(
+                                    cursoCreado.getCourseState()))
                     .enlaceClase(cursoCreado.getAlternateLink())
                     .build();
 

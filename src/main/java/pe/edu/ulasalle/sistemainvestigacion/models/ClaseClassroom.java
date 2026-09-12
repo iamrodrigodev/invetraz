@@ -14,6 +14,6 @@ public class ClaseClassroom {
     private String nombre;
     private String seccion;
     private String profesorId;
-    private String estado;
+    private EstadoClase estado;
     private String enlaceClase;
 }
