@@ -28,8 +28,7 @@ public class ManejadorExcepcionesGlobal {
                 solicitud.getRequestURI(),
                 excepcion.getMessage());
         ApiRespuesta<Void> respuesta =
-                ApiRespuesta.error(
-                        400, excepcion.getMessage(), null, solicitud.getRequestURI(), null);
+                ApiRespuesta.error(400, excepcion.getMessage(), solicitud.getRequestURI(), null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
     }
 
@@ -41,8 +40,7 @@ public class ManejadorExcepcionesGlobal {
                 solicitud.getRequestURI(),
                 excepcion.getMessage());
         ApiRespuesta<Void> respuesta =
-                ApiRespuesta.error(
-                        404, excepcion.getMessage(), null, solicitud.getRequestURI(), null);
+                ApiRespuesta.error(404, excepcion.getMessage(), solicitud.getRequestURI(), null);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(respuesta);
     }
 
@@ -55,7 +53,6 @@ public class ManejadorExcepcionesGlobal {
                 ApiRespuesta.error(
                         excepcion.getCodigo(),
                         excepcion.getMessage(),
-                        excepcion.getDetalles(),
                         solicitud.getRequestURI(),
                         null);
         return ResponseEntity.status(excepcion.getCodigo()).body(respuesta);
@@ -70,7 +67,6 @@ public class ManejadorExcepcionesGlobal {
                 ApiRespuesta.error(
                         MensajesDeError.DATOS_INVALIDOS.getCodigo(),
                         MensajesDeError.DATOS_INVALIDOS.getMensaje(),
-                        null,
                         solicitud.getRequestURI(),
                         erroresValidacion);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
@@ -99,7 +95,6 @@ public class ManejadorExcepcionesGlobal {
                 ApiRespuesta.error(
                         HttpStatus.BAD_REQUEST.value(),
                         "El cuerpo de la peticion contiene un formato JSON invalido",
-                        null,
                         solicitud.getRequestURI(),
                         null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
@@ -113,7 +108,6 @@ public class ManejadorExcepcionesGlobal {
                 ApiRespuesta.error(
                         MensajesDeError.RECURSO_NO_ENCONTRADO.getCodigo(),
                         MensajesDeError.RECURSO_NO_ENCONTRADO.getMensaje(),
-                        excepcion.getMessage(),
                         solicitud.getRequestURI(),
                         null);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(respuesta);
@@ -127,7 +121,6 @@ public class ManejadorExcepcionesGlobal {
                 ApiRespuesta.error(
                         HttpStatus.METHOD_NOT_ALLOWED.value(),
                         MensajesDeError.METODO_NO_PERMITIDO.getMensaje(),
-                        excepcion.getMessage(),
                         solicitud.getRequestURI(),
                         null);
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
@@ -143,7 +136,6 @@ public class ManejadorExcepcionesGlobal {
                 ApiRespuesta.error(
                         MensajesDeError.ERROR_INTERNO.getCodigo(),
                         MensajesDeError.ERROR_INTERNO.getMensaje(),
-                        null,
                         solicitud.getRequestURI(),
                         null);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuesta);

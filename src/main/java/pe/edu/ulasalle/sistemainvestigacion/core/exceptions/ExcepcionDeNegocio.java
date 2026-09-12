@@ -10,15 +10,7 @@ public class ExcepcionDeNegocio extends ExcepcionPersonalizada {
         super(mensajeError);
     }
 
-    public ExcepcionDeNegocio(MensajesDeError mensajeError, Object detalles) {
-        super(mensajeError, detalles);
-    }
-
     public ExcepcionDeNegocio(String mensaje, int codigo) {
         super(mensaje, codigo);
-    }
-
-    public ExcepcionDeNegocio(String mensaje, int codigo, Object detalles) {
-        super(mensaje, codigo, detalles);
     }
 }

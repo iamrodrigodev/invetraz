@@ -9,8 +9,4 @@ public class ExcepcionDeRecursoNoEncontrado extends ExcepcionPersonalizada {
     public ExcepcionDeRecursoNoEncontrado() {
         super(MensajesDeError.RECURSO_NO_ENCONTRADO);
     }
-
-    public ExcepcionDeRecursoNoEncontrado(Object detalles) {
-        super(MensajesDeError.RECURSO_NO_ENCONTRADO, detalles);
-    }
 }

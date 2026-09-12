@@ -32,7 +32,6 @@ public class ApiRespuesta<T> {
     private int estado;
     private String mensaje;
     private T datos;
-    private Object detalles;
     private String ruta;
     private String idRastreo;
     private String fecha;
@@ -47,7 +46,6 @@ public class ApiRespuesta<T> {
             int estado,
             String mensaje,
             T datos,
-            Object detalles,
             String ruta,
             String idRastreo,
             String fecha,
@@ -56,7 +54,6 @@ public class ApiRespuesta<T> {
         this.estado = estado;
         this.mensaje = mensaje;
         this.datos = datos;
-        this.detalles = detalles;
         this.ruta = ruta;
         this.idRastreo = idRastreo;
         this.fecha = fecha;
@@ -68,12 +65,11 @@ public class ApiRespuesta<T> {
             int estado,
             String mensaje,
             T datos,
-            Object detalles,
             String ruta,
             String fecha,
             String hora,
             Object errores) {
-        this(estado, mensaje, datos, detalles, ruta, obtenerTraceIdActual(), fecha, hora, errores);
+        this(estado, mensaje, datos, ruta, obtenerTraceIdActual(), fecha, hora, errores);
     }
 
     public static <T> ApiRespuesta<T> exito(String mensaje, T datos, int codigo) {
@@ -99,11 +95,10 @@ public class ApiRespuesta<T> {
     }
 
     public static <T> ApiRespuesta<T> error(
-            int codigo, String mensaje, Object detalles, String ruta, Object errores) {
+            int codigo, String mensaje, String ruta, Object errores) {
         return ApiRespuesta.<T>builder()
                 .estado(codigo)
                 .mensaje(mensaje)
-                .detalles(detalles)
                 .ruta(ruta)
                 .idRastreo(obtenerTraceIdActual())
                 .fecha(LocalDate.now().toString())
