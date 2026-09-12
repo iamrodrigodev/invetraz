@@ -1,6 +1,7 @@
 package pe.edu.ulasalle.sistemainvestigacion.core.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -15,6 +16,17 @@ import org.springframework.http.ResponseEntity;
 @Setter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+    "estado",
+    "mensaje",
+    "datos",
+    "detalles",
+    "ruta",
+    "idRastreo",
+    "fecha",
+    "hora",
+    "errores"
+})
 public class ApiRespuesta<T> {
 
     private int estado;
