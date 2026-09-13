@@ -1,6 +1,7 @@
 ﻿# Configuración de Google Classroom API (OAuth 2.0)
 
-Documentación técnica minimalista para la integración de Google Classroom API en Spring Boot mediante credenciales de usuario con efresh_token.
+Documentación técnica minimalista para la integración de Google Classroom API en Spring Boot mediante credenciales de usuario con 
+efresh_token.
 
 ---
 
@@ -44,7 +45,7 @@ Documentación técnica minimalista para la integración de Google Classroom API
 
 ## 3. Configuración en Spring Boot
 
-### pplication.yml
+### application.yml
 `yaml
 app:
   google:
@@ -77,6 +78,7 @@ return new Classroom.Builder(
 
 ## 4. Consideraciones Técnicas
 
-- **Persistencia de sesión:** El efresh_token no expira automáticamente en entornos internos y renueva el ccess_token de 1 hora de manera transparente.
+- **Persistencia de sesión:** El 
+efresh_token no expira automáticamente en entornos internos y renueva el ccess_token de 1 hora de manera transparente.
 - **Optimización de red (Windows):** En SistemaDeInvestigacion.java, se establece java.net.preferIPv4Stack=true para evitar retardos por timeout de socket en IPv6.
 - **Respuestas parciales:** El repositorio utiliza .setFields("courses(id,name,courseState,alternateLink)") para optimizar los tiempos de respuesta de Google.
