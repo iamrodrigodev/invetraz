@@ -1,4 +1,4 @@
-﻿# Configuración de Google Classroom API (OAuth 2.0)
+# Configuración de Google Classroom API (OAuth 2.0)
 
 Documentación para la integración de Google Classroom API en Spring Boot mediante credenciales de usuario con refresh_token.
 
@@ -28,9 +28,10 @@ Documentación para la integración de Google Classroom API en Spring Boot media
    - Use your own OAuth credentials.
    - Ingresar el OAuth Client ID y OAuth Client Secret.
 3. En **Step 1**, en *Input your own scopes*, ingresar:
-   `	ext
+   ```text
    https://www.googleapis.com/auth/classroom.courses
-   `
+   https://www.googleapis.com/auth/classroom.coursework.students
+   ```
    Hacer clic en **Authorize APIs**.
 4. Iniciar sesión con la cuenta institucional y conceder permisos.
 5. En **Step 2**, hacer clic en **Exchange authorization code for tokens**.

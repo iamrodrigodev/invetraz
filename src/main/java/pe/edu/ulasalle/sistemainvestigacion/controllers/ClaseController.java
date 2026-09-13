@@ -14,9 +14,11 @@ import pe.edu.ulasalle.sistemainvestigacion.core.response.ApiRespuesta;
 import pe.edu.ulasalle.sistemainvestigacion.core.response.MensajeConfirmacion;
 import pe.edu.ulasalle.sistemainvestigacion.dto.peticion.CrearClasePeticion;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.ClaseRespuesta;
+import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.TareaRespuesta;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoArchivarClase;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoCrearClase;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarClases;
+import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarTareas;
 
 @RestController
 @RequestMapping("/api/v1/clases")
@@ -25,14 +27,17 @@ public class ClaseController {
     private final CasoUsoCrearClase casoUsoCrearClase;
     private final CasoUsoArchivarClase casoUsoArchivarClase;
     private final CasoUsoListarClases casoUsoListarClases;
+    private final CasoUsoListarTareas casoUsoListarTareas;
 
     public ClaseController(
             CasoUsoCrearClase casoUsoCrearClase,
             CasoUsoArchivarClase casoUsoArchivarClase,
-            CasoUsoListarClases casoUsoListarClases) {
+            CasoUsoListarClases casoUsoListarClases,
+            CasoUsoListarTareas casoUsoListarTareas) {
         this.casoUsoCrearClase = casoUsoCrearClase;
         this.casoUsoArchivarClase = casoUsoArchivarClase;
         this.casoUsoListarClases = casoUsoListarClases;
+        this.casoUsoListarTareas = casoUsoListarTareas;
     }
 
     @PostMapping
@@ -53,5 +58,13 @@ public class ClaseController {
     public ResponseEntity<ApiRespuesta<List<ClaseRespuesta>>> listarClases() {
         return ApiRespuesta.ok(
                 MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(), casoUsoListarClases.ejecutar());
+    }
+
+    @GetMapping("/{idClase}/tareas")
+    public ResponseEntity<ApiRespuesta<List<TareaRespuesta>>> listarTareas(
+            @PathVariable String idClase) {
+        return ApiRespuesta.ok(
+                MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(),
+                casoUsoListarTareas.ejecutar(idClase));
     }
 }
