@@ -16,17 +16,7 @@ import org.springframework.http.ResponseEntity;
 @Setter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "estado",
-    "mensaje",
-    "datos",
-    "detalles",
-    "ruta",
-    "idRastreo",
-    "fecha",
-    "hora",
-    "errores"
-})
+@JsonPropertyOrder({"estado", "mensaje", "datos", "ruta", "idRastreo", "fecha", "hora", "errores"})
 public class ApiRespuesta<T> {
 
     private int estado;
@@ -59,17 +49,6 @@ public class ApiRespuesta<T> {
         this.fecha = fecha;
         this.hora = hora;
         this.errores = errores;
-    }
-
-    public ApiRespuesta(
-            int estado,
-            String mensaje,
-            T datos,
-            String ruta,
-            String fecha,
-            String hora,
-            Object errores) {
-        this(estado, mensaje, datos, ruta, obtenerTraceIdActual(), fecha, hora, errores);
     }
 
     public static <T> ApiRespuesta<T> exito(String mensaje, T datos, int codigo) {

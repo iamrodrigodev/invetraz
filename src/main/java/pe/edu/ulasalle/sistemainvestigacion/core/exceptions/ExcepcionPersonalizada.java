@@ -1,10 +1,6 @@
 package pe.edu.ulasalle.sistemainvestigacion.core.exceptions;
 
-import java.io.Serial;
-
 public class ExcepcionPersonalizada extends RuntimeException {
-
-    @Serial private static final long serialVersionUID = 1L;
 
     private final MensajesDeError mensajeError;
     private final int codigo;
