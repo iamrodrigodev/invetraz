@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada;
-import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
+import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ManejadorErroresGoogle;
 import pe.edu.ulasalle.sistemainvestigacion.enums.EstadoClase;
 import pe.edu.ulasalle.sistemainvestigacion.models.ClaseClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.ClaseRepository;
@@ -19,9 +18,12 @@ import pe.edu.ulasalle.sistemainvestigacion.repositories.ClaseRepository;
 public class ClaseClassroomRepositoryImpl implements ClaseRepository {
 
     private final Classroom clienteGoogle;
+    private final ManejadorErroresGoogle manejadorErroresGoogle;
 
-    public ClaseClassroomRepositoryImpl(Classroom clienteGoogle) {
+    public ClaseClassroomRepositoryImpl(
+            Classroom clienteGoogle, ManejadorErroresGoogle manejadorErroresGoogle) {
         this.clienteGoogle = clienteGoogle;
+        this.manejadorErroresGoogle = manejadorErroresGoogle;
     }
 
     @Override
@@ -44,8 +46,7 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
                     .build();
 
         } catch (Exception e) {
-            log.error("Error al crear la clase en Google Classroom", e);
-            throw new ExcepcionPersonalizada(MensajesDeError.ERROR_INTERNO);
+            throw manejadorErroresGoogle.manejar("ClaseClassroomRepository.guardar", e);
         }
     }
 
@@ -59,8 +60,7 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
                     .setUpdateMask("courseState")
                     .execute();
         } catch (Exception e) {
-            log.error("Error al archivar la clase en Google Classroom", e);
-            throw new ExcepcionPersonalizada(MensajesDeError.ERROR_INTERNO);
+            throw manejadorErroresGoogle.manejar("ClaseClassroomRepository.archivar", e);
         }
     }
 
@@ -93,8 +93,7 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
                                             .build())
                     .collect(Collectors.toList());
         } catch (Exception e) {
-            log.error("Error al listar las clases en Google Classroom", e);
-            throw new ExcepcionPersonalizada(MensajesDeError.ERROR_INTERNO);
+            throw manejadorErroresGoogle.manejar("ClaseClassroomRepository.listarTodas", e);
         }
     }
 }

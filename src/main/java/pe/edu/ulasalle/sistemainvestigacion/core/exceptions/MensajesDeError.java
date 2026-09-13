@@ -1,13 +1,30 @@
 package pe.edu.ulasalle.sistemainvestigacion.core.exceptions;
 
 public enum MensajesDeError {
-    DATOS_INVALIDOS("Datos de entrada invalidos", 400),
-    ACCESO_DENEGADO("Acceso denegado", 403),
-    SIN_PERMISOS_DOCENTE("No tienes permisos de docente para gestionar tareas en esta clase", 403),
-    RECURSO_NO_ENCONTRADO("Recurso no encontrado", 404),
-    METODO_NO_PERMITIDO("Metodo no permitido para este endpoint", 405),
-    ERROR_INTERNO("Error interno del servidor", 500),
-    ERROR_CONFIGURACION_GOOGLE("Error en la configuracion del servicio de Google Classroom", 500);
+    DATOS_INVALIDOS("Los datos enviados son invalidos o no cumplen con el formato requerido", 400),
+    ACCESO_DENEGADO("No cuentas con los permisos necesarios para realizar esta operacion", 403),
+    SIN_PERMISOS_DOCENTE(
+            "No cuentas con permisos de docente en esta clase de Google Classroom", 403),
+    RECURSO_NO_ENCONTRADO("El recurso solicitado no fue encontrado", 404),
+    METODO_NO_PERMITIDO("Metodo HTTP no permitido para este endpoint", 405),
+    LIMITE_PETICIONES_EXCEDIDO(
+            "Se ha superado el limite de solicitudes hacia Google Classroom. Intenta nuevamente mas"
+                    + " tarde",
+            429),
+    ERROR_CONFIGURACION_GOOGLE(
+            "El servicio de Google Classroom no se encuentra disponible o no esta configurado"
+                    + " adecuadamente",
+            503),
+    ERROR_COMUNICACION_GOOGLE(
+            "No fue posible comunicarse con los servidores de Google Classroom. Por favor,"
+                    + " reintenta la operacion",
+            502),
+    TIEMPO_ESPERA_AGOTADO(
+            "El tiempo de espera para obtener respuesta de Google Classroom ha expirado", 504),
+    ERROR_INTERNO(
+            "Ocurrio un error interno al procesar la solicitud. Contacta al administrador si el"
+                    + " problema persiste",
+            500);
 
     private final String mensaje;
     private final int codigo;

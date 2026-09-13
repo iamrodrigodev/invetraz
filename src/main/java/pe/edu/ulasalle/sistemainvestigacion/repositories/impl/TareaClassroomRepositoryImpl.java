@@ -1,6 +1,5 @@
 package pe.edu.ulasalle.sistemainvestigacion.repositories.impl;
 
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.model.CourseWork;
 import com.google.api.services.classroom.model.Date;
@@ -14,8 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada;
-import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
+import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ManejadorErroresGoogle;
 import pe.edu.ulasalle.sistemainvestigacion.enums.EstadoTarea;
 import pe.edu.ulasalle.sistemainvestigacion.models.TareaClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.TareaRepository;
@@ -28,9 +26,12 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
     private static final ZoneId ZONA_UTC = ZoneId.of("UTC");
 
     private final Classroom clienteGoogle;
+    private final ManejadorErroresGoogle manejadorErroresGoogle;
 
-    public TareaClassroomRepositoryImpl(Classroom clienteGoogle) {
+    public TareaClassroomRepositoryImpl(
+            Classroom clienteGoogle, ManejadorErroresGoogle manejadorErroresGoogle) {
         this.clienteGoogle = clienteGoogle;
+        this.manejadorErroresGoogle = manejadorErroresGoogle;
     }
 
     @Override
@@ -51,14 +52,9 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
             }
 
             return tareas.stream().map(this::mapearTarea).collect(Collectors.toList());
-        } catch (GoogleJsonResponseException e) {
-            manejarErrorGoogle(idClase, e);
-            throw new ExcepcionPersonalizada(MensajesDeError.ERROR_INTERNO);
-        } catch (ExcepcionPersonalizada e) {
-            throw e;
         } catch (Exception e) {
-            log.error("Error al listar las tareas de la clase {} en Google Classroom", idClase, e);
-            throw new ExcepcionPersonalizada(MensajesDeError.ERROR_INTERNO);
+            throw manejadorErroresGoogle.manejar(
+                    "TareaClassroomRepository.listarPorClase (" + idClase + ")", e);
         }
     }
 
@@ -97,31 +93,9 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
                     clienteGoogle.courses().courseWork().create(idClase, coursework).execute();
 
             return mapearTarea(tareaCreada);
-        } catch (GoogleJsonResponseException e) {
-            manejarErrorGoogle(idClase, e);
-            throw new ExcepcionPersonalizada(MensajesDeError.ERROR_INTERNO);
-        } catch (ExcepcionPersonalizada e) {
-            throw e;
         } catch (Exception e) {
-            log.error("Error al guardar la tarea en la clase {} en Google Classroom", idClase, e);
-            throw new ExcepcionPersonalizada(MensajesDeError.ERROR_INTERNO);
-        }
-    }
-
-    private void manejarErrorGoogle(String idClase, GoogleJsonResponseException e) {
-        log.warn(
-                "Error de Google Classroom al procesar clase {}: status={}, mensaje={}",
-                idClase,
-                e.getStatusCode(),
-                e.getMessage());
-        if (e.getStatusCode() == 403) {
-            throw new ExcepcionPersonalizada(MensajesDeError.SIN_PERMISOS_DOCENTE);
-        }
-        if (e.getStatusCode() == 404) {
-            throw new ExcepcionPersonalizada(MensajesDeError.RECURSO_NO_ENCONTRADO);
-        }
-        if (e.getStatusCode() == 400) {
-            throw new ExcepcionPersonalizada(MensajesDeError.DATOS_INVALIDOS);
+            throw manejadorErroresGoogle.manejar(
+                    "TareaClassroomRepository.guardar (" + idClase + ")", e);
         }
     }
 
