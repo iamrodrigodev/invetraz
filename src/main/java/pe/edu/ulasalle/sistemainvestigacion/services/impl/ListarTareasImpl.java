@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.TareaRespuesta;
+import pe.edu.ulasalle.sistemainvestigacion.models.TareaClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.TareaRepository;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarTareas;
 
@@ -20,7 +21,12 @@ public class ListarTareasImpl implements CasoUsoListarTareas {
 
     @Override
     public List<TareaRespuesta> ejecutar(String idClase) {
-        return tareaRepository.listarPorClase(idClase).stream()
+        log.info("Entrada - Listando tareas para la clase con id: '{}'", idClase);
+        log.info("Proceso - Consultando tareas en Google Classroom para la clase '{}'...", idClase);
+        List<TareaClassroom> tareas = tareaRepository.listarPorClase(idClase);
+        log.info("Resultado - Se obtuvieron {} tareas para la clase '{}'", tareas.size(), idClase);
+
+        return tareas.stream()
                 .map(
                         tarea ->
                                 TareaRespuesta.builder()

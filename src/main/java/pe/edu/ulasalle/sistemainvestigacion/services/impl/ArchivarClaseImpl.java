@@ -17,6 +17,9 @@ public class ArchivarClaseImpl implements CasoUsoArchivarClase {
 
     @Override
     public void ejecutar(String idClassroom) {
+        log.info("Entrada - Archivando clase con idClassroom: '{}'", idClassroom);
+        log.info("Proceso - Cambiando estado de la clase a ARCHIVED en Google Classroom...");
         claseRepository.archivar(idClassroom);
+        log.info("Resultado - Clase '{}' archivada exitosamente", idClassroom);
     }
 }

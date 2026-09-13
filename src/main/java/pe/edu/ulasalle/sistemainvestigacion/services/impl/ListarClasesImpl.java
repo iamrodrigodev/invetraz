@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.ClaseRespuesta;
+import pe.edu.ulasalle.sistemainvestigacion.models.ClaseClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.ClaseRepository;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarClases;
 
@@ -20,7 +21,12 @@ public class ListarClasesImpl implements CasoUsoListarClases {
 
     @Override
     public List<ClaseRespuesta> ejecutar() {
-        return claseRepository.listarTodas().stream()
+        log.info("Entrada - Solicitud para listar clases activas");
+        log.info("Proceso - Consultando clases en Google Classroom...");
+        List<ClaseClassroom> clases = claseRepository.listarTodas();
+        log.info("Resultado - Se obtuvieron {} clases", clases.size());
+
+        return clases.stream()
                 .map(
                         clase ->
                                 ClaseRespuesta.builder()
