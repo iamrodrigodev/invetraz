@@ -7,6 +7,8 @@ import com.google.api.services.classroom.model.Date;
 import com.google.api.services.classroom.model.ListCourseWorkResponse;
 import com.google.api.services.classroom.model.TimeOfDay;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +23,9 @@ import pe.edu.ulasalle.sistemainvestigacion.repositories.TareaRepository;
 @Slf4j
 @Repository
 public class TareaClassroomRepositoryImpl implements TareaRepository {
+
+    private static final ZoneId ZONA_LIMA = ZoneId.of("America/Lima");
+    private static final ZoneId ZONA_UTC = ZoneId.of("UTC");
 
     private final Classroom clienteGoogle;
 
@@ -72,16 +77,18 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
                                             : EstadoTarea.PUBLISHED.name());
 
             if (tarea.getFechaLimite() != null) {
+                ZonedDateTime fechaLima = tarea.getFechaLimite().atZone(ZONA_LIMA);
+                ZonedDateTime fechaUtc = fechaLima.withZoneSameInstant(ZONA_UTC);
                 Date dueDate =
                         new Date()
-                                .setYear(tarea.getFechaLimite().getYear())
-                                .setMonth(tarea.getFechaLimite().getMonthValue())
-                                .setDay(tarea.getFechaLimite().getDayOfMonth());
+                                .setYear(fechaUtc.getYear())
+                                .setMonth(fechaUtc.getMonthValue())
+                                .setDay(fechaUtc.getDayOfMonth());
                 TimeOfDay dueTime =
                         new TimeOfDay()
-                                .setHours(tarea.getFechaLimite().getHour())
-                                .setMinutes(tarea.getFechaLimite().getMinute())
-                                .setSeconds(tarea.getFechaLimite().getSecond());
+                                .setHours(fechaUtc.getHour())
+                                .setMinutes(fechaUtc.getMinute())
+                                .setSeconds(fechaUtc.getSecond());
                 coursework.setDueDate(dueDate);
                 coursework.setDueTime(dueTime);
             }
@@ -155,6 +162,10 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
         int horas = (hora != null && hora.getHours() != null) ? hora.getHours() : 23;
         int minutos = (hora != null && hora.getMinutes() != null) ? hora.getMinutes() : 59;
         int segundos = (hora != null && hora.getSeconds() != null) ? hora.getSeconds() : 59;
-        return LocalDateTime.of(anio, mes, dia, horas, minutos, segundos);
+
+        LocalDateTime fechaUtc = LocalDateTime.of(anio, mes, dia, horas, minutos, segundos);
+        ZonedDateTime utcZoned = fechaUtc.atZone(ZONA_UTC);
+        ZonedDateTime limaZoned = utcZoned.withZoneSameInstant(ZONA_LIMA);
+        return limaZoned.toLocalDateTime();
     }
 }
