@@ -7,9 +7,7 @@ public enum MensajesDeError {
     RECURSO_NO_ENCONTRADO("Recurso no encontrado", 404),
     METODO_NO_PERMITIDO("Metodo no permitido para este endpoint", 405),
     ERROR_INTERNO("Error interno del servidor", 500),
-    ERROR_CREDENCIALES_GOOGLE_NO_ENCONTRADAS(
-            "Faltan las credenciales app.google en application.yml", 500),
-    ERROR_CREDENCIALES_GOOGLE_INVALIDAS("Error al configurar el cliente de Google Classroom", 500);
+    ERROR_CONFIGURACION_GOOGLE("Error en la configuracion del servicio de Google Classroom", 500);
 
     private final String mensaje;
     private final int codigo;

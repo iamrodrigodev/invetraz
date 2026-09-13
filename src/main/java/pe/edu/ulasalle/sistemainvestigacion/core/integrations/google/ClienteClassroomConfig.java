@@ -7,12 +7,14 @@ import com.google.api.services.classroom.Classroom;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.UserCredentials;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 
+@Slf4j
 @Configuration
 public class ClienteClassroomConfig {
 
@@ -33,8 +35,10 @@ public class ClienteClassroomConfig {
     public Classroom googleClassroomClient() {
         try {
             if (clientId == null || clientSecret == null || refreshToken == null) {
-                throw new ExcepcionPersonalizada(
-                        MensajesDeError.ERROR_CREDENCIALES_GOOGLE_NO_ENCONTRADAS.getMensaje(), 500);
+                log.error(
+                        "Faltan las credenciales de Google Classroom en la configuracion del"
+                                + " servidor");
+                throw new ExcepcionPersonalizada(MensajesDeError.ERROR_CONFIGURACION_GOOGLE);
             }
 
             GoogleCredentials credentials =
@@ -55,8 +59,8 @@ public class ClienteClassroomConfig {
         } catch (ExcepcionPersonalizada e) {
             throw e;
         } catch (Exception e) {
-            throw new ExcepcionPersonalizada(
-                    MensajesDeError.ERROR_CREDENCIALES_GOOGLE_INVALIDAS.getMensaje(), 500);
+            log.error("Error al inicializar el cliente de Google Classroom", e);
+            throw new ExcepcionPersonalizada(MensajesDeError.ERROR_CONFIGURACION_GOOGLE);
         }
     }
 }
