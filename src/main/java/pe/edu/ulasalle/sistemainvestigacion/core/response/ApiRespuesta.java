@@ -1,10 +1,10 @@
 package pe.edu.ulasalle.sistemainvestigacion.core.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,19 +16,19 @@ import org.springframework.http.ResponseEntity;
 @Setter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"estado", "mensaje", "idRastreo", "ruta", "fecha", "hora", "datos", "errores"})
+@JsonPropertyOrder({"estado", "mensaje", "idRastreo", "ruta", "fechaHora", "datos", "errores"})
 public class ApiRespuesta<T> {
 
     private int estado;
     private String mensaje;
     private String idRastreo;
     private String ruta;
-    private String fecha;
-    private String hora;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime fechaHora;
+
     private T datos;
     private Object errores;
-
-    private static final DateTimeFormatter FORMATO_HORA = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public ApiRespuesta() {}
 
@@ -37,16 +37,14 @@ public class ApiRespuesta<T> {
             String mensaje,
             String idRastreo,
             String ruta,
-            String fecha,
-            String hora,
+            LocalDateTime fechaHora,
             T datos,
             Object errores) {
         this.estado = estado;
         this.mensaje = mensaje;
         this.idRastreo = idRastreo;
         this.ruta = ruta;
-        this.fecha = fecha;
-        this.hora = hora;
+        this.fechaHora = fechaHora;
         this.datos = datos;
         this.errores = errores;
     }
@@ -55,8 +53,8 @@ public class ApiRespuesta<T> {
         return ApiRespuesta.<T>builder()
                 .estado(codigo)
                 .mensaje(mensaje)
-                .datos(datos)
                 .idRastreo(obtenerTraceIdActual())
+                .datos(datos)
                 .build();
     }
 
@@ -78,10 +76,9 @@ public class ApiRespuesta<T> {
         return ApiRespuesta.<T>builder()
                 .estado(codigo)
                 .mensaje(mensaje)
-                .ruta(ruta)
                 .idRastreo(obtenerTraceIdActual())
-                .fecha(LocalDate.now().toString())
-                .hora(LocalTime.now().format(FORMATO_HORA))
+                .ruta(ruta)
+                .fechaHora(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
                 .errores(errores)
                 .build();
     }
