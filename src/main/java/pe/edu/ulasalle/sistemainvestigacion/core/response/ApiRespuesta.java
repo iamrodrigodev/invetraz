@@ -16,16 +16,16 @@ import org.springframework.http.ResponseEntity;
 @Setter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"estado", "mensaje", "datos", "ruta", "idRastreo", "fecha", "hora", "errores"})
+@JsonPropertyOrder({"estado", "mensaje", "idRastreo", "ruta", "fecha", "hora", "datos", "errores"})
 public class ApiRespuesta<T> {
 
     private int estado;
     private String mensaje;
-    private T datos;
-    private String ruta;
     private String idRastreo;
+    private String ruta;
     private String fecha;
     private String hora;
+    private T datos;
     private Object errores;
 
     private static final DateTimeFormatter FORMATO_HORA = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -35,19 +35,19 @@ public class ApiRespuesta<T> {
     public ApiRespuesta(
             int estado,
             String mensaje,
-            T datos,
-            String ruta,
             String idRastreo,
+            String ruta,
             String fecha,
             String hora,
+            T datos,
             Object errores) {
         this.estado = estado;
         this.mensaje = mensaje;
-        this.datos = datos;
-        this.ruta = ruta;
         this.idRastreo = idRastreo;
+        this.ruta = ruta;
         this.fecha = fecha;
         this.hora = hora;
+        this.datos = datos;
         this.errores = errores;
     }
 
