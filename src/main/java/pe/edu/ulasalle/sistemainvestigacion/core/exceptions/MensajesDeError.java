@@ -13,7 +13,8 @@ public enum MensajesDeError {
     ERROR_GENERAL("Ocurrio un error al procesar la solicitud.", 500),
     ERROR_CREDENCIALES_GOOGLE_NO_ENCONTRADAS(
             "Falta el archivo google-credentials.json en src/main/resources", 500),
-    ERROR_CREDENCIALES_GOOGLE_INVALIDAS("Error al configurar el cliente de Google Classroom", 500);
+    ERROR_CREDENCIALES_GOOGLE_INVALIDAS("Error al configurar el cliente de Google Classroom", 500),
+    SIN_PERMISOS_DOCENTE("No tienes permisos de docente para gestionar tareas en esta clase", 403);
 
     private final String mensaje;
     private final int codigo;

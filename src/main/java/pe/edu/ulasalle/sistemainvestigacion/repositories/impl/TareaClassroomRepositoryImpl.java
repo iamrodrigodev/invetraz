@@ -1,5 +1,6 @@
 package pe.edu.ulasalle.sistemainvestigacion.repositories.impl;
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.model.CourseWork;
 import com.google.api.services.classroom.model.Date;
@@ -45,9 +46,75 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
             }
 
             return tareas.stream().map(this::mapearTarea).collect(Collectors.toList());
+        } catch (GoogleJsonResponseException e) {
+            manejarErrorGoogle(idClase, e);
+            throw new ExcepcionPersonalizada(MensajesDeError.ERROR_INTERNO);
+        } catch (ExcepcionPersonalizada e) {
+            throw e;
         } catch (Exception e) {
             log.error("Error al listar las tareas de la clase {} en Google Classroom", idClase, e);
             throw new ExcepcionPersonalizada(MensajesDeError.ERROR_INTERNO);
+        }
+    }
+
+    @Override
+    public TareaClassroom guardar(String idClase, TareaClassroom tarea) {
+        try {
+            CourseWork coursework =
+                    new CourseWork()
+                            .setTitle(tarea.getTitulo())
+                            .setDescription(tarea.getDescripcion())
+                            .setMaxPoints(tarea.getPuntajeMaximo())
+                            .setWorkType("ASSIGNMENT")
+                            .setState(
+                                    tarea.getEstado() != null
+                                            ? tarea.getEstado().name()
+                                            : EstadoTarea.PUBLISHED.name());
+
+            if (tarea.getFechaLimite() != null) {
+                Date dueDate =
+                        new Date()
+                                .setYear(tarea.getFechaLimite().getYear())
+                                .setMonth(tarea.getFechaLimite().getMonthValue())
+                                .setDay(tarea.getFechaLimite().getDayOfMonth());
+                TimeOfDay dueTime =
+                        new TimeOfDay()
+                                .setHours(tarea.getFechaLimite().getHour())
+                                .setMinutes(tarea.getFechaLimite().getMinute())
+                                .setSeconds(tarea.getFechaLimite().getSecond());
+                coursework.setDueDate(dueDate);
+                coursework.setDueTime(dueTime);
+            }
+
+            CourseWork tareaCreada =
+                    clienteGoogle.courses().courseWork().create(idClase, coursework).execute();
+
+            return mapearTarea(tareaCreada);
+        } catch (GoogleJsonResponseException e) {
+            manejarErrorGoogle(idClase, e);
+            throw new ExcepcionPersonalizada(MensajesDeError.ERROR_INTERNO);
+        } catch (ExcepcionPersonalizada e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Error al guardar la tarea en la clase {} en Google Classroom", idClase, e);
+            throw new ExcepcionPersonalizada(MensajesDeError.ERROR_INTERNO);
+        }
+    }
+
+    private void manejarErrorGoogle(String idClase, GoogleJsonResponseException e) {
+        log.warn(
+                "Error de Google Classroom al procesar clase {}: status={}, mensaje={}",
+                idClase,
+                e.getStatusCode(),
+                e.getMessage());
+        if (e.getStatusCode() == 403) {
+            throw new ExcepcionPersonalizada(MensajesDeError.SIN_PERMISOS_DOCENTE);
+        }
+        if (e.getStatusCode() == 404) {
+            throw new ExcepcionPersonalizada(MensajesDeError.RECURSO_NO_ENCONTRADO);
+        }
+        if (e.getStatusCode() == 400) {
+            throw new ExcepcionPersonalizada(MensajesDeError.DATOS_INVALIDOS);
         }
     }
 

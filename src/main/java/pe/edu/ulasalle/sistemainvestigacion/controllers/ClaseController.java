@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import pe.edu.ulasalle.sistemainvestigacion.core.response.ApiRespuesta;
 import pe.edu.ulasalle.sistemainvestigacion.core.response.MensajeConfirmacion;
 import pe.edu.ulasalle.sistemainvestigacion.dto.peticion.CrearClasePeticion;
+import pe.edu.ulasalle.sistemainvestigacion.dto.peticion.CrearTareaPeticion;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.ClaseRespuesta;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.TareaRespuesta;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoArchivarClase;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoCrearClase;
+import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoCrearTarea;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarClases;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarTareas;
 
@@ -28,16 +30,19 @@ public class ClaseController {
     private final CasoUsoArchivarClase casoUsoArchivarClase;
     private final CasoUsoListarClases casoUsoListarClases;
     private final CasoUsoListarTareas casoUsoListarTareas;
+    private final CasoUsoCrearTarea casoUsoCrearTarea;
 
     public ClaseController(
             CasoUsoCrearClase casoUsoCrearClase,
             CasoUsoArchivarClase casoUsoArchivarClase,
             CasoUsoListarClases casoUsoListarClases,
-            CasoUsoListarTareas casoUsoListarTareas) {
+            CasoUsoListarTareas casoUsoListarTareas,
+            CasoUsoCrearTarea casoUsoCrearTarea) {
         this.casoUsoCrearClase = casoUsoCrearClase;
         this.casoUsoArchivarClase = casoUsoArchivarClase;
         this.casoUsoListarClases = casoUsoListarClases;
         this.casoUsoListarTareas = casoUsoListarTareas;
+        this.casoUsoCrearTarea = casoUsoCrearTarea;
     }
 
     @PostMapping
@@ -66,5 +71,13 @@ public class ClaseController {
         return ApiRespuesta.ok(
                 MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(),
                 casoUsoListarTareas.ejecutar(idClase));
+    }
+
+    @PostMapping("/{idClase}/tareas")
+    public ResponseEntity<ApiRespuesta<TareaRespuesta>> crearTarea(
+            @PathVariable String idClase, @Valid @RequestBody CrearTareaPeticion peticion) {
+        return ApiRespuesta.creado(
+                MensajeConfirmacion.RECURSO_CREADO.getMensaje(),
+                casoUsoCrearTarea.ejecutar(idClase, peticion));
     }
 }
