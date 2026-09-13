@@ -13,31 +13,12 @@ public class ManejadorErroresGoogle {
 
     public ExcepcionPersonalizada manejar(String contexto, Exception excepcion) {
         if (excepcion instanceof GoogleJsonResponseException gjre) {
-            int codigo = gjre.getStatusCode();
             log.warn(
                     "Error de Google Classroom en {}: status={}, error={}",
                     contexto,
-                    codigo,
+                    gjre.getStatusCode(),
                     gjre.getDetails() != null ? gjre.getDetails().getMessage() : gjre.getMessage());
-
-            if (codigo == 400) {
-                return new ExcepcionPersonalizada(MensajesDeError.DATOS_INVALIDOS);
-            }
-            if (codigo == 401) {
-                return new ExcepcionPersonalizada(MensajesDeError.ERROR_CONFIGURACION_GOOGLE);
-            }
-            if (codigo == 403) {
-                return new ExcepcionPersonalizada(MensajesDeError.SIN_PERMISOS_DOCENTE);
-            }
-            if (codigo == 404) {
-                return new ExcepcionPersonalizada(MensajesDeError.RECURSO_NO_ENCONTRADO);
-            }
-            if (codigo == 429) {
-                return new ExcepcionPersonalizada(MensajesDeError.LIMITE_PETICIONES_EXCEDIDO);
-            }
-            if (codigo >= 500) {
-                return new ExcepcionPersonalizada(MensajesDeError.ERROR_COMUNICACION_GOOGLE);
-            }
+            return new ExcepcionPersonalizada(mapearCodigoEstadoGoogle(gjre.getStatusCode()));
         }
 
         if (excepcion.getCause() instanceof SocketTimeoutException
@@ -52,5 +33,19 @@ public class ManejadorErroresGoogle {
 
         log.error("Error no controlado en Google Classroom ({})", contexto, excepcion);
         return new ExcepcionPersonalizada(MensajesDeError.ERROR_INTERNO);
+    }
+
+    private MensajesDeError mapearCodigoEstadoGoogle(int codigo) {
+        if (codigo >= 500) {
+            return MensajesDeError.ERROR_COMUNICACION_GOOGLE;
+        }
+        return switch (codigo) {
+            case 400 -> MensajesDeError.DATOS_INVALIDOS;
+            case 401 -> MensajesDeError.ERROR_CONFIGURACION_GOOGLE;
+            case 403 -> MensajesDeError.SIN_PERMISOS_DOCENTE;
+            case 404 -> MensajesDeError.RECURSO_NO_ENCONTRADO;
+            case 429 -> MensajesDeError.LIMITE_PETICIONES_EXCEDIDO;
+            default -> MensajesDeError.ERROR_INTERNO;
+        };
     }
 }
