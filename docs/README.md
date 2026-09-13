@@ -24,7 +24,7 @@ Documentación para la integración de Google Classroom API en Spring Boot media
 ## 2. Generación del Refresh Token (OAuth 2.0 Playground)
 
 1. Ingresar a [Google OAuth 2.0 Playground](https://developers.google.com/oauthplayground/).
-2. Abrir el panel de configuración (engranaje ⚙️) y marcar:
+2. Abrir el panel de configuración (engranaje) y marcar:
    - Use your own OAuth credentials.
    - Ingresar el OAuth Client ID y OAuth Client Secret.
 3. En **Step 1**, en *Input your own scopes*, ingresar:
