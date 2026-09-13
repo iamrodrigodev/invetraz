@@ -9,6 +9,7 @@ import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 import java.io.InputStream;
 import java.util.Collections;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada;
@@ -16,6 +17,12 @@ import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 
 @Configuration
 public class ClienteClassroomConfig {
+
+    private final String usuarioDelegado;
+
+    public ClienteClassroomConfig(@Value("${app.google.usuario-delegado}") String usuarioDelegado) {
+        this.usuarioDelegado = usuarioDelegado;
+    }
 
     @Bean
     public Classroom googleClassroomClient() {
@@ -28,7 +35,8 @@ public class ClienteClassroomConfig {
 
             GoogleCredentials credentials =
                     GoogleCredentials.fromStream(resourceStream)
-                            .createScoped(Collections.singleton(ClassroomScopes.CLASSROOM_COURSES));
+                            .createScoped(Collections.singleton(ClassroomScopes.CLASSROOM_COURSES))
+                            .createDelegated(usuarioDelegado);
 
             NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 

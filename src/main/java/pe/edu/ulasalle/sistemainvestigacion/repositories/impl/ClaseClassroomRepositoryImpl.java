@@ -2,7 +2,6 @@ package pe.edu.ulasalle.sistemainvestigacion.repositories.impl;
 
 import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.model.Course;
-import com.google.api.services.classroom.model.ListInvitationsResponse;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -68,21 +67,6 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
     @Override
     public List<ClaseClassroom> listarTodas() {
         try {
-            try {
-                ListInvitationsResponse invitaciones =
-                        clienteGoogle.invitations().list().setUserId("me").execute();
-                if (invitaciones.getInvitations() != null) {
-                    for (var inv : invitaciones.getInvitations()) {
-                        clienteGoogle.invitations().accept(inv.getId()).execute();
-                        log.info(
-                                "Invitacion aceptada automaticamente para curso: {}",
-                                inv.getCourseId());
-                    }
-                }
-            } catch (Exception e) {
-                log.warn("Verificacion de invitaciones omitida: {}", e.getMessage());
-            }
-
             var response =
                     clienteGoogle
                             .courses()
@@ -100,7 +84,11 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
                                     ClaseClassroom.builder()
                                             .idClassroom(curso.getId())
                                             .nombre(curso.getName())
-                                            .estado(EstadoClase.valueOf(curso.getCourseState()))
+                                            .estado(
+                                                    curso.getCourseState() != null
+                                                            ? EstadoClase.valueOf(
+                                                                    curso.getCourseState())
+                                                            : EstadoClase.PROVISIONED)
                                             .enlaceClase(curso.getAlternateLink())
                                             .build())
                     .collect(Collectors.toList());
