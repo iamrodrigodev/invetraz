@@ -1,9 +1,6 @@
 ﻿# Configuración de Google Classroom API (OAuth 2.0)
 
-Documentación técnica minimalista para la integración de Google Classroom API en Spring Boot mediante credenciales de usuario con 
-efresh_token.
-
----
+Documentación para la integración de Google Classroom API en Spring Boot mediante credenciales de usuario con refresh_token.
 
 ## 1. Google Cloud Console
 
@@ -24,8 +21,6 @@ efresh_token.
      `
    - Guardar el Client ID y Client Secret.
 
----
-
 ## 2. Generación del Refresh Token (OAuth 2.0 Playground)
 
 1. Ingresar a [Google OAuth 2.0 Playground](https://developers.google.com/oauthplayground/).
@@ -41,8 +36,6 @@ efresh_token.
 5. En **Step 2**, hacer clic en **Exchange authorization code for tokens**.
 6. Copiar el valor generado en **Refresh token** (1//...).
 
----
-
 ## 3. Configuración en Spring Boot
 
 ### application.yml
@@ -54,31 +47,8 @@ app:
     refresh-token: "TU_REFRESH_TOKEN"
 `
 
-### ClienteClassroomConfig.java
-Uso de UserCredentials para autenticación autónoma en segundo plano sin intervención humana ni ventanas emergentes:
-
-`java
-GoogleCredentials credentials = UserCredentials.newBuilder()
-    .setClientId(clientId)
-    .setClientSecret(clientSecret)
-    .setRefreshToken(refreshToken)
-    .build();
-
-NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-
-return new Classroom.Builder(
-        httpTransport,
-        GsonFactory.getDefaultInstance(),
-        new HttpCredentialsAdapter(credentials))
-    .setApplicationName("SistemaDeInvestigacion")
-    .build();
-`
-
----
-
 ## 4. Consideraciones Técnicas
 
-- **Persistencia de sesión:** El 
-efresh_token no expira automáticamente en entornos internos y renueva el ccess_token de 1 hora de manera transparente.
+- **Persistencia de sesión:** El refresh_token no expira automáticamente en entornos internos y renueva el access_token de 1 hora de manera transparente.
 - **Optimización de red (Windows):** En SistemaDeInvestigacion.java, se establece java.net.preferIPv4Stack=true para evitar retardos por timeout de socket en IPv6.
 - **Respuestas parciales:** El repositorio utiliza .setFields("courses(id,name,courseState,alternateLink)") para optimizar los tiempos de respuesta de Google.
