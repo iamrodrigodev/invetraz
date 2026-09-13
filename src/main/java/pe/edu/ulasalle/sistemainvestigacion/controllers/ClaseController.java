@@ -2,6 +2,7 @@ package pe.edu.ulasalle.sistemainvestigacion.controllers;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,6 +23,7 @@ import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoCrearTare
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarClases;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarTareas;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/clases")
 public class ClaseController {
@@ -48,6 +50,7 @@ public class ClaseController {
     @PostMapping
     public ResponseEntity<ApiRespuesta<ClaseRespuesta>> crearClase(
             @Valid @RequestBody CrearClasePeticion peticion) {
+        log.info("Peticion para crear clase: {}", peticion.getNombre());
         return ApiRespuesta.creado(
                 MensajeConfirmacion.RECURSO_CREADO.getMensaje(),
                 casoUsoCrearClase.ejecutar(peticion));
@@ -55,12 +58,14 @@ public class ClaseController {
 
     @PatchMapping("/{id}/archivar")
     public ResponseEntity<ApiRespuesta<Void>> archivarClase(@PathVariable String id) {
+        log.info("Peticion para archivar clase: {}", id);
         casoUsoArchivarClase.ejecutar(id);
         return ApiRespuesta.ok(MensajeConfirmacion.OPERACION_EXITOSA.getMensaje());
     }
 
     @GetMapping
     public ResponseEntity<ApiRespuesta<List<ClaseRespuesta>>> listarClases() {
+        log.info("Peticion para listar clases");
         return ApiRespuesta.ok(
                 MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(), casoUsoListarClases.ejecutar());
     }
@@ -68,6 +73,7 @@ public class ClaseController {
     @GetMapping("/{idClase}/tareas")
     public ResponseEntity<ApiRespuesta<List<TareaRespuesta>>> listarTareas(
             @PathVariable String idClase) {
+        log.info("Peticion para listar tareas de la clase: {}", idClase);
         return ApiRespuesta.ok(
                 MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(),
                 casoUsoListarTareas.ejecutar(idClase));
@@ -76,6 +82,7 @@ public class ClaseController {
     @PostMapping("/{idClase}/tareas")
     public ResponseEntity<ApiRespuesta<TareaRespuesta>> crearTarea(
             @PathVariable String idClase, @Valid @RequestBody CrearTareaPeticion peticion) {
+        log.info("Peticion para crear tarea en clase {}: {}", idClase, peticion.getTitulo());
         return ApiRespuesta.creado(
                 MensajeConfirmacion.RECURSO_CREADO.getMensaje(),
                 casoUsoCrearTarea.ejecutar(idClase, peticion));
