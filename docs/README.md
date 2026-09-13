@@ -16,9 +16,9 @@ Documentación para la integración de Google Classroom API en Spring Boot media
    - Tipo: **ID de cliente de OAuth 2.0** > **Aplicación web**.
    - Nombre: Backend Investigacion.
    - URI de redireccionamiento autorizado:
-     `	ext
+     ```text
      https://developers.google.com/oauthplayground
-     `
+     ```
    - Guardar el Client ID y Client Secret.
 
 ## 2. Generación del Refresh Token (OAuth 2.0 Playground)
@@ -40,13 +40,13 @@ Documentación para la integración de Google Classroom API en Spring Boot media
 ## 3. Configuración en Spring Boot
 
 ### application.yml
-`yaml
+```yaml
 app:
   google:
     client-id: "TU_CLIENT_ID"
     client-secret: "TU_CLIENT_SECRET"
     refresh-token: "TU_REFRESH_TOKEN"
-`
+```
 
 ## 4. Consideraciones Técnicas
 
