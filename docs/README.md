@@ -31,6 +31,7 @@ Documentación para la integración de Google Classroom API en Spring Boot media
    ```text
    https://www.googleapis.com/auth/classroom.courses
    https://www.googleapis.com/auth/classroom.coursework.students
+   https://www.googleapis.com/auth/classroom.coursework.me
    ```
    Hacer clic en **Authorize APIs**.
 4. Iniciar sesión con la cuenta institucional y conceder permisos.
