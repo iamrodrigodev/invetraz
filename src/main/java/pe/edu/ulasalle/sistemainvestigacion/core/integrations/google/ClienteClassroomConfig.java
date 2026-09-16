@@ -1,6 +1,7 @@
 package pe.edu.ulasalle.sistemainvestigacion.core.integrations.google;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.classroom.Classroom;
@@ -53,12 +54,18 @@ public class ClienteClassroomConfig {
                             .setRefreshToken(refreshToken)
                             .build();
 
+            HttpCredentialsAdapter adapter = new HttpCredentialsAdapter(credentials);
+            HttpRequestInitializer requestInitializer =
+                    request -> {
+                        adapter.initialize(request);
+                        request.setConnectTimeout(10000);
+                        request.setReadTimeout(20000);
+                    };
+
             NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 
             return new Classroom.Builder(
-                            httpTransport,
-                            GsonFactory.getDefaultInstance(),
-                            new HttpCredentialsAdapter(credentials))
+                            httpTransport, GsonFactory.getDefaultInstance(), requestInitializer)
                     .setApplicationName("SistemaDeInvestigacion")
                     .build();
         } catch (ExcepcionPersonalizada e) {

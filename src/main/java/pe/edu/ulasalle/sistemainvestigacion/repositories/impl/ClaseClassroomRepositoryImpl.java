@@ -71,6 +71,8 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
                     clienteGoogle
                             .courses()
                             .list()
+                            .setTeacherId("me")
+                            .setPageSize(20)
                             .setCourseStates(Arrays.asList("ACTIVE", "PROVISIONED"))
                             .setFields("courses(id,name,courseState,alternateLink)")
                             .execute();
