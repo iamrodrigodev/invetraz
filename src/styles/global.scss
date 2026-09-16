@@ -1,0 +1,9 @@
+$border-radius: 8px;
+
+.custom-card {
+	border-radius: $border-radius;
+
+	&:hover {
+		transform: translateY(-2px);
+	}
+}
