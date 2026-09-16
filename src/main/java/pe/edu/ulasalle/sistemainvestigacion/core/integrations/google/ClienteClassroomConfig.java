@@ -34,7 +34,12 @@ public class ClienteClassroomConfig {
     @Bean
     public Classroom googleClassroomClient() {
         try {
-            if (clientId == null || clientSecret == null || refreshToken == null) {
+            if (clientId == null
+                    || clientId.isBlank()
+                    || clientSecret == null
+                    || clientSecret.isBlank()
+                    || refreshToken == null
+                    || refreshToken.isBlank()) {
                 log.error(
                         "Faltan las credenciales de Google Classroom en la configuracion del"
                                 + " servidor");
