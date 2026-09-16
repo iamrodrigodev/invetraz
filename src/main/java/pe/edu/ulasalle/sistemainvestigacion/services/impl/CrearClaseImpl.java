@@ -22,7 +22,7 @@ public class CrearClaseImpl implements CasoUsoCrearClase {
     @Override
     public ClaseRespuesta ejecutar(CrearClasePeticion peticion) {
         log.info(
-                "Entrada - Creando clase con nombre: '{}', seccion: '{}', profesorId: '{}'",
+                "Creando clase '{}' (seccion: '{}', profesorId: '{}')",
                 peticion.getNombre(),
                 peticion.getSeccion(),
                 peticion.getProfesorId());
@@ -35,11 +35,11 @@ public class CrearClaseImpl implements CasoUsoCrearClase {
                         .estado(EstadoClase.PROVISIONED)
                         .build();
 
-        log.info("Proceso - Guardando nueva clase en Google Classroom...");
         ClaseClassroom claseCreada = claseRepository.guardar(nuevaClase);
 
         log.info(
-                "Resultado - Clase creada exitosamente con idClassroom: '{}'",
+                "Clase '{}' creada exitosamente con id: '{}'",
+                claseCreada.getNombre(),
                 claseCreada.getIdClassroom());
 
         return ClaseRespuesta.builder()

@@ -21,10 +21,9 @@ public class ListarTareasImpl implements CasoUsoListarTareas {
 
     @Override
     public List<TareaRespuesta> ejecutar(String idClase) {
-        log.info("Entrada - Listando tareas para la clase con id: '{}'", idClase);
-        log.info("Proceso - Consultando tareas en Google Classroom para la clase '{}'...", idClase);
+        log.info("Consultando tareas de la clase '{}' en Google Classroom", idClase);
         List<TareaClassroom> tareas = tareaRepository.listarPorClase(idClase);
-        log.info("Resultado - Se obtuvieron {} tareas para la clase '{}'", tareas.size(), idClase);
+        log.info("Tareas obtenidas para la clase '{}': {}", idClase, tareas.size());
 
         return tareas.stream()
                 .map(

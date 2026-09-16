@@ -21,10 +21,9 @@ public class ListarClasesDocenteImpl implements CasoUsoListarClasesDocente {
 
     @Override
     public List<ClaseRespuesta> ejecutar() {
-        log.info("Entrada - Solicitud para listar clases de docente");
-        log.info("Proceso - Consultando clases en Google Classroom donde el usuario es docente...");
+        log.info("Consultando clases del docente en Google Classroom");
         List<ClaseClassroom> clases = claseRepository.listarPorDocente();
-        log.info("Resultado - Se obtuvieron {} clases de docente", clases.size());
+        log.info("Clases de docente obtenidas: {}", clases.size());
 
         return clases.stream()
                 .map(

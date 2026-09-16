@@ -20,13 +20,7 @@ public class CrearTareaImpl implements CasoUsoCrearTarea {
 
     @Override
     public TareaRespuesta ejecutar(String idClase, CrearTareaPeticion peticion) {
-        log.info(
-                "Entrada - Creando tarea '{}' en clase con id: '{}', puntajeMaximo: {},"
-                        + " fechaLimite: {}",
-                peticion.getTitulo(),
-                idClase,
-                peticion.getPuntajeMaximo(),
-                peticion.getFechaLimite());
+        log.info("Creando tarea '{}' en clase '{}'", peticion.getTitulo(), idClase);
 
         TareaClassroom tareaDominio =
                 TareaClassroom.builder()
@@ -37,13 +31,12 @@ public class CrearTareaImpl implements CasoUsoCrearTarea {
                         .estado(peticion.getEstado())
                         .build();
 
-        log.info("Proceso - Guardando tarea '{}' en Google Classroom...", peticion.getTitulo());
         TareaClassroom tareaGuardada = tareaRepository.guardar(idClase, tareaDominio);
 
         log.info(
-                "Resultado - Tarea creada exitosamente con idTarea: '{}' en clase: '{}'",
-                tareaGuardada.getIdTarea(),
-                idClase);
+                "Tarea '{}' creada exitosamente con id: '{}'",
+                tareaGuardada.getTitulo(),
+                tareaGuardada.getIdTarea());
 
         return TareaRespuesta.builder()
                 .idTarea(tareaGuardada.getIdTarea())

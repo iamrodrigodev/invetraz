@@ -21,10 +21,9 @@ public class ListarClasesAlumnoImpl implements CasoUsoListarClasesAlumno {
 
     @Override
     public List<ClaseRespuesta> ejecutar() {
-        log.info("Entrada - Solicitud para listar clases como alumno");
-        log.info("Proceso - Consultando clases en Google Classroom donde el usuario es alumno...");
+        log.info("Consultando clases del estudiante en Google Classroom");
         List<ClaseClassroom> clases = claseRepository.listarPorAlumno();
-        log.info("Resultado - Se obtuvieron {} clases como alumno", clases.size());
+        log.info("Clases de estudiante obtenidas: {}", clases.size());
 
         return clases.stream()
                 .map(
