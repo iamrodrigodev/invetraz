@@ -19,7 +19,8 @@ import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.TareaRespuesta;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoArchivarClase;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoCrearClase;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoCrearTarea;
-import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarClases;
+import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarClasesAlumno;
+import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarClasesDocente;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarTareas;
 
 @RestController
@@ -28,19 +29,22 @@ public class ClaseController {
 
     private final CasoUsoCrearClase casoUsoCrearClase;
     private final CasoUsoArchivarClase casoUsoArchivarClase;
-    private final CasoUsoListarClases casoUsoListarClases;
+    private final CasoUsoListarClasesDocente casoUsoListarClasesDocente;
+    private final CasoUsoListarClasesAlumno casoUsoListarClasesAlumno;
     private final CasoUsoListarTareas casoUsoListarTareas;
     private final CasoUsoCrearTarea casoUsoCrearTarea;
 
     public ClaseController(
             CasoUsoCrearClase casoUsoCrearClase,
             CasoUsoArchivarClase casoUsoArchivarClase,
-            CasoUsoListarClases casoUsoListarClases,
+            CasoUsoListarClasesDocente casoUsoListarClasesDocente,
+            CasoUsoListarClasesAlumno casoUsoListarClasesAlumno,
             CasoUsoListarTareas casoUsoListarTareas,
             CasoUsoCrearTarea casoUsoCrearTarea) {
         this.casoUsoCrearClase = casoUsoCrearClase;
         this.casoUsoArchivarClase = casoUsoArchivarClase;
-        this.casoUsoListarClases = casoUsoListarClases;
+        this.casoUsoListarClasesDocente = casoUsoListarClasesDocente;
+        this.casoUsoListarClasesAlumno = casoUsoListarClasesAlumno;
         this.casoUsoListarTareas = casoUsoListarTareas;
         this.casoUsoCrearTarea = casoUsoCrearTarea;
     }
@@ -59,10 +63,18 @@ public class ClaseController {
         return ApiRespuesta.ok(MensajeConfirmacion.OPERACION_EXITOSA.getMensaje());
     }
 
-    @GetMapping
-    public ResponseEntity<ApiRespuesta<List<ClaseRespuesta>>> listarClases() {
+    @GetMapping({"", "/", "/docente", "/propias"})
+    public ResponseEntity<ApiRespuesta<List<ClaseRespuesta>>> listarClasesDocente() {
         return ApiRespuesta.ok(
-                MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(), casoUsoListarClases.ejecutar());
+                MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(),
+                casoUsoListarClasesDocente.ejecutar());
+    }
+
+    @GetMapping({"/alumno", "/inscritas"})
+    public ResponseEntity<ApiRespuesta<List<ClaseRespuesta>>> listarClasesAlumno() {
+        return ApiRespuesta.ok(
+                MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(),
+                casoUsoListarClasesAlumno.ejecutar());
     }
 
     @GetMapping("/{idClase}/tareas")

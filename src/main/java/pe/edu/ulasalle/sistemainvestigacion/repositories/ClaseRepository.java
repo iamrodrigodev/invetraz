@@ -8,5 +8,7 @@ public interface ClaseRepository {
 
     void archivar(String idClassroom);
 
-    List<ClaseClassroom> listarTodas();
+    List<ClaseClassroom> listarPorDocente();
+
+    List<ClaseClassroom> listarPorAlumno();
 }

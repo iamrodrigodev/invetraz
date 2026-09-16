@@ -65,7 +65,7 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
     }
 
     @Override
-    public List<ClaseClassroom> listarTodas() {
+    public List<ClaseClassroom> listarPorDocente() {
         try {
             var response =
                     clienteGoogle
@@ -76,26 +76,47 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
                             .setCourseStates(Arrays.asList("ACTIVE", "PROVISIONED"))
                             .setFields("courses(id,name,courseState,alternateLink)")
                             .execute();
-            List<Course> cursos = response.getCourses();
-            if (cursos == null || cursos.isEmpty()) {
-                return Collections.emptyList();
-            }
-            return cursos.stream()
-                    .map(
-                            curso ->
-                                    ClaseClassroom.builder()
-                                            .idClassroom(curso.getId())
-                                            .nombre(curso.getName())
-                                            .estado(
-                                                    curso.getCourseState() != null
-                                                            ? EstadoClase.valueOf(
-                                                                    curso.getCourseState())
-                                                            : EstadoClase.PROVISIONED)
-                                            .enlaceClase(curso.getAlternateLink())
-                                            .build())
-                    .collect(Collectors.toList());
+            return mapearCursos(response.getCourses());
         } catch (Exception e) {
-            throw manejadorErroresGoogle.manejar("ClaseClassroomRepository.listarTodas", e);
+            throw manejadorErroresGoogle.manejar("ClaseClassroomRepository.listarPorDocente", e);
         }
+    }
+
+    @Override
+    public List<ClaseClassroom> listarPorAlumno() {
+        try {
+            var response =
+                    clienteGoogle
+                            .courses()
+                            .list()
+                            .setStudentId("me")
+                            .setPageSize(20)
+                            .setCourseStates(Arrays.asList("ACTIVE", "PROVISIONED"))
+                            .setFields("courses(id,name,courseState,alternateLink)")
+                            .execute();
+            return mapearCursos(response.getCourses());
+        } catch (Exception e) {
+            throw manejadorErroresGoogle.manejar("ClaseClassroomRepository.listarPorAlumno", e);
+        }
+    }
+
+    private List<ClaseClassroom> mapearCursos(List<Course> cursos) {
+        if (cursos == null || cursos.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return cursos.stream()
+                .map(
+                        curso ->
+                                ClaseClassroom.builder()
+                                        .idClassroom(curso.getId())
+                                        .nombre(curso.getName())
+                                        .estado(
+                                                curso.getCourseState() != null
+                                                        ? EstadoClase.valueOf(
+                                                                curso.getCourseState())
+                                                        : EstadoClase.PROVISIONED)
+                                        .enlaceClase(curso.getAlternateLink())
+                                        .build())
+                .collect(Collectors.toList());
     }
 }
