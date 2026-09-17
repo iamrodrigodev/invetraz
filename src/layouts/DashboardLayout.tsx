@@ -40,7 +40,7 @@ export function DashboardLayout({
 				className={cn(
 					"fixed inset-y-0 left-0 z-30 transform transition-all duration-300 ease-in-out lg:static lg:inset-0 lg:translate-x-0",
 					menuLateralAbierto ? "translate-x-0" : "-translate-x-full",
-					estaColapsado ? "lg:w-20" : "lg:w-64",
+					estaColapsado ? "lg:w-20" : "lg:w-72",
 				)}
 			>
 				<Sidebar

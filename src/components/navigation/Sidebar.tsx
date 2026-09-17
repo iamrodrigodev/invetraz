@@ -13,18 +13,21 @@ export const ELEMENTOS_NAVEGACION: ItemNavegacion[] = [
 	{
 		id: "actividades",
 		titulo: "Actividades de seguimiento",
+		etiquetaMenu: "Actividades",
 		icono: ClipboardCheck,
 		descripcion: "Monitoreo y seguimiento de actividades",
 	},
 	{
 		id: "reportes",
 		titulo: "Reportes",
+		etiquetaMenu: "Reportes",
 		icono: BarChart3,
 		descripcion: "Informes y análisis de progreso",
 	},
 	{
 		id: "plantillas",
 		titulo: "Plantillas de seguimiento",
+		etiquetaMenu: "Plantillas",
 		icono: LayoutTemplate,
 		descripcion: "Modelos y formatos de registro",
 	},
@@ -49,7 +52,7 @@ export function Sidebar({
 		<aside
 			className={cn(
 				"relative flex h-full flex-col border-r border-slate-200 bg-white text-slate-600 transition-all duration-300 ease-in-out select-none",
-				estaColapsado ? "w-20" : "w-64",
+				estaColapsado ? "w-20" : "w-72",
 				className,
 			)}
 		>
@@ -114,12 +117,14 @@ function SidebarItem({
 	alHacerClic,
 }: SidebarItemProps) {
 	const Icono = item.icono;
+	const etiqueta = item.etiquetaMenu ?? item.titulo;
 
 	return (
 		<div className="group/item relative flex w-full justify-center">
 			<button
 				type="button"
 				onClick={alHacerClic}
+				title={item.titulo}
 				className={cn(
 					"flex h-11 items-center font-medium text-[15px] transition-all duration-200 ease-in-out cursor-pointer",
 					estaColapsado
@@ -145,7 +150,7 @@ function SidebarItem({
 						estaColapsado ? "ml-0 w-0 opacity-0" : "ml-3 w-auto opacity-100",
 					)}
 				>
-					{item.titulo}
+					{etiqueta}
 				</span>
 			</button>
 
