@@ -17,7 +17,7 @@ export function ModuloEnConstruccion({
 	return (
 		<div
 			className={cn(
-				"flex w-full flex-1 flex-col items-center justify-center rounded-3xl border border-slate-200/60 bg-white p-8 text-center shadow-xs md:p-12",
+				"flex h-full min-h-[450px] w-full flex-1 flex-col items-center justify-center rounded-3xl border border-slate-200/60 bg-white p-8 text-center shadow-xs md:p-12",
 				className,
 			)}
 		>

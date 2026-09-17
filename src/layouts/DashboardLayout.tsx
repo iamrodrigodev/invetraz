@@ -59,10 +59,9 @@ export function DashboardLayout({
 					alAbrirMenuMovil={() => setMenuLateralAbierto(true)}
 				/>
 
-				<main className="relative flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
-					<div className="flex min-h-0 w-full flex-1 flex-col">
+				<main className="flex flex-1 flex-col overflow-y-auto p-6">
+					<div className="flex h-full min-h-0 w-full flex-1 flex-col">
 						{children}
-						<div className="h-12 w-full shrink-0 md:h-16" aria-hidden="true" />
 					</div>
 				</main>
 			</div>
