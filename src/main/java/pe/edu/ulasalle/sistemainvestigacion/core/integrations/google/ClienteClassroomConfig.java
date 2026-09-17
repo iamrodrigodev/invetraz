@@ -54,6 +54,12 @@ public class ClienteClassroomConfig {
                             .setRefreshToken(refreshToken)
                             .build();
 
+            try {
+                credentials.refreshIfExpired();
+            } catch (Exception e) {
+                log.warn("No se pudo pre-refrescar el token OAuth2: {}", e.getMessage());
+            }
+
             HttpCredentialsAdapter adapter = new HttpCredentialsAdapter(credentials);
             HttpRequestInitializer requestInitializer =
                     request -> {

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RaizController {
 
-    @GetMapping({"/", ""})
+    @GetMapping("/")
     public ResponseEntity<Void> redirigirAlEstado() {
         return ResponseEntity.status(HttpStatus.FOUND)
                 .location(URI.create("/api/v1/estado"))

@@ -63,14 +63,14 @@ public class ClaseController {
         return ApiRespuesta.ok(MensajeConfirmacion.OPERACION_EXITOSA.getMensaje());
     }
 
-    @GetMapping({"/como-docente", "/docente"})
+    @GetMapping("/como-docente")
     public ResponseEntity<ApiRespuesta<List<ClaseRespuesta>>> listarClasesComoDocente() {
         return ApiRespuesta.ok(
                 MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(),
                 casoUsoListarClasesDocente.ejecutar());
     }
 
-    @GetMapping({"/como-estudiante", "/estudiante", "/alumno"})
+    @GetMapping("/como-estudiante")
     public ResponseEntity<ApiRespuesta<List<ClaseRespuesta>>> listarClasesComoEstudiante() {
         return ApiRespuesta.ok(
                 MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(),

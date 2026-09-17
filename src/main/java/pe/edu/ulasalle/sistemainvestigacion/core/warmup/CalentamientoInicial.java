@@ -1,6 +1,5 @@
 package pe.edu.ulasalle.sistemainvestigacion.core.warmup;
 
-import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -26,12 +25,12 @@ public class CalentamientoInicial {
 
     @EventListener(ApplicationReadyEvent.class)
     public void alIniciarAplicacion() {
-        CompletableFuture.runAsync(this::ejecutarCalentamiento);
+        ejecutarCalentamiento();
     }
 
     private void ejecutarCalentamiento() {
         long tiempoInicio = System.currentTimeMillis();
-        log.info("Iniciando warmup de integracion con Google Classroom en segundo plano");
+        log.info("Iniciando warmup de integracion con Google Classroom");
         try {
             var clasesDocente = casoUsoListarClasesDocente.ejecutar();
             var clasesAlumno = casoUsoListarClasesAlumno.ejecutar();
