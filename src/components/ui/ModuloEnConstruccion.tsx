@@ -21,9 +21,7 @@ export function ModuloEnConstruccion({
 				className,
 			)}
 		>
-			<div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-primary-50 text-primary">
-				<Icono className="h-10 w-10" strokeWidth={1.75} />
-			</div>
+			<Icono className="mb-6 h-14 w-14 text-primary" strokeWidth={1.5} />
 			<h2 className="mb-2 font-extrabold font-heading text-2xl text-slate-900 tracking-tight md:text-3xl">
 				{titulo}
 			</h2>
