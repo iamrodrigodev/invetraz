@@ -30,10 +30,6 @@ export function ModuloEnConstruccion({
 			<p className="max-w-md text-slate-500 text-sm leading-relaxed md:text-base">
 				{descripcion}
 			</p>
-			<div className="mt-8 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3.5 py-1 text-xs font-semibold text-amber-700">
-				<span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
-				<span>Módulo en construcción</span>
-			</div>
 		</div>
 	);
 }
