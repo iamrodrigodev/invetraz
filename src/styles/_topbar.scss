@@ -1,0 +1,116 @@
+@use "variables" as *;
+
+.dashboard-topbar {
+	position: relative;
+	z-index: 10;
+	display: flex;
+	height: $topbar-height;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: 1px solid $color-border;
+	background-color: $color-surface;
+	padding: 0 1rem;
+
+	@media (min-width: 1024px) {
+		padding: 0 2rem;
+	}
+
+	.topbar-left {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+
+		@media (min-width: 768px) {
+			gap: 1rem;
+		}
+	}
+
+	.topbar-mobile-btn {
+		display: flex;
+		height: 36px;
+		width: 36px;
+		align-items: center;
+		justify-content: center;
+		border-radius: $radius-md;
+		border: none;
+		background-color: transparent;
+		color: $color-text-muted;
+		cursor: pointer;
+		transition: background-color 150ms ease, color 150ms ease;
+
+		&:hover {
+			background-color: $color-surface-hover;
+			color: $color-text-title;
+		}
+
+		@media (min-width: 1024px) {
+			display: none;
+		}
+	}
+
+	.topbar-heading {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+
+		.topbar-breadcrumb {
+			display: none;
+			font-size: 12px;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+			color: $color-text-subtle;
+
+			@media (min-width: 640px) {
+				display: inline-block;
+			}
+		}
+
+		.topbar-separator {
+			display: none;
+			color: #cbd5e1;
+
+			@media (min-width: 640px) {
+				display: inline-block;
+			}
+		}
+
+		.topbar-title {
+			font-family: $font-heading;
+			font-size: 1rem;
+			font-weight: 600;
+			color: $color-text-title;
+
+			@media (min-width: 768px) {
+				font-size: 1.125rem;
+			}
+		}
+	}
+
+	.topbar-right {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+
+		.system-status-pill {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			border-radius: $radius-full;
+			background-color: $color-surface-hover;
+			padding: 4px 12px;
+			font-size: 12px;
+			font-weight: 500;
+			color: $color-text-muted;
+
+			.status-pulse-dot {
+				height: 8px;
+				width: 8px;
+				border-radius: 50%;
+				background-color: $color-accent-500;
+				box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+			}
+		}
+	}
+}

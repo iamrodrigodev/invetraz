@@ -19,5 +19,14 @@
 			"quoteStyle": "double",
 			"semicolons": "always"
 		}
+	},
+	"css": {
+		"parser": {
+			"cssModules": true,
+			"tailwindDirectives": true
+		},
+		"formatter": {
+			"enabled": true
+		}
 	}
 }

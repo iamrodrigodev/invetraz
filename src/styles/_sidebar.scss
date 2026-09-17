@@ -1,0 +1,261 @@
+@use "variables" as *;
+
+.dashboard-sidebar {
+	position: relative;
+	display: flex;
+	height: 100%;
+	flex-direction: column;
+	background-color: $color-surface;
+	border-right: 1px solid $color-border;
+	color: $color-text-body;
+	user-select: none;
+	transition: width $transition-speed $transition-ease;
+
+	&.is-collapsed {
+		width: $sidebar-width-collapsed;
+
+		.sidebar-header {
+			justify-content: center;
+			padding: 0 0.5rem;
+		}
+
+		.brand-text {
+			width: 0;
+			opacity: 0;
+			margin-left: 0;
+		}
+
+		.sidebar-nav {
+			padding: 1.5rem 0.5rem;
+		}
+
+		.sidebar-nav-item {
+			width: 44px;
+			margin: 0 auto;
+			padding: 0;
+			justify-content: center;
+			border-radius: 12px;
+
+			.item-label {
+				width: 0;
+				opacity: 0;
+				margin-left: 0;
+			}
+		}
+	}
+
+	&.is-expanded {
+		width: $sidebar-width-expanded;
+
+		.sidebar-header {
+			padding: 0 1.5rem;
+		}
+
+		.brand-text {
+			width: auto;
+			opacity: 1;
+			margin-left: 0.75rem;
+		}
+
+		.sidebar-nav {
+			padding: 1.5rem 0.75rem;
+		}
+
+		.sidebar-nav-item {
+			width: 100%;
+			padding: 0 0.75rem;
+			border-radius: $radius-md;
+
+			.item-label {
+				width: auto;
+				opacity: 1;
+				margin-left: 0.75rem;
+			}
+		}
+	}
+}
+
+.sidebar-header {
+	display: flex;
+	height: $topbar-height;
+	flex-shrink: 0;
+	align-items: center;
+	border-bottom: 1px solid $color-border;
+}
+
+.sidebar-brand {
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+	text-decoration: none;
+	cursor: default;
+
+	.brand-icon-box {
+		display: flex;
+		height: 36px;
+		width: 36px;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+		border-radius: 10px;
+		background-color: $color-primary-50;
+		color: $color-primary;
+	}
+
+	.brand-text {
+		display: flex;
+		align-items: center;
+		white-space: nowrap;
+		font-family: $font-heading;
+		font-size: 1.125rem;
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		color: $color-text-title;
+		transition: all $transition-speed $transition-ease;
+
+		.brand-highlight {
+			color: $color-primary;
+			font-weight: 800;
+		}
+	}
+}
+
+.sidebar-toggle-btn {
+	position: absolute;
+	top: 1.25rem;
+	right: -0.875rem;
+	z-index: 20;
+	display: none;
+	height: 28px;
+	width: 28px;
+	align-items: center;
+	justify-content: center;
+	border-radius: $radius-full;
+	border: 2px solid $color-bg-app;
+	background-color: $color-primary;
+	color: #ffffff;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+	cursor: pointer;
+	transition: background-color 150ms ease, transform 150ms ease;
+
+	&:hover {
+		background-color: $color-primary-hover;
+	}
+
+	&:active {
+		transform: scale(0.92);
+	}
+
+	@media (min-width: 1024px) {
+		display: flex;
+	}
+}
+
+.sidebar-nav {
+	flex: 1;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 0.375rem;
+}
+
+.sidebar-item-wrapper {
+	position: relative;
+	display: flex;
+	width: 100%;
+	justify-content: center;
+
+	&:hover {
+		.sidebar-tooltip {
+			opacity: 1;
+			visibility: visible;
+			transform: translateY(-50%) translateX(0);
+		}
+	}
+}
+
+.sidebar-nav-item {
+	display: flex;
+	height: 44px;
+	align-items: center;
+	font-size: 15px;
+	font-weight: 500;
+	border: none;
+	cursor: pointer;
+	text-decoration: none;
+	transition: all 180ms ease;
+
+	.item-icon {
+		height: 20px;
+		width: 20px;
+		flex-shrink: 0;
+		transition: color 180ms ease;
+	}
+
+	.item-label {
+		overflow: hidden;
+		white-space: nowrap;
+		transition: all $transition-speed $transition-ease;
+	}
+
+	&.is-inactive {
+		background-color: transparent;
+		color: $color-text-body;
+
+		.item-icon {
+			color: $color-text-muted;
+		}
+
+		&:hover {
+			background-color: $color-surface-hover;
+			color: $color-text-title;
+
+			.item-icon {
+				color: $color-text-title;
+			}
+		}
+	}
+
+	&.is-active {
+		background-color: $color-primary;
+		color: #ffffff;
+		box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25);
+
+		.item-icon {
+			color: #ffffff;
+			stroke-width: 2.4;
+		}
+	}
+}
+
+.sidebar-tooltip {
+	position: absolute;
+	left: calc(100% + 10px);
+	top: 50%;
+	transform: translateY(-50%) translateX(-4px);
+	z-index: 50;
+	white-space: nowrap;
+	border-radius: $radius-md;
+	background-color: #0f172a;
+	padding: 6px 12px;
+	font-size: 12px;
+	font-weight: 500;
+	color: #ffffff;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15);
+	pointer-events: none;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease;
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: 50%;
+		right: 100%;
+		transform: translateY(-50%);
+		border-width: 4px;
+		border-style: solid;
+		border-color: transparent #0f172a transparent transparent;
+	}
+}
+
