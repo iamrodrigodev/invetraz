@@ -15,6 +15,7 @@
 	"dependencies": {
 		"@hookform/resolvers": "^5.9.1",
 		"@tailwindcss/postcss": "^4.3.3",
+		"framer-motion": "^13.4.0",
 		"lucide-react": "^1.46.0",
 		"postcss": "^8.5.28",
 		"react": "^19.2.8",

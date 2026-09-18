@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { verificarAutenticacion } from "../features/auth/api/auth.api";
+import { logout, verificarAutenticacion } from "../features/auth/api/auth.api";
 import { verificarEstadoSistema } from "../features/setup/api/setup.api";
 
 interface AppState {
@@ -9,6 +9,7 @@ interface AppState {
 	verificarEstadoGlobal: () => Promise<void>;
 	setConfigurado: (valor: boolean) => void;
 	setAutenticado: (valor: boolean) => void;
+	cerrarSesion: () => Promise<void>;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -33,4 +34,14 @@ export const useAppStore = create<AppState>((set) => ({
 	},
 	setConfigurado: (valor: boolean) => set({ configurado: valor }),
 	setAutenticado: (valor: boolean) => set({ autenticado: valor }),
+	cerrarSesion: async () => {
+		try {
+			await logout();
+		} catch (_error) {
+			// Ignorar errores de red al cerrar sesión
+		}
+		localStorage.removeItem("jwt");
+		localStorage.removeItem("moduloActivo");
+		set({ autenticado: false });
+	},
 }));

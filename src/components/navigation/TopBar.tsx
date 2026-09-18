@@ -1,10 +1,10 @@
-﻿import { KeyRound, LogOut, Menu } from "lucide-react";
+import { KeyRound, LogOut, Menu } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ELEMENTOS_NAVEGACION } from "../../constants/navigation";
 import { ModalCambiarClave } from "../../features/auth/components/ModalCambiarClave";
+import { useAppStore } from "../../store/useAppStore";
 import { cn } from "../../utils/cn";
-import { Button } from "../ui";
 import type { ModuloId } from "./types";
 
 export interface TopBarProps {
@@ -19,14 +19,15 @@ export function TopBar({
 	className,
 }: TopBarProps) {
 	const navigate = useNavigate();
+	const cerrarSesionStore = useAppStore((state) => state.cerrarSesion);
 	const [modalClaveAbierto, setModalClaveAbierto] = useState(false);
 	const elementoActual = ELEMENTOS_NAVEGACION.find(
 		(item) => item.id === moduloActivo,
 	);
-	const titulo = elementoActual?.titulo || "Sistema de Investigacin";
+	const titulo = elementoActual?.titulo || "Sistema de Investigación";
 
-	const cerrarSesion = () => {
-		localStorage.removeItem("jwt");
+	const cerrarSesion = async () => {
+		await cerrarSesionStore();
 		navigate("/login", { replace: true });
 	};
 
@@ -42,7 +43,7 @@ export function TopBar({
 					<button
 						type="button"
 						onClick={alAbrirMenuMovil}
-						aria-label="Abrir men de navegacin"
+						aria-label="Abrir menú de navegación"
 						className="-ml-2 flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 lg:hidden cursor-pointer"
 					>
 						<Menu className="h-5 w-5" />
@@ -53,26 +54,27 @@ export function TopBar({
 					</h1>
 				</div>
 
-				<div className="flex items-center gap-2">
-					<Button
-						variant="ghost"
-						size="sm"
+				<div className="flex items-center gap-2.5">
+					<button
+						type="button"
 						onClick={() => setModalClaveAbierto(true)}
-						className="text-slate-500 hover:text-primary hover:bg-primary-50"
+						className="inline-flex items-center gap-2 rounded-xl border border-slate-200/80 bg-slate-50/50 px-3.5 py-1.5 font-medium text-xs text-slate-700 shadow-2xs transition-all hover:border-slate-300 hover:bg-slate-100/70 hover:text-slate-900 active:scale-98 cursor-pointer sm:text-sm"
 					>
-						<KeyRound className="h-4 w-4 mr-2" />
-						<span className="hidden sm:inline">Cambiar Contrasea</span>
-					</Button>
-					<div className="h-4 w-px bg-slate-200 mx-1 hidden sm:block"></div>
-					<Button
-						variant="ghost"
-						size="sm"
+						<KeyRound
+							className="h-4 w-4 shrink-0 text-primary"
+							strokeWidth={2.2}
+						/>
+						<span className="hidden sm:inline">Cambiar Contraseña</span>
+					</button>
+
+					<button
+						type="button"
 						onClick={cerrarSesion}
-						className="text-slate-500 hover:text-red-600 hover:bg-red-50"
+						className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-3.5 py-1.5 font-medium text-xs text-white shadow-2xs transition-all hover:bg-red-700 active:scale-98 cursor-pointer sm:text-sm"
 					>
-						<LogOut className="h-4 w-4 mr-2" />
-						<span className="hidden sm:inline">Cerrar Sesin</span>
-					</Button>
+						<LogOut className="h-4 w-4 shrink-0 text-white" strokeWidth={2.2} />
+						<span className="hidden sm:inline">Cerrar Sesión</span>
+					</button>
 				</div>
 			</header>
 

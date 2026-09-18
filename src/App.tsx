@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import type { ModuloId } from "./components/navigation/types";
-import { Spinner } from "./components/ui";
+import { PageSkeleton } from "./components/ui";
 import { DashboardLayout } from "./layouts";
 
 const ActividadesSeguimientoPage = lazy(
@@ -26,9 +26,7 @@ export default function App() {
 			moduloActivo={moduloActivo}
 			alCambiarModulo={setModuloActivo}
 		>
-			<Suspense
-				fallback={<Spinner fullContainer mensaje="Cargando módulo..." />}
-			>
+			<Suspense fallback={<PageSkeleton />}>
 				{moduloActivo === "actividades" && <ActividadesSeguimientoPage />}
 				{moduloActivo === "reportes" && <ReportesPage />}
 				{moduloActivo === "plantillas" && <PlantillasSeguimientoPage />}
