@@ -55,7 +55,7 @@ export function Spinner({
 			>
 				{spinnerElement}
 				{mensaje && (
-					<p className="font-medium text-slate-500 text-sm animate-pulse">
+					<p className="max-w-md text-slate-500 text-sm leading-relaxed md:text-base">
 						{mensaje}
 					</p>
 				)}
