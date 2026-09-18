@@ -5,7 +5,6 @@
 	try {
 		return await fetch(url, options);
 	} catch (_error) {
-		// Este bloque catch atrapa errores de red (CORS, servidor caído, sin internet)
 		throw new Error(
 			"El servidor no responde. Verifica que esté encendido o revisa tu conexión a internet.",
 		);
@@ -25,7 +24,6 @@ export async function extraerMensajeError(
 			mensajePorDefecto
 		);
 	} catch (_e) {
-		// Si el cuerpo no es JSON (ej. 502 Bad Gateway html)
 		return mensajePorDefecto;
 	}
 }

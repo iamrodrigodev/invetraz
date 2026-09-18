@@ -15,7 +15,6 @@ export function SetupPage() {
 	const [errorApi, setErrorApi] = useState<string | null>(null);
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirm, setShowConfirm] = useState(false);
-	const [redirigiendo, setRedirigiendo] = useState(false);
 
 	const {
 		register,
@@ -31,8 +30,6 @@ export function SetupPage() {
 			setErrorApi(null);
 			const { confirmPassword, ...payload } = data;
 			await crearAdmin(payload);
-			localStorage.setItem("sistema_configurado", "true");
-			setRedirigiendo(true);
 			navigate("/login", { replace: true });
 		} catch (error) {
 			setErrorApi(
@@ -146,13 +143,11 @@ export function SetupPage() {
 					<Button
 						type="submit"
 						disabled={!isValid}
-						isLoading={isSubmitting || redirigiendo}
+						isLoading={isSubmitting}
 						className="w-full font-bold"
 						size="lg"
 					>
-						{isSubmitting || redirigiendo
-							? "Creando..."
-							: "Crear Administrador"}
+						{isSubmitting ? "Creando..." : "Crear Administrador"}
 					</Button>
 				</form>
 			</div>

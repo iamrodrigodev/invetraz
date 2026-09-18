@@ -52,8 +52,8 @@ export function Button({
 			type={type}
 			disabled={disabled || isLoading}
 			className={cn(
-				"inline-flex select-none items-center justify-center font-medium transition-all duration-200 ease-in-out cursor-pointer",
-				"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50 active:translate-y-px",
+				"inline-flex select-none items-center justify-center font-medium transition-colors duration-200 cursor-pointer",
+				"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
 				variantStyles,
 				sizeStyles,
 				className,

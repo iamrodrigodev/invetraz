@@ -14,7 +14,6 @@ export function LoginPage() {
 	const navigate = useNavigate();
 	const [errorApi, setErrorApi] = useState<string | null>(null);
 	const [showPassword, setShowPassword] = useState(false);
-	const [redirigiendo, setRedirigiendo] = useState(false);
 
 	const {
 		register,
@@ -30,7 +29,6 @@ export function LoginPage() {
 			setErrorApi(null);
 			const respuesta = await login(data);
 			localStorage.setItem("jwt", respuesta.tokenAcceso);
-			setRedirigiendo(true);
 			navigate("/", { replace: true });
 		} catch (error) {
 			setErrorApi(
@@ -41,7 +39,7 @@ export function LoginPage() {
 
 	return (
 		<div className="flex min-h-screen w-full items-center justify-center bg-slate-50 p-4 font-sans text-slate-800">
-			<div className="w-full max-w-[480px] rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xs md:p-12">
+			<div className="w-full max-w-120 rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xs md:p-12">
 				<div className="mb-8 flex flex-col items-center text-center">
 					<img
 						src="/icon.svg"
@@ -114,11 +112,11 @@ export function LoginPage() {
 					<Button
 						type="submit"
 						disabled={!isValid}
-						isLoading={isSubmitting || redirigiendo}
+						isLoading={isSubmitting}
 						className="w-full font-bold"
 						size="lg"
 					>
-						{isSubmitting || redirigiendo ? "Ingresando..." : "Ingresar"}
+						Ingresar
 					</Button>
 				</form>
 			</div>
