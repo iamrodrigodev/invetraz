@@ -85,7 +85,7 @@ public class ConfiguracionSeguridad {
     @Bean
     public PasswordEncoder codificadorClaves() {
         return new org.springframework.security.crypto.argon2.Argon2PasswordEncoder(
-                16, 32, 1, 2048, 2);
+                16, 32, 1, 1024, 1);
     }
 
     @Bean
