@@ -1,8 +1,11 @@
-import react from "@vitejs/plugin-react";
+﻿import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 export default defineConfig({
 	plugins: [react()],
+	preview: {
+		port: parseInt(process.env.PORT || "5173"),
+	},
 	build: {
 		cssCodeSplit: true,
 		rollupOptions: {
@@ -22,6 +25,7 @@ export default defineConfig({
 		},
 	},
 	server: {
+		port: parseInt(process.env.PORT || "5173"),
 		proxy: {
 			"/api": {
 				target: "http://localhost:8080",
