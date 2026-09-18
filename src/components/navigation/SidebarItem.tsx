@@ -37,7 +37,7 @@ export function SidebarItem({
 						: "w-full rounded-lg px-3",
 					esActivo
 						? "bg-primary text-white shadow-xs"
-						: "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
+						: "text-slate-800 hover:bg-slate-100 hover:text-slate-900",
 				)}
 			>
 				<Icono
@@ -45,7 +45,7 @@ export function SidebarItem({
 						"h-5 w-5 shrink-0 transition-colors",
 						esActivo
 							? "text-white"
-							: "text-slate-500 group-hover/item:text-slate-900",
+							: "text-slate-700 group-hover/item:text-slate-900",
 					)}
 					strokeWidth={esActivo ? 2.5 : 2}
 				/>
