@@ -17,7 +17,7 @@ export function TopBar({
 	const elementoActual = ELEMENTOS_NAVEGACION.find(
 		(item) => item.id === moduloActivo,
 	);
-	const titulo = elementoActual?.titulo || "GCC Investigación";
+	const titulo = elementoActual?.titulo || "Sistema de Investigación";
 
 	return (
 		<header

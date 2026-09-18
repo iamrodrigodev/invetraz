@@ -10,7 +10,7 @@ export function Logo({ estaColapsado = false, className }: LogoProps) {
 	return (
 		<div
 			className={cn(
-				"flex items-center select-none overflow-hidden font-bold text-slate-900 text-lg tracking-tight",
+				"flex items-center select-none overflow-hidden font-bold text-slate-900 text-base tracking-tight",
 				estaColapsado ? "justify-center w-full" : "w-full",
 				className,
 			)}
@@ -25,7 +25,8 @@ export function Logo({ estaColapsado = false, className }: LogoProps) {
 				)}
 			>
 				<span className="text-slate-900">
-					GCC <span className="text-primary font-bold">Investigación</span>
+					Sistema de{" "}
+					<span className="text-primary font-bold">Investigación</span>
 				</span>
 			</div>
 		</div>
