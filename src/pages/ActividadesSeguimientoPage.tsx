@@ -11,3 +11,5 @@ export function ActividadesSeguimientoPage() {
 		</div>
 	);
 }
+
+export default ActividadesSeguimientoPage;

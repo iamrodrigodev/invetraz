@@ -11,3 +11,5 @@ export function PlantillasSeguimientoPage() {
 		</div>
 	);
 }
+
+export default PlantillasSeguimientoPage;

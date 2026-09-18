@@ -8,3 +8,5 @@ export function ReportesPage() {
 		</div>
 	);
 }
+
+export default ReportesPage;
