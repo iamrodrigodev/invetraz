@@ -1,4 +1,4 @@
-﻿import { X } from "lucide-react";
+import { X } from "lucide-react";
 import type React from "react";
 import { useEffect } from "react";
 import { cn } from "../../utils/cn";
@@ -53,6 +53,7 @@ export function Modal({
 					<div className="mb-5 flex items-center justify-between">
 						<h3 className="text-lg font-semibold text-slate-900">{titulo}</h3>
 						<button
+							type="button"
 							onClick={alCerrar}
 							className="rounded-full p-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"
 						>

@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ELEMENTOS_NAVEGACION } from "../../constants/navigation";
-import { cn } from "../../utils/cn";
 import { ModalCambiarClave } from "../../features/auth/components/ModalCambiarClave";
+import { cn } from "../../utils/cn";
 import { Button } from "../ui";
 import type { ModuloId } from "./types";
 

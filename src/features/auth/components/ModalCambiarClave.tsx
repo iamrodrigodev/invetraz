@@ -9,23 +9,35 @@ import { VALIDATION_LIMITS } from "../../../constants/validations";
 const Paso1Schema = z.object({
 	claveActual: z
 		.string()
-		.min(1, "Ingresa tu contraseña actual")
-		.max(VALIDATION_LIMITS.MAX_PASSWORD, `La contraseña no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres`),
+		.min(1, "Ingresa tu contraseÃ±a actual")
+		.max(
+			VALIDATION_LIMITS.MAX_PASSWORD,
+			`La contraseÃ±a no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres`,
+		),
 });
 
 const Paso2Schema = z
 	.object({
 		nuevaClave: z
 			.string()
-			.min(VALIDATION_LIMITS.MIN_PASSWORD, `La contraseña debe tener al menos ${VALIDATION_LIMITS.MIN_PASSWORD} caracteres`)
-			.max(VALIDATION_LIMITS.MAX_PASSWORD, `La contraseña no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres`),
+			.min(
+				VALIDATION_LIMITS.MIN_PASSWORD,
+				`La contraseÃ±a debe tener al menos ${VALIDATION_LIMITS.MIN_PASSWORD} caracteres`,
+			)
+			.max(
+				VALIDATION_LIMITS.MAX_PASSWORD,
+				`La contraseÃ±a no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres`,
+			),
 		confirmarClave: z
 			.string()
-			.min(1, "Confirma tu nueva contraseña")
-			.max(VALIDATION_LIMITS.MAX_PASSWORD, `La contraseña no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres`),
+			.min(1, "Confirma tu nueva contraseÃ±a")
+			.max(
+				VALIDATION_LIMITS.MAX_PASSWORD,
+				`La contraseÃ±a no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres`,
+			),
 	})
 	.refine((data) => data.nuevaClave === data.confirmarClave, {
-		message: "Las contraseñas no coinciden",
+		message: "Las contraseÃ±as no coinciden",
 		path: ["confirmarClave"],
 	});
 
@@ -37,7 +49,10 @@ export interface ModalCambiarClaveProps {
 	alCerrar: () => void;
 }
 
-export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps) {
+export function ModalCambiarClave({
+	abierto,
+	alCerrar,
+}: ModalCambiarClaveProps) {
 	const [paso, setPaso] = useState<1 | 2>(1);
 	const [cargando, setCargando] = useState(false);
 	const [errorApi, setErrorApi] = useState<string | null>(null);
@@ -68,7 +83,7 @@ export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps)
 		try {
 			await new Promise((resolve) => setTimeout(resolve, 800));
 			setPaso(2);
-		} catch (error) {
+		} catch (_error) {
 			setErrorApi("La contrasena actual es incorrecta");
 		} finally {
 			setCargando(false);
@@ -84,7 +99,7 @@ export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps)
 			setTimeout(() => {
 				manejarCierre();
 			}, 2000);
-		} catch (error) {
+		} catch (_error) {
 			setErrorApi("Hubo un error al actualizar la contrasena");
 		} finally {
 			setCargando(false);
@@ -92,7 +107,11 @@ export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps)
 	};
 
 	return (
-		<Modal abierto={abierto} alCerrar={manejarCierre} titulo="Cambiar Contrasena">
+		<Modal
+			abierto={abierto}
+			alCerrar={manejarCierre}
+			titulo="Cambiar Contrasena"
+		>
 			{exito ? (
 				<div className="flex flex-col items-center justify-center py-6 text-center">
 					<div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-green-600">
@@ -106,9 +125,13 @@ export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps)
 					</p>
 				</div>
 			) : paso === 1 ? (
-				<form onSubmit={formPaso1.handleSubmit(onVerificarPaso1)} className="space-y-5">
+				<form
+					onSubmit={formPaso1.handleSubmit(onVerificarPaso1)}
+					className="space-y-5"
+				>
 					<p className="text-sm text-slate-600">
-						Por motivos de seguridad, por favor ingresa tu contrasena actual para verificar tu identidad.
+						Por motivos de seguridad, por favor ingresa tu contrasena actual
+						para verificar tu identidad.
 					</p>
 
 					{errorApi && (
@@ -120,10 +143,14 @@ export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps)
 					)}
 
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-slate-700">
+						<label
+							htmlFor="claveActual"
+							className="mb-1.5 block text-sm font-medium text-slate-700"
+						>
 							Contrasena Actual <span className="text-red-500">*</span>
 						</label>
 						<Input
+							id="claveActual"
 							type="password"
 							placeholder="Ingresa tu contrasena actual"
 							disabled={cargando}
@@ -154,7 +181,10 @@ export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps)
 					</div>
 				</form>
 			) : (
-				<form onSubmit={formPaso2.handleSubmit(onActualizarClave)} className="space-y-5">
+				<form
+					onSubmit={formPaso2.handleSubmit(onActualizarClave)}
+					className="space-y-5"
+				>
 					{errorApi && (
 						<Alert
 							variant="error"
@@ -164,10 +194,14 @@ export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps)
 					)}
 
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-slate-700">
+						<label
+							htmlFor="nuevaClave"
+							className="mb-1.5 block text-sm font-medium text-slate-700"
+						>
 							Nueva Contrasena <span className="text-red-500">*</span>
 						</label>
 						<Input
+							id="nuevaClave"
 							type="password"
 							placeholder="Minimo 8 caracteres"
 							disabled={cargando}
@@ -184,10 +218,14 @@ export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps)
 					</div>
 
 					<div>
-						<label className="mb-1.5 block text-sm font-medium text-slate-700">
+						<label
+							htmlFor="confirmarClave"
+							className="mb-1.5 block text-sm font-medium text-slate-700"
+						>
 							Confirmar Contrasena <span className="text-red-500">*</span>
 						</label>
 						<Input
+							id="confirmarClave"
 							type="password"
 							placeholder="Repite la nueva contrasena"
 							disabled={cargando}
