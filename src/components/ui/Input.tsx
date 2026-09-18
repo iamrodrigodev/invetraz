@@ -1,33 +1,66 @@
-import type React from "react";
-import { forwardRef } from "react";
+﻿import type React from "react";
+import { forwardRef, useState } from "react";
 import { cn } from "../../utils/cn";
 
 export interface InputProps
 	extends React.InputHTMLAttributes<HTMLInputElement> {
 	error?: boolean;
 	rightElement?: React.ReactNode;
+	showCount?: boolean;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-	({ className, error, type = "text", rightElement, ...props }, ref) => {
+	(
+		{
+			className,
+			error,
+			type = "text",
+			rightElement,
+			showCount,
+			maxLength,
+			onChange,
+			...props
+		},
+		ref,
+	) => {
+		const [charCount, setCharCount] = useState(0);
+
+		const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+			if (showCount || maxLength) {
+				setCharCount(e.target.value.length);
+			}
+			if (onChange) {
+				onChange(e);
+			}
+		};
+
 		return (
-			<div className="relative w-full">
-				<input
-					type={type}
-					className={cn(
-						"flex h-10 w-full appearance-none rounded-md bg-white px-3 py-2 text-sm placeholder:text-slate-400 outline-none focus:outline-none border-0 disabled:cursor-not-allowed disabled:opacity-50 transition-shadow duration-200",
-						error
-							? "ring-1 ring-inset ring-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500"
-							: "ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-primary",
-						rightElement ? "pr-10" : "",
-						className,
+			<div className="w-full">
+				<div className="relative w-full">
+					<input
+						type={type}
+						className={cn(
+							"flex h-10 w-full appearance-none rounded-md bg-white px-3 py-2 text-sm placeholder:text-slate-400 outline-none focus:outline-none border-0 disabled:cursor-not-allowed disabled:opacity-50 transition-shadow duration-200",
+							error
+								? "ring-1 ring-inset ring-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500"
+								: "ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-primary",
+							rightElement ? "pr-10" : "",
+							className,
+						)}
+						ref={ref}
+						maxLength={maxLength}
+						onChange={handleChange}
+						{...props}
+					/>
+					{rightElement && (
+						<div className="absolute inset-y-0 right-0 flex items-center pr-3">
+							{rightElement}
+						</div>
 					)}
-					ref={ref}
-					{...props}
-				/>
-				{rightElement && (
-					<div className="absolute inset-y-0 right-0 flex items-center pr-3">
-						{rightElement}
+				</div>
+				{showCount && maxLength && (
+					<div className="mt-1 text-right text-xs text-slate-400 font-medium">
+						{charCount} / {maxLength}
 					</div>
 				)}
 			</div>

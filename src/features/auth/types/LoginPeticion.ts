@@ -1,18 +1,19 @@
 import { z } from "zod";
+import { VALIDATION_LIMITS } from "../../../constants/validations";
 
 export const LoginPeticionSchema = z.object({
 	email: z
 		.string()
 		.min(1, { message: "El correo es obligatorio" })
 		.email({ message: "Correo inválido" })
-		.max(150, { message: "El correo no puede exceder 150 caracteres" })
+		.max(VALIDATION_LIMITS.MAX_EMAIL, { message: `El correo no puede exceder los ${VALIDATION_LIMITS.MAX_EMAIL} caracteres` })
 		.endsWith("@ulasalle.edu.pe", {
 			message: "Debe ser un correo institucional (@ulasalle.edu.pe)",
 		}),
 	password: z
 		.string()
 		.min(1, { message: "La contraseña es obligatoria" })
-		.max(255, { message: "La contraseña no puede exceder 255 caracteres" }),
+		.max(VALIDATION_LIMITS.MAX_PASSWORD, { message: `La contraseña no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres` }),
 });
 
 export type LoginPeticion = z.infer<typeof LoginPeticionSchema>;
