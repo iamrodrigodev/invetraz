@@ -36,15 +36,9 @@ export function TopBar({
 					<Menu className="h-5 w-5" />
 				</button>
 
-				<div className="flex items-center gap-2">
-					<span className="hidden text-xs font-semibold uppercase tracking-wider text-slate-400 sm:inline">
-						GCC Inv
-					</span>
-					<span className="hidden text-slate-300 sm:inline">/</span>
-					<h1 className="font-heading text-base font-semibold text-slate-800 md:text-lg">
-						{titulo}
-					</h1>
-				</div>
+				<h1 className="font-heading text-base font-semibold text-slate-800 md:text-lg">
+					{titulo}
+				</h1>
 			</div>
 		</header>
 	);
