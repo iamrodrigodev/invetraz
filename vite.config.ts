@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
 	plugins: [react()],
 	preview: {
-		port: parseInt(process.env.PORT || "5173"),
+		port: parseInt(process.env.PORT || "5173", 10),
 	},
 	build: {
 		cssCodeSplit: true,
@@ -25,7 +25,7 @@ export default defineConfig({
 		},
 	},
 	server: {
-		port: parseInt(process.env.PORT || "5173"),
+		port: parseInt(process.env.PORT || "5173", 10),
 		proxy: {
 			"/api": {
 				target: "http://localhost:8080",
