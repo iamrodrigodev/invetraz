@@ -1,4 +1,4 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+﻿import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Microscope } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -36,12 +36,11 @@ export function SetupPage() {
 			const { confirmPassword, ...payload } = data;
 			await crearAdmin(payload);
 
-			// Auto-login instantáneo
+			// Auto-login instantÃ¡neo
 			await login({
 				email: payload.email,
 				password: payload.password,
 			});
-			// El token ahora vive seguro en una Cookie HttpOnly
 			setConfigurado(true);
 			setAutenticado(true);
 			navigate("/", { replace: true });
@@ -61,7 +60,7 @@ export function SetupPage() {
 						strokeWidth={2.2}
 					/>
 					<h1 className="mb-2 font-extrabold font-heading text-2xl text-slate-900 tracking-tight md:text-3xl">
-						Sistema de InvestigaciÃ³n
+						Sistema de InvestigaciÃƒÂ³n
 					</h1>
 					<p className="max-w-md text-slate-500 text-sm leading-relaxed md:text-base">
 						Crea tu cuenta de administrador para continuar.
@@ -74,7 +73,7 @@ export function SetupPage() {
 							htmlFor="email"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							Correo ElectrÃ³nico
+							Correo ElectrÃƒÂ³nico
 						</label>
 						<Input
 							id="email"
@@ -97,12 +96,12 @@ export function SetupPage() {
 							htmlFor="password"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							ContraseÃ±a
+							ContraseÃƒÂ±a
 						</label>
 						<Input
 							id="password"
 							type={showPassword ? "text" : "password"}
-							placeholder="MÃ­nimo 8 caracteres, 1 mayÃºscula y 1 nÃºmero"
+							placeholder="MÃƒÂ­nimo 8 caracteres, 1 mayÃƒÂºscula y 1 nÃƒÂºmero"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
 							showCount
 							error={!!errors.password}
@@ -129,12 +128,12 @@ export function SetupPage() {
 							htmlFor="confirmPassword"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							Confirmar ContraseÃ±a
+							Confirmar ContraseÃƒÂ±a
 						</label>
 						<Input
 							id="confirmPassword"
 							type={showConfirm ? "text" : "password"}
-							placeholder="Vuelve a escribir tu contraseÃ±a"
+							placeholder="Vuelve a escribir tu contraseÃƒÂ±a"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
 							showCount
 							error={!!errors.confirmPassword}

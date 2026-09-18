@@ -31,7 +31,6 @@ export function LoginPage() {
 		try {
 			setErrorApi(null);
 			await login(data);
-			// El token ahora vive seguro en una Cookie HttpOnly
 			setAutenticado(true);
 			navigate("/", { replace: true });
 		} catch (error) {
