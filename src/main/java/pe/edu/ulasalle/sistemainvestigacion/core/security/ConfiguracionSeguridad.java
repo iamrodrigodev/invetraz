@@ -84,8 +84,8 @@ public class ConfiguracionSeguridad {
 
     @Bean
     public PasswordEncoder codificadorClaves() {
-        return org.springframework.security.crypto.argon2.Argon2PasswordEncoder
-                .defaultsForSpringSecurity_v5_8();
+        return new org.springframework.security.crypto.argon2.Argon2PasswordEncoder(
+                16, 32, 1, 4096, 2);
     }
 
     @Bean
