@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "usuarios")
+@Table(schema = "auth", name = "usuarios")
 @Getter
 @Setter
 public class Usuario {

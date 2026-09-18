@@ -12,7 +12,7 @@ import lombok.Setter;
 import pe.edu.ulasalle.sistemainvestigacion.core.security.AttributeEncryptor;
 
 @Entity
-@Table(name = "configuracion_sistema")
+@Table(schema = "configuracion", name = "configuracion_sistema")
 @Getter
 @Setter
 public class ConfiguracionSistema {
