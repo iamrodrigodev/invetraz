@@ -1,6 +1,5 @@
 package pe.edu.ulasalle.sistemainvestigacion.repositories.impl;
 
-import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.model.CourseWork;
 import com.google.api.services.classroom.model.Date;
 import com.google.api.services.classroom.model.ListCourseWorkResponse;
@@ -14,6 +13,7 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ManejadorErroresGoogle;
+import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.enums.EstadoTarea;
 import pe.edu.ulasalle.sistemainvestigacion.models.TareaClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.TareaRepository;
@@ -25,12 +25,12 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
     private static final ZoneId ZONA_LIMA = ZoneId.of("America/Lima");
     private static final ZoneId ZONA_UTC = ZoneId.of("UTC");
 
-    private final Classroom clienteGoogle;
+    private final ProveedorClassroom proveedorClassroom;
     private final ManejadorErroresGoogle manejadorErroresGoogle;
 
     public TareaClassroomRepositoryImpl(
-            Classroom clienteGoogle, ManejadorErroresGoogle manejadorErroresGoogle) {
-        this.clienteGoogle = clienteGoogle;
+            ProveedorClassroom proveedorClassroom, ManejadorErroresGoogle manejadorErroresGoogle) {
+        this.proveedorClassroom = proveedorClassroom;
         this.manejadorErroresGoogle = manejadorErroresGoogle;
     }
 
@@ -38,7 +38,8 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
     public List<TareaClassroom> listarPorClase(String idClase) {
         try {
             ListCourseWorkResponse response =
-                    clienteGoogle
+                    proveedorClassroom
+                            .obtenerCliente()
                             .courses()
                             .courseWork()
                             .list(idClase)
@@ -90,7 +91,12 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
             }
 
             CourseWork tareaCreada =
-                    clienteGoogle.courses().courseWork().create(idClase, coursework).execute();
+                    proveedorClassroom
+                            .obtenerCliente()
+                            .courses()
+                            .courseWork()
+                            .create(idClase, coursework)
+                            .execute();
 
             return mapearTarea(tareaCreada);
         } catch (Exception e) {

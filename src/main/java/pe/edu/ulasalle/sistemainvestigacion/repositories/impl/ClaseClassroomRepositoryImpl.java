@@ -1,6 +1,5 @@
 package pe.edu.ulasalle.sistemainvestigacion.repositories.impl;
 
-import com.google.api.services.classroom.Classroom;
 import com.google.api.services.classroom.model.Course;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,6 +8,7 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ManejadorErroresGoogle;
+import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.enums.EstadoClase;
 import pe.edu.ulasalle.sistemainvestigacion.models.ClaseClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.ClaseRepository;
@@ -17,12 +17,12 @@ import pe.edu.ulasalle.sistemainvestigacion.repositories.ClaseRepository;
 @Repository
 public class ClaseClassroomRepositoryImpl implements ClaseRepository {
 
-    private final Classroom clienteGoogle;
+    private final ProveedorClassroom proveedorClassroom;
     private final ManejadorErroresGoogle manejadorErroresGoogle;
 
     public ClaseClassroomRepositoryImpl(
-            Classroom clienteGoogle, ManejadorErroresGoogle manejadorErroresGoogle) {
-        this.clienteGoogle = clienteGoogle;
+            ProveedorClassroom proveedorClassroom, ManejadorErroresGoogle manejadorErroresGoogle) {
+        this.proveedorClassroom = proveedorClassroom;
         this.manejadorErroresGoogle = manejadorErroresGoogle;
     }
 
@@ -36,7 +36,8 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
                             .setOwnerId(clase.getProfesorId())
                             .setCourseState(clase.getEstado().name());
 
-            Course cursoCreado = clienteGoogle.courses().create(curso).execute();
+            Course cursoCreado =
+                    proveedorClassroom.obtenerCliente().courses().create(curso).execute();
 
             return ClaseClassroom.builder()
                     .idClassroom(cursoCreado.getId())
@@ -54,7 +55,8 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
     public void archivar(String idClassroom) {
         try {
             Course cursoCambios = new Course().setCourseState(EstadoClase.ARCHIVED.name());
-            clienteGoogle
+            proveedorClassroom
+                    .obtenerCliente()
                     .courses()
                     .patch(idClassroom, cursoCambios)
                     .setUpdateMask("courseState")
@@ -68,7 +70,8 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
     public List<ClaseClassroom> listarPorDocente() {
         try {
             var response =
-                    clienteGoogle
+                    proveedorClassroom
+                            .obtenerCliente()
                             .courses()
                             .list()
                             .setTeacherId("me")
@@ -86,7 +89,8 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
     public List<ClaseClassroom> listarPorAlumno() {
         try {
             var response =
-                    clienteGoogle
+                    proveedorClassroom
+                            .obtenerCliente()
                             .courses()
                             .list()
                             .setStudentId("me")
