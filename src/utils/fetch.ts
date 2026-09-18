@@ -17,6 +17,10 @@ export async function extraerMensajeError(
 	mensajePorDefecto: string,
 ): Promise<string> {
 	try {
+		const contentType = res.headers.get("content-type");
+		if (!contentType?.includes("application/json")) {
+			return mensajePorDefecto;
+		}
 		const errorData = await res.json();
 		return (
 			errorData.mensaje ||
@@ -27,4 +31,14 @@ export async function extraerMensajeError(
 	} catch (_e) {
 		return mensajePorDefecto;
 	}
+}
+
+export async function parsearJsonSeguro<T>(res: Response): Promise<T> {
+	const contentType = res.headers.get("content-type");
+	if (!contentType?.includes("application/json")) {
+		throw new Error(
+			"Error de comunicación con el servidor. Inténtalo de nuevo más tarde.",
+		);
+	}
+	return (await res.json()) as T;
 }

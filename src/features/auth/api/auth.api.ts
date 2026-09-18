@@ -1,5 +1,9 @@
 import { entorno } from "../../../config/entorno";
-import { extraerMensajeError, fetchSeguro } from "../../../utils/fetch";
+import {
+	extraerMensajeError,
+	fetchSeguro,
+	parsearJsonSeguro,
+} from "../../../utils/fetch";
 import type { LoginPeticion } from "../types/LoginPeticion";
 import {
 	type LoginRespuesta,
@@ -18,7 +22,7 @@ export async function login(peticion: LoginPeticion): Promise<LoginRespuesta> {
 		throw new Error(msj);
 	}
 
-	const wrapper = await res.json();
+	const wrapper = await parsearJsonSeguro<{ datos: unknown }>(res);
 	return LoginRespuestaSchema.parse(wrapper.datos);
 }
 

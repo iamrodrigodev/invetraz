@@ -1,20 +1,28 @@
 import { entorno } from "../../../config/entorno";
-import { extraerMensajeError, fetchSeguro } from "../../../utils/fetch";
+import {
+	extraerMensajeError,
+	fetchSeguro,
+	parsearJsonSeguro,
+} from "../../../utils/fetch";
 import type { CrearAdminPeticion } from "../types/CrearAdminPeticion";
 import { EstadoSetupRespuestaSchema } from "../types/EstadoSetupRespuesta";
 
 export async function verificarEstadoSistema(): Promise<boolean> {
-	const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/setup/estado`);
-	if (!res.ok) return false;
+	try {
+		const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/setup/estado`);
+		if (!res.ok) return false;
 
-	const wrapper = await res.json();
-	const parsed = EstadoSetupRespuestaSchema.safeParse(wrapper.datos);
+		const wrapper = await parsearJsonSeguro<{ datos: unknown }>(res);
+		const parsed = EstadoSetupRespuestaSchema.safeParse(wrapper.datos);
 
-	if (parsed.success) {
-		return parsed.data.configurado;
+		if (parsed.success) {
+			return parsed.data.configurado;
+		}
+
+		return false;
+	} catch (_e) {
+		return false;
 	}
-
-	return false;
 }
 
 export async function crearAdmin(
