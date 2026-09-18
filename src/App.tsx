@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Spinner } from "./components/ui";
 import { DashboardLayout } from "./layouts";
 import type { ModuloId } from "./types";
@@ -12,7 +12,14 @@ const PlantillasSeguimientoPage = lazy(
 );
 
 export default function App() {
-	const [moduloActivo, setModuloActivo] = useState<ModuloId>("actividades");
+	const [moduloActivo, setModuloActivo] = useState<ModuloId>(() => {
+		const guardado = localStorage.getItem("moduloActivo");
+		return (guardado as ModuloId) || "actividades";
+	});
+
+	useEffect(() => {
+		localStorage.setItem("moduloActivo", moduloActivo);
+	}, [moduloActivo]);
 
 	return (
 		<DashboardLayout
