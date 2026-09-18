@@ -22,7 +22,7 @@ public class ServicioJwt {
     public ServicioJwt(
             @Value("${app.jwt.secret}") String secretoFirma,
             @Value("${app.jwt.expiration-ms:86400000}") long tiempoExpiracionMillis) {
-        
+
         byte[] keyBytes;
         try {
             // Intentar decodificar como Base64 estándar
@@ -31,7 +31,7 @@ public class ServicioJwt {
             // Si falla (ej. caracteres invalidos o plain text), usar los bytes de la cadena UTF-8
             keyBytes = secretoFirma.getBytes(StandardCharsets.UTF_8);
         }
-        
+
         this.claveSecreta = Keys.hmacShaKeyFor(keyBytes);
         this.tiempoExpiracionMillis = tiempoExpiracionMillis;
     }
