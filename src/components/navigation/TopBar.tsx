@@ -1,6 +1,8 @@
-import { Menu } from "lucide-react";
+﻿import { LogOut, Menu } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { ELEMENTOS_NAVEGACION } from "../../constants/navigation";
 import { cn } from "../../utils/cn";
+import { Button } from "../ui";
 import type { ModuloId } from "./types";
 
 export interface TopBarProps {
@@ -14,10 +16,16 @@ export function TopBar({
 	alAbrirMenuMovil,
 	className,
 }: TopBarProps) {
+	const navigate = useNavigate();
 	const elementoActual = ELEMENTOS_NAVEGACION.find(
 		(item) => item.id === moduloActivo,
 	);
-	const titulo = elementoActual?.titulo || "Sistema de Investigación";
+	const titulo = elementoActual?.titulo || "Sistema de Investigacin";
+
+	const cerrarSesion = () => {
+		localStorage.removeItem("jwt");
+		navigate("/login", { replace: true });
+	};
 
 	return (
 		<header
@@ -30,7 +38,7 @@ export function TopBar({
 				<button
 					type="button"
 					onClick={alAbrirMenuMovil}
-					aria-label="Abrir menú de navegación"
+					aria-label="Abrir menǧ de navegacin"
 					className="-ml-2 flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 lg:hidden cursor-pointer"
 				>
 					<Menu className="h-5 w-5" />
@@ -39,6 +47,18 @@ export function TopBar({
 				<h1 className="font-heading text-base font-semibold text-slate-800 md:text-lg">
 					{titulo}
 				</h1>
+			</div>
+
+			<div className="flex items-center gap-3">
+				<Button
+					variant="ghost"
+					size="sm"
+					onClick={cerrarSesion}
+					className="text-slate-500 hover:text-red-600 hover:bg-red-50"
+				>
+					<LogOut className="h-4 w-4 mr-2" />
+					Cerrar Sesin
+				</Button>
 			</div>
 		</header>
 	);
