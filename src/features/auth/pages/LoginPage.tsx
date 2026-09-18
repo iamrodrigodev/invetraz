@@ -70,14 +70,9 @@ export function LoginPage() {
 							placeholder="admin@ulasalle.edu.pe"
 							maxLength={VALIDATION_LIMITS.MAX_EMAIL}
 							showCount
-							error={!!errors.email}
+							errorMessage={errors.email?.message}
 							{...register("email")}
 						/>
-						{errors.email && (
-							<p className="mt-2 text-sm text-red-600">
-								{errors.email.message}
-							</p>
-						)}
 					</div>
 
 					<div>
@@ -93,7 +88,7 @@ export function LoginPage() {
 							placeholder="••••••••"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
 							showCount
-							error={!!errors.password}
+							errorMessage={errors.password?.message}
 							{...register("password")}
 							rightElement={
 								<button
@@ -105,11 +100,6 @@ export function LoginPage() {
 								</button>
 							}
 						/>
-						{errors.password && (
-							<p className="mt-2 text-sm text-red-600">
-								{errors.password.message}
-							</p>
-						)}
 					</div>
 
 					{errorApi && (

@@ -156,14 +156,9 @@ export function ModalCambiarClave({
 							disabled={cargando}
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
 							showCount
-							error={!!formPaso1.formState.errors.claveActual}
+							errorMessage={formPaso1.formState.errors.claveActual?.message}
 							{...formPaso1.register("claveActual")}
 						/>
-						{formPaso1.formState.errors.claveActual && (
-							<p className="mt-2 text-sm text-red-600">
-								{formPaso1.formState.errors.claveActual.message}
-							</p>
-						)}
 					</div>
 
 					<div className="mt-6 flex justify-end gap-3 pt-2">
@@ -207,14 +202,9 @@ export function ModalCambiarClave({
 							disabled={cargando}
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
 							showCount
-							error={!!formPaso2.formState.errors.nuevaClave}
+							errorMessage={formPaso2.formState.errors.nuevaClave?.message}
 							{...formPaso2.register("nuevaClave")}
 						/>
-						{formPaso2.formState.errors.nuevaClave && (
-							<p className="mt-2 text-sm text-red-600">
-								{formPaso2.formState.errors.nuevaClave.message}
-							</p>
-						)}
 					</div>
 
 					<div>
@@ -231,14 +221,9 @@ export function ModalCambiarClave({
 							disabled={cargando}
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
 							showCount
-							error={!!formPaso2.formState.errors.confirmarClave}
+							errorMessage={formPaso2.formState.errors.confirmarClave?.message}
 							{...formPaso2.register("confirmarClave")}
 						/>
-						{formPaso2.formState.errors.confirmarClave && (
-							<p className="mt-2 text-sm text-red-600">
-								{formPaso2.formState.errors.confirmarClave.message}
-							</p>
-						)}
 					</div>
 
 					<div className="mt-6 flex justify-end gap-3 pt-2">

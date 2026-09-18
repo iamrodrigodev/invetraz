@@ -1,10 +1,11 @@
-﻿import type React from "react";
-import { forwardRef, useState } from "react";
+import type React from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { cn } from "../../utils/cn";
 
 export interface InputProps
 	extends React.InputHTMLAttributes<HTMLInputElement> {
 	error?: boolean;
+	errorMessage?: React.ReactNode;
 	rightElement?: React.ReactNode;
 	showCount?: boolean;
 }
@@ -14,16 +15,29 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 		{
 			className,
 			error,
+			errorMessage,
 			type = "text",
 			rightElement,
 			showCount,
 			maxLength,
 			onChange,
+			value,
+			defaultValue,
 			...props
 		},
 		ref,
 	) => {
-		const [charCount, setCharCount] = useState(0);
+		const [charCount, setCharCount] = useState<number>(() => {
+			if (typeof value === "string") return value.length;
+			if (typeof defaultValue === "string") return defaultValue.length;
+			return 0;
+		});
+
+		useEffect(() => {
+			if (value !== undefined && typeof value === "string") {
+				setCharCount(value.length);
+			}
+		}, [value]);
 
 		const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 			if (showCount || maxLength) {
@@ -34,6 +48,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 			}
 		};
 
+		const hasError = Boolean(error || errorMessage);
+
 		return (
 			<div className="w-full">
 				<div className="relative w-full">
@@ -41,7 +57,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 						type={type}
 						className={cn(
 							"flex h-10 w-full appearance-none rounded-md bg-white px-3 py-2 text-sm placeholder:text-slate-400 outline-none focus:outline-none border-0 disabled:cursor-not-allowed disabled:opacity-50 transition-shadow duration-200",
-							error
+							hasError
 								? "ring-1 ring-inset ring-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500"
 								: "ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-primary",
 							rightElement ? "pr-10" : "",
@@ -49,6 +65,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 						)}
 						ref={ref}
 						maxLength={maxLength}
+						value={value}
+						defaultValue={defaultValue}
 						onChange={handleChange}
 						{...props}
 					/>
@@ -58,9 +76,20 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 						</div>
 					)}
 				</div>
-				{showCount && maxLength && (
-					<div className="mt-1 text-right text-xs text-slate-400 font-medium">
-						{charCount} / {maxLength}
+				{(errorMessage || (showCount && maxLength)) && (
+					<div className="mt-1.5 flex items-start justify-between gap-3 text-xs">
+						<div className="flex-1 min-w-0">
+							{errorMessage && (
+								<p className="font-medium text-red-600 leading-tight">
+									{errorMessage}
+								</p>
+							)}
+						</div>
+						{showCount && maxLength && (
+							<span className="shrink-0 font-medium text-slate-400">
+								{charCount} / {maxLength}
+							</span>
+						)}
 					</div>
 				)}
 			</div>
