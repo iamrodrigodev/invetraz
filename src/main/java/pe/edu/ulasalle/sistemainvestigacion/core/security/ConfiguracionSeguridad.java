@@ -82,4 +82,12 @@ public class ConfiguracionSeguridad {
         return org.springframework.security.crypto.argon2.Argon2PasswordEncoder
                 .defaultsForSpringSecurity_v5_8();
     }
+
+    @Bean
+    public org.springframework.security.core.userdetails.UserDetailsService userDetailsService() {
+        return username -> {
+            throw new org.springframework.security.core.userdetails.UsernameNotFoundException(
+                    "No se usa auth clasica");
+        };
+    }
 }
