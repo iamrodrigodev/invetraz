@@ -1,4 +1,4 @@
-﻿package pe.edu.ulasalle.sistemainvestigacion.core.security;
+package pe.edu.ulasalle.sistemainvestigacion.core.security;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,8 +37,9 @@ public class ConfiguracionSeguridad {
                 .csrf(csrf -> csrf.disable())
 				.headers(headers -> headers
 						.xssProtection(xss -> xss.headerValue(org.springframework.security.web.header.writers.XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
-						.contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'; form-action 'self';")))
-						.frameOptions(frame -> frame.deny()))
+						.contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'; form-action 'self';"))
+						.frameOptions(frame -> frame.deny())
+				)
                 .sessionManagement(
                         sesion -> sesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(

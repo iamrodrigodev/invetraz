@@ -1,8 +1,9 @@
-package pe.edu.ulasalle.sistemainvestigacion.core.security;
+﻿package pe.edu.ulasalle.sistemainvestigacion.core.security;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -30,14 +31,31 @@ public class FiltroAutenticacionJwt extends OncePerRequestFilter {
             HttpServletRequest solicitud, HttpServletResponse respuesta, FilterChain cadenaFiltros)
             throws ServletException, IOException {
 
-        final String encabezadoAutorizacion = solicitud.getHeader(HttpHeaders.AUTHORIZATION);
+        String tokenJwt = null;
 
-        if (encabezadoAutorizacion == null || !encabezadoAutorizacion.startsWith("Bearer ")) {
+        // Intentar leer de la Cookie HttpOnly primero
+        if (solicitud.getCookies() != null) {
+            for (Cookie cookie : solicitud.getCookies()) {
+                if ("jwt".equals(cookie.getName())) {
+                    tokenJwt = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        // Fallback al header Authorization
+        if (tokenJwt == null) {
+            String encabezadoAutorizacion = solicitud.getHeader(HttpHeaders.AUTHORIZATION);
+            if (encabezadoAutorizacion != null && encabezadoAutorizacion.startsWith("Bearer ")) {
+                tokenJwt = encabezadoAutorizacion.substring(7);
+            }
+        }
+
+        if (tokenJwt == null) {
             cadenaFiltros.doFilter(solicitud, respuesta);
             return;
         }
 
-        final String tokenJwt = encabezadoAutorizacion.substring(7);
         try {
             Claims cuerpoToken = servicioJwt.obtenerPayload(tokenJwt);
 
