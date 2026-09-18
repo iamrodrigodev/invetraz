@@ -31,7 +31,8 @@ export function SetupPage() {
 			setErrorApi(null);
 			const { confirmPassword, ...payload } = data;
 			await crearAdmin(payload);
-			navigate("/login", { replace: true });
+			// Forzamos la recarga completa para que AppRouter vuelva a evaluar el estado a configurado=true
+			window.location.href = "/login";
 		} catch (error) {
 			setErrorApi(
 				error instanceof Error ? error.message : "Error al crear la cuenta",
