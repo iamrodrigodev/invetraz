@@ -6,18 +6,25 @@ import { z } from "zod";
 import { Alert, Button, Input, Modal } from "../../../components/ui";
 
 const Paso1Schema = z.object({
-	claveActual: z.string().min(1, "Ingresa tu contrasea actual"),
+	claveActual: z
+		.string()
+		.min(1, "Ingresa tu contraseña actual")
+		.max(255, "La contraseña no puede exceder 255 caracteres"),
 });
 
 const Paso2Schema = z
 	.object({
 		nuevaClave: z
 			.string()
-			.min(8, "La contrasea debe tener al menos 8 caracteres"),
-		confirmarClave: z.string().min(1, "Confirma tu nueva contrasea"),
+			.min(8, "La contraseña debe tener al menos 8 caracteres")
+			.max(255, "La contraseña no puede exceder 255 caracteres"),
+		confirmarClave: z
+			.string()
+			.min(1, "Confirma tu nueva contraseña")
+			.max(255, "La contraseña no puede exceder 255 caracteres"),
 	})
 	.refine((data) => data.nuevaClave === data.confirmarClave, {
-		message: "Las contraseas no coinciden",
+		message: "Las contraseñas no coinciden",
 		path: ["confirmarClave"],
 	});
 

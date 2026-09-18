@@ -76,9 +76,9 @@ export function TopBar({
 				</div>
 			</header>
 
-			<ModalCambiarClave 
-				abierto={modalClaveAbierto} 
-				alCerrar={() => setModalClaveAbierto(false)} 
+			<ModalCambiarClave
+				abierto={modalClaveAbierto}
+				alCerrar={() => setModalClaveAbierto(false)}
 			/>
 		</>
 	);
