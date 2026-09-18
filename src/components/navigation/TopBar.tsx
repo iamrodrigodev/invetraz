@@ -27,7 +27,6 @@ export function TopBar({
 			)}
 		>
 			<div className="flex items-center gap-3 md:gap-4">
-				{/* Botón menú móvil */}
 				<button
 					type="button"
 					onClick={alAbrirMenuMovil}
@@ -37,7 +36,6 @@ export function TopBar({
 					<Menu className="h-5 w-5" />
 				</button>
 
-				{/* Título de la vista actual */}
 				<div className="flex items-center gap-2">
 					<span className="hidden text-xs font-semibold uppercase tracking-wider text-slate-400 sm:inline">
 						GCC Inv

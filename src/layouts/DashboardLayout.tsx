@@ -25,7 +25,6 @@ export function DashboardLayout({
 
 	return (
 		<div className="flex h-screen w-full overflow-hidden bg-slate-50 font-sans text-slate-800">
-			{/* Overlay oscuro para pantallas móviles */}
 			{menuLateralAbierto && (
 				<button
 					type="button"
@@ -35,7 +34,6 @@ export function DashboardLayout({
 				/>
 			)}
 
-			{/* Wrapper del Sidebar responsivo */}
 			<div
 				className={cn(
 					"fixed inset-y-0 left-0 z-30 transform transition-all duration-300 ease-in-out lg:static lg:inset-0 lg:translate-x-0",
@@ -52,7 +50,6 @@ export function DashboardLayout({
 				/>
 			</div>
 
-			{/* Contenedor principal con Navbar y contenido */}
 			<div className="flex min-w-0 flex-1 flex-col overflow-hidden">
 				<TopBar
 					moduloActivo={moduloActivo}

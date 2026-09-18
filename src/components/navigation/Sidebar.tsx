@@ -56,7 +56,6 @@ export function Sidebar({
 				className,
 			)}
 		>
-			{/* Botón flotante para colapsar/expandir en desktop */}
 			<button
 				type="button"
 				onClick={alAlternarColapso}
@@ -72,7 +71,6 @@ export function Sidebar({
 				)}
 			</button>
 
-			{/* Cabecera del sidebar */}
 			<div
 				className={cn(
 					"flex h-16 shrink-0 items-center border-b border-slate-200",
@@ -82,7 +80,6 @@ export function Sidebar({
 				<Logo estaColapsado={estaColapsado} />
 			</div>
 
-			{/* Navegación */}
 			<nav
 				className={cn(
 					"flex-1 space-y-1.5 overflow-y-auto py-6",
@@ -154,7 +151,6 @@ function SidebarItem({
 				</span>
 			</button>
 
-			{/* Tooltip al estar colapsado */}
 			{estaColapsado && (
 				<div className="pointer-events-none absolute left-full top-1/2 ml-2.5 -translate-y-1/2 z-50 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-medium text-white shadow-md opacity-0 group-hover/item:opacity-100 transition-opacity duration-150">
 					{item.titulo}
