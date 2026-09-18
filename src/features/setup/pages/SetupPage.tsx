@@ -3,11 +3,11 @@ import { Eye, EyeOff, Microscope } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useAppStore } from "../../../store/useAppStore";
 import { Alert, Button, Input } from "../../../components/ui";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
-import { crearAdmin } from "../api/setup.api";
+import { useAppStore } from "../../../store/useAppStore";
 import { login } from "../../auth/api/auth.api";
+import { crearAdmin } from "../api/setup.api";
 import {
 	type CrearAdminPeticion,
 	CrearAdminPeticionSchema,
@@ -35,7 +35,6 @@ export function SetupPage() {
 			const { confirmPassword, ...payload } = data;
 			await crearAdmin(payload);
 
-			// Auto-login instantáneo
 			const respuestaLogin = await login({
 				email: payload.email,
 				password: payload.password,
@@ -53,7 +52,7 @@ export function SetupPage() {
 
 	return (
 		<div className="flex min-h-screen w-full items-center justify-center bg-slate-50 p-4 font-sans text-slate-800">
-			<div className="w-full max-w-[480px] rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xs md:p-12">
+			<div className="w-full max-w-120 rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xs md:p-12">
 				<div className="mb-8 flex flex-col items-center text-center">
 					<Microscope
 						className="mb-4 h-14 w-14 shrink-0 text-primary"
