@@ -1,8 +1,9 @@
-﻿export async function fetchSeguro(
+export async function fetchSeguro(
 	url: string,
-	options?: RequestInit,
+	options: RequestInit = {},
 ): Promise<Response> {
 	try {
+		options.credentials = "include";
 		return await fetch(url, options);
 	} catch (_error) {
 		throw new Error(

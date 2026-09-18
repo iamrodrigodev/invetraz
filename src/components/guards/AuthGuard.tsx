@@ -1,9 +1,10 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { useAppStore } from "../../store/useAppStore";
 
 export function AuthGuard() {
-	const jwt = localStorage.getItem("jwt");
+	const autenticado = useAppStore((state) => state.autenticado);
 
-	if (!jwt) {
+	if (!autenticado) {
 		return <Navigate to="/login" replace />;
 	}
 

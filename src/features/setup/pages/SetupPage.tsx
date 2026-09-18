@@ -1,4 +1,4 @@
-﻿import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Microscope } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -16,6 +16,7 @@ import {
 export function SetupPage() {
 	const navigate = useNavigate();
 	const setConfigurado = useAppStore((state) => state.setConfigurado);
+	const setAutenticado = useAppStore((state) => state.setAutenticado);
 	const [errorApi, setErrorApi] = useState<string | null>(null);
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirm, setShowConfirm] = useState(false);
@@ -35,13 +36,14 @@ export function SetupPage() {
 			const { confirmPassword, ...payload } = data;
 			await crearAdmin(payload);
 
-			const respuestaLogin = await login({
+			// Auto-login instantáneo
+			await login({
 				email: payload.email,
 				password: payload.password,
 			});
-			localStorage.setItem("jwt", respuestaLogin.tokenAcceso);
-
+			// El token ahora vive seguro en una Cookie HttpOnly
 			setConfigurado(true);
+			setAutenticado(true);
 			navigate("/", { replace: true });
 		} catch (error) {
 			setErrorApi(

@@ -1,4 +1,4 @@
-﻿import { useEffect } from "react";
+import { useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import App from "./App";
 import { AuthGuard } from "./components/guards/AuthGuard";
@@ -7,11 +7,12 @@ import { SetupPage } from "./features/setup/pages/SetupPage";
 import { useAppStore } from "./store/useAppStore";
 
 export function AppRouter() {
-	const { configurado, estadoVerificado, verificarEstado } = useAppStore();
+	const { configurado, estadoVerificado, verificarEstadoGlobal } =
+		useAppStore();
 
 	useEffect(() => {
-		verificarEstado();
-	}, [verificarEstado]);
+		verificarEstadoGlobal();
+	}, [verificarEstadoGlobal]);
 
 	if (!estadoVerificado || configurado === null) {
 		return <div className="min-h-screen w-full bg-slate-50" />;

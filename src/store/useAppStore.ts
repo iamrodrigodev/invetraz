@@ -1,24 +1,36 @@
-﻿import { create } from "zustand";
+import { create } from "zustand";
+import { verificarAutenticacion } from "../features/auth/api/auth.api";
 import { verificarEstadoSistema } from "../features/setup/api/setup.api";
 
 interface AppState {
 	configurado: boolean | null;
+	autenticado: boolean | null;
 	estadoVerificado: boolean;
-	verificarEstado: () => Promise<void>;
+	verificarEstadoGlobal: () => Promise<void>;
 	setConfigurado: (valor: boolean) => void;
+	setAutenticado: (valor: boolean) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
 	configurado: null,
+	autenticado: null,
 	estadoVerificado: false,
-	verificarEstado: async () => {
+	verificarEstadoGlobal: async () => {
 		try {
-			const esConfigurado = await verificarEstadoSistema();
-			set({ configurado: esConfigurado, estadoVerificado: true });
+			const [esConfigurado, esAutenticado] = await Promise.all([
+				verificarEstadoSistema(),
+				verificarAutenticacion(),
+			]);
+			set({
+				configurado: esConfigurado,
+				autenticado: esAutenticado,
+				estadoVerificado: true,
+			});
 		} catch (error) {
-			console.error("Error al verificar estado", error);
-			set({ configurado: false, estadoVerificado: true });
+			console.error("Error al verificar estado global", error);
+			set({ configurado: false, autenticado: false, estadoVerificado: true });
 		}
 	},
 	setConfigurado: (valor: boolean) => set({ configurado: valor }),
+	setAutenticado: (valor: boolean) => set({ autenticado: valor }),
 }));

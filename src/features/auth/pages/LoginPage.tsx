@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Alert, Button, Input } from "../../../components/ui";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
+import { useAppStore } from "../../../store/useAppStore";
 import { login } from "../api/auth.api";
 import {
 	type LoginPeticion,
@@ -13,6 +14,7 @@ import {
 
 export function LoginPage() {
 	const navigate = useNavigate();
+	const setAutenticado = useAppStore((state) => state.setAutenticado);
 	const [errorApi, setErrorApi] = useState<string | null>(null);
 	const [showPassword, setShowPassword] = useState(false);
 
@@ -28,12 +30,13 @@ export function LoginPage() {
 	const onSubmit = async (data: LoginPeticion) => {
 		try {
 			setErrorApi(null);
-			const respuesta = await login(data);
-			localStorage.setItem("jwt", respuesta.tokenAcceso);
+			await login(data);
+			// El token ahora vive seguro en una Cookie HttpOnly
+			setAutenticado(true);
 			navigate("/", { replace: true });
 		} catch (error) {
 			setErrorApi(
-				error instanceof Error ? error.message : "Credenciales inválidas",
+				error instanceof Error ? error.message : "Credenciales invÃ¡lidas",
 			);
 		}
 	};
@@ -47,10 +50,10 @@ export function LoginPage() {
 						strokeWidth={2.2}
 					/>
 					<h1 className="mb-2 font-extrabold font-heading text-2xl text-slate-900 tracking-tight md:text-3xl">
-						Sistema de Investigación
+						Sistema de InvestigaciÃ³n
 					</h1>
 					<p className="max-w-md text-slate-500 text-sm leading-relaxed md:text-base">
-						Inicia sesión para administrar la plataforma.
+						Inicia sesiÃ³n para administrar la plataforma.
 					</p>
 				</div>
 
@@ -60,7 +63,7 @@ export function LoginPage() {
 							htmlFor="email"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							Correo Electrónico
+							Correo ElectrÃ³nico
 						</label>
 						<Input
 							id="email"
@@ -83,12 +86,12 @@ export function LoginPage() {
 							htmlFor="password"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							Contraseña
+							ContraseÃ±a
 						</label>
 						<Input
 							id="password"
 							type={showPassword ? "text" : "password"}
-							placeholder="••••••••"
+							placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
 							showCount
 							error={!!errors.password}
