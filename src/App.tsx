@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { DashboardLayout } from "./layouts/DashboardLayout";
-import { ActividadesSeguimientoPage } from "./pages/ActividadesSeguimientoPage";
-import { PlantillasSeguimientoPage } from "./pages/PlantillasSeguimientoPage";
-import { ReportesPage } from "./pages/ReportesPage";
-import type { ModuloId } from "./types/navigation";
+import { DashboardLayout } from "./layouts";
+import {
+	ActividadesSeguimientoPage,
+	PlantillasSeguimientoPage,
+	ReportesPage,
+} from "./pages";
+import type { ModuloId } from "./types";
 
 export default function App() {
 	const [moduloActivo, setModuloActivo] = useState<ModuloId>("actividades");

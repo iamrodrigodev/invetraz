@@ -1,0 +1,26 @@
+import { BarChart3, ClipboardCheck, LayoutTemplate } from "lucide-react";
+import type { ItemNavegacion } from "../types/navigation";
+
+export const ELEMENTOS_NAVEGACION: ItemNavegacion[] = [
+	{
+		id: "actividades",
+		titulo: "Actividades de seguimiento",
+		etiquetaMenu: "Actividades",
+		icono: ClipboardCheck,
+		descripcion: "Monitoreo y seguimiento de actividades",
+	},
+	{
+		id: "reportes",
+		titulo: "Reportes",
+		etiquetaMenu: "Reportes",
+		icono: BarChart3,
+		descripcion: "Informes y análisis de progreso",
+	},
+	{
+		id: "plantillas",
+		titulo: "Plantillas de seguimiento",
+		etiquetaMenu: "Plantillas",
+		icono: LayoutTemplate,
+		descripcion: "Modelos y formatos de registro",
+	},
+];

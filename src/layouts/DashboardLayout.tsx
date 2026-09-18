@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Sidebar } from "../components/navigation/Sidebar";
-import { TopBar } from "../components/navigation/TopBar";
-import type { ModuloId } from "../types/navigation";
+import { Sidebar, TopBar } from "../components/navigation";
+import type { ModuloId } from "../types";
 import { cn } from "../utils/cn";
 
 export interface DashboardLayoutProps {

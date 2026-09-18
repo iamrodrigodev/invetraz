@@ -1,5 +1,5 @@
 import { ClipboardCheck } from "lucide-react";
-import { ModuloEnConstruccion } from "../components/ui/ModuloEnConstruccion";
+import { ModuloEnConstruccion } from "../components/ui";
 
 export function ActividadesSeguimientoPage() {
 	return (
