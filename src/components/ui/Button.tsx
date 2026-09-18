@@ -1,3 +1,4 @@
+﻿import { Loader2 } from "lucide-react";
 import type React from "react";
 import { cn } from "../../utils/cn";
 
@@ -11,6 +12,7 @@ export interface ButtonProps
 		| "destructive"
 		| "link";
 	size?: "default" | "sm" | "lg" | "icon" | "icon-sm";
+	isLoading?: boolean;
 }
 
 export function Button({
@@ -18,7 +20,9 @@ export function Button({
 	variant = "default",
 	size = "default",
 	type = "button",
+	isLoading = false,
 	children,
+	disabled,
 	...props
 }: ButtonProps) {
 	const variantStyles = {
@@ -46,6 +50,7 @@ export function Button({
 	return (
 		<button
 			type={type}
+			disabled={disabled || isLoading}
 			className={cn(
 				"inline-flex select-none items-center justify-center font-medium transition-all duration-200 ease-in-out cursor-pointer",
 				"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50 active:translate-y-px",
@@ -55,6 +60,7 @@ export function Button({
 			)}
 			{...props}
 		>
+			{isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
 			{children}
 		</button>
 	);

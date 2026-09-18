@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
+import type { ModuloId } from "./components/navigation/types";
 import { Spinner } from "./components/ui";
 import { DashboardLayout } from "./layouts";
-import type { ModuloId } from "./types";
 
 const ActividadesSeguimientoPage = lazy(
 	() => import("./pages/ActividadesSeguimientoPage"),

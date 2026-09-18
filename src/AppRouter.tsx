@@ -1,31 +1,42 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import App from "./App";
 import { AuthGuard } from "./components/guards/AuthGuard";
 import { Spinner } from "./components/ui";
 
-import { entorno } from "./entorno";
-
-import { SetupPage } from "./pages/SetupPage";
-import { LoginPage } from "./pages/LoginPage";
+import { LoginPage } from "./features/auth/pages/LoginPage";
+import { verificarEstadoSistema } from "./features/setup/api/setup.api";
+import { SetupPage } from "./features/setup/pages/SetupPage";
 
 export function AppRouter() {
-	const [estadoVerificado, setEstadoVerificado] = useState(false);
-	const [configurado, setConfigurado] = useState<boolean | null>(null);
+	// Inicializamos síncronamente desde localStorage para evitar el "tick" al hacer F5
+	const [configurado, setConfigurado] = useState<boolean | null>(() => {
+		if (typeof window !== "undefined") {
+			const guardado = localStorage.getItem("sistema_configurado");
+			if (guardado === "true") return true;
+			if (guardado === "false") return false;
+		}
+		return null;
+	});
+
+	const [estadoVerificado, setEstadoVerificado] = useState<boolean>(() => {
+		// Si ya tenemos el estado en localStorage, podemos proceder sin bloquear
+		return localStorage.getItem("sistema_configurado") !== null;
+	});
 
 	useEffect(() => {
 		const verificarEstado = async () => {
 			try {
-				const res = await fetch(entorno.VITE_API_BASE_URL + "/setup/estado");
-				if (res.ok) {
-					const data = await res.json();
-					setConfigurado(data.configurado);
-				} else {
-					setConfigurado(false);
-				}
+				const esConfigurado = await verificarEstadoSistema();
+				setConfigurado(esConfigurado);
+				localStorage.setItem(
+					"sistema_configurado",
+					esConfigurado ? "true" : "false",
+				);
 			} catch (error) {
 				console.error("Error al verificar estado", error);
 				setConfigurado(false);
+				localStorage.setItem("sistema_configurado", "false");
 			} finally {
 				setEstadoVerificado(true);
 			}

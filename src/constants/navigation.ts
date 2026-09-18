@@ -1,5 +1,5 @@
 import { BarChart3, ClipboardCheck, LayoutTemplate } from "lucide-react";
-import type { ItemNavegacion } from "../types/navigation";
+import type { ItemNavegacion } from "../components/navigation/types";
 
 export const ELEMENTOS_NAVEGACION: ItemNavegacion[] = [
 	{

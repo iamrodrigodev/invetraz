@@ -1,7 +1,7 @@
 import { Menu } from "lucide-react";
 import { ELEMENTOS_NAVEGACION } from "../../constants/navigation";
-import type { ModuloId } from "../../types/navigation";
 import { cn } from "../../utils/cn";
+import type { ModuloId } from "./types";
 
 export interface TopBarProps {
 	moduloActivo: ModuloId;

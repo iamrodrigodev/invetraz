@@ -1,0 +1,127 @@
+﻿import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { Alert, Button, Input } from "../../../components/ui";
+import { login } from "../api/auth.api";
+import {
+	type LoginPeticion,
+	LoginPeticionSchema,
+} from "../types/LoginPeticion";
+
+export function LoginPage() {
+	const navigate = useNavigate();
+	const [errorApi, setErrorApi] = useState<string | null>(null);
+	const [showPassword, setShowPassword] = useState(false);
+	const [redirigiendo, setRedirigiendo] = useState(false);
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors, isSubmitting, isValid },
+	} = useForm<LoginPeticion>({
+		resolver: zodResolver(LoginPeticionSchema),
+		mode: "onChange",
+	});
+
+	const onSubmit = async (data: LoginPeticion) => {
+		try {
+			setErrorApi(null);
+			const respuesta = await login(data);
+			localStorage.setItem("jwt", respuesta.tokenAcceso);
+			setRedirigiendo(true);
+			navigate("/", { replace: true });
+		} catch (error) {
+			setErrorApi(
+				error instanceof Error ? error.message : "Credenciales inválidas",
+			);
+		}
+	};
+
+	return (
+		<div className="flex min-h-screen w-full items-center justify-center bg-slate-50 p-4 font-sans text-slate-800">
+			<div className="w-full max-w-[480px] rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xs md:p-12">
+				<div className="mb-8 flex flex-col items-center text-center">
+					<img
+						src="/icon.svg"
+						alt="Logotipo"
+						className="mb-4 h-14 w-14 object-contain text-primary"
+					/>
+					<h1 className="mb-2 font-extrabold font-heading text-2xl text-slate-900 tracking-tight md:text-3xl">
+						Sistema de Investigación
+					</h1>
+					<p className="max-w-md text-slate-500 text-sm leading-relaxed md:text-base">
+						Inicia sesión para administrar la plataforma.
+					</p>
+				</div>
+
+				<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+					<div>
+						<label
+							htmlFor="email"
+							className="mb-2 block text-sm font-medium text-slate-700"
+						>
+							Correo Electrónico
+						</label>
+						<Input
+							id="email"
+							type="email"
+							placeholder="admin@ulasalle.edu.pe"
+							error={!!errors.email}
+							{...register("email")}
+						/>
+						{errors.email && (
+							<p className="mt-2 text-sm text-red-600">
+								{errors.email.message}
+							</p>
+						)}
+					</div>
+
+					<div>
+						<label
+							htmlFor="password"
+							className="mb-2 block text-sm font-medium text-slate-700"
+						>
+							Contraseña
+						</label>
+						<Input
+							id="password"
+							type={showPassword ? "text" : "password"}
+							placeholder="••••••••"
+							error={!!errors.password}
+							{...register("password")}
+							rightElement={
+								<button
+									type="button"
+									onClick={() => setShowPassword(!showPassword)}
+									className="cursor-pointer text-primary/70 transition-colors hover:text-primary focus:outline-none"
+								>
+									{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+								</button>
+							}
+						/>
+						{errors.password && (
+							<p className="mt-2 text-sm text-red-600">
+								{errors.password.message}
+							</p>
+						)}
+					</div>
+
+					{errorApi && (
+						<Alert message={errorApi} onClose={() => setErrorApi(null)} />
+					)}
+					<Button
+						type="submit"
+						disabled={!isValid}
+						isLoading={isSubmitting || redirigiendo}
+						className="w-full font-bold"
+						size="lg"
+					>
+						{isSubmitting || redirigiendo ? "Ingresando..." : "Ingresar"}
+					</Button>
+				</form>
+			</div>
+		</div>
+	);
+}

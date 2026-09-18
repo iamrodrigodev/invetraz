@@ -1,5 +1,5 @@
-import type { ItemNavegacion } from "../../types/navigation";
 import { cn } from "../../utils/cn";
+import type { ItemNavegacion } from "./types";
 
 export interface SidebarItemProps {
 	item: ItemNavegacion;
