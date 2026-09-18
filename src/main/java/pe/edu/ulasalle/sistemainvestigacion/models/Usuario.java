@@ -10,6 +10,7 @@ import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import pe.edu.ulasalle.sistemainvestigacion.core.constants.ValidationConstants;
 
 @Entity
 @Table(schema = "auth", name = "usuarios")
@@ -21,10 +22,10 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, unique = true, length = 150)
+    @Column(nullable = false, unique = true, length = ValidationConstants.MAX_EMAIL)
     private String email;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = ValidationConstants.MAX_PASSWORD)
     private String password;
 
     protected Usuario() {}
