@@ -7,7 +7,7 @@ import { SetupPage } from "./features/setup/pages/SetupPage";
 import { useAppStore } from "./store/useAppStore";
 
 export function AppRouter() {
-	const { configurado, estadoVerificado, verificarEstadoGlobal } =
+	const { configurado, autenticado, estadoVerificado, verificarEstadoGlobal } =
 		useAppStore();
 
 	useEffect(() => {
@@ -24,13 +24,23 @@ export function AppRouter() {
 				<Route
 					path="/setup"
 					element={
-						configurado ? <Navigate to="/login" replace /> : <SetupPage />
+						configurado ? (
+							<Navigate to={autenticado ? "/" : "/login"} replace />
+						) : (
+							<SetupPage />
+						)
 					}
 				/>
 				<Route
 					path="/login"
 					element={
-						!configurado ? <Navigate to="/setup" replace /> : <LoginPage />
+						autenticado ? (
+							<Navigate to="/" replace />
+						) : !configurado ? (
+							<Navigate to="/setup" replace />
+						) : (
+							<LoginPage />
+						)
 					}
 				/>
 
