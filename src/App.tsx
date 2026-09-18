@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState } from "react";
+import { Spinner } from "./components/ui";
 import { DashboardLayout } from "./layouts";
 import type { ModuloId } from "./types";
 
@@ -19,11 +20,7 @@ export default function App() {
 			alCambiarModulo={setModuloActivo}
 		>
 			<Suspense
-				fallback={
-					<div className="flex h-full min-h-[450px] w-full flex-1 items-center justify-center rounded-3xl border border-slate-200/60 bg-white">
-						<div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-					</div>
-				}
+				fallback={<Spinner fullContainer mensaje="Cargando módulo..." />}
 			>
 				{moduloActivo === "actividades" && <ActividadesSeguimientoPage />}
 				{moduloActivo === "reportes" && <ReportesPage />}
