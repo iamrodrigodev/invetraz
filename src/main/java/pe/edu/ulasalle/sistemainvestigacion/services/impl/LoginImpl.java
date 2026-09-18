@@ -3,6 +3,7 @@ package pe.edu.ulasalle.sistemainvestigacion.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionDeNegocio;
 import pe.edu.ulasalle.sistemainvestigacion.core.security.ConstantesSeguridad;
 import pe.edu.ulasalle.sistemainvestigacion.core.security.ServicioJwt;
@@ -21,6 +22,7 @@ public class LoginImpl implements CasoUsoLogin {
     private final ServicioJwt servicioJwt;
 
     @Override
+    @Transactional
     public LoginRespuesta ejecutar(LoginPeticion peticion) {
         Usuario usuario = usuarioRepository.findByEmail(peticion.email());
 
@@ -28,6 +30,11 @@ public class LoginImpl implements CasoUsoLogin {
                 || !passwordEncoder.matches(peticion.password(), usuario.getPassword())) {
             throw new ExcepcionDeNegocio(
                     "Credenciales invalidas. Revisa tu correo o contrasena.", 401);
+        }
+
+        if (passwordEncoder.upgradeEncoding(usuario.getPassword())) {
+            usuario.setPassword(passwordEncoder.encode(peticion.password()));
+            usuarioRepository.save(usuario);
         }
 
         String token =
