@@ -52,7 +52,7 @@ export function SetupPage() {
 
 	return (
 		<div className="flex min-h-screen w-full items-center justify-center bg-slate-50 p-4 font-sans text-slate-800">
-			<div className="w-full max-w-[480px] rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xs md:p-12">
+			<div className="w-full max-w-120 rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xs md:p-12">
 				<div className="mb-8 flex flex-col items-center text-center">
 					<Microscope
 						className="mb-4 h-14 w-14 shrink-0 text-primary"
