@@ -23,7 +23,7 @@ public class CrearAdminImpl implements CasoUsoCrearAdmin {
 
     @Override
     public UsuarioDTO ejecutar(CrearAdminPeticion peticion) {
-        if (casoUsoObtenerEstadoSetup.ejecutar().configurado()) {
+        if (usuarioRepository.count() > 0 || casoUsoObtenerEstadoSetup.ejecutar().configurado()) {
             throw new ExcepcionDeNegocio(
                     pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError
                             .ADMIN_YA_CONFIGURADO);

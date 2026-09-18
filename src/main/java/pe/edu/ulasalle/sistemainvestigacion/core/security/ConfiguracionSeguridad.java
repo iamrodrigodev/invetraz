@@ -47,7 +47,7 @@ public class ConfiguracionSeguridad {
                                 autorizacion
                                         .requestMatchers("/api/v1/setup/**")
                                         .permitAll()
-                                        .requestMatchers("/api/v1/auth/**")
+                                        .requestMatchers("/api/v1/auth/login", "/api/v1/auth/logout")
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated())
