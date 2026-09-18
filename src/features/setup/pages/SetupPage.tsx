@@ -1,4 +1,4 @@
-﻿import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Microscope } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -36,7 +36,6 @@ export function SetupPage() {
 			const { confirmPassword, ...payload } = data;
 			await crearAdmin(payload);
 
-			// Auto-login instantÃ¡neo
 			await login({
 				email: payload.email,
 				password: payload.password,
@@ -53,14 +52,14 @@ export function SetupPage() {
 
 	return (
 		<div className="flex min-h-screen w-full items-center justify-center bg-slate-50 p-4 font-sans text-slate-800">
-			<div className="w-full max-w-120 rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xs md:p-12">
+			<div className="w-full max-w-[480px] rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xs md:p-12">
 				<div className="mb-8 flex flex-col items-center text-center">
 					<Microscope
 						className="mb-4 h-14 w-14 shrink-0 text-primary"
 						strokeWidth={2.2}
 					/>
 					<h1 className="mb-2 font-extrabold font-heading text-2xl text-slate-900 tracking-tight md:text-3xl">
-						Sistema de InvestigaciÃƒÂ³n
+						Sistema de Investigación
 					</h1>
 					<p className="max-w-md text-slate-500 text-sm leading-relaxed md:text-base">
 						Crea tu cuenta de administrador para continuar.
@@ -73,7 +72,7 @@ export function SetupPage() {
 							htmlFor="email"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							Correo ElectrÃƒÂ³nico
+							Correo Electrónico
 						</label>
 						<Input
 							id="email"
@@ -96,12 +95,12 @@ export function SetupPage() {
 							htmlFor="password"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							ContraseÃƒÂ±a
+							Contraseña
 						</label>
 						<Input
 							id="password"
 							type={showPassword ? "text" : "password"}
-							placeholder="MÃƒÂ­nimo 8 caracteres, 1 mayÃƒÂºscula y 1 nÃƒÂºmero"
+							placeholder="Mínimo 8 caracteres, 1 mayúscula y 1 número"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
 							showCount
 							error={!!errors.password}
@@ -128,12 +127,12 @@ export function SetupPage() {
 							htmlFor="confirmPassword"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							Confirmar ContraseÃƒÂ±a
+							Confirmar Contraseña
 						</label>
 						<Input
 							id="confirmPassword"
 							type={showConfirm ? "text" : "password"}
-							placeholder="Vuelve a escribir tu contraseÃƒÂ±a"
+							placeholder="Vuelve a escribir tu contraseña"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
 							showCount
 							error={!!errors.confirmPassword}

@@ -1,4 +1,4 @@
-﻿import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Microscope } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -35,24 +35,24 @@ export function LoginPage() {
 			navigate("/", { replace: true });
 		} catch (error) {
 			setErrorApi(
-				error instanceof Error ? error.message : "Credenciales invÃ¡lidas",
+				error instanceof Error ? error.message : "Credenciales inválidas",
 			);
 		}
 	};
 
 	return (
 		<div className="flex min-h-screen w-full items-center justify-center bg-slate-50 p-4 font-sans text-slate-800">
-			<div className="w-full max-w-120 rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xs md:p-12">
+			<div className="w-full max-w-[480px] rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xs md:p-12">
 				<div className="mb-8 flex flex-col items-center text-center">
 					<Microscope
 						className="mb-4 h-14 w-14 shrink-0 text-primary"
 						strokeWidth={2.2}
 					/>
 					<h1 className="mb-2 font-extrabold font-heading text-2xl text-slate-900 tracking-tight md:text-3xl">
-						Sistema de InvestigaciÃ³n
+						Sistema de Investigación
 					</h1>
 					<p className="max-w-md text-slate-500 text-sm leading-relaxed md:text-base">
-						Inicia sesiÃ³n para administrar la plataforma.
+						Inicia sesión para administrar la plataforma.
 					</p>
 				</div>
 
@@ -62,7 +62,7 @@ export function LoginPage() {
 							htmlFor="email"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							Correo ElectrÃ³nico
+							Correo Electrónico
 						</label>
 						<Input
 							id="email"
@@ -85,12 +85,12 @@ export function LoginPage() {
 							htmlFor="password"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							ContraseÃ±a
+							Contraseña
 						</label>
 						<Input
 							id="password"
 							type={showPassword ? "text" : "password"}
-							placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+							placeholder="••••••••"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
 							showCount
 							error={!!errors.password}
