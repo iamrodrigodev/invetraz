@@ -18,8 +18,8 @@ export async function login(peticion: LoginPeticion): Promise<LoginRespuesta> {
 		throw new Error(msj);
 	}
 
-	const data = await res.json();
-	return LoginRespuestaSchema.parse(data);
+	const wrapper = await res.json();
+	return LoginRespuestaSchema.parse(wrapper.datos);
 }
 
 export async function verificarAutenticacion(): Promise<boolean> {
@@ -27,7 +27,9 @@ export async function verificarAutenticacion(): Promise<boolean> {
 		const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/auth/me`, {
 			method: "GET",
 		});
-		return res.ok;
+		if (!res.ok) return false;
+		const wrapper = await res.json();
+		return wrapper.datos?.autenticado === true;
 	} catch (_error) {
 		return false;
 	}

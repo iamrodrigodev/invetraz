@@ -7,8 +7,8 @@ export async function verificarEstadoSistema(): Promise<boolean> {
 	const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/setup/estado`);
 	if (!res.ok) return false;
 
-	const data = await res.json();
-	const parsed = EstadoSetupRespuestaSchema.safeParse(data);
+	const wrapper = await res.json();
+	const parsed = EstadoSetupRespuestaSchema.safeParse(wrapper.datos);
 
 	if (parsed.success) {
 		return parsed.data.configurado;
