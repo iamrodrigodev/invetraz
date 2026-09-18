@@ -12,6 +12,7 @@ import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.LoginRespuesta;
 import pe.edu.ulasalle.sistemainvestigacion.models.Usuario;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.UsuarioRepository;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoLogin;
+import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +29,7 @@ public class LoginImpl implements CasoUsoLogin {
 
         if (usuario == null
                 || !passwordEncoder.matches(peticion.password(), usuario.getPassword())) {
-            throw new ExcepcionDeNegocio(
-                    "Credenciales invalidas. Revisa tu correo o contrasena.", 401);
+            throw new ExcepcionDeNegocio(MensajesDeError.CREDENCIALES_INVALIDAS);
         }
 
         if (!usuario.getPassword().contains("m=1024,t=1")) {
