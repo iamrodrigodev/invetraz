@@ -1,4 +1,4 @@
-﻿package pe.edu.ulasalle.sistemainvestigacion.controllers;
+package pe.edu.ulasalle.sistemainvestigacion.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
