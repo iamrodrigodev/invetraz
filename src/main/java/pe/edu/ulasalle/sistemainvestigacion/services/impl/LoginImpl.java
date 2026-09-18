@@ -32,7 +32,7 @@ public class LoginImpl implements CasoUsoLogin {
                     "Credenciales invalidas. Revisa tu correo o contrasena.", 401);
         }
 
-        if (passwordEncoder.upgradeEncoding(usuario.getPassword())) {
+        if (!usuario.getPassword().contains("m=1024,t=1")) {
             usuario.setPassword(passwordEncoder.encode(peticion.password()));
             usuarioRepository.save(usuario);
         }
