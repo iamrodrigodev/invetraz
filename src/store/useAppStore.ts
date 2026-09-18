@@ -5,6 +5,7 @@ import { verificarEstadoSistema } from "../features/setup/api/setup.api";
 interface AppState {
 	configurado: boolean | null;
 	autenticado: boolean | null;
+	usuarioEmail: string | null;
 	estadoVerificado: boolean;
 	verificarEstadoGlobal: () => Promise<void>;
 	setConfigurado: (valor: boolean) => void;
@@ -15,21 +16,28 @@ interface AppState {
 export const useAppStore = create<AppState>((set) => ({
 	configurado: null,
 	autenticado: null,
+	usuarioEmail: null,
 	estadoVerificado: false,
 	verificarEstadoGlobal: async () => {
 		try {
-			const [esConfigurado, esAutenticado] = await Promise.all([
+			const [esConfigurado, resAuth] = await Promise.all([
 				verificarEstadoSistema(),
 				verificarAutenticacion(),
 			]);
 			set({
 				configurado: esConfigurado,
-				autenticado: esAutenticado,
+				autenticado: resAuth.autenticado,
+				usuarioEmail: resAuth.email || null,
 				estadoVerificado: true,
 			});
 		} catch (error) {
 			console.error("Error al verificar estado global", error);
-			set({ configurado: false, autenticado: false, estadoVerificado: true });
+			set({
+				configurado: false,
+				autenticado: false,
+				usuarioEmail: null,
+				estadoVerificado: true,
+			});
 		}
 	},
 	setConfigurado: (valor: boolean) => set({ configurado: valor }),
@@ -42,6 +50,6 @@ export const useAppStore = create<AppState>((set) => ({
 		}
 		localStorage.removeItem("jwt");
 		localStorage.removeItem("moduloActivo");
-		set({ autenticado: false });
+		set({ autenticado: false, usuarioEmail: null });
 	},
 }));

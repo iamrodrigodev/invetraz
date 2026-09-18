@@ -26,16 +26,24 @@ export async function login(peticion: LoginPeticion): Promise<LoginRespuesta> {
 	return LoginRespuestaSchema.parse(wrapper.datos);
 }
 
-export async function verificarAutenticacion(): Promise<boolean> {
+export interface ResultadoAutenticacion {
+	autenticado: boolean;
+	email?: string | null;
+}
+
+export async function verificarAutenticacion(): Promise<ResultadoAutenticacion> {
 	try {
 		const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/auth/me`, {
 			method: "GET",
 		});
-		if (!res.ok) return false;
+		if (!res.ok) return { autenticado: false };
 		const wrapper = await res.json();
-		return wrapper.datos?.autenticado === true;
+		return {
+			autenticado: wrapper.datos?.autenticado === true,
+			email: wrapper.datos?.email || null,
+		};
 	} catch (_error) {
-		return false;
+		return { autenticado: false };
 	}
 }
 

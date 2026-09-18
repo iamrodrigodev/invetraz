@@ -1,5 +1,6 @@
-import { KeyRound, LogOut, Menu } from "lucide-react";
-import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown, KeyRound, LogOut, Menu, ShieldCheck } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ELEMENTOS_NAVEGACION } from "../../constants/navigation";
 import { ModalCambiarClave } from "../../features/auth/components/ModalCambiarClave";
@@ -20,16 +21,33 @@ export function TopBar({
 }: TopBarProps) {
 	const navigate = useNavigate();
 	const cerrarSesionStore = useAppStore((state) => state.cerrarSesion);
+	const usuarioEmail = useAppStore((state) => state.usuarioEmail);
 	const [modalClaveAbierto, setModalClaveAbierto] = useState(false);
+	const [menuUsuarioAbierto, setMenuUsuarioAbierto] = useState(false);
+	const menuRef = useRef<HTMLDivElement>(null);
+
 	const elementoActual = ELEMENTOS_NAVEGACION.find(
 		(item) => item.id === moduloActivo,
 	);
 	const titulo = elementoActual?.titulo || "Sistema de Investigación";
+	const emailMostrar = usuarioEmail || "admin@ulasalle.edu.pe";
+	const iniciales = emailMostrar.substring(0, 2).toUpperCase();
 
 	const cerrarSesion = async () => {
+		setMenuUsuarioAbierto(false);
 		await cerrarSesionStore();
 		navigate("/login", { replace: true });
 	};
+
+	useEffect(() => {
+		const manejarClicFuera = (event: MouseEvent) => {
+			if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+				setMenuUsuarioAbierto(false);
+			}
+		};
+		document.addEventListener("mousedown", manejarClicFuera);
+		return () => document.removeEventListener("mousedown", manejarClicFuera);
+	}, []);
 
 	return (
 		<>
@@ -54,27 +72,84 @@ export function TopBar({
 					</h1>
 				</div>
 
-				<div className="flex items-center gap-2.5">
+				<div className="relative" ref={menuRef}>
 					<button
 						type="button"
-						onClick={() => setModalClaveAbierto(true)}
-						className="inline-flex items-center gap-2 rounded-xl border border-slate-200/80 bg-slate-50/50 px-3.5 py-1.5 font-medium text-xs text-slate-700 shadow-2xs transition-all hover:border-slate-300 hover:bg-slate-100/70 hover:text-slate-900 active:scale-98 cursor-pointer sm:text-sm"
+						onClick={() => setMenuUsuarioAbierto(!menuUsuarioAbierto)}
+						className="flex items-center gap-3 rounded-2xl p-1.5 pr-2.5 transition-all hover:bg-slate-100/80 active:scale-98 cursor-pointer"
 					>
-						<KeyRound
-							className="h-4 w-4 shrink-0 text-primary"
-							strokeWidth={2.2}
+						<div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary font-bold text-xs text-white shadow-2xs">
+							{iniciales}
+						</div>
+
+						<div className="hidden flex-col items-start text-left sm:flex">
+							<span className="max-w-[160px] truncate font-semibold text-xs text-slate-800 md:max-w-[200px] md:text-sm">
+								{emailMostrar}
+							</span>
+							<span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 font-bold text-[10px] text-primary">
+								<ShieldCheck className="h-3 w-3" strokeWidth={2.2} />
+								ADMINISTRADOR
+							</span>
+						</div>
+
+						<ChevronDown
+							className={cn(
+								"h-4 w-4 text-slate-400 transition-transform duration-200",
+								menuUsuarioAbierto && "rotate-180 text-slate-600",
+							)}
 						/>
-						<span className="hidden sm:inline">Cambiar Contraseña</span>
 					</button>
 
-					<button
-						type="button"
-						onClick={cerrarSesion}
-						className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-3.5 py-1.5 font-medium text-xs text-white shadow-2xs transition-all hover:bg-red-700 active:scale-98 cursor-pointer sm:text-sm"
-					>
-						<LogOut className="h-4 w-4 shrink-0 text-white" strokeWidth={2.2} />
-						<span className="hidden sm:inline">Cerrar Sesión</span>
-					</button>
+					<AnimatePresence>
+						{menuUsuarioAbierto && (
+							<motion.div
+								initial={{ opacity: 0, y: 8, scale: 0.96 }}
+								animate={{ opacity: 1, y: 0, scale: 1 }}
+								exit={{ opacity: 0, y: 6, scale: 0.96 }}
+								transition={{ duration: 0.15, ease: "easeOut" }}
+								className="absolute right-0 top-full mt-2 w-64 rounded-2xl border border-slate-200/80 bg-white p-1.5 shadow-xl shadow-slate-900/10 z-50 font-sans"
+							>
+								<div className="px-3 py-2 sm:hidden border-b border-slate-100 mb-1">
+									<p className="truncate font-semibold text-xs text-slate-800">
+										{emailMostrar}
+									</p>
+									<span className="mt-1 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 font-bold text-[10px] text-primary">
+										<ShieldCheck className="h-3 w-3" strokeWidth={2.2} />
+										ADMINISTRADOR
+									</span>
+								</div>
+
+								<button
+									type="button"
+									onClick={() => {
+										setMenuUsuarioAbierto(false);
+										setModalClaveAbierto(true);
+									}}
+									className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-100/80 active:bg-slate-100 cursor-pointer sm:text-sm"
+								>
+									<KeyRound
+										className="h-4 w-4 text-primary shrink-0"
+										strokeWidth={2.2}
+									/>
+									<span>Cambiar Contraseña</span>
+								</button>
+
+								<div className="my-1 h-px bg-slate-100" />
+
+								<button
+									type="button"
+									onClick={cerrarSesion}
+									className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-50 active:bg-red-100/60 cursor-pointer sm:text-sm"
+								>
+									<LogOut
+										className="h-4 w-4 text-red-500 shrink-0"
+										strokeWidth={2.2}
+									/>
+									<span>Cerrar Sesión</span>
+								</button>
+							</motion.div>
+						)}
+					</AnimatePresence>
 				</div>
 			</header>
 
