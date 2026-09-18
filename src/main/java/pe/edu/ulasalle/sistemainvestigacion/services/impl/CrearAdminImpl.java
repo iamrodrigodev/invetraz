@@ -24,7 +24,9 @@ public class CrearAdminImpl implements CasoUsoCrearAdmin {
     @Override
     public UsuarioDTO ejecutar(CrearAdminPeticion peticion) {
         if (casoUsoObtenerEstadoSetup.ejecutar().configurado()) {
-            throw new ExcepcionDeNegocio(pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError.ADMIN_YA_CONFIGURADO);
+            throw new ExcepcionDeNegocio(
+                    pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError
+                            .ADMIN_YA_CONFIGURADO);
         }
 
         Usuario nuevoAdmin =
