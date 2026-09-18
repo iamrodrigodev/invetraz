@@ -1,8 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+﻿import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Microscope } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useAppStore } from "../../../store/useAppStore";
 import { Alert, Button, Input } from "../../../components/ui";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
 import { crearAdmin } from "../api/setup.api";
@@ -13,6 +14,7 @@ import {
 
 export function SetupPage() {
 	const navigate = useNavigate();
+	const setConfigurado = useAppStore((state) => state.setConfigurado);
 	const [errorApi, setErrorApi] = useState<string | null>(null);
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirm, setShowConfirm] = useState(false);
@@ -31,8 +33,8 @@ export function SetupPage() {
 			setErrorApi(null);
 			const { confirmPassword, ...payload } = data;
 			await crearAdmin(payload);
-			// Forzamos la recarga completa para que AppRouter vuelva a evaluar el estado a configurado=true
-			window.location.href = "/login";
+			setConfigurado(true);
+			navigate("/login", { replace: true });
 		} catch (error) {
 			setErrorApi(
 				error instanceof Error ? error.message : "Error al crear la cuenta",
@@ -49,7 +51,7 @@ export function SetupPage() {
 						strokeWidth={2.2}
 					/>
 					<h1 className="mb-2 font-extrabold font-heading text-2xl text-slate-900 tracking-tight md:text-3xl">
-						Sistema de Investigación
+						Sistema de InvestigaciÃ³n
 					</h1>
 					<p className="max-w-md text-slate-500 text-sm leading-relaxed md:text-base">
 						Crea tu cuenta de administrador para continuar.
@@ -62,7 +64,7 @@ export function SetupPage() {
 							htmlFor="email"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							Correo Electrónico
+							Correo ElectrÃ³nico
 						</label>
 						<Input
 							id="email"
@@ -85,12 +87,12 @@ export function SetupPage() {
 							htmlFor="password"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							Contraseña
+							ContraseÃ±a
 						</label>
 						<Input
 							id="password"
 							type={showPassword ? "text" : "password"}
-							placeholder="Mínimo 8 caracteres, 1 mayúscula y 1 número"
+							placeholder="MÃ­nimo 8 caracteres, 1 mayÃºscula y 1 nÃºmero"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
 							showCount
 							error={!!errors.password}
@@ -117,12 +119,12 @@ export function SetupPage() {
 							htmlFor="confirmPassword"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							Confirmar Contraseña
+							Confirmar ContraseÃ±a
 						</label>
 						<Input
 							id="confirmPassword"
 							type={showConfirm ? "text" : "password"}
-							placeholder="Vuelve a escribir tu contraseña"
+							placeholder="Vuelve a escribir tu contraseÃ±a"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
 							showCount
 							error={!!errors.confirmPassword}
