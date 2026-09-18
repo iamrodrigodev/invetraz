@@ -1,4 +1,4 @@
-﻿package pe.edu.ulasalle.sistemainvestigacion.services.impl;
+package pe.edu.ulasalle.sistemainvestigacion.services.impl;
 
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.VerificarAutenticacionRespuesta;

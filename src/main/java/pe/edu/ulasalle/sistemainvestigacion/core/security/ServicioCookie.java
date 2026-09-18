@@ -1,4 +1,4 @@
-﻿package pe.edu.ulasalle.sistemainvestigacion.core.security;
+package pe.edu.ulasalle.sistemainvestigacion.core.security;
 
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;

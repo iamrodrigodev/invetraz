@@ -1,4 +1,4 @@
-﻿package pe.edu.ulasalle.sistemainvestigacion.core.security;
+package pe.edu.ulasalle.sistemainvestigacion.core.security;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
