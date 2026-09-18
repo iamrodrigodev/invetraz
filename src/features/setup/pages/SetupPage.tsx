@@ -1,9 +1,10 @@
-﻿import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Microscope } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Alert, Button, Input } from "../../../components/ui";
+import { VALIDATION_LIMITS } from "../../../constants/validations";
 import { crearAdmin } from "../api/setup.api";
 import {
 	type CrearAdminPeticion,
@@ -66,6 +67,8 @@ export function SetupPage() {
 							id="email"
 							type="email"
 							placeholder="admin@ulasalle.edu.pe"
+							maxLength={VALIDATION_LIMITS.MAX_EMAIL}
+							showCount
 							error={!!errors.email}
 							{...register("email")}
 						/>
@@ -87,6 +90,8 @@ export function SetupPage() {
 							id="password"
 							type={showPassword ? "text" : "password"}
 							placeholder="Mínimo 8 caracteres, 1 mayúscula y 1 número"
+							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
+							showCount
 							error={!!errors.password}
 							{...register("password")}
 							rightElement={
@@ -117,6 +122,8 @@ export function SetupPage() {
 							id="confirmPassword"
 							type={showConfirm ? "text" : "password"}
 							placeholder="Vuelve a escribir tu contraseña"
+							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
+							showCount
 							error={!!errors.confirmPassword}
 							{...register("confirmPassword")}
 							rightElement={

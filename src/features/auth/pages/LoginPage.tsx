@@ -1,9 +1,10 @@
-﻿import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Microscope } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Alert, Button, Input } from "../../../components/ui";
+import { VALIDATION_LIMITS } from "../../../constants/validations";
 import { login } from "../api/auth.api";
 import {
 	type LoginPeticion,
@@ -65,6 +66,8 @@ export function LoginPage() {
 							id="email"
 							type="email"
 							placeholder="admin@ulasalle.edu.pe"
+							maxLength={VALIDATION_LIMITS.MAX_EMAIL}
+							showCount
 							error={!!errors.email}
 							{...register("email")}
 						/>
@@ -86,6 +89,8 @@ export function LoginPage() {
 							id="password"
 							type={showPassword ? "text" : "password"}
 							placeholder="••••••••"
+							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
+							showCount
 							error={!!errors.password}
 							{...register("password")}
 							rightElement={
