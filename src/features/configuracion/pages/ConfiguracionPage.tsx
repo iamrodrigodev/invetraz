@@ -34,7 +34,8 @@ export function ConfiguracionPage() {
 		reset,
 		getValues,
 		trigger,
-		formState: { errors, isSubmitting },
+		watch,
+		formState: { errors, isSubmitting, isDirty },
 	} = useForm<ActualizarCredencialesPeticion>({
 		resolver: zodResolver(ActualizarCredencialesPeticionSchema),
 		mode: "onChange",
@@ -44,6 +45,30 @@ export function ConfiguracionPage() {
 			googleRefreshToken: "",
 		},
 	});
+
+	const [clientId, clientSecret, refreshToken] = watch([
+		"googleClientId",
+		"googleClientSecret",
+		"googleRefreshToken",
+	]);
+
+	const camposCompletos = Boolean(
+		clientId?.trim() &&
+		clientSecret?.trim() &&
+		refreshToken?.trim()
+	);
+
+	const tieneErrores = Boolean(
+		errors.googleClientId ||
+		errors.googleClientSecret ||
+		errors.googleRefreshToken
+	);
+
+	const configuracionCompleta = camposCompletos && !tieneErrores;
+	const deshabilitarVerificar =
+		!configuracionCompleta || verificando || isSubmitting;
+	const deshabilitarGuardar =
+		!configuracionCompleta || !isDirty || isSubmitting || verificando;
 
 	useEffect(() => {
 		async function cargar() {
@@ -292,8 +317,13 @@ export function ConfiguracionPage() {
 										variant="outline"
 										onClick={onProbarConexion}
 										isLoading={verificando}
-										disabled={isSubmitting}
+										disabled={deshabilitarVerificar}
 										className="w-full sm:w-auto"
+										title={
+											!configuracionCompleta
+												? "Completa todos los campos requeridos para verificar la conexión"
+												: undefined
+										}
 									>
 										<RefreshCw size={16} className="mr-2" />
 										Verificar Conexión
@@ -303,8 +333,15 @@ export function ConfiguracionPage() {
 										type="submit"
 										variant="default"
 										isLoading={isSubmitting}
-										disabled={verificando}
+										disabled={deshabilitarGuardar}
 										className="w-full sm:w-auto"
+										title={
+											!configuracionCompleta
+												? "Completa todos los campos requeridos para guardar"
+												: !isDirty
+													? "Modifica al menos un campo para guardar cambios"
+													: undefined
+										}
 									>
 										<Save size={16} className="mr-2" />
 										Guardar Configuración
