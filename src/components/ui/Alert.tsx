@@ -71,6 +71,7 @@ export const Alert: React.FC<AlertProps> = ({
 					onClick={onClose}
 					className="inline-flex shrink-0 cursor-pointer rounded-lg p-1 opacity-70 transition-all hover:opacity-100 hover:bg-black/5 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-current"
 					aria-label="Cerrar notificación"
+					title="Cerrar"
 				>
 					<X size={16} />
 				</button>

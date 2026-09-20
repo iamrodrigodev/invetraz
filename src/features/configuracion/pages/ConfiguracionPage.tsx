@@ -94,15 +94,6 @@ export function ConfiguracionPage() {
 		}
 	}, [cargado, cargarConfiguracion, credenciales, reset]);
 
-	useEffect(() => {
-		if (mensajeExito) {
-			const timer = setTimeout(() => {
-				setMensajeExito(null);
-			}, 6000);
-			return () => clearTimeout(timer);
-		}
-	}, [mensajeExito]);
-
 	const onGuardar = async (data: ActualizarCredencialesPeticion) => {
 		try {
 			setMensajeError(null);
