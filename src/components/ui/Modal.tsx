@@ -51,7 +51,7 @@ export function Modal({
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
 						transition={{ duration: 0.15, ease: "easeOut" }}
-						className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs cursor-pointer"
+						className="fixed inset-0 bg-black/40 backdrop-blur-sm cursor-pointer"
 						onClick={alCerrar}
 						aria-hidden="true"
 					/>
@@ -61,7 +61,8 @@ export function Modal({
 						exit={{ opacity: 0, scale: 0.96, y: 12 }}
 						transition={{ duration: 0.18, ease: "easeOut" }}
 						className={cn(
-							"relative z-10 w-full max-w-md overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-2xl",
+							"relative z-10 w-full max-w-md overflow-hidden rounded-2xl bg-white p-6 align-middle shadow-2xl",
+							!className?.includes("text-center") && "text-left",
 							className,
 						)}
 						role="dialog"

@@ -43,26 +43,22 @@ export function ModalConfirmacion({
 				<X className="h-5 w-5" />
 			</button>
 
-			<div className="flex flex-col items-center justify-center gap-3 pt-2">
-				<div
+			<div className="flex flex-col items-center justify-center gap-3 pt-2 text-center">
+				<AlertCircle
 					className={
 						varianteBoton === "destructivo"
-							? "flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-red-500"
-							: "flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary"
+							? "mb-1 h-14 w-14 text-red-500"
+							: "mb-1 h-14 w-14 text-primary"
 					}
-				>
-					<AlertCircle
-						className="h-8 w-8"
-						strokeWidth={1.8}
-						aria-hidden="true"
-					/>
-				</div>
+					strokeWidth={1.5}
+					aria-hidden="true"
+				/>
 
-				<div>
-					<h3 className="font-heading font-bold text-slate-900 text-xl">
+				<div className="text-center">
+					<h3 className="font-heading font-bold text-slate-900 text-xl text-center">
 						{titulo}
 					</h3>
-					<p className="mt-2 text-[15px] text-slate-500 leading-relaxed">
+					<p className="mt-2 text-[15px] text-slate-500 leading-relaxed text-center">
 						{descripcion}
 					</p>
 				</div>

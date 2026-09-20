@@ -9,10 +9,10 @@ import { VALIDATION_LIMITS } from "../../../constants/validations";
 const Paso1Schema = z.object({
 	claveActual: z
 		.string()
-		.min(1, "Ingresa tu contraseÃ±a actual")
+		.min(1, "Ingresa tu contraseña actual")
 		.max(
 			VALIDATION_LIMITS.MAX_PASSWORD,
-			`La contraseÃ±a no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres`,
+			`La contraseña no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres`,
 		),
 });
 
@@ -22,22 +22,22 @@ const Paso2Schema = z
 			.string()
 			.min(
 				VALIDATION_LIMITS.MIN_PASSWORD,
-				`La contraseÃ±a debe tener al menos ${VALIDATION_LIMITS.MIN_PASSWORD} caracteres`,
+				`La contraseña debe tener al menos ${VALIDATION_LIMITS.MIN_PASSWORD} caracteres`,
 			)
 			.max(
 				VALIDATION_LIMITS.MAX_PASSWORD,
-				`La contraseÃ±a no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres`,
+				`La contraseña no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres`,
 			),
 		confirmarClave: z
 			.string()
-			.min(1, "Confirma tu nueva contraseÃ±a")
+			.min(1, "Confirma tu nueva contraseña")
 			.max(
 				VALIDATION_LIMITS.MAX_PASSWORD,
-				`La contraseÃ±a no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres`,
+				`La contraseña no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres`,
 			),
 	})
 	.refine((data) => data.nuevaClave === data.confirmarClave, {
-		message: "Las contraseÃ±as no coinciden",
+		message: "Las contraseñas no coinciden",
 		path: ["confirmarClave"],
 	});
 
@@ -84,7 +84,7 @@ export function ModalCambiarClave({
 			await new Promise((resolve) => setTimeout(resolve, 800));
 			setPaso(2);
 		} catch (_error) {
-			setErrorApi("La contrasena actual es incorrecta");
+			setErrorApi("La contraseña actual es incorrecta");
 		} finally {
 			setCargando(false);
 		}
