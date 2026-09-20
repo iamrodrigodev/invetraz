@@ -1,3 +1,4 @@
+import { Microscope } from "lucide-react";
 import type React from "react";
 import { cn } from "../../utils/cn";
 
@@ -40,26 +41,70 @@ export function PageSkeleton({ className }: PageSkeletonProps = {}) {
 	);
 }
 
-export function AuthCardSkeleton() {
+export interface AuthCardSkeletonProps {
+	esSetup?: boolean;
+}
+
+export function AuthCardSkeleton({ esSetup }: AuthCardSkeletonProps = {}) {
+	const isSetup =
+		esSetup ??
+		(typeof window !== "undefined" && window.location.pathname !== "/login");
+
 	return (
-		<div className="flex min-h-screen w-full items-center justify-center bg-slate-50 p-4 font-sans">
+		<div className="flex min-h-screen w-full items-center justify-center bg-slate-50 p-4 font-sans text-slate-800">
 			<div className="w-full max-w-120 rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xs md:p-12">
 				<div className="mb-8 flex flex-col items-center text-center">
-					<Skeleton className="mb-4 h-14 w-14 rounded-2xl" />
-					<Skeleton className="mb-2 h-8 w-64 rounded-xl md:w-72" />
-					<Skeleton className="h-4 w-56 rounded-md md:w-64" />
+					<Microscope
+						className="mb-4 h-14 w-14 shrink-0 text-primary/30 animate-pulse"
+						strokeWidth={2.2}
+					/>
+					<div className="mb-2 h-8 w-64 rounded-xl bg-slate-200/80 animate-pulse md:w-72" />
+					<div className="h-4 w-56 rounded-md bg-slate-200/60 animate-pulse md:w-64" />
 				</div>
 
 				<div className="space-y-6">
 					<div>
-						<Skeleton className="mb-2 h-4 w-32 rounded-md" />
-						<Skeleton className="h-10 w-full rounded-lg" />
+						<div className="mb-2 flex items-center gap-1">
+							<div className="h-4 w-32 rounded-md bg-slate-200 animate-pulse" />
+							<span className="text-red-400 text-xs select-none">*</span>
+						</div>
+						<div className="flex h-10 w-full items-center rounded-lg border border-slate-200/80 bg-slate-50/50 px-3.5 ring-1 ring-inset ring-slate-200/50">
+							<div className="h-3 w-40 rounded-sm bg-slate-200/70 animate-pulse" />
+						</div>
 					</div>
+
 					<div>
-						<Skeleton className="mb-2 h-4 w-24 rounded-md" />
-						<Skeleton className="h-10 w-full rounded-lg" />
+						<div className="mb-2 flex items-center gap-1">
+							<div className="h-4 w-24 rounded-md bg-slate-200 animate-pulse" />
+							<span className="text-red-400 text-xs select-none">*</span>
+						</div>
+						<div className="flex h-10 w-full items-center justify-between rounded-lg border border-slate-200/80 bg-slate-50/50 px-3.5 ring-1 ring-inset ring-slate-200/50">
+							<div className="h-3 w-32 rounded-sm bg-slate-200/70 animate-pulse" />
+							<div className="h-4 w-4 rounded-full bg-slate-200/80 animate-pulse" />
+						</div>
+						{isSetup && (
+							<div className="mt-1.5 flex items-center">
+								<div className="h-3 w-56 rounded-sm bg-slate-200/80 animate-pulse" />
+							</div>
+						)}
 					</div>
-					<Skeleton className="mt-2 h-11 w-full rounded-xl" />
+
+					{isSetup && (
+						<div>
+							<div className="mb-2 flex items-center gap-1">
+								<div className="h-4 w-36 rounded-md bg-slate-200 animate-pulse" />
+								<span className="text-red-400 text-xs select-none">*</span>
+							</div>
+							<div className="flex h-10 w-full items-center justify-between rounded-lg border border-slate-200/80 bg-slate-50/50 px-3.5 ring-1 ring-inset ring-slate-200/50">
+								<div className="h-3 w-32 rounded-sm bg-slate-200/70 animate-pulse" />
+								<div className="h-4 w-4 rounded-full bg-slate-200/80 animate-pulse" />
+							</div>
+						</div>
+					)}
+
+					<div className="mt-2 flex h-11 w-full items-center justify-center rounded-xl bg-primary/25 shadow-xs animate-pulse">
+						<div className="h-4 w-36 rounded-md bg-primary/40" />
+					</div>
 				</div>
 			</div>
 		</div>

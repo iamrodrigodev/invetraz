@@ -29,8 +29,13 @@ export function AppRouter() {
 			(window.location.pathname === "/login" ||
 				window.location.pathname === "/setup");
 
+		const esSetup =
+			typeof window !== "undefined" &&
+			(window.location.pathname === "/setup" ||
+				(window.location.pathname !== "/login" && configurado !== true));
+
 		if (esRutaAuth || !tieneSesionPrevia) {
-			return <AuthCardSkeleton />;
+			return <AuthCardSkeleton esSetup={esSetup} />;
 		}
 
 		return <DashboardSkeleton />;
