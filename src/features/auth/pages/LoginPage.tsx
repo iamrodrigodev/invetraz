@@ -69,7 +69,6 @@ export function LoginPage() {
 							type="email"
 							placeholder="admin@ulasalle.edu.pe"
 							maxLength={VALIDATION_LIMITS.MAX_EMAIL}
-							showCount
 							errorMessage={errors.email?.message}
 							{...register("email")}
 						/>
@@ -87,7 +86,6 @@ export function LoginPage() {
 							type={showPassword ? "text" : "password"}
 							placeholder="••••••••"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
-							showCount
 							errorMessage={errors.password?.message}
 							{...register("password")}
 							rightElement={

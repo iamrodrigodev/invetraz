@@ -23,34 +23,26 @@ export function Skeleton({ className }: SkeletonProps) {
 	);
 }
 
-export function PageSkeleton() {
+export interface PageSkeletonProps {
+	className?: string;
+}
+
+export function PageSkeleton({ className }: PageSkeletonProps = {}) {
 	return (
 		<motion.div
-			initial={{ opacity: 0, y: 8 }}
-			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.3, ease: "easeOut" }}
-			className="flex h-full min-h-[450px] w-full flex-1 flex-col rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xs md:p-12"
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 0.2, ease: "easeOut" }}
+			className={cn(
+				"flex h-full min-h-[450px] w-full flex-1 flex-col items-center justify-center rounded-3xl border border-slate-200/60 bg-white p-8 text-center shadow-xs md:p-12",
+				className,
+			)}
 		>
-			<div className="mb-8 flex flex-col items-center text-center">
-				<Skeleton className="mb-4 h-14 w-14 rounded-2xl" />
-				<Skeleton className="mb-3 h-8 w-64 rounded-xl" />
-				<Skeleton className="h-4 w-full max-w-md rounded-lg md:w-96" />
-			</div>
-
-			<div className="mt-4 grid w-full grid-cols-1 gap-6 md:grid-cols-3">
-				{[1, 2, 3].map((index) => (
-					<motion.div
-						key={index}
-						initial={{ opacity: 0, y: 12 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.35, delay: index * 0.08 }}
-						className="flex flex-col gap-3 rounded-2xl border border-slate-100 bg-slate-50/50 p-6"
-					>
-						<Skeleton className="h-6 w-3/4 rounded-lg" />
-						<Skeleton className="h-4 w-full rounded-md" />
-						<Skeleton className="h-4 w-5/6 rounded-md" />
-					</motion.div>
-				))}
+			<Skeleton className="mb-6 h-14 w-14 rounded-2xl" />
+			<Skeleton className="mb-3 h-8 w-64 rounded-xl md:w-80" />
+			<div className="flex w-full max-w-md flex-col items-center gap-2">
+				<Skeleton className="h-4 w-full rounded-lg" />
+				<Skeleton className="h-4 w-3/4 rounded-lg" />
 			</div>
 		</motion.div>
 	);
