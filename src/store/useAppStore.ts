@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { logout, verificarAutenticacion } from "../features/auth/api/auth.api";
+import { useConfiguracionStore } from "../features/configuracion/store/useConfiguracionStore";
 import { verificarEstadoSistema } from "../features/setup/api/setup.api";
 import { alExpirarSesion } from "../utils/fetch";
 
@@ -75,10 +76,12 @@ export const useAppStore = create<AppState>((set) => ({
 		localStorage.removeItem("sesion_activa");
 		localStorage.removeItem("jwt");
 		localStorage.removeItem("moduloActivo");
+		useConfiguracionStore.getState().limpiar();
 		set({ autenticado: false, usuarioEmail: null });
 	},
 }));
 
 alExpirarSesion(() => {
 	useAppStore.setState({ autenticado: false, usuarioEmail: null });
+	useConfiguracionStore.getState().limpiar();
 });

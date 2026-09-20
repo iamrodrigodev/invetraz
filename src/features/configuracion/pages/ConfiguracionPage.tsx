@@ -14,25 +14,26 @@ import {
 } from "../../../components/ui";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
 import {
-	actualizarConfiguracion,
-	obtenerConfiguracion,
-	verificarConfiguracion,
-} from "../api/configuracion.api";
-import {
 	CampoCredencial,
 	EstadoConexionBadge,
 	TarjetaGuiaGoogle,
-	type TipoEstadoConexion,
 } from "../components";
+import { useConfiguracionStore } from "../store/useConfiguracionStore";
 import {
 	type ActualizarCredencialesPeticion,
 	ActualizarCredencialesPeticionSchema,
 } from "../types/ActualizarCredencialesPeticion";
 
 export function ConfiguracionPage() {
-	const [cargandoInicial, setCargandoInicial] = useState(true);
-	const [estadoConexion, setEstadoConexion] =
-		useState<TipoEstadoConexion>("no_configurado");
+	const {
+		credenciales,
+		estadoConexion,
+		cargado,
+		cargarConfiguracion,
+		guardarConfiguracion,
+		verificarConexion,
+	} = useConfiguracionStore();
+
 	const [mensajeExito, setMensajeExito] = useState<string | null>(null);
 	const [mensajeError, setMensajeError] = useState<string | null>(null);
 	const [verificando, setVerificando] = useState(false);
@@ -48,11 +49,7 @@ export function ConfiguracionPage() {
 	} = useForm<ActualizarCredencialesPeticion>({
 		resolver: zodResolver(ActualizarCredencialesPeticionSchema),
 		mode: "onChange",
-		defaultValues: {
-			googleClientId: "",
-			googleClientSecret: "",
-			googleRefreshToken: "",
-		},
+		defaultValues: credenciales,
 	});
 
 	const [clientId, clientSecret, refreshToken] = watch([
@@ -63,14 +60,14 @@ export function ConfiguracionPage() {
 
 	const camposCompletos = Boolean(
 		clientId?.trim() &&
-		clientSecret?.trim() &&
-		refreshToken?.trim()
+			clientSecret?.trim() &&
+			refreshToken?.trim(),
 	);
 
 	const tieneErrores = Boolean(
 		errors.googleClientId ||
-		errors.googleClientSecret ||
-		errors.googleRefreshToken
+			errors.googleClientSecret ||
+			errors.googleRefreshToken,
 	);
 
 	const configuracionCompleta = camposCompletos && !tieneErrores;
@@ -80,44 +77,28 @@ export function ConfiguracionPage() {
 		!configuracionCompleta || !isDirty || isSubmitting || verificando;
 
 	useEffect(() => {
-		async function cargar() {
-			try {
-				setCargandoInicial(true);
-				const config = await obtenerConfiguracion();
-				reset({
-					googleClientId: config.googleClientId || "",
-					googleClientSecret: config.googleClientSecret || "",
-					googleRefreshToken: config.googleRefreshToken || "",
+		if (!cargado) {
+			cargarConfiguracion()
+				.then((datos) => {
+					reset(datos);
+				})
+				.catch((error) => {
+					setMensajeError(
+						error instanceof Error
+							? error.message
+							: "Error al cargar la configuración",
+					);
 				});
-
-				if (
-					config.googleClientId &&
-					config.googleClientSecret &&
-					config.googleRefreshToken
-				) {
-					setEstadoConexion("conectado");
-				} else {
-					setEstadoConexion("no_configurado");
-				}
-			} catch (error) {
-				setMensajeError(
-					error instanceof Error
-						? error.message
-						: "Error al cargar la configuración",
-				);
-			} finally {
-				setCargandoInicial(false);
-			}
+		} else {
+			reset(credenciales);
 		}
-
-		cargar();
-	}, [reset]);
+	}, [cargado, cargarConfiguracion, credenciales, reset]);
 
 	const onGuardar = async (data: ActualizarCredencialesPeticion) => {
 		try {
 			setMensajeError(null);
 			setMensajeExito(null);
-			await actualizarConfiguracion(data);
+			await guardarConfiguracion(data);
 			setMensajeExito(
 				"Credenciales de Google actualizadas y guardadas exitosamente.",
 			);
@@ -145,15 +126,11 @@ export function ConfiguracionPage() {
 			}
 
 			setVerificando(true);
-			setEstadoConexion("verificando");
-
 			const valores = getValues();
-			const res = await verificarConfiguracion(valores);
+			const res = await verificarConexion(valores);
 
-			setEstadoConexion("conectado");
 			setMensajeExito(res.mensaje || "¡Conexión verificada exitosamente!");
 		} catch (error) {
-			setEstadoConexion("error");
 			setMensajeError(
 				error instanceof Error
 					? error.message
@@ -164,7 +141,7 @@ export function ConfiguracionPage() {
 		}
 	};
 
-	if (cargandoInicial) {
+	if (!cargado) {
 		return <ConfiguracionSkeleton />;
 	}
 
