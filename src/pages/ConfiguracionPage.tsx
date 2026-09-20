@@ -1,1 +1,4 @@
-export { ConfiguracionPage, default } from "../features/configuracion/pages/ConfiguracionPage";
+export {
+	ConfiguracionPage,
+	default,
+} from "../features/configuracion/pages/ConfiguracionPage";

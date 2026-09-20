@@ -125,14 +125,30 @@ export function ConfiguracionSkeleton() {
 					</div>
 				</div>
 
-				{/* Columna derecha: Tarjeta informativa y guía */}
-				<div className="rounded-2xl border border-slate-200/80 bg-slate-50/50 p-6 shadow-xs">
-					<Skeleton className="h-5 w-40 rounded-md" />
-					<Skeleton className="mt-2 h-6 w-56 rounded-md" />
-					<div className="mt-4 space-y-4">
-						<Skeleton className="h-16 w-full rounded-lg" />
-						<Skeleton className="h-16 w-full rounded-lg" />
-						<Skeleton className="h-20 w-full rounded-lg" />
+				{/* Columna derecha: Tarjetas informativas y scopes en cards independientes */}
+				<div className="space-y-6">
+					<div className="rounded-2xl border border-slate-200/80 bg-slate-50/50 p-6 shadow-xs">
+						<Skeleton className="h-5 w-40 rounded-md" />
+						<Skeleton className="mt-2 h-6 w-56 rounded-md" />
+						<div className="mt-4 space-y-3">
+							<Skeleton className="h-14 w-full rounded-lg" />
+							<Skeleton className="h-14 w-full rounded-lg" />
+							<Skeleton className="h-14 w-full rounded-lg" />
+						</div>
+					</div>
+
+					<div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs">
+						<div className="flex items-center justify-between">
+							<Skeleton className="h-5 w-36 rounded-md" />
+							<Skeleton className="h-7 w-24 rounded-lg" />
+						</div>
+						<Skeleton className="mt-2 h-6 w-48 rounded-md" />
+						<Skeleton className="mt-1.5 h-4 w-64 rounded-md" />
+						<div className="mt-4 space-y-2">
+							<Skeleton className="h-12 w-full rounded-lg" />
+							<Skeleton className="h-12 w-full rounded-lg" />
+							<Skeleton className="h-12 w-full rounded-lg" />
+						</div>
 					</div>
 				</div>
 			</div>

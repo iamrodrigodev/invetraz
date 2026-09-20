@@ -1,8 +1,7 @@
 import { Eye, EyeOff } from "lucide-react";
+import type React from "react";
 import { forwardRef, useState } from "react";
 import { Input, type InputProps } from "../../../components/ui/Input";
-
-import type React from "react";
 
 export interface CampoCredencialProps extends Omit<InputProps, "rightElement"> {
 	label: string;
@@ -11,7 +10,10 @@ export interface CampoCredencialProps extends Omit<InputProps, "rightElement"> {
 	esSensible?: boolean;
 }
 
-export const CampoCredencial = forwardRef<HTMLInputElement, CampoCredencialProps>(
+export const CampoCredencial = forwardRef<
+	HTMLInputElement,
+	CampoCredencialProps
+>(
 	(
 		{
 			id,
@@ -29,11 +31,7 @@ export const CampoCredencial = forwardRef<HTMLInputElement, CampoCredencialProps
 	) => {
 		const [mostrarTexto, setMostrarTexto] = useState(false);
 
-		const tipoInput = esSensible
-			? mostrarTexto
-				? "text"
-				: "password"
-			: type;
+		const tipoInput = esSensible ? (mostrarTexto ? "text" : "password") : type;
 
 		const elementoDerecho = esSensible ? (
 			<button
@@ -57,9 +55,7 @@ export const CampoCredencial = forwardRef<HTMLInputElement, CampoCredencialProps
 					</label>
 				</div>
 
-				{descripcion && (
-					<p className="text-xs text-slate-500">{descripcion}</p>
-				)}
+				{descripcion && <p className="text-xs text-slate-500">{descripcion}</p>}
 
 				<Input
 					id={id}

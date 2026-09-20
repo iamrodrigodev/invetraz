@@ -1,5 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, CheckCircle2, Eye, EyeOff, Save, ShieldCheck, X } from "lucide-react";
+import {
+	ArrowLeft,
+	CheckCircle2,
+	Eye,
+	EyeOff,
+	Save,
+	ShieldCheck,
+	X,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Alert, Button, Input, Modal } from "../../../components/ui";
@@ -60,7 +68,7 @@ export function ModalCambiarClave({
 			setShowNueva(false);
 			setShowConfirmar(false);
 		}
-	}, [paso]);
+	}, [paso, formPaso2.reset]);
 
 	const manejarCierre = () => {
 		alCerrar();
@@ -143,7 +151,9 @@ export function ModalCambiarClave({
 									type="button"
 									onClick={() => setShowActual(!showActual)}
 									className="cursor-pointer text-primary/70 transition-colors hover:text-primary focus:outline-none"
-									aria-label={showActual ? "Ocultar contraseña" : "Ver contraseña"}
+									aria-label={
+										showActual ? "Ocultar contraseña" : "Ver contraseña"
+									}
 								>
 									{showActual ? <EyeOff size={18} /> : <Eye size={18} />}
 								</button>
@@ -202,7 +212,9 @@ export function ModalCambiarClave({
 									type="button"
 									onClick={() => setShowNueva(!showNueva)}
 									className="cursor-pointer text-primary/70 transition-colors hover:text-primary focus:outline-none"
-									aria-label={showNueva ? "Ocultar contraseña" : "Ver contraseña"}
+									aria-label={
+										showNueva ? "Ocultar contraseña" : "Ver contraseña"
+									}
 								>
 									{showNueva ? <EyeOff size={18} /> : <Eye size={18} />}
 								</button>
@@ -231,7 +243,9 @@ export function ModalCambiarClave({
 									type="button"
 									onClick={() => setShowConfirmar(!showConfirmar)}
 									className="cursor-pointer text-primary/70 transition-colors hover:text-primary focus:outline-none"
-									aria-label={showConfirmar ? "Ocultar contraseña" : "Ver contraseña"}
+									aria-label={
+										showConfirmar ? "Ocultar contraseña" : "Ver contraseña"
+									}
 								>
 									{showConfirmar ? <EyeOff size={18} /> : <Eye size={18} />}
 								</button>

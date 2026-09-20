@@ -17,6 +17,7 @@ import {
 	CampoCredencial,
 	EstadoConexionBadge,
 	TarjetaGuiaGoogle,
+	TarjetaScopesGoogle,
 } from "../components";
 import { useConfiguracionStore } from "../store/useConfiguracionStore";
 import {
@@ -59,9 +60,7 @@ export function ConfiguracionPage() {
 	]);
 
 	const camposCompletos = Boolean(
-		clientId?.trim() &&
-			clientSecret?.trim() &&
-			refreshToken?.trim(),
+		clientId?.trim() && clientSecret?.trim() && refreshToken?.trim(),
 	);
 
 	const tieneErrores = Boolean(
@@ -153,7 +152,8 @@ export function ConfiguracionPage() {
 					Configuración de Google Classroom
 				</h1>
 				<p className="mt-1 text-sm text-slate-500">
-					Administra las credenciales de la API de Google para la sincronización de clases y tareas.
+					Administra las credenciales de la API de Google para la sincronización
+					de clases y tareas.
 				</p>
 			</div>
 
@@ -191,7 +191,8 @@ export function ConfiguracionPage() {
 								Credenciales de API de Google
 							</CardTitle>
 							<CardDescription>
-								Ingresa el Client ID, Client Secret y Refresh Token correspondientes.
+								Ingresa el Client ID, Client Secret y Refresh Token
+								correspondientes.
 							</CardDescription>
 						</CardHeader>
 
@@ -295,9 +296,10 @@ export function ConfiguracionPage() {
 					</Card>
 				</div>
 
-				{/* Columna derecha: Tarjeta informativa y guía */}
-				<div>
+				{/* Columna derecha: Tarjetas informativas y scopes en cards independientes */}
+				<div className="space-y-6">
 					<TarjetaGuiaGoogle />
+					<TarjetaScopesGoogle />
 				</div>
 			</div>
 		</div>

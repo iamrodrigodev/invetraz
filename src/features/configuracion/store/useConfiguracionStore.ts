@@ -15,8 +15,12 @@ interface ConfiguracionState {
 	estadoConexion: TipoEstadoConexion;
 	cargado: boolean;
 	cargando: boolean;
-	cargarConfiguracion: (forzar?: boolean) => Promise<ActualizarCredencialesPeticion>;
-	guardarConfiguracion: (datos: ActualizarCredencialesPeticion) => Promise<void>;
+	cargarConfiguracion: (
+		forzar?: boolean,
+	) => Promise<ActualizarCredencialesPeticion>;
+	guardarConfiguracion: (
+		datos: ActualizarCredencialesPeticion,
+	) => Promise<void>;
 	verificarConexion: (
 		datos?: ActualizarCredencialesPeticion,
 	) => Promise<ResultadoVerificacion>;

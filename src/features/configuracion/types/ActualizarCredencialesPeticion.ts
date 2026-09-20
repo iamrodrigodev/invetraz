@@ -47,6 +47,4 @@ export const ResultadoVerificacionSchema = z.object({
 	mensaje: z.string(),
 });
 
-export type ResultadoVerificacion = z.infer<
-	typeof ResultadoVerificacionSchema
->;
+export type ResultadoVerificacion = z.infer<typeof ResultadoVerificacionSchema>;

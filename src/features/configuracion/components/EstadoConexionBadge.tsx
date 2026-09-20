@@ -40,12 +40,13 @@ export const EstadoConexionBadge: React.FC<EstadoConexionBadgeProps> = ({
 				</Badge>
 			);
 		case "no_configurado":
-		default:
 			return (
 				<Badge variant="warning" className={className}>
 					<AlertCircle size={13} className="shrink-0 text-amber-600" />
 					<span>Pendiente de configuración</span>
 				</Badge>
 			);
+		default:
+			return null;
 	}
 };
