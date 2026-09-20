@@ -10,7 +10,11 @@ import { EstadoSetupRespuestaSchema } from "../types/EstadoSetupRespuesta";
 export async function verificarEstadoSistema(): Promise<boolean> {
 	try {
 		const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/setup/estado`);
-		if (!res.ok) return false;
+		if (!res.ok) {
+			// Si la base de datos está desconectada o el backend devuelve error,
+			// asumimos configurado (true) para redirigir al login y no al setup
+			return true;
+		}
 
 		const wrapper = await parsearJsonSeguro<{ datos: unknown }>(res);
 		const parsed = EstadoSetupRespuestaSchema.safeParse(wrapper.datos);
@@ -19,9 +23,10 @@ export async function verificarEstadoSistema(): Promise<boolean> {
 			return parsed.data.configurado;
 		}
 
-		return false;
+		return true;
 	} catch (_e) {
-		return false;
+		// Ante error de red o servidor apagado, asumir configurado (true) para ir al login
+		return true;
 	}
 }
 

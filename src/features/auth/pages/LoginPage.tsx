@@ -1,11 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Microscope } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Alert, Button, Input } from "../../../components/ui";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
 import { useAppStore } from "../../../store/useAppStore";
+import { verificarEstadoSistema } from "../../setup/api/setup.api";
 import { login } from "../api/auth.api";
 import {
 	type LoginPeticion,
@@ -15,8 +16,22 @@ import {
 export function LoginPage() {
 	const navigate = useNavigate();
 	const setAutenticado = useAppStore((state) => state.setAutenticado);
+	const setConfigurado = useAppStore((state) => state.setConfigurado);
 	const [errorApi, setErrorApi] = useState<string | null>(null);
 	const [showPassword, setShowPassword] = useState(false);
+
+	useEffect(() => {
+		let montado = true;
+		verificarEstadoSistema().then((esConfigurado) => {
+			if (montado && !esConfigurado) {
+				setConfigurado(false);
+				navigate("/setup", { replace: true });
+			}
+		});
+		return () => {
+			montado = false;
+		};
+	}, [setConfigurado, navigate]);
 
 	const {
 		register,

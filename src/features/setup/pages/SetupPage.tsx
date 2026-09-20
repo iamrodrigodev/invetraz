@@ -1,13 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Microscope } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Alert, Button, Input } from "../../../components/ui";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
 import { useAppStore } from "../../../store/useAppStore";
 import { login } from "../../auth/api/auth.api";
-import { crearAdmin } from "../api/setup.api";
+import { crearAdmin, verificarEstadoSistema } from "../api/setup.api";
 import {
 	type CrearAdminPeticion,
 	CrearAdminPeticionSchema,
@@ -20,6 +20,19 @@ export function SetupPage() {
 	const [errorApi, setErrorApi] = useState<string | null>(null);
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirm, setShowConfirm] = useState(false);
+
+	useEffect(() => {
+		let montado = true;
+		verificarEstadoSistema().then((esConfigurado) => {
+			if (montado && esConfigurado) {
+				setConfigurado(true);
+				navigate("/login", { replace: true });
+			}
+		});
+		return () => {
+			montado = false;
+		};
+	}, [setConfigurado, navigate]);
 
 	const {
 		register,
@@ -44,9 +57,15 @@ export function SetupPage() {
 			setAutenticado(true);
 			navigate("/", { replace: true });
 		} catch (error) {
-			setErrorApi(
-				error instanceof Error ? error.message : "Error al crear la cuenta",
-			);
+			const mensaje =
+				error instanceof Error ? error.message : "Error al crear la cuenta";
+			setErrorApi(mensaje);
+			if (mensaje.toLowerCase().includes("ya ha sido configurado")) {
+				setConfigurado(true);
+				setTimeout(() => {
+					navigate("/login", { replace: true });
+				}, 1500);
+			}
 		}
 	};
 

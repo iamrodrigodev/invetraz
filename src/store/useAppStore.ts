@@ -33,7 +33,7 @@ export const useAppStore = create<AppState>((set) => ({
 		} catch (error) {
 			console.error("Error al verificar estado global", error);
 			set({
-				configurado: false,
+				configurado: true,
 				autenticado: false,
 				usuarioEmail: null,
 				estadoVerificado: true,
