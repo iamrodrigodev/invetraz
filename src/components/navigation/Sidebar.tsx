@@ -38,7 +38,7 @@ export function Sidebar({
 	return (
 		<aside
 			className={cn(
-				"relative flex h-full flex-col border-r border-slate-200 bg-white text-slate-600 transition-all duration-300 ease-in-out select-none",
+				"relative flex h-full flex-col border-r border-slate-200 bg-white text-slate-600 select-none",
 				estaColapsado ? "w-20" : "w-72",
 				className,
 			)}
@@ -58,19 +58,16 @@ export function Sidebar({
 				)}
 			</button>
 
-			<div
-				className={cn(
-					"flex h-16 shrink-0 items-center border-b border-slate-200",
-					estaColapsado ? "justify-center px-2" : "px-6",
-				)}
-			>
+			<div className="flex h-16 shrink-0 items-center border-b border-slate-200 px-[18px]">
 				<Logo estaColapsado={estaColapsado} />
 			</div>
 
 			<nav
 				className={cn(
-					"flex-1 space-y-1.5 overflow-x-hidden overflow-y-auto py-5",
-					estaColapsado ? "px-2" : "px-3",
+					"flex-1 space-y-1.5 py-5 px-[18px]",
+					estaColapsado
+						? "overflow-visible"
+						: "overflow-x-hidden overflow-y-auto",
 				)}
 			>
 				{ELEMENTOS_NAVEGACION.map((item) => (
@@ -84,12 +81,7 @@ export function Sidebar({
 				))}
 			</nav>
 
-			<div
-				className={cn(
-					"border-t border-slate-200/80 py-4",
-					estaColapsado ? "px-2" : "px-3",
-				)}
-			>
+			<div className="border-t border-slate-200/80 py-4 px-[18px]">
 				<BotonCerrarSesion
 					estaColapsado={estaColapsado}
 					alHacerClic={alSolicitarCerrarSesion ?? manejarCerrarSesion}

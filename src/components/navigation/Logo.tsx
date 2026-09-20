@@ -10,18 +10,19 @@ export function Logo({ estaColapsado = false, className }: LogoProps) {
 	return (
 		<div
 			className={cn(
-				"flex items-center select-none overflow-hidden font-bold text-slate-900 text-base tracking-tight",
-				estaColapsado ? "justify-center w-full" : "w-full",
+				"flex items-center select-none font-bold text-slate-900 text-base tracking-tight w-full",
 				className,
 			)}
 		>
-			<Microscope className="h-6 w-6 shrink-0 text-primary" strokeWidth={2.2} />
+			<div className="flex h-11 w-11 shrink-0 items-center justify-center">
+				<Microscope className="h-6 w-6 text-primary" strokeWidth={2.2} />
+			</div>
 			<div
 				className={cn(
-					"flex items-center whitespace-nowrap transition-all duration-300 ease-in-out font-heading",
+					"flex items-center whitespace-nowrap transition-all duration-300 ease-in-out font-heading overflow-hidden",
 					estaColapsado
-						? "ml-0 max-w-0 overflow-hidden opacity-0"
-						: "ml-2.5 max-w-xs opacity-100",
+						? "ml-0 max-w-0 opacity-0"
+						: "ml-1.5 max-w-xs opacity-100",
 				)}
 			>
 				<span className="text-slate-900">

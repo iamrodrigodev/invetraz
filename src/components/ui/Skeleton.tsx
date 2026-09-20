@@ -70,29 +70,32 @@ export function DashboardSkeleton() {
 	return (
 		<div className="flex h-screen w-full overflow-hidden bg-slate-50 font-sans text-slate-800">
 			<aside className="hidden h-full w-72 flex-col border-r border-slate-200 bg-white lg:flex">
-				<div className="flex h-16 shrink-0 items-center border-b border-slate-200 px-6">
-					<div className="flex items-center gap-3">
-						<Skeleton className="h-6 w-6 rounded-lg" />
-						<Skeleton className="h-5 w-40 rounded-md" />
+				<div className="flex h-16 shrink-0 items-center border-b border-slate-200 px-[18px]">
+					<div className="flex items-center w-full">
+						<div className="flex h-11 w-11 shrink-0 items-center justify-center">
+							<Skeleton className="h-6 w-6 rounded-lg" />
+						</div>
+						<Skeleton className="ml-1.5 h-5 w-40 rounded-md" />
 					</div>
 				</div>
 
-				<div className="flex-1 space-y-2 p-3 pt-6">
+				<div className="flex-1 space-y-1.5 py-5 px-[18px]">
 					{[1, 2, 3].map((i) => (
-						<div
-							key={i}
-							className="flex h-11 items-center gap-3 rounded-lg px-3"
-						>
-							<Skeleton className="h-5 w-5 rounded-md" />
-							<Skeleton className="h-4 w-32 rounded-md" />
+						<div key={i} className="flex h-11 w-full items-center rounded-xl">
+							<div className="flex h-11 w-11 shrink-0 items-center justify-center">
+								<Skeleton className="h-5 w-5 rounded-md" />
+							</div>
+							<Skeleton className="ml-1.5 h-4 w-32 rounded-md" />
 						</div>
 					))}
 				</div>
 
-				<div className="border-t border-slate-200/80 p-3 py-4">
-					<div className="flex h-11 items-center gap-3 rounded-lg px-3">
-						<Skeleton className="h-5 w-5 shrink-0 rounded-md" />
-						<Skeleton className="h-4 w-28 rounded-md" />
+				<div className="border-t border-slate-200/80 py-4 px-[18px]">
+					<div className="flex h-11 w-full items-center rounded-xl">
+						<div className="flex h-11 w-11 shrink-0 items-center justify-center">
+							<Skeleton className="h-5 w-5 shrink-0 rounded-md" />
+						</div>
+						<Skeleton className="ml-1.5 h-4 w-28 rounded-md" />
 					</div>
 				</div>
 			</aside>

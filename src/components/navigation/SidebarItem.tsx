@@ -20,41 +20,35 @@ export function SidebarItem({
 	const etiqueta = item.etiquetaMenu ?? item.titulo;
 
 	return (
-		<div
-			className={cn(
-				"group/item relative flex w-full justify-center",
-				className,
-			)}
-		>
+		<div className={cn("group/item relative flex w-full", className)}>
 			<button
 				type="button"
 				onClick={alHacerClic}
 				title={item.titulo}
 				className={cn(
-					"flex h-11 items-center font-medium text-[15px] transition-all duration-150 ease-in-out cursor-pointer active:scale-98",
-					estaColapsado
-						? "mx-auto w-11 justify-center rounded-xl"
-						: "w-full rounded-lg px-3",
+					"flex h-11 w-full items-center rounded-xl font-medium text-[15px] transition-colors duration-150 ease-in-out cursor-pointer active:scale-98 overflow-hidden",
 					esActivo
 						? "bg-primary text-white shadow-xs"
 						: "text-slate-800 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200/80",
 				)}
 			>
-				<Icono
-					className={cn(
-						"h-5 w-5 shrink-0 transition-colors",
-						esActivo
-							? "text-white"
-							: "text-slate-700 group-hover/item:text-slate-900",
-					)}
-					strokeWidth={esActivo ? 2.5 : 2}
-				/>
+				<div className="flex h-11 w-11 shrink-0 items-center justify-center">
+					<Icono
+						className={cn(
+							"h-5 w-5 shrink-0 transition-colors",
+							esActivo
+								? "text-white"
+								: "text-slate-700 group-hover/item:text-slate-900",
+						)}
+						strokeWidth={esActivo ? 2.5 : 2}
+					/>
+				</div>
 				<span
 					className={cn(
-						"inline-block overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out",
+						"overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out text-left",
 						estaColapsado
 							? "ml-0 max-w-0 opacity-0"
-							: "ml-3 max-w-[180px] opacity-100",
+							: "ml-1.5 max-w-[180px] opacity-100",
 					)}
 				>
 					{etiqueta}
