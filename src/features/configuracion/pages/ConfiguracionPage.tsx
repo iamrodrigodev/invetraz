@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ExternalLink, Key, RefreshCw, Save } from "lucide-react";
+import { ExternalLink, Key, Loader2, RefreshCw, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -260,7 +260,6 @@ export function ConfiguracionPage() {
 										type="button"
 										variant="outline"
 										onClick={onProbarConexion}
-										isLoading={verificando}
 										disabled={deshabilitarVerificar}
 										className="w-full sm:w-auto"
 										title={
@@ -269,14 +268,16 @@ export function ConfiguracionPage() {
 												: undefined
 										}
 									>
-										<RefreshCw size={16} className="mr-2" />
-										Verificar Conexión
+										<RefreshCw
+											size={16}
+											className={`mr-2 ${verificando ? "animate-spin text-primary" : ""}`}
+										/>
+										{verificando ? "Verificando..." : "Verificar Conexión"}
 									</Button>
 
 									<Button
 										type="submit"
 										variant="default"
-										isLoading={isSubmitting}
 										disabled={deshabilitarGuardar}
 										className="w-full sm:w-auto"
 										title={
@@ -287,8 +288,12 @@ export function ConfiguracionPage() {
 													: undefined
 										}
 									>
-										<Save size={16} className="mr-2" />
-										Guardar Configuración
+										{isSubmitting ? (
+											<Loader2 size={16} className="mr-2 animate-spin" />
+										) : (
+											<Save size={16} className="mr-2" />
+										)}
+										{isSubmitting ? "Guardando..." : "Guardar Configuración"}
 									</Button>
 								</div>
 							</form>

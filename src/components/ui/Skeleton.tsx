@@ -158,6 +158,9 @@ export function ConfiguracionSkeleton() {
 								<Skeleton className="h-3 w-52 rounded-md" />
 							</div>
 						</div>
+						<div className="mt-4 border-t border-slate-100 pt-3">
+							<Skeleton className="h-4 w-full rounded-md" />
+						</div>
 					</div>
 				</div>
 			</div>
