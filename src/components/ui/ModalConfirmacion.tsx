@@ -14,6 +14,8 @@ export interface PropsModalConfirmacion {
 	alCerrar: () => void;
 }
 
+export type ModalConfirmacionProps = PropsModalConfirmacion;
+
 export function ModalConfirmacion({
 	abierto,
 	titulo,
