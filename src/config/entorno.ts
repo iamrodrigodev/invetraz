@@ -3,7 +3,7 @@ import { z } from "zod";
 const fallbackApi =
 	typeof window !== "undefined" &&
 	window.location.hostname.includes("iamrodrigo.dev")
-		? "https://apiinvestigacion.iamrodrigo.dev/api/v1"
+		? "https://api-investigacion.iamrodrigo.dev/api/v1"
 		: import.meta.env.PROD
 			? "https://api-investigacion.iamrodrigo.dev/api/v1"
 			: "http://localhost:8080/api/v1";
