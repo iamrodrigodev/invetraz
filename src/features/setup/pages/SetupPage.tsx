@@ -78,7 +78,7 @@ export function SetupPage() {
 							htmlFor="email"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							Correo Electrónico
+							Correo Electrónico <span className="text-red-500">*</span>
 						</label>
 						<Input
 							id="email"
@@ -95,7 +95,7 @@ export function SetupPage() {
 							htmlFor="password"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							Contraseña
+							Contraseña <span className="text-red-500">*</span>
 						</label>
 						<Input
 							id="password"
@@ -126,7 +126,7 @@ export function SetupPage() {
 							htmlFor="confirmPassword"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							Confirmar Contraseña
+							Confirmar Contraseña <span className="text-red-500">*</span>
 						</label>
 						<Input
 							id="confirmPassword"

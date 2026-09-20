@@ -74,7 +74,7 @@ export function LoginPage() {
 							htmlFor="email"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							Correo Electrónico
+							Correo Electrónico <span className="text-red-500">*</span>
 						</label>
 						<Input
 							id="email"
@@ -91,7 +91,7 @@ export function LoginPage() {
 							htmlFor="password"
 							className="mb-2 block text-sm font-medium text-slate-700"
 						>
-							Contraseña
+							Contraseña <span className="text-red-500">*</span>
 						</label>
 						<Input
 							id="password"
