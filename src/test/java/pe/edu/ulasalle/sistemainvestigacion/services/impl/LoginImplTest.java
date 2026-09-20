@@ -22,6 +22,7 @@ import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionDeNegocio;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 import pe.edu.ulasalle.sistemainvestigacion.core.security.ConstantesSeguridad;
 import pe.edu.ulasalle.sistemainvestigacion.core.security.ServicioJwt;
+import pe.edu.ulasalle.sistemainvestigacion.core.security.ServicioLimitadorIntentos;
 import pe.edu.ulasalle.sistemainvestigacion.dto.peticion.LoginPeticion;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.LoginRespuesta;
 import pe.edu.ulasalle.sistemainvestigacion.models.Usuario;
@@ -39,11 +40,19 @@ class LoginImplTest {
     @Mock
     private ServicioJwt servicioJwt;
 
+    private ServicioLimitadorIntentos servicioLimitadorIntentos;
+
     private LoginImpl loginService;
 
     @BeforeEach
     void setUp() {
-        loginService = new LoginImpl(usuarioRepository, passwordEncoder, servicioJwt);
+        servicioLimitadorIntentos = new ServicioLimitadorIntentos();
+        loginService =
+                new LoginImpl(
+                        usuarioRepository,
+                        passwordEncoder,
+                        servicioJwt,
+                        servicioLimitadorIntentos);
     }
 
     @Test
@@ -141,5 +150,33 @@ class LoginImplTest {
         assertEquals("token-upgrade", respuesta.tokenAcceso());
         assertEquals(nuevoBcrypt, usuario.getPassword());
         verify(usuarioRepository).saveAndFlush(usuario);
+    }
+
+    @Test
+    void ejecutar_superaLimiteIntentos_lanzaExcepcion429() {
+        when(usuarioRepository.findByEmailIgnoreCase("bloqueado@ulasalle.edu.pe"))
+                .thenReturn(Optional.empty());
+
+        LoginPeticion peticion =
+                new LoginPeticion("bloqueado@ulasalle.edu.pe", "ClaveErrada123");
+
+        for (int i = 0; i < 4; i++) {
+            assertThrows(ExcepcionDeNegocio.class, () -> loginService.ejecutar(peticion));
+        }
+
+        // El quinto intento debe superar el limite y lanzar ExcepcionPersonalizada (HTTP 429)
+        pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada excepcion =
+                assertThrows(
+                        pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada
+                                .class,
+                        () -> loginService.ejecutar(peticion));
+
+        assertEquals(429, excepcion.getCodigo());
+        assertEquals(MensajesDeError.DEMASIADOS_INTENTOS_LOGIN.getMensaje(), excepcion.getMessage());
+
+        // Intentos subsiguientes se bloquean inmediatamente
+        assertThrows(
+                pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada.class,
+                () -> loginService.ejecutar(peticion));
     }
 }

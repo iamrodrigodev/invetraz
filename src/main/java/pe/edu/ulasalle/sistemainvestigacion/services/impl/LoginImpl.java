@@ -9,6 +9,7 @@ import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionDeNegocio;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 import pe.edu.ulasalle.sistemainvestigacion.core.security.ConstantesSeguridad;
 import pe.edu.ulasalle.sistemainvestigacion.core.security.ServicioJwt;
+import pe.edu.ulasalle.sistemainvestigacion.core.security.ServicioLimitadorIntentos;
 import pe.edu.ulasalle.sistemainvestigacion.dto.peticion.LoginPeticion;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.LoginRespuesta;
 import pe.edu.ulasalle.sistemainvestigacion.models.Usuario;
@@ -25,14 +26,17 @@ public class LoginImpl implements CasoUsoLogin {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final ServicioJwt servicioJwt;
+    private final ServicioLimitadorIntentos servicioLimitadorIntentos;
 
     public LoginImpl(
             UsuarioRepository usuarioRepository,
             PasswordEncoder passwordEncoder,
-            ServicioJwt servicioJwt) {
+            ServicioJwt servicioJwt,
+            ServicioLimitadorIntentos servicioLimitadorIntentos) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.servicioJwt = servicioJwt;
+        this.servicioLimitadorIntentos = servicioLimitadorIntentos;
     }
 
     @Override
@@ -44,6 +48,10 @@ public class LoginImpl implements CasoUsoLogin {
                         ? peticion.email().trim().toLowerCase(Locale.ROOT)
                         : "";
 
+        String claveRateLimit = "login:" + emailNormalizado;
+        servicioLimitadorIntentos.comprobarBloqueo(
+                claveRateLimit, MensajesDeError.DEMASIADOS_INTENTOS_LOGIN);
+
         long t0 = System.currentTimeMillis();
         Optional<Usuario> usuarioOpt =
                 usuarioRepository.findByEmailIgnoreCase(emailNormalizado);
@@ -51,6 +59,8 @@ public class LoginImpl implements CasoUsoLogin {
 
         if (usuarioOpt.isEmpty()) {
             passwordEncoder.matches(peticion.password(), HASH_FICTICIO);
+            servicioLimitadorIntentos.registrarFallo(
+                    claveRateLimit, 5, 60_000L, MensajesDeError.DEMASIADOS_INTENTOS_LOGIN);
             throw new ExcepcionDeNegocio(MensajesDeError.CREDENCIALES_INVALIDAS);
         }
 
@@ -58,9 +68,13 @@ public class LoginImpl implements CasoUsoLogin {
 
         long t1 = System.currentTimeMillis();
         if (!passwordEncoder.matches(peticion.password(), usuario.getPassword())) {
+            servicioLimitadorIntentos.registrarFallo(
+                    claveRateLimit, 5, 60_000L, MensajesDeError.DEMASIADOS_INTENTOS_LOGIN);
             throw new ExcepcionDeNegocio(MensajesDeError.CREDENCIALES_INVALIDAS);
         }
         long tHash = System.currentTimeMillis() - t1;
+
+        servicioLimitadorIntentos.limpiarIntentos(claveRateLimit);
 
         if (passwordEncoder.upgradeEncoding(usuario.getPassword())) {
             usuario.setPassword(passwordEncoder.encode(peticion.password()));

@@ -23,6 +23,17 @@ public enum MensajesDeError {
             502),
     TIEMPO_ESPERA_AGOTADO(
             "El tiempo de espera para obtener respuesta de Google Classroom ha expirado", 504),
+    CONTRASENA_ACTUAL_INCORRECTA("La contraseña actual es incorrecta", 400),
+    CONTRASENA_NUEVA_IGUAL(
+            "La nueva contraseña no puede ser identica a la contraseña actual", 400),
+    DEMASIADOS_INTENTOS_LOGIN(
+            "Has superado el limite de intentos de inicio de sesion. Por favor, espera un minuto"
+                    + " antes de reintentar.",
+            429),
+    DEMASIADOS_INTENTOS_CONTRASENA(
+            "Has superado el limite de intentos permitidos. Por favor, espera un minuto antes de"
+                    + " reintentar.",
+            429),
     ERROR_INTERNO(
             "Ocurrio un error interno al procesar la solicitud. Contacta al administrador si el"
                     + " problema persiste",
