@@ -39,7 +39,7 @@ export function Sidebar({
 		<aside
 			className={cn(
 				"relative flex h-full flex-col border-r border-slate-200 bg-white text-slate-600 transition-all duration-300 ease-in-out select-none",
-				estaColapsado ? "w-20" : "w-64",
+				estaColapsado ? "w-20" : "w-72",
 				className,
 			)}
 		>
@@ -61,7 +61,7 @@ export function Sidebar({
 			<div
 				className={cn(
 					"flex h-16 shrink-0 items-center border-b border-slate-200",
-					estaColapsado ? "justify-center px-2" : "px-5",
+					estaColapsado ? "justify-center px-2" : "px-6",
 				)}
 			>
 				<Logo estaColapsado={estaColapsado} />

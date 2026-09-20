@@ -21,7 +21,7 @@ export function Logo({ estaColapsado = false, className }: LogoProps) {
 					"flex items-center whitespace-nowrap transition-all duration-300 ease-in-out font-heading",
 					estaColapsado
 						? "ml-0 max-w-0 overflow-hidden opacity-0"
-						: "ml-2.5 max-w-[200px] opacity-100",
+						: "ml-2.5 max-w-xs opacity-100",
 				)}
 			>
 				<span className="text-slate-900">
