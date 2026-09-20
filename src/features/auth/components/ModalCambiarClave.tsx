@@ -128,17 +128,6 @@ export function ModalCambiarClave({
 						para verificar tu identidad.
 					</p>
 
-					<AnimatePresence mode="wait">
-						{errorApi && (
-							<Alert
-								key="error-paso1"
-								variant="error"
-								message={errorApi}
-								onClose={limpiarError}
-							/>
-						)}
-					</AnimatePresence>
-
 					<div>
 						<label
 							htmlFor="claveActual"
@@ -170,6 +159,17 @@ export function ModalCambiarClave({
 						/>
 					</div>
 
+					<AnimatePresence mode="wait">
+						{errorApi && (
+							<Alert
+								key="error-paso1"
+								variant="error"
+								message={errorApi}
+								onClose={limpiarError}
+							/>
+						)}
+					</AnimatePresence>
+
 					<div className="mt-6 flex justify-end gap-3 pt-2">
 						<Button
 							variant="ghost"
@@ -199,17 +199,6 @@ export function ModalCambiarClave({
 					onSubmit={formPaso2.handleSubmit(onActualizarClave)}
 					className="space-y-5"
 				>
-					<AnimatePresence mode="wait">
-						{errorApi && (
-							<Alert
-								key="error-paso2"
-								variant="error"
-								message={errorApi}
-								onClose={limpiarError}
-							/>
-						)}
-					</AnimatePresence>
-
 					<div>
 						<label
 							htmlFor="nuevaClave"
@@ -271,6 +260,17 @@ export function ModalCambiarClave({
 							}
 						/>
 					</div>
+
+					<AnimatePresence mode="wait">
+						{errorApi && (
+							<Alert
+								key="error-paso2"
+								variant="error"
+								message={errorApi}
+								onClose={limpiarError}
+							/>
+						)}
+					</AnimatePresence>
 
 					<div className="mt-6 flex justify-end gap-3 pt-2">
 						<Button
