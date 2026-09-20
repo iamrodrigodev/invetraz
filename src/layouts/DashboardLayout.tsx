@@ -37,7 +37,7 @@ export function DashboardLayout({
 				className={cn(
 					"fixed inset-y-0 left-0 z-30 transform transition-all duration-300 ease-in-out lg:static lg:inset-0 lg:translate-x-0",
 					menuLateralAbierto ? "translate-x-0" : "-translate-x-full",
-					estaColapsado ? "lg:w-20" : "lg:w-72",
+					estaColapsado ? "lg:w-20" : "lg:w-64",
 				)}
 			>
 				<Sidebar
@@ -55,7 +55,7 @@ export function DashboardLayout({
 					alAbrirMenuMovil={() => setMenuLateralAbierto(true)}
 				/>
 
-				<main className="flex flex-1 flex-col overflow-y-auto p-6">
+				<main className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto p-6">
 					<div className="flex h-full min-h-0 w-full flex-1 flex-col">
 						{children}
 					</div>

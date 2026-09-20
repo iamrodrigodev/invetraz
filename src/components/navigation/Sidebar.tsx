@@ -36,7 +36,7 @@ export function Sidebar({
 		<aside
 			className={cn(
 				"relative flex h-full flex-col border-r border-slate-200 bg-white text-slate-600 transition-all duration-300 ease-in-out select-none",
-				estaColapsado ? "w-20" : "w-72",
+				estaColapsado ? "w-20" : "w-64",
 				className,
 			)}
 		>
@@ -58,7 +58,7 @@ export function Sidebar({
 			<div
 				className={cn(
 					"flex h-16 shrink-0 items-center border-b border-slate-200",
-					estaColapsado ? "justify-center px-2" : "px-6",
+					estaColapsado ? "justify-center px-2" : "px-5",
 				)}
 			>
 				<Logo estaColapsado={estaColapsado} />
@@ -66,7 +66,7 @@ export function Sidebar({
 
 			<nav
 				className={cn(
-					"flex-1 space-y-1.5 overflow-y-auto py-6",
+					"flex-1 space-y-1.5 overflow-x-hidden overflow-y-auto py-5",
 					estaColapsado ? "px-2" : "px-3",
 				)}
 			>
@@ -105,10 +105,10 @@ export function Sidebar({
 						/>
 						<span
 							className={cn(
-								"overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out",
+								"inline-block overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out",
 								estaColapsado
-									? "ml-0 w-0 opacity-0"
-									: "ml-3 w-auto opacity-100",
+									? "ml-0 max-w-0 opacity-0"
+									: "ml-3 max-w-[180px] opacity-100",
 							)}
 						>
 							Cerrar Sesión

@@ -20,8 +20,8 @@ export function Logo({ estaColapsado = false, className }: LogoProps) {
 				className={cn(
 					"flex items-center whitespace-nowrap transition-all duration-300 ease-in-out font-heading",
 					estaColapsado
-						? "ml-0 w-0 overflow-hidden opacity-0"
-						: "ml-2.5 w-auto opacity-100",
+						? "ml-0 max-w-0 overflow-hidden opacity-0"
+						: "ml-2.5 max-w-[200px] opacity-100",
 				)}
 			>
 				<span className="text-slate-900">

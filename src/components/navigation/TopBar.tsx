@@ -62,7 +62,7 @@ export function TopBar({
 						type="button"
 						onClick={alAbrirMenuMovil}
 						aria-label="Abrir menú de navegación"
-						className="-ml-2 flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 lg:hidden cursor-pointer"
+						className="-ml-2 flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition-all hover:bg-slate-100 hover:text-slate-700 active:scale-95 lg:hidden cursor-pointer"
 					>
 						<Menu className="h-5 w-5" />
 					</button>
@@ -125,7 +125,7 @@ export function TopBar({
 										setMenuUsuarioAbierto(false);
 										setModalClaveAbierto(true);
 									}}
-									className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-100/80 active:bg-slate-100 cursor-pointer sm:text-sm"
+									className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-medium text-slate-700 transition-all duration-150 hover:bg-slate-100/80 active:bg-slate-200/70 active:scale-98 cursor-pointer sm:text-sm"
 								>
 									<KeyRound
 										className="h-4 w-4 text-primary shrink-0"
@@ -139,7 +139,7 @@ export function TopBar({
 								<button
 									type="button"
 									onClick={cerrarSesion}
-									className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-50 active:bg-red-100/60 cursor-pointer sm:text-sm"
+									className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-medium text-red-600 transition-all duration-150 hover:bg-red-50 hover:text-red-700 active:bg-red-100/80 active:scale-98 cursor-pointer sm:text-sm"
 								>
 									<LogOut
 										className="h-4 w-4 text-red-500 shrink-0"

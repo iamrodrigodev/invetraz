@@ -31,13 +31,13 @@ export function SidebarItem({
 				onClick={alHacerClic}
 				title={item.titulo}
 				className={cn(
-					"flex h-11 items-center font-medium text-[15px] transition-all duration-200 ease-in-out cursor-pointer",
+					"flex h-11 items-center font-medium text-[15px] transition-all duration-200 ease-in-out cursor-pointer active:scale-98",
 					estaColapsado
 						? "mx-auto w-11 justify-center rounded-xl"
 						: "w-full rounded-lg px-3",
 					esActivo
 						? "bg-primary text-white shadow-xs"
-						: "text-slate-800 hover:bg-slate-100 hover:text-slate-900",
+						: "text-slate-800 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200/80",
 				)}
 			>
 				<Icono
@@ -51,8 +51,10 @@ export function SidebarItem({
 				/>
 				<span
 					className={cn(
-						"overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out",
-						estaColapsado ? "ml-0 w-0 opacity-0" : "ml-3 w-auto opacity-100",
+						"inline-block overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out",
+						estaColapsado
+							? "ml-0 max-w-0 opacity-0"
+							: "ml-3 max-w-[180px] opacity-100",
 					)}
 				>
 					{etiqueta}
