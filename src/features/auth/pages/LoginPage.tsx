@@ -84,7 +84,7 @@ export function LoginPage() {
 						<Input
 							id="password"
 							type={showPassword ? "text" : "password"}
-							placeholder="••••••••"
+							placeholder="Ingresa tu contraseña"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
 							errorMessage={errors.password?.message}
 							{...register("password")}
