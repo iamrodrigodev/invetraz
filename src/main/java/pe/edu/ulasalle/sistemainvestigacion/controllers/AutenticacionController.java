@@ -48,7 +48,7 @@ public class AutenticacionController {
                         ApiRespuesta.exito(
                                 MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(),
                                 respuesta,
-                                200));
+                                MensajeConfirmacion.OPERACION_EXITOSA.getCodigo()));
     }
 
     @PostMapping("/logout")
@@ -57,7 +57,9 @@ public class AutenticacionController {
                 .header(HttpHeaders.SET_COOKIE, servicioCookie.crearCookieLimpieza().toString())
                 .body(
                         ApiRespuesta.exito(
-                                MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(), null, 200));
+                                MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(),
+                                null,
+                                MensajeConfirmacion.OPERACION_EXITOSA.getCodigo()));
     }
 
     @GetMapping("/me")
