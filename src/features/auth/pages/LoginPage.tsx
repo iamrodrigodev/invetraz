@@ -64,7 +64,7 @@ export function LoginPage() {
 						strokeWidth={2.2}
 					/>
 					<h1 className="mb-2 font-extrabold font-heading text-2xl text-slate-900 tracking-tight md:text-3xl">
-						Sistema de Investigación
+						Sistema de <span className="text-primary">Investigación</span>
 					</h1>
 					<p className="max-w-md text-slate-500 text-sm leading-relaxed md:text-base">
 						Inicia sesión para administrar la plataforma.

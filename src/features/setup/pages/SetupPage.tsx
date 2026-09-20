@@ -78,7 +78,7 @@ export function SetupPage() {
 						strokeWidth={2.2}
 					/>
 					<h1 className="mb-2 font-extrabold font-heading text-2xl text-slate-900 tracking-tight md:text-3xl">
-						Sistema de Investigación
+						Sistema de <span className="text-primary">Investigación</span>
 					</h1>
 					<p className="max-w-md text-slate-500 text-sm leading-relaxed md:text-base">
 						Crea tu cuenta de administrador para continuar.
@@ -98,7 +98,6 @@ export function SetupPage() {
 							type="email"
 							placeholder="admin@ulasalle.edu.pe"
 							maxLength={VALIDATION_LIMITS.MAX_EMAIL}
-							showCount
 							errorMessage={errors.email?.message}
 							{...register("email")}
 						/>
@@ -114,9 +113,8 @@ export function SetupPage() {
 						<Input
 							id="password"
 							type={showPassword ? "text" : "password"}
-							placeholder="Mínimo 8 caracteres, 1 mayúscula y 1 número"
+							placeholder="Crea tu contraseña"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
-							showCount
 							errorMessage={errors.password?.message}
 							{...register("password")}
 							rightElement={
@@ -129,6 +127,11 @@ export function SetupPage() {
 								</button>
 							}
 						/>
+						{!errors.password && (
+							<p className="mt-1.5 text-xs text-slate-400 font-medium">
+								Mínimo 8 caracteres, 1 mayúscula y 1 número
+							</p>
+						)}
 					</div>
 
 					<div>
@@ -141,9 +144,8 @@ export function SetupPage() {
 						<Input
 							id="confirmPassword"
 							type={showConfirm ? "text" : "password"}
-							placeholder="Vuelve a escribir tu contraseña"
+							placeholder="Confirma tu contraseña"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
-							showCount
 							errorMessage={errors.confirmPassword?.message}
 							{...register("confirmPassword")}
 							rightElement={
@@ -168,7 +170,7 @@ export function SetupPage() {
 						className="w-full font-bold"
 						size="lg"
 					>
-						{isSubmitting ? "Creando..." : "Crear Administrador"}
+						Crear Administrador
 					</Button>
 				</form>
 			</div>

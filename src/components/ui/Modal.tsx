@@ -43,7 +43,7 @@ export function Modal({
 			/>
 			<div
 				className={cn(
-					"relative z-50 w-full max-w-md scale-100 transform overflow-hidden rounded-xl bg-white p-6 text-left align-middle shadow-xl transition-all",
+					"relative z-50 w-full max-w-md scale-100 transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all",
 					className,
 				)}
 				role="dialog"
@@ -51,11 +51,13 @@ export function Modal({
 			>
 				{titulo && (
 					<div className="mb-5 flex items-center justify-between">
-						<h3 className="text-lg font-semibold text-slate-900">{titulo}</h3>
+						<h3 className="text-lg font-semibold text-slate-900 font-heading tracking-tight">
+							{titulo}
+						</h3>
 						<button
 							type="button"
 							onClick={alCerrar}
-							className="rounded-full p-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+							className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer"
 						>
 							<X className="h-5 w-5" />
 						</button>

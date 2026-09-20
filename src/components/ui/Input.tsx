@@ -56,7 +56,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 					<input
 						type={type}
 						className={cn(
-							"flex h-10 w-full appearance-none rounded-md bg-white px-3 py-2 text-sm placeholder:text-slate-400 outline-none focus:outline-none border-0 disabled:cursor-not-allowed disabled:opacity-50 transition-shadow duration-200",
+							"flex h-10 w-full appearance-none rounded-lg bg-white px-3.5 py-2 text-sm placeholder:text-slate-400 outline-none focus:outline-none border-0 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200",
 							hasError
 								? "ring-1 ring-inset ring-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500"
 								: "ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-primary",

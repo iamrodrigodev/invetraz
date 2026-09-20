@@ -100,7 +100,7 @@ export function ModalCambiarClave({
 				manejarCierre();
 			}, 2000);
 		} catch (_error) {
-			setErrorApi("Hubo un error al actualizar la contrasena");
+			setErrorApi("Hubo un error al actualizar la contraseña");
 		} finally {
 			setCargando(false);
 		}
@@ -110,18 +110,18 @@ export function ModalCambiarClave({
 		<Modal
 			abierto={abierto}
 			alCerrar={manejarCierre}
-			titulo="Cambiar Contrasena"
+			titulo="Cambiar contraseña"
 		>
 			{exito ? (
 				<div className="flex flex-col items-center justify-center py-6 text-center">
 					<div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-green-600">
 						<ShieldCheck className="h-7 w-7" />
 					</div>
-					<h4 className="mb-2 text-lg font-semibold text-slate-900">
-						Contrasena Actualizada
+					<h4 className="mb-2 text-lg font-semibold text-slate-900 font-heading">
+						Contraseña actualizada
 					</h4>
 					<p className="text-sm text-slate-500">
-						Tu contrasena ha sido cambiada exitosamente.
+						Tu contraseña ha sido cambiada exitosamente.
 					</p>
 				</div>
 			) : paso === 1 ? (
@@ -130,7 +130,7 @@ export function ModalCambiarClave({
 					className="space-y-5"
 				>
 					<p className="text-sm text-slate-600">
-						Por motivos de seguridad, por favor ingresa tu contrasena actual
+						Por motivos de seguridad, por favor ingresa tu contraseña actual
 						para verificar tu identidad.
 					</p>
 
@@ -147,15 +147,14 @@ export function ModalCambiarClave({
 							htmlFor="claveActual"
 							className="mb-1.5 block text-sm font-medium text-slate-700"
 						>
-							Contrasena Actual <span className="text-red-500">*</span>
+							Contraseña actual <span className="text-red-500">*</span>
 						</label>
 						<Input
 							id="claveActual"
 							type="password"
-							placeholder="Ingresa tu contrasena actual"
+							placeholder="Ingresa tu contraseña actual"
 							disabled={cargando}
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
-							showCount
 							errorMessage={formPaso1.formState.errors.claveActual?.message}
 							{...formPaso1.register("claveActual")}
 						/>
@@ -193,15 +192,14 @@ export function ModalCambiarClave({
 							htmlFor="nuevaClave"
 							className="mb-1.5 block text-sm font-medium text-slate-700"
 						>
-							Nueva Contrasena <span className="text-red-500">*</span>
+							Nueva contraseña <span className="text-red-500">*</span>
 						</label>
 						<Input
 							id="nuevaClave"
 							type="password"
-							placeholder="Minimo 8 caracteres"
+							placeholder="Crea tu nueva contraseña"
 							disabled={cargando}
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
-							showCount
 							errorMessage={formPaso2.formState.errors.nuevaClave?.message}
 							{...formPaso2.register("nuevaClave")}
 						/>
@@ -212,15 +210,14 @@ export function ModalCambiarClave({
 							htmlFor="confirmarClave"
 							className="mb-1.5 block text-sm font-medium text-slate-700"
 						>
-							Confirmar Contrasena <span className="text-red-500">*</span>
+							Confirmar contraseña <span className="text-red-500">*</span>
 						</label>
 						<Input
 							id="confirmarClave"
 							type="password"
-							placeholder="Repite la nueva contrasena"
+							placeholder="Confirma la nueva contraseña"
 							disabled={cargando}
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
-							showCount
 							errorMessage={formPaso2.formState.errors.confirmarClave?.message}
 							{...formPaso2.register("confirmarClave")}
 						/>
@@ -233,10 +230,10 @@ export function ModalCambiarClave({
 							onClick={() => setPaso(1)}
 							disabled={cargando}
 						>
-							Atras
+							Atrás
 						</Button>
 						<Button type="submit" isLoading={cargando}>
-							Actualizar Contrasena
+							Actualizar contraseña
 						</Button>
 					</div>
 				</form>
