@@ -38,16 +38,16 @@ export function ModalConfirmacion({
 				onClick={alCerrar}
 				disabled={cargando}
 				aria-label="Cerrar modal"
-				className="absolute top-4 right-4 rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-all active:scale-90 cursor-pointer disabled:pointer-events-none"
+				className="absolute top-4 right-4 inline-flex cursor-pointer rounded-md p-0.5 text-slate-500 opacity-70 transition-all hover:opacity-100 hover:bg-black/5 hover:text-slate-800 active:scale-95 outline-none disabled:pointer-events-none"
 			>
-				<X className="h-5 w-5" />
+				<X size={18} />
 			</button>
 
 			<div className="flex flex-col items-center justify-center gap-3 pt-2 text-center">
 				<AlertCircle
 					className={
 						varianteBoton === "destructivo"
-							? "mb-1 h-14 w-14 text-red-500"
+							? "mb-1 h-14 w-14 text-red-600"
 							: "mb-1 h-14 w-14 text-primary"
 					}
 					strokeWidth={1.5}

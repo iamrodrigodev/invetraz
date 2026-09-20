@@ -76,9 +76,10 @@ export function Modal({
 								<button
 									type="button"
 									onClick={alCerrar}
-									className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-all active:scale-90 cursor-pointer"
+									className="inline-flex cursor-pointer rounded-md p-0.5 text-slate-500 opacity-70 transition-all hover:opacity-100 hover:bg-black/5 hover:text-slate-800 active:scale-95 outline-none"
+									aria-label="Cerrar"
 								>
-									<X className="h-5 w-5" />
+									<X size={18} />
 								</button>
 							</div>
 						)}

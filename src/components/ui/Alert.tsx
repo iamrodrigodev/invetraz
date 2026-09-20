@@ -1,4 +1,4 @@
-﻿import { X } from "lucide-react";
+import { X } from "lucide-react";
 import type React from "react";
 import { cn } from "../../utils/cn";
 
@@ -16,7 +16,7 @@ export function Alert({
 	...props
 }: AlertProps) {
 	const variantStyles = {
-		error: "bg-red-50 text-red-700 ring-1 ring-red-200",
+		error: "bg-red-50 text-red-600 ring-1 ring-red-200",
 		success: "bg-green-50 text-green-700 ring-1 ring-green-200",
 		warning: "bg-yellow-50 text-yellow-700 ring-1 ring-yellow-200",
 		info: "bg-blue-50 text-blue-700 ring-1 ring-blue-200",
