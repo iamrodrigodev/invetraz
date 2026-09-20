@@ -115,7 +115,7 @@ export function SetupPage() {
 							}
 						/>
 						{!errors.password && (
-							<p className="mt-1.5 text-xs text-slate-400 font-medium">
+							<p className="mt-1.5 text-xs text-slate-700 font-medium">
 								Mínimo 8 caracteres, 1 mayúscula y 1 número
 							</p>
 						)}
