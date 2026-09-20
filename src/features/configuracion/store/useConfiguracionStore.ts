@@ -20,7 +20,7 @@ interface ConfiguracionState {
 	) => Promise<ActualizarCredencialesPeticion>;
 	guardarConfiguracion: (
 		datos: ActualizarCredencialesPeticion,
-	) => Promise<void>;
+	) => Promise<ResultadoVerificacion>;
 	verificarConexion: (
 		datos?: ActualizarCredencialesPeticion,
 	) => Promise<ResultadoVerificacion>;
@@ -79,17 +79,27 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 	},
 
 	guardarConfiguracion: async (datos: ActualizarCredencialesPeticion) => {
-		set({ cargando: true });
+		set({ cargando: true, estadoConexion: "verificando" });
 		try {
+			// 1. Primero verifica las credenciales en vivo contra Google Classroom
+			const resVerificacion = await verificarConfiguracion(datos);
+
+			// 2. Si Google responde que son válidas, persiste en el backend
 			await actualizarConfiguracion(datos);
+
 			set({
 				credenciales: datos,
 				estadoConexion: "conectado",
 				cargado: true,
 				cargando: false,
 			});
+
+			return resVerificacion;
 		} catch (error) {
-			set({ cargando: false });
+			set({
+				estadoConexion: "error",
+				cargando: false,
+			});
 			throw error;
 		}
 	},

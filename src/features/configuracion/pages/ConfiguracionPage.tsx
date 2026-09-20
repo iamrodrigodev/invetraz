@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ExternalLink, Key, RefreshCw, Save } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
 	Alert,
@@ -18,6 +18,7 @@ import {
 	EstadoConexionBadge,
 	TarjetaGuiaGoogle,
 	TarjetaScopesGoogle,
+	type TipoEstadoConexion,
 } from "../components";
 import { useConfiguracionStore } from "../store/useConfiguracionStore";
 import {
@@ -38,6 +39,8 @@ export function ConfiguracionPage() {
 	const [mensajeExito, setMensajeExito] = useState<string | null>(null);
 	const [mensajeError, setMensajeError] = useState<string | null>(null);
 	const [verificando, setVerificando] = useState(false);
+	const [valoresVerificados, setValoresVerificados] =
+		useState<ActualizarCredencialesPeticion | null>(null);
 
 	const {
 		register,
@@ -75,6 +78,48 @@ export function ConfiguracionPage() {
 	const deshabilitarGuardar =
 		!configuracionCompleta || !isDirty || isSubmitting || verificando;
 
+	// Si el usuario modifica cualquier campo, limpiamos el mensaje de éxito previo
+	useEffect(() => {
+		if (isDirty) {
+			setMensajeExito(null);
+		}
+	}, [isDirty]);
+
+	// Comprobamos si los valores actuales en pantalla coinciden con una verificación exitosa reciente
+	const formularioCoincideConVerificados = useMemo(() => {
+		if (!valoresVerificados) return false;
+		return (
+			valoresVerificados.googleClientId === clientId &&
+			valoresVerificados.googleClientSecret === clientSecret &&
+			valoresVerificados.googleRefreshToken === refreshToken
+		);
+	}, [valoresVerificados, clientId, clientSecret, refreshToken]);
+
+	// Determinación dinámica del estado de la conexión en pantalla
+	const estadoConexionVisual: TipoEstadoConexion = useMemo(() => {
+		if (verificando || isSubmitting) {
+			return "verificando";
+		}
+		if (!camposCompletos || tieneErrores) {
+			return "no_configurado";
+		}
+		if (formularioCoincideConVerificados) {
+			return "conectado";
+		}
+		if (isDirty) {
+			return "no_configurado";
+		}
+		return estadoConexion;
+	}, [
+		verificando,
+		isSubmitting,
+		camposCompletos,
+		tieneErrores,
+		formularioCoincideConVerificados,
+		isDirty,
+		estadoConexion,
+	]);
+
 	useEffect(() => {
 		if (!cargado) {
 			cargarConfiguracion()
@@ -97,16 +142,21 @@ export function ConfiguracionPage() {
 		try {
 			setMensajeError(null);
 			setMensajeExito(null);
-			await guardarConfiguracion(data);
-			setMensajeExito(
-				"Credenciales de Google actualizadas y guardadas exitosamente.",
-			);
+
+			// guardarConfiguracion verifica primero con Google Classroom y luego persiste
+			const res = await guardarConfiguracion(data);
 			reset(data);
+			setValoresVerificados(data);
+			setMensajeExito(
+				res?.mensaje ||
+					"Credenciales verificadas con Google y guardadas exitosamente.",
+			);
 		} catch (error) {
+			setValoresVerificados(null);
 			setMensajeError(
 				error instanceof Error
 					? error.message
-					: "Error al guardar la configuración",
+					: "Error al verificar o guardar la configuración con Google Classroom",
 			);
 		}
 	};
@@ -127,9 +177,13 @@ export function ConfiguracionPage() {
 			setVerificando(true);
 			const valores = getValues();
 			const res = await verificarConexion(valores);
-
-			setMensajeExito(res.mensaje || "¡Conexión verificada exitosamente!");
+			setValoresVerificados(valores);
+			setMensajeExito(
+				res.mensaje ||
+					"¡Conexión verificada exitosamente con Google Classroom!",
+			);
 		} catch (error) {
+			setValoresVerificados(null);
 			setMensajeError(
 				error instanceof Error
 					? error.message
@@ -187,7 +241,7 @@ export function ConfiguracionPage() {
 									<Key size={18} />
 									<span>Credenciales OAuth 2.0</span>
 								</div>
-								<EstadoConexionBadge estado={estadoConexion} />
+								<EstadoConexionBadge estado={estadoConexionVisual} />
 							</div>
 							<CardTitle className="text-lg text-slate-900 font-bold">
 								Credenciales de API de Google
@@ -295,7 +349,9 @@ export function ConfiguracionPage() {
 										) : (
 											<Save size={16} className="mr-2" />
 										)}
-										{isSubmitting ? "Guardando..." : "Guardar Configuración"}
+										{isSubmitting
+											? "Verificando y guardando..."
+											: "Guardar Configuración"}
 									</Button>
 								</div>
 							</form>
