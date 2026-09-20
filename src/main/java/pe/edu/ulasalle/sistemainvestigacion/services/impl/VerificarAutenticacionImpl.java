@@ -1,7 +1,6 @@
 package pe.edu.ulasalle.sistemainvestigacion.services.impl;
 
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,10 +11,13 @@ import pe.edu.ulasalle.sistemainvestigacion.repositories.UsuarioRepository;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoVerificarAutenticacion;
 
 @Service
-@RequiredArgsConstructor
 public class VerificarAutenticacionImpl implements CasoUsoVerificarAutenticacion {
 
     private final UsuarioRepository usuarioRepository;
+
+    public VerificarAutenticacionImpl(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @Override
     public VerificarAutenticacionRespuesta ejecutar() {

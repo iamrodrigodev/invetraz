@@ -2,7 +2,6 @@ package pe.edu.ulasalle.sistemainvestigacion.services.impl;
 
 import java.util.Locale;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionDeNegocio;
@@ -16,7 +15,6 @@ import pe.edu.ulasalle.sistemainvestigacion.repositories.UsuarioRepository;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoLogin;
 
 @Service
-@RequiredArgsConstructor
 public class LoginImpl implements CasoUsoLogin {
 
     private static final String HASH_FICTICIO =
@@ -25,6 +23,15 @@ public class LoginImpl implements CasoUsoLogin {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final ServicioJwt servicioJwt;
+
+    public LoginImpl(
+            UsuarioRepository usuarioRepository,
+            PasswordEncoder passwordEncoder,
+            ServicioJwt servicioJwt) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.servicioJwt = servicioJwt;
+    }
 
     @Override
     public LoginRespuesta ejecutar(LoginPeticion peticion) {

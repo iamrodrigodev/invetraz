@@ -1,7 +1,6 @@
 package pe.edu.ulasalle.sistemainvestigacion.controllers;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +19,20 @@ import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoVerificar
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@RequiredArgsConstructor
 public class AutenticacionController {
 
     private final CasoUsoLogin casoUsoLogin;
     private final CasoUsoVerificarAutenticacion casoUsoVerificarAutenticacion;
     private final ServicioCookie servicioCookie;
+
+    public AutenticacionController(
+            CasoUsoLogin casoUsoLogin,
+            CasoUsoVerificarAutenticacion casoUsoVerificarAutenticacion,
+            ServicioCookie servicioCookie) {
+        this.casoUsoLogin = casoUsoLogin;
+        this.casoUsoVerificarAutenticacion = casoUsoVerificarAutenticacion;
+        this.servicioCookie = servicioCookie;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<ApiRespuesta<LoginRespuesta>> iniciarSesion(

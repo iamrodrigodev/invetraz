@@ -1,6 +1,5 @@
 package pe.edu.ulasalle.sistemainvestigacion.services.impl;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionDeNegocio;
@@ -13,13 +12,23 @@ import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoCrearAdmi
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoObtenerEstadoSetup;
 
 @Service
-@RequiredArgsConstructor
 public class CrearAdminImpl implements CasoUsoCrearAdmin {
 
     private final UsuarioRepository usuarioRepository;
     private final CasoUsoObtenerEstadoSetup casoUsoObtenerEstadoSetup;
     private final PasswordEncoder passwordEncoder;
     private final UsuarioMapper usuarioMapper;
+
+    public CrearAdminImpl(
+            UsuarioRepository usuarioRepository,
+            CasoUsoObtenerEstadoSetup casoUsoObtenerEstadoSetup,
+            PasswordEncoder passwordEncoder,
+            UsuarioMapper usuarioMapper) {
+        this.usuarioRepository = usuarioRepository;
+        this.casoUsoObtenerEstadoSetup = casoUsoObtenerEstadoSetup;
+        this.passwordEncoder = passwordEncoder;
+        this.usuarioMapper = usuarioMapper;
+    }
 
     @Override
     public UsuarioDTO ejecutar(CrearAdminPeticion peticion) {

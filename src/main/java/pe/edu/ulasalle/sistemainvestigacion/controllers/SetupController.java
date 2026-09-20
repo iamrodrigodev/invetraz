@@ -1,7 +1,6 @@
 package pe.edu.ulasalle.sistemainvestigacion.controllers;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,11 +17,17 @@ import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoObtenerEs
 
 @RestController
 @RequestMapping("/api/v1/setup")
-@RequiredArgsConstructor
 public class SetupController {
 
     private final CasoUsoObtenerEstadoSetup casoUsoObtenerEstadoSetup;
     private final CasoUsoCrearAdmin casoUsoCrearAdmin;
+
+    public SetupController(
+            CasoUsoObtenerEstadoSetup casoUsoObtenerEstadoSetup,
+            CasoUsoCrearAdmin casoUsoCrearAdmin) {
+        this.casoUsoObtenerEstadoSetup = casoUsoObtenerEstadoSetup;
+        this.casoUsoCrearAdmin = casoUsoCrearAdmin;
+    }
 
     @GetMapping("/estado")
     public ResponseEntity<ApiRespuesta<EstadoSetupRespuesta>> verificarEstado() {
