@@ -16,9 +16,10 @@ export async function fetchSeguro(
 		const res = await fetch(url, options);
 
 		if (
-			res.status === 401 &&
+			(res.status === 401 || res.status === 403) &&
 			!url.includes("/auth/login") &&
-			!url.includes("/auth/logout")
+			!url.includes("/auth/logout") &&
+			!url.includes("/auth/me")
 		) {
 			if (typeof window !== "undefined") {
 				const sesionEstabaActiva =

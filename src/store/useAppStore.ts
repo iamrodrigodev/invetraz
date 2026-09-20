@@ -14,11 +14,18 @@ interface AppState {
 	cerrarSesion: () => Promise<void>;
 }
 
+const configuradoCacheado =
+	typeof window !== "undefined" &&
+	localStorage.getItem("sistema_configurado") === "true";
+const sesionPreviaActiva =
+	typeof window !== "undefined" &&
+	localStorage.getItem("sesion_activa") === "true";
+
 export const useAppStore = create<AppState>((set) => ({
-	configurado: null,
-	autenticado: null,
+	configurado: configuradoCacheado ? true : null,
+	autenticado: sesionPreviaActiva ? null : false,
 	usuarioEmail: null,
-	estadoVerificado: false,
+	estadoVerificado: configuradoCacheado && !sesionPreviaActiva,
 	verificarEstadoGlobal: async () => {
 		try {
 			const [esConfigurado, resAuth] = await Promise.all([
@@ -47,7 +54,12 @@ export const useAppStore = create<AppState>((set) => ({
 			});
 		}
 	},
-	setConfigurado: (valor: boolean) => set({ configurado: valor }),
+	setConfigurado: (valor: boolean) => {
+		if (valor && typeof window !== "undefined") {
+			localStorage.setItem("sistema_configurado", "true");
+		}
+		set({ configurado: valor });
+	},
 	setAutenticado: (valor: boolean) => {
 		if (valor) {
 			localStorage.setItem("sesion_activa", "true");

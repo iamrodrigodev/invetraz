@@ -11,6 +11,13 @@ import {
 import type { CrearAdminPeticion } from "../types/CrearAdminPeticion";
 
 export async function verificarEstadoSistema(): Promise<boolean> {
+	if (
+		typeof window !== "undefined" &&
+		localStorage.getItem("sistema_configurado") === "true"
+	) {
+		return true;
+	}
+
 	try {
 		const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/setup/estado`);
 		if (!res.ok) {
@@ -19,6 +26,9 @@ export async function verificarEstadoSistema(): Promise<boolean> {
 
 		const wrapperSchema = crearApiRespuestaSchema(EstadoSetupRespuestaSchema);
 		const wrapper = await parsearConEsquema(res, wrapperSchema);
+		if (wrapper.datos.configurado && typeof window !== "undefined") {
+			localStorage.setItem("sistema_configurado", "true");
+		}
 		return wrapper.datos.configurado;
 	} catch (_e) {
 		return true;
