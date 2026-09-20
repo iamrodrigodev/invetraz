@@ -14,8 +14,6 @@ export async function verificarEstadoSistema(): Promise<boolean> {
 	try {
 		const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/setup/estado`);
 		if (!res.ok) {
-			// Si la base de datos está desconectada o el backend devuelve error,
-			// asumimos configurado (true) para redirigir al login y no al setup
 			return true;
 		}
 
@@ -23,7 +21,6 @@ export async function verificarEstadoSistema(): Promise<boolean> {
 		const wrapper = await parsearConEsquema(res, wrapperSchema);
 		return wrapper.datos.configurado;
 	} catch (_e) {
-		// Ante error de red o servidor apagado, asumir configurado (true) para ir al login
 		return true;
 	}
 }

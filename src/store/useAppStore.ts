@@ -58,9 +58,7 @@ export const useAppStore = create<AppState>((set) => ({
 	cerrarSesion: async () => {
 		try {
 			await logout();
-		} catch (_error) {
-			// Ignorar errores de red al cerrar sesión
-		}
+		} catch (_error) {}
 		localStorage.removeItem("sesion_activa");
 		localStorage.removeItem("jwt");
 		localStorage.removeItem("moduloActivo");

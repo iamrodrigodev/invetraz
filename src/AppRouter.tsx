@@ -29,8 +29,6 @@ export function AppRouter() {
 			(window.location.pathname === "/login" ||
 				window.location.pathname === "/setup");
 
-		// Si no tiene sesión previa o está en ruta de autenticación, mostrar silueta de Login
-		// NUNCA mostrar la estructura del Dashboard a un usuario nuevo o no autenticado
 		if (esRutaAuth || !tieneSesionPrevia) {
 			return <AuthCardSkeleton />;
 		}
