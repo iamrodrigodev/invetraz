@@ -85,6 +85,7 @@ export function SetupPage() {
 							type="email"
 							placeholder="admin@ulasalle.edu.pe"
 							maxLength={VALIDATION_LIMITS.MAX_EMAIL}
+							autoComplete="email"
 							errorMessage={errors.email?.message}
 							{...register("email")}
 						/>
@@ -102,6 +103,7 @@ export function SetupPage() {
 							type={showPassword ? "text" : "password"}
 							placeholder="Crea tu contraseña"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
+							autoComplete="new-password"
 							errorMessage={errors.password?.message}
 							{...register("password")}
 							rightElement={
@@ -133,6 +135,7 @@ export function SetupPage() {
 							type={showConfirm ? "text" : "password"}
 							placeholder="Confirma tu contraseña"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
+							autoComplete="new-password"
 							errorMessage={errors.confirmPassword?.message}
 							{...register("confirmPassword")}
 							rightElement={

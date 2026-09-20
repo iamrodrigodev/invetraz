@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ShieldCheck } from "lucide-react";
+import { Eye, EyeOff, ShieldCheck } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Alert, Button, Input, Modal } from "../../../components/ui";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
@@ -32,15 +33,34 @@ export function ModalCambiarClave({
 		reiniciar,
 	} = useCambiarClave();
 
+	const [showActual, setShowActual] = useState(false);
+	const [showNueva, setShowNueva] = useState(false);
+	const [showConfirmar, setShowConfirmar] = useState(false);
+
 	const formPaso1 = useForm<CambiarClavePaso1FormData>({
 		resolver: zodResolver(CambiarClavePaso1Schema),
 		mode: "onChange",
+		defaultValues: {
+			claveActual: "",
+		},
 	});
 
 	const formPaso2 = useForm<CambiarClavePaso2FormData>({
 		resolver: zodResolver(CambiarClavePaso2Schema),
 		mode: "onChange",
+		defaultValues: {
+			nuevaClave: "",
+			confirmarClave: "",
+		},
 	});
+
+	useEffect(() => {
+		if (paso === 2) {
+			formPaso2.reset({ nuevaClave: "", confirmarClave: "" });
+			setShowNueva(false);
+			setShowConfirmar(false);
+		}
+	}, [paso]);
 
 	const manejarCierre = () => {
 		alCerrar();
@@ -48,6 +68,9 @@ export function ModalCambiarClave({
 			reiniciar();
 			formPaso1.reset();
 			formPaso2.reset();
+			setShowActual(false);
+			setShowNueva(false);
+			setShowConfirmar(false);
 		}, 300);
 	};
 
@@ -86,6 +109,7 @@ export function ModalCambiarClave({
 				</div>
 			) : paso === 1 ? (
 				<form
+					key="form-paso1"
 					onSubmit={formPaso1.handleSubmit(onVerificarPaso1)}
 					className="space-y-5"
 				>
@@ -107,12 +131,23 @@ export function ModalCambiarClave({
 						</label>
 						<Input
 							id="claveActual"
-							type="password"
+							type={showActual ? "text" : "password"}
 							placeholder="Ingresa tu contraseña actual"
 							disabled={cargando}
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
+							autoComplete="current-password"
 							errorMessage={formPaso1.formState.errors.claveActual?.message}
 							{...formPaso1.register("claveActual")}
+							rightElement={
+								<button
+									type="button"
+									onClick={() => setShowActual(!showActual)}
+									className="cursor-pointer text-primary/70 transition-colors hover:text-primary focus:outline-none"
+									aria-label={showActual ? "Ocultar contraseña" : "Ver contraseña"}
+								>
+									{showActual ? <EyeOff size={18} /> : <Eye size={18} />}
+								</button>
+							}
 						/>
 					</div>
 
@@ -136,6 +171,7 @@ export function ModalCambiarClave({
 				</form>
 			) : (
 				<form
+					key="form-paso2"
 					onSubmit={formPaso2.handleSubmit(onActualizarClave)}
 					className="space-y-5"
 				>
@@ -152,12 +188,23 @@ export function ModalCambiarClave({
 						</label>
 						<Input
 							id="nuevaClave"
-							type="password"
+							type={showNueva ? "text" : "password"}
 							placeholder="Crea tu nueva contraseña"
 							disabled={cargando}
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
+							autoComplete="new-password"
 							errorMessage={formPaso2.formState.errors.nuevaClave?.message}
 							{...formPaso2.register("nuevaClave")}
+							rightElement={
+								<button
+									type="button"
+									onClick={() => setShowNueva(!showNueva)}
+									className="cursor-pointer text-primary/70 transition-colors hover:text-primary focus:outline-none"
+									aria-label={showNueva ? "Ocultar contraseña" : "Ver contraseña"}
+								>
+									{showNueva ? <EyeOff size={18} /> : <Eye size={18} />}
+								</button>
+							}
 						/>
 					</div>
 
@@ -170,12 +217,23 @@ export function ModalCambiarClave({
 						</label>
 						<Input
 							id="confirmarClave"
-							type="password"
+							type={showConfirmar ? "text" : "password"}
 							placeholder="Confirma la nueva contraseña"
 							disabled={cargando}
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
+							autoComplete="new-password"
 							errorMessage={formPaso2.formState.errors.confirmarClave?.message}
 							{...formPaso2.register("confirmarClave")}
+							rightElement={
+								<button
+									type="button"
+									onClick={() => setShowConfirmar(!showConfirmar)}
+									className="cursor-pointer text-primary/70 transition-colors hover:text-primary focus:outline-none"
+									aria-label={showConfirmar ? "Ocultar contraseña" : "Ver contraseña"}
+								>
+									{showConfirmar ? <EyeOff size={18} /> : <Eye size={18} />}
+								</button>
+							}
 						/>
 					</div>
 
