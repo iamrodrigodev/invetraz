@@ -22,19 +22,21 @@ public class VerificarAutenticacionImpl implements CasoUsoVerificarAutenticacion
     @Override
     public VerificarAutenticacionRespuesta ejecutar() {
         Authentication autenticacion = SecurityContextHolder.getContext().getAuthentication();
-        boolean autenticado =
-                autenticacion != null
-                        && autenticacion.isAuthenticated()
-                        && !(autenticacion instanceof AnonymousAuthenticationToken);
+
+        if (autenticacion == null
+                || !autenticacion.isAuthenticated()
+                || autenticacion instanceof AnonymousAuthenticationToken) {
+            return new VerificarAutenticacionRespuesta(false, null);
+        }
 
         String email = null;
-        if (autenticado && autenticacion.getPrincipal() instanceof UUID idUsuario) {
+        if (autenticacion.getPrincipal() instanceof UUID idUsuario) {
             Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
             if (usuario != null) {
                 email = usuario.getEmail();
             }
         }
 
-        return new VerificarAutenticacionRespuesta(autenticado, email);
+        return new VerificarAutenticacionRespuesta(true, email);
     }
 }
