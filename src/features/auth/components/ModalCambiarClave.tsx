@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, ShieldCheck } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Eye, EyeOff, Save, ShieldCheck, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Alert, Button, Input, Modal } from "../../../components/ui";
@@ -158,6 +158,7 @@ export function ModalCambiarClave({
 							onClick={manejarCierre}
 							disabled={cargando}
 						>
+							<X size={16} className="mr-1.5" />
 							Cancelar
 						</Button>
 						<Button
@@ -165,6 +166,7 @@ export function ModalCambiarClave({
 							disabled={!formPaso1.formState.isValid || cargando}
 							isLoading={cargando}
 						>
+							<CheckCircle2 size={16} className="mr-1.5" />
 							Verificar
 						</Button>
 					</div>
@@ -247,6 +249,7 @@ export function ModalCambiarClave({
 							}}
 							disabled={cargando}
 						>
+							<ArrowLeft size={16} className="mr-1.5" />
 							Atrás
 						</Button>
 						<Button
@@ -254,6 +257,7 @@ export function ModalCambiarClave({
 							disabled={!formPaso2.formState.isValid || cargando}
 							isLoading={cargando}
 						>
+							<Save size={16} className="mr-1.5" />
 							Actualizar contraseña
 						</Button>
 					</div>

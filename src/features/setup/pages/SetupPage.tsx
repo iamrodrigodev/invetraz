@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Microscope } from "lucide-react";
+import { Eye, EyeOff, Microscope, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -160,6 +160,7 @@ export function SetupPage() {
 						className="w-full font-bold"
 						size="lg"
 					>
+						<UserPlus size={18} className="mr-2" />
 						Crear Administrador
 					</Button>
 				</form>

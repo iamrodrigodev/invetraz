@@ -1,4 +1,4 @@
-import { AlertCircle, X } from "lucide-react";
+import { AlertCircle, Check, LogOut, X } from "lucide-react";
 import { Button } from "./Button";
 import { Modal } from "./Modal";
 
@@ -73,6 +73,11 @@ export function ModalConfirmacion({
 					className="h-11 w-full rounded-xl font-semibold text-[15px] shadow-sm active:scale-98"
 					size="lg"
 				>
+					{varianteBoton === "destructivo" ? (
+						<LogOut size={18} className="mr-2" />
+					) : (
+						<Check size={18} className="mr-2" />
+					)}
 					{textoConfirmar}
 				</Button>
 				<Button
@@ -83,6 +88,7 @@ export function ModalConfirmacion({
 					className="h-11 w-full rounded-xl font-medium text-[15px] text-slate-600 hover:bg-slate-100 active:scale-98"
 					size="lg"
 				>
+					<X size={18} className="mr-2" />
 					{textoCancelar}
 				</Button>
 			</div>

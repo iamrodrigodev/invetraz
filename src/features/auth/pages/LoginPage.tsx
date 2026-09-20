@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Microscope } from "lucide-react";
+import { Eye, EyeOff, LogIn, Microscope } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -124,6 +124,7 @@ export function LoginPage() {
 						className="w-full font-bold"
 						size="lg"
 					>
+						<LogIn size={18} className="mr-2" />
 						Ingresar
 					</Button>
 				</form>
