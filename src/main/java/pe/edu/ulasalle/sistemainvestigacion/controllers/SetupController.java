@@ -27,13 +27,13 @@ public class SetupController {
     @GetMapping("/estado")
     public ResponseEntity<ApiRespuesta<EstadoSetupRespuesta>> verificarEstado() {
         return ApiRespuesta.ok(
-                MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(), 
-                casoUsoObtenerEstadoSetup.ejecutar()
-        );
+                MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(),
+                casoUsoObtenerEstadoSetup.ejecutar());
     }
 
     @PostMapping("/crear-admin")
-    public ResponseEntity<ApiRespuesta<UsuarioDTO>> crearAdmin(@Valid @RequestBody CrearAdminPeticion peticion) {
+    public ResponseEntity<ApiRespuesta<UsuarioDTO>> crearAdmin(
+            @Valid @RequestBody CrearAdminPeticion peticion) {
         UsuarioDTO nuevoAdmin = casoUsoCrearAdmin.ejecutar(peticion);
         return ApiRespuesta.creado(MensajeConfirmacion.RECURSO_CREADO.getMensaje(), nuevoAdmin);
     }

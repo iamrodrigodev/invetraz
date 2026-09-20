@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionDeNegocio;
+import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 import pe.edu.ulasalle.sistemainvestigacion.core.security.ConstantesSeguridad;
 import pe.edu.ulasalle.sistemainvestigacion.core.security.ServicioJwt;
 import pe.edu.ulasalle.sistemainvestigacion.dto.peticion.LoginPeticion;
@@ -12,7 +13,6 @@ import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.LoginRespuesta;
 import pe.edu.ulasalle.sistemainvestigacion.models.Usuario;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.UsuarioRepository;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoLogin;
-import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ public class LoginImpl implements CasoUsoLogin {
             throw new ExcepcionDeNegocio(MensajesDeError.CREDENCIALES_INVALIDAS);
         }
 
-        if (!usuario.getPassword().contains("m=1024,t=1")) {
+        if (passwordEncoder.upgradeEncoding(usuario.getPassword())) {
             usuario.setPassword(passwordEncoder.encode(peticion.password()));
             usuarioRepository.save(usuario);
         }

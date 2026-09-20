@@ -30,26 +30,33 @@ public class AutenticacionController {
     @PostMapping("/login")
     public ResponseEntity<ApiRespuesta<LoginRespuesta>> iniciarSesion(
             @Valid @RequestBody LoginPeticion peticion) {
-        
+
         LoginRespuesta respuesta = casoUsoLogin.ejecutar(peticion);
-        
+
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, servicioCookie.crearCookieAuth(respuesta.tokenAcceso()).toString())
-                .body(ApiRespuesta.exito(MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(), respuesta, 200));
+                .header(
+                        HttpHeaders.SET_COOKIE,
+                        servicioCookie.crearCookieAuth(respuesta.tokenAcceso()).toString())
+                .body(
+                        ApiRespuesta.exito(
+                                MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(),
+                                respuesta,
+                                200));
     }
 
     @PostMapping("/logout")
     public ResponseEntity<ApiRespuesta<Void>> cerrarSesion() {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, servicioCookie.crearCookieLimpieza().toString())
-                .body(ApiRespuesta.exito(MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(), null, 200));
+                .body(
+                        ApiRespuesta.exito(
+                                MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(), null, 200));
     }
 
     @GetMapping("/me")
     public ResponseEntity<ApiRespuesta<VerificarAutenticacionRespuesta>> verificarAutenticacion() {
         return ApiRespuesta.ok(
-                MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(), 
-                casoUsoVerificarAutenticacion.ejecutar()
-        );
+                MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(),
+                casoUsoVerificarAutenticacion.ejecutar());
     }
 }

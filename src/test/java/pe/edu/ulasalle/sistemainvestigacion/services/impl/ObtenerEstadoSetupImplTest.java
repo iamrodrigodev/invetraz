@@ -15,11 +15,9 @@ import pe.edu.ulasalle.sistemainvestigacion.repositories.UsuarioRepository;
 @ExtendWith(MockitoExtension.class)
 class ObtenerEstadoSetupImplTest {
 
-    @Mock
-    private UsuarioRepository usuarioRepository;
+    @Mock private UsuarioRepository usuarioRepository;
 
-    @InjectMocks
-    private ObtenerEstadoSetupImpl obtenerEstadoSetup;
+    @InjectMocks private ObtenerEstadoSetupImpl obtenerEstadoSetup;
 
     @Test
     void cuandoNoHayUsuarios_devuelveNoConfigurado() {

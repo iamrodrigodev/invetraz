@@ -35,11 +35,26 @@ public class ConfiguracionSeguridad {
     public SecurityFilterChain cadenaFiltrosSeguridad(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
-				.headers(headers -> headers
-						.xssProtection(xss -> xss.headerValue(org.springframework.security.web.header.writers.XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
-						.contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'; form-action 'self';"))
-						.frameOptions(frame -> frame.deny())
-				)
+                .headers(
+                        headers ->
+                                headers.xssProtection(
+                                                xss ->
+                                                        xss.headerValue(
+                                                                org.springframework.security.web
+                                                                        .header.writers
+                                                                        .XXssProtectionHeaderWriter
+                                                                        .HeaderValue
+                                                                        .ENABLED_MODE_BLOCK))
+                                        .contentSecurityPolicy(
+                                                csp ->
+                                                        csp.policyDirectives(
+                                                                "default-src 'self'; script-src"
+                                                                        + " 'self' 'unsafe-inline';"
+                                                                        + " style-src 'self'"
+                                                                        + " 'unsafe-inline';"
+                                                                        + " frame-ancestors 'none';"
+                                                                        + " form-action 'self';"))
+                                        .frameOptions(frame -> frame.deny()))
                 .sessionManagement(
                         sesion -> sesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
@@ -47,7 +62,8 @@ public class ConfiguracionSeguridad {
                                 autorizacion
                                         .requestMatchers("/api/v1/setup/**")
                                         .permitAll()
-                                        .requestMatchers("/api/v1/auth/login", "/api/v1/auth/logout")
+                                        .requestMatchers(
+                                                "/api/v1/auth/login", "/api/v1/auth/logout")
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated())
@@ -84,8 +100,7 @@ public class ConfiguracionSeguridad {
 
     @Bean
     public PasswordEncoder codificadorClaves() {
-        return new org.springframework.security.crypto.argon2.Argon2PasswordEncoder(
-                16, 32, 1, 1024, 1);
+        return new CodificadorContrasenasHibrido();
     }
 
     @Bean
