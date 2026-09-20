@@ -23,7 +23,7 @@ public class ServicioJwt {
 
     public ServicioJwt(
             @Value("${app.jwt.secret}") String secretoFirma,
-            @Value("${app.jwt.expiration-ms:86400000}") long tiempoExpiracionMillis) {
+            @Value("${app.jwt.expiration-ms}") long tiempoExpiracionMillis) {
 
         byte[] keyBytes;
         try {
