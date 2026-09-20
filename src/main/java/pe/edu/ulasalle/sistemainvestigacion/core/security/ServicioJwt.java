@@ -2,6 +2,7 @@ package pe.edu.ulasalle.sistemainvestigacion.core.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.DecodingException;
@@ -18,6 +19,7 @@ public class ServicioJwt {
 
     private final SecretKey claveSecreta;
     private final long tiempoExpiracionMillis;
+    private final JwtParser jwtParser;
 
     public ServicioJwt(
             @Value("${app.jwt.secret}") String secretoFirma,
@@ -25,15 +27,14 @@ public class ServicioJwt {
 
         byte[] keyBytes;
         try {
-            // Intentar decodificar como Base64 estándar
             keyBytes = Decoders.BASE64.decode(secretoFirma);
         } catch (DecodingException e) {
-            // Si falla (ej. caracteres invalidos o plain text), usar los bytes de la cadena UTF-8
             keyBytes = secretoFirma.getBytes(StandardCharsets.UTF_8);
         }
 
         this.claveSecreta = Keys.hmacShaKeyFor(keyBytes);
         this.tiempoExpiracionMillis = tiempoExpiracionMillis;
+        this.jwtParser = Jwts.parser().verifyWith(this.claveSecreta).build();
     }
 
     public String generarTokenAcceso(UUID idUsuario, String rol) {
@@ -50,11 +51,7 @@ public class ServicioJwt {
 
     public Claims obtenerPayload(String token) {
         try {
-            return Jwts.parser()
-                    .verifyWith(claveSecreta)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
+            return jwtParser.parseSignedClaims(token).getPayload();
         } catch (JwtException | IllegalArgumentException e) {
             return null;
         }

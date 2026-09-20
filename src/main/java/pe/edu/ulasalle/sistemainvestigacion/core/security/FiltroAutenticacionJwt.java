@@ -27,13 +27,20 @@ public class FiltroAutenticacionJwt extends OncePerRequestFilter {
     }
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return path.startsWith("/api/v1/setup")
+                || "/api/v1/auth/login".equals(path)
+                || "/api/v1/auth/logout".equals(path);
+    }
+
+    @Override
     protected void doFilterInternal(
             HttpServletRequest solicitud, HttpServletResponse respuesta, FilterChain cadenaFiltros)
             throws ServletException, IOException {
 
         String tokenJwt = null;
 
-        // Intentar leer de la Cookie HttpOnly primero
         if (solicitud.getCookies() != null) {
             for (Cookie cookie : solicitud.getCookies()) {
                 if ("jwt".equals(cookie.getName())) {
@@ -43,7 +50,6 @@ public class FiltroAutenticacionJwt extends OncePerRequestFilter {
             }
         }
 
-        // Fallback al header Authorization
         if (tokenJwt == null) {
             String encabezadoAutorizacion = solicitud.getHeader(HttpHeaders.AUTHORIZATION);
             if (encabezadoAutorizacion != null && encabezadoAutorizacion.startsWith("Bearer ")) {
@@ -70,6 +76,7 @@ public class FiltroAutenticacionJwt extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
+            SecurityContextHolder.clearContext();
         }
 
         cadenaFiltros.doFilter(solicitud, respuesta);
