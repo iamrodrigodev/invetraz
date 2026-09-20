@@ -24,6 +24,11 @@ export const useAppStore = create<AppState>((set) => ({
 				verificarEstadoSistema(),
 				verificarAutenticacion(),
 			]);
+			if (resAuth.autenticado) {
+				localStorage.setItem("sesion_activa", "true");
+			} else {
+				localStorage.removeItem("sesion_activa");
+			}
 			set({
 				configurado: esConfigurado,
 				autenticado: resAuth.autenticado,
@@ -32,6 +37,7 @@ export const useAppStore = create<AppState>((set) => ({
 			});
 		} catch (error) {
 			console.error("Error al verificar estado global", error);
+			localStorage.removeItem("sesion_activa");
 			set({
 				configurado: true,
 				autenticado: false,
@@ -41,13 +47,21 @@ export const useAppStore = create<AppState>((set) => ({
 		}
 	},
 	setConfigurado: (valor: boolean) => set({ configurado: valor }),
-	setAutenticado: (valor: boolean) => set({ autenticado: valor }),
+	setAutenticado: (valor: boolean) => {
+		if (valor) {
+			localStorage.setItem("sesion_activa", "true");
+		} else {
+			localStorage.removeItem("sesion_activa");
+		}
+		set({ autenticado: valor });
+	},
 	cerrarSesion: async () => {
 		try {
 			await logout();
 		} catch (_error) {
 			// Ignorar errores de red al cerrar sesión
 		}
+		localStorage.removeItem("sesion_activa");
 		localStorage.removeItem("jwt");
 		localStorage.removeItem("moduloActivo");
 		set({ autenticado: false, usuarioEmail: null });

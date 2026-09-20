@@ -16,12 +16,22 @@ export function AppRouter() {
 	}, [verificarEstadoGlobal]);
 
 	if (!estadoVerificado || configurado === null) {
+		const tieneSesionPrevia =
+			typeof window !== "undefined" &&
+			localStorage.getItem("sesion_activa") === "true";
+
 		const esRutaAuth =
 			typeof window !== "undefined" &&
 			(window.location.pathname === "/login" ||
 				window.location.pathname === "/setup");
 
-		return esRutaAuth ? <AuthCardSkeleton /> : <DashboardSkeleton />;
+		// Si no tiene sesión previa o está en ruta de autenticación, mostrar silueta de Login
+		// NUNCA mostrar la estructura del Dashboard a un usuario nuevo o no autenticado
+		if (esRutaAuth || !tieneSesionPrevia) {
+			return <AuthCardSkeleton />;
+		}
+
+		return <DashboardSkeleton />;
 	}
 
 	return (
