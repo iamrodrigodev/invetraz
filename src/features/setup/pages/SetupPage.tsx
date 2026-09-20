@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, Microscope, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -67,7 +68,7 @@ export function SetupPage() {
 					<h1 className="mb-2 font-extrabold font-heading text-2xl text-slate-900 tracking-tight md:text-3xl">
 						Sistema de <span className="text-primary">Investigación</span>
 					</h1>
-					<p className="max-w-md text-slate-500 text-sm leading-relaxed md:text-base">
+					<p className="max-w-md text-slate-600 text-sm leading-relaxed md:text-base">
 						Crea tu cuenta de administrador para continuar.
 					</p>
 				</div>
@@ -76,7 +77,7 @@ export function SetupPage() {
 					<div>
 						<label
 							htmlFor="email"
-							className="mb-2 block text-sm font-medium text-slate-700"
+							className="mb-2 block text-sm font-medium text-slate-800"
 						>
 							Correo Electrónico <span className="text-red-500">*</span>
 						</label>
@@ -94,7 +95,7 @@ export function SetupPage() {
 					<div>
 						<label
 							htmlFor="password"
-							className="mb-2 block text-sm font-medium text-slate-700"
+							className="mb-2 block text-sm font-medium text-slate-800"
 						>
 							Contraseña <span className="text-red-500">*</span>
 						</label>
@@ -126,7 +127,7 @@ export function SetupPage() {
 					<div>
 						<label
 							htmlFor="confirmPassword"
-							className="mb-2 block text-sm font-medium text-slate-700"
+							className="mb-2 block text-sm font-medium text-slate-800"
 						>
 							Confirmar Contraseña <span className="text-red-500">*</span>
 						</label>
@@ -150,9 +151,15 @@ export function SetupPage() {
 						/>
 					</div>
 
-					{errorApi && (
-						<Alert message={errorApi} onClose={() => setErrorApi(null)} />
-					)}
+					<AnimatePresence mode="wait">
+						{errorApi && (
+							<Alert
+								key="error-setup"
+								message={errorApi}
+								onClose={() => setErrorApi(null)}
+							/>
+						)}
+					</AnimatePresence>
 					<Button
 						type="submit"
 						disabled={!isValid}

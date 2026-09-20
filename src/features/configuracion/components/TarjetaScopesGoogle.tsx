@@ -4,7 +4,6 @@ import { useState } from "react";
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "../../../components/ui/Card";
@@ -13,27 +12,23 @@ interface ScopeClassroom {
 	id: string;
 	nombre: string;
 	scope: string;
-	descripcion: string;
 }
 
 const SCOPES_DISPONIBLES: ScopeClassroom[] = [
 	{
 		id: "courses",
-		nombre: "Cursos y clases (básico)",
+		nombre: "1. Cursos y clases",
 		scope: "https://www.googleapis.com/auth/classroom.courses",
-		descripcion: "Lectura y sincronización de cursos activos.",
 	},
 	{
 		id: "coursework",
-		nombre: "Tareas y actividades",
+		nombre: "2. Tareas y actividades",
 		scope: "https://www.googleapis.com/auth/classroom.coursework.students",
-		descripcion: "Seguimiento y creación de tareas y entregas.",
 	},
 	{
 		id: "rosters",
-		nombre: "Estudiantes y docentes",
+		nombre: "3. Estudiantes y docentes",
 		scope: "https://www.googleapis.com/auth/classroom.rosters",
-		descripcion: "Consulta de participantes en cada aula.",
 	},
 ];
 
@@ -59,11 +54,11 @@ export const TarjetaScopesGoogle: React.FC = () => {
 
 	return (
 		<Card className="border-slate-200/80 bg-white">
-			<CardHeader className="pb-4">
-				<div className="flex items-center justify-between gap-2">
-					<div className="flex items-center gap-2 text-primary font-medium text-sm">
+			<CardHeader className="pb-3">
+				<div className="flex items-center justify-between">
+					<div className="flex items-center gap-2 text-primary font-semibold text-sm">
 						<KeyRound size={16} />
-						<span>Permisos OAuth 2.0</span>
+						<span>Permisos de sincronización</span>
 					</div>
 					<button
 						type="button"
@@ -73,10 +68,10 @@ export const TarjetaScopesGoogle: React.FC = () => {
 								"todos",
 							)
 						}
-						className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-all cursor-pointer ${
+						className={`inline-flex items-center gap-1 font-medium text-xs transition-colors cursor-pointer ${
 							copiadoId === "todos"
-								? "border-primary/30 bg-primary-50 text-primary font-semibold"
-								: "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 hover:text-primary active:scale-95"
+								? "text-primary font-semibold"
+								: "text-slate-600 hover:text-primary active:scale-95"
 						}`}
 						title="Copiar todos los scopes separados por espacio"
 					>
@@ -93,83 +88,48 @@ export const TarjetaScopesGoogle: React.FC = () => {
 						)}
 					</button>
 				</div>
-				<CardTitle className="mt-1 text-base text-slate-900 font-bold tracking-tight">
-					Scopes de Classroom
+				<CardTitle className="text-base text-slate-900 font-bold tracking-tight">
+					Scopes de Google Classroom
 				</CardTitle>
-				<CardDescription className="mt-1 text-xs text-slate-500 leading-normal">
-					Permisos para autorizar en el paso <em>Input your own scopes</em> de
-					OAuth 2.0 Playground.
-				</CardDescription>
 			</CardHeader>
-			<CardContent className="space-y-4 pt-1 text-xs leading-relaxed text-slate-600">
-				<div className="space-y-2.5">
-					{SCOPES_DISPONIBLES.map((item) => {
-						const estaCopiado = copiadoId === item.id;
-						return (
-							<button
-								key={item.id}
-								type="button"
-								onClick={() => copiarTexto(item.scope, item.id)}
-								className={`group flex w-full items-center justify-between gap-3 rounded-xl p-3 text-left transition-all cursor-pointer select-none ${
-									estaCopiado
-										? "bg-primary-50 text-primary font-medium shadow-2xs"
-										: "hover:bg-slate-50 text-slate-700"
-								}`}
-								title={`Clic para copiar scope de ${item.nombre}`}
-							>
-								<div className="min-w-0 flex-1">
-									<div className="flex items-center gap-2">
-										<span
-											className={`h-2 w-2 shrink-0 rounded-full transition-colors ${
-												estaCopiado
-													? "bg-primary"
-													: "bg-primary/40 group-hover:bg-primary"
-											}`}
-										/>
-										<span className="font-semibold text-slate-900 text-xs">
-											{item.nombre}
-										</span>
-									</div>
-									<p className="mt-1 pl-4 font-mono text-[11px] text-slate-500 truncate group-hover:text-slate-800">
-										{item.scope}
-									</p>
-									<p className="mt-0.5 pl-4 text-[11px] text-slate-400 group-hover:text-slate-500">
-										{item.descripcion}
-									</p>
-								</div>
-								<div className="shrink-0 flex items-center gap-1 pl-2 text-xs">
+			<CardContent className="space-y-2.5 text-xs leading-relaxed text-slate-700">
+				{SCOPES_DISPONIBLES.map((item) => {
+					const estaCopiado = copiadoId === item.id;
+					return (
+						<div key={item.id} className="space-y-1">
+							<div className="flex items-center justify-between">
+								<span className="font-semibold text-slate-800">
+									{item.nombre}:
+								</span>
+								<button
+									type="button"
+									onClick={() => copiarTexto(item.scope, item.id)}
+									className={`inline-flex items-center gap-1 font-medium text-[11px] transition-colors cursor-pointer ${
+										estaCopiado
+											? "text-primary font-semibold"
+											: "text-slate-500 hover:text-primary"
+									}`}
+									title={`Copiar ${item.nombre}`}
+								>
 									{estaCopiado ? (
 										<>
-											<Check size={14} className="text-primary" />
-											<span className="font-bold text-primary text-xs">
-												Copiado
-											</span>
+											<Check size={12} className="text-primary" />
+											<span>Copiado</span>
 										</>
 									) : (
-										<Copy
-											size={14}
-											className="text-slate-400 transition-colors group-hover:text-primary"
-										/>
+										<>
+											<Copy size={12} className="text-slate-400" />
+											<span>Copiar</span>
+										</>
 									)}
-								</div>
-							</button>
-						);
-					})}
-				</div>
-
-				<div className="mt-5 border-t border-slate-100 pt-3.5 pb-1 text-xs text-slate-500 leading-relaxed">
-					<p>
-						No se limita solo a cursos: puedes agregar tareas (
-						<code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[11px] text-slate-700">
-							coursework
-						</code>
-						) o participantes (
-						<code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[11px] text-slate-700">
-							rosters
-						</code>
-						) según las funciones que requiera el sistema.
-					</p>
-				</div>
+								</button>
+							</div>
+							<p className="font-mono text-[11px] text-slate-800 bg-slate-50 rounded-md px-2.5 py-1 border border-slate-200/70 select-all break-all">
+								{item.scope}
+							</p>
+						</div>
+					);
+				})}
 			</CardContent>
 		</Card>
 	);

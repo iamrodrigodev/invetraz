@@ -82,10 +82,8 @@ export function DashboardLayout({
 					alSolicitarCerrarSesion={() => setModalCerrarSesionAbierto(true)}
 				/>
 
-				<main className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto p-6">
-					<div className="flex h-full min-h-0 w-full flex-1 flex-col">
-						{children}
-					</div>
+				<main className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto p-4 sm:p-6 pb-12">
+					<div className="flex min-h-0 w-full flex-1 flex-col">{children}</div>
 				</main>
 			</div>
 

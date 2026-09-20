@@ -49,13 +49,13 @@ export const CampoCredencial = forwardRef<
 				<div className="flex items-center justify-between">
 					<label
 						htmlFor={id}
-						className="block text-sm font-medium text-slate-700"
+						className="block text-sm font-medium text-slate-800"
 					>
 						{label} {obligatorio && <span className="text-red-500">*</span>}
 					</label>
 				</div>
 
-				{descripcion && <p className="text-xs text-slate-500">{descripcion}</p>}
+				{descripcion && <p className="text-xs text-slate-600">{descripcion}</p>}
 
 				<Input
 					id={id}

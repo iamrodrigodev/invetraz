@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, LogIn, Microscope } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -63,7 +64,7 @@ export function LoginPage() {
 					<h1 className="mb-2 font-extrabold font-heading text-2xl text-slate-900 tracking-tight md:text-3xl">
 						Sistema de <span className="text-primary">Investigación</span>
 					</h1>
-					<p className="max-w-md text-slate-500 text-sm leading-relaxed md:text-base">
+					<p className="max-w-md text-slate-600 text-sm leading-relaxed md:text-base">
 						Inicia sesión para administrar la plataforma.
 					</p>
 				</div>
@@ -72,7 +73,7 @@ export function LoginPage() {
 					<div>
 						<label
 							htmlFor="email"
-							className="mb-2 block text-sm font-medium text-slate-700"
+							className="mb-2 block text-sm font-medium text-slate-800"
 						>
 							Correo Electrónico <span className="text-red-500">*</span>
 						</label>
@@ -90,7 +91,7 @@ export function LoginPage() {
 					<div>
 						<label
 							htmlFor="password"
-							className="mb-2 block text-sm font-medium text-slate-700"
+							className="mb-2 block text-sm font-medium text-slate-800"
 						>
 							Contraseña <span className="text-red-500">*</span>
 						</label>
@@ -114,9 +115,15 @@ export function LoginPage() {
 						/>
 					</div>
 
-					{errorApi && (
-						<Alert message={errorApi} onClose={() => setErrorApi(null)} />
-					)}
+					<AnimatePresence mode="wait">
+						{errorApi && (
+							<Alert
+								key="error-login"
+								message={errorApi}
+								onClose={() => setErrorApi(null)}
+							/>
+						)}
+					</AnimatePresence>
 					<Button
 						type="submit"
 						disabled={!isValid}

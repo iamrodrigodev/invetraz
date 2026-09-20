@@ -25,7 +25,7 @@ export function ModuloEnConstruccion({
 			<h2 className="mb-2 font-extrabold font-heading text-2xl text-slate-900 tracking-tight md:text-3xl">
 				{titulo}
 			</h2>
-			<p className="max-w-md text-slate-500 text-sm leading-relaxed md:text-base">
+			<p className="max-w-md text-slate-600 text-sm leading-relaxed md:text-base">
 				{descripcion}
 			</p>
 		</div>

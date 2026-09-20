@@ -58,7 +58,7 @@ export function ModalConfirmacion({
 					<h3 className="font-heading font-bold text-slate-900 text-xl text-center">
 						{titulo}
 					</h3>
-					<p className="mt-2 text-[15px] text-slate-500 leading-relaxed text-center">
+					<p className="mt-2 text-[15px] text-slate-600 leading-relaxed text-center">
 						{descripcion}
 					</p>
 				</div>

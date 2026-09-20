@@ -9,17 +9,17 @@ import {
 
 export const TarjetaGuiaGoogle: React.FC = () => {
 	return (
-		<Card className="border-slate-200/80 bg-slate-50/50">
+		<Card className="border-slate-200/80 bg-white">
 			<CardHeader className="pb-3">
-				<div className="flex items-center gap-2 text-primary font-medium text-sm">
+				<div className="flex items-center gap-2 text-primary font-semibold text-sm">
 					<Info size={16} />
 					<span>Guía rápida de integración</span>
 				</div>
-				<CardTitle className="text-base text-slate-900 font-bold">
+				<CardTitle className="text-base text-slate-900 font-bold tracking-tight">
 					¿Cómo obtener tus credenciales de Google?
 				</CardTitle>
 			</CardHeader>
-			<CardContent className="space-y-3 text-xs leading-relaxed text-slate-600">
+			<CardContent className="space-y-3 text-xs leading-relaxed text-slate-700">
 				<div className="space-y-1">
 					<p className="font-semibold text-slate-800">
 						1.{" "}

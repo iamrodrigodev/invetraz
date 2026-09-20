@@ -98,7 +98,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 							)}
 						</div>
 						{showCount && maxLength && (
-							<span className="shrink-0 font-medium text-slate-400">
+							<span className="shrink-0 font-medium text-slate-500">
 								{charCount} / {maxLength}
 							</span>
 						)}

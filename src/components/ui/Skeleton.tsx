@@ -126,40 +126,37 @@ export function ConfiguracionSkeleton() {
 				</div>
 
 				{/* Columna derecha: Tarjetas informativas y scopes en cards independientes */}
+				{/* Columna derecha: Tarjetas informativas y scopes en cards independientes */}
 				<div className="space-y-6">
-					<div className="rounded-2xl border border-slate-200/80 bg-slate-50/50 p-6 shadow-xs">
+					<div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs">
 						<Skeleton className="h-5 w-40 rounded-md" />
 						<Skeleton className="mt-2 h-6 w-56 rounded-md" />
 						<div className="mt-4 space-y-3">
-							<Skeleton className="h-14 w-full rounded-lg" />
-							<Skeleton className="h-14 w-full rounded-lg" />
-							<Skeleton className="h-14 w-full rounded-lg" />
+							<Skeleton className="h-12 w-full rounded-lg" />
+							<Skeleton className="h-12 w-full rounded-lg" />
+							<Skeleton className="h-12 w-full rounded-lg" />
 						</div>
 					</div>
 
 					<div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs">
 						<div className="flex items-center justify-between">
 							<Skeleton className="h-5 w-36 rounded-md" />
-							<Skeleton className="h-7 w-24 rounded-lg" />
+							<Skeleton className="h-5 w-20 rounded-md" />
 						</div>
-						<Skeleton className="mt-2 h-6 w-48 rounded-md" />
-						<Skeleton className="mt-1.5 h-4 w-64 rounded-md" />
-						<div className="mt-4 space-y-3">
+						<Skeleton className="mt-2 h-6 w-52 rounded-md" />
+						<div className="mt-3 space-y-2.5">
 							<div className="space-y-1">
-								<Skeleton className="h-4 w-36 rounded-md" />
-								<Skeleton className="h-3 w-56 rounded-md" />
-							</div>
-							<div className="space-y-1">
-								<Skeleton className="h-4 w-40 rounded-md" />
-								<Skeleton className="h-3 w-64 rounded-md" />
+								<Skeleton className="h-4 w-32 rounded-md" />
+								<Skeleton className="h-8 w-full rounded-md" />
 							</div>
 							<div className="space-y-1">
 								<Skeleton className="h-4 w-36 rounded-md" />
-								<Skeleton className="h-3 w-52 rounded-md" />
+								<Skeleton className="h-8 w-full rounded-md" />
 							</div>
-						</div>
-						<div className="mt-4 border-t border-slate-100 pt-3">
-							<Skeleton className="h-4 w-full rounded-md" />
+							<div className="space-y-1">
+								<Skeleton className="h-4 w-32 rounded-md" />
+								<Skeleton className="h-8 w-full rounded-md" />
+							</div>
 						</div>
 					</div>
 				</div>

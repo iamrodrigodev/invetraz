@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence } from "framer-motion";
 import { ExternalLink, Key, Loader2, RefreshCw, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -93,6 +94,15 @@ export function ConfiguracionPage() {
 		}
 	}, [cargado, cargarConfiguracion, credenciales, reset]);
 
+	useEffect(() => {
+		if (mensajeExito) {
+			const timer = setTimeout(() => {
+				setMensajeExito(null);
+			}, 6000);
+			return () => clearTimeout(timer);
+		}
+	}, [mensajeExito]);
+
 	const onGuardar = async (data: ActualizarCredencialesPeticion) => {
 		try {
 			setMensajeError(null);
@@ -145,34 +155,38 @@ export function ConfiguracionPage() {
 	}
 
 	return (
-		<div className="space-y-6">
+		<div className="space-y-6 pb-12">
 			{/* Encabezado */}
 			<div>
 				<h1 className="font-extrabold font-heading text-2xl text-slate-900 tracking-tight sm:text-3xl">
 					Configuración de Google Classroom
 				</h1>
-				<p className="mt-1 text-sm text-slate-500">
+				<p className="mt-1 text-sm text-slate-600">
 					Administra las credenciales de la API de Google para la sincronización
 					de clases y tareas.
 				</p>
 			</div>
 
-			{/* Mensajes de retroalimentación */}
-			{mensajeExito && (
-				<Alert
-					variant="success"
-					message={mensajeExito}
-					onClose={() => setMensajeExito(null)}
-				/>
-			)}
+			{/* Mensajes de retroalimentación con Framer Motion */}
+			<AnimatePresence mode="wait">
+				{mensajeExito && (
+					<Alert
+						key="alerta-exito"
+						variant="success"
+						message={mensajeExito}
+						onClose={() => setMensajeExito(null)}
+					/>
+				)}
 
-			{mensajeError && (
-				<Alert
-					variant="error"
-					message={mensajeError}
-					onClose={() => setMensajeError(null)}
-				/>
-			)}
+				{mensajeError && (
+					<Alert
+						key="alerta-error"
+						variant="error"
+						message={mensajeError}
+						onClose={() => setMensajeError(null)}
+					/>
+				)}
+			</AnimatePresence>
 
 			{/* Contenedor principal en 2 columnas */}
 			<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

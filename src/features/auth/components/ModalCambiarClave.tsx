@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence } from "framer-motion";
 import {
 	ArrowLeft,
 	CheckCircle2,
@@ -111,7 +112,7 @@ export function ModalCambiarClave({
 					<h4 className="mb-2 text-lg font-semibold text-slate-900 font-heading">
 						Contraseña actualizada
 					</h4>
-					<p className="text-sm text-slate-500">
+					<p className="text-sm text-slate-600">
 						Tu contraseña ha sido cambiada exitosamente.
 					</p>
 				</div>
@@ -121,19 +122,26 @@ export function ModalCambiarClave({
 					onSubmit={formPaso1.handleSubmit(onVerificarPaso1)}
 					className="space-y-5"
 				>
-					<p className="text-sm text-slate-600">
+					<p className="text-sm text-slate-700">
 						Por motivos de seguridad, por favor ingresa tu contraseña actual
 						para verificar tu identidad.
 					</p>
 
-					{errorApi && (
-						<Alert variant="error" message={errorApi} onClose={limpiarError} />
-					)}
+					<AnimatePresence mode="wait">
+						{errorApi && (
+							<Alert
+								key="error-paso1"
+								variant="error"
+								message={errorApi}
+								onClose={limpiarError}
+							/>
+						)}
+					</AnimatePresence>
 
 					<div>
 						<label
 							htmlFor="claveActual"
-							className="mb-1.5 block text-sm font-medium text-slate-700"
+							className="mb-1.5 block text-sm font-medium text-slate-800"
 						>
 							Contraseña actual <span className="text-red-500">*</span>
 						</label>
@@ -187,14 +195,21 @@ export function ModalCambiarClave({
 					onSubmit={formPaso2.handleSubmit(onActualizarClave)}
 					className="space-y-5"
 				>
-					{errorApi && (
-						<Alert variant="error" message={errorApi} onClose={limpiarError} />
-					)}
+					<AnimatePresence mode="wait">
+						{errorApi && (
+							<Alert
+								key="error-paso2"
+								variant="error"
+								message={errorApi}
+								onClose={limpiarError}
+							/>
+						)}
+					</AnimatePresence>
 
 					<div>
 						<label
 							htmlFor="nuevaClave"
-							className="mb-1.5 block text-sm font-medium text-slate-700"
+							className="mb-1.5 block text-sm font-medium text-slate-800"
 						>
 							Nueva contraseña <span className="text-red-500">*</span>
 						</label>
@@ -225,7 +240,7 @@ export function ModalCambiarClave({
 					<div>
 						<label
 							htmlFor="confirmarClave"
-							className="mb-1.5 block text-sm font-medium text-slate-700"
+							className="mb-1.5 block text-sm font-medium text-slate-800"
 						>
 							Confirmar contraseña <span className="text-red-500">*</span>
 						</label>
