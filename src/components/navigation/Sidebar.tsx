@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ELEMENTOS_NAVEGACION } from "../../constants/navigation";
@@ -44,21 +43,20 @@ export function Sidebar({
 				className,
 			)}
 		>
-			<motion.button
+			<button
 				type="button"
-				whileTap={{ scale: 0.9 }}
 				onClick={alAlternarColapso}
 				aria-label={
 					estaColapsado ? "Expandir barra lateral" : "Colapsar barra lateral"
 				}
-				className="absolute -right-3.5 top-5 z-20 hidden h-7 w-7 items-center justify-center rounded-full border-2 border-slate-50 bg-primary text-white shadow-xs hover:bg-primary-700 lg:flex cursor-pointer"
+				className="absolute -right-3.5 top-5 z-20 hidden h-7 w-7 items-center justify-center rounded-full border-2 border-slate-50 bg-primary text-white shadow-xs transition-all duration-150 ease-in-out hover:bg-primary-700 active:scale-95 lg:flex cursor-pointer"
 			>
 				{estaColapsado ? (
 					<ChevronRight size={15} strokeWidth={2.5} />
 				) : (
 					<ChevronLeft size={15} strokeWidth={2.5} />
 				)}
-			</motion.button>
+			</button>
 
 			<div
 				className={cn(

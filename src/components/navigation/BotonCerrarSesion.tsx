@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { LogOut } from "lucide-react";
 import { cn } from "../../utils/cn";
 
@@ -20,14 +19,12 @@ export function BotonCerrarSesion({
 				className,
 			)}
 		>
-			<motion.button
+			<button
 				type="button"
-				whileTap={{ scale: 0.97 }}
-				transition={{ duration: 0.1 }}
 				onClick={alHacerClic}
 				title="Cerrar Sesión"
 				className={cn(
-					"flex h-11 items-center font-medium text-[15px] bg-white text-red-600 transition-colors duration-200 hover:bg-red-50 hover:text-red-700 active:bg-red-100/70 cursor-pointer",
+					"flex h-11 items-center font-medium text-[15px] bg-white text-red-600 transition-all duration-150 ease-in-out hover:bg-red-50 hover:text-red-700 active:bg-red-100/70 active:scale-98 cursor-pointer",
 					estaColapsado
 						? "mx-auto w-11 justify-center rounded-xl"
 						: "w-full rounded-lg px-3",
@@ -47,7 +44,7 @@ export function BotonCerrarSesion({
 				>
 					Cerrar Sesión
 				</span>
-			</motion.button>
+			</button>
 
 			{estaColapsado && (
 				<div className="pointer-events-none absolute left-full top-1/2 ml-2.5 -translate-y-1/2 z-50 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-medium text-white shadow-md opacity-0 group-hover/logout:opacity-100 transition-opacity duration-150">
