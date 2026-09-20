@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { logout, verificarAutenticacion } from "../features/auth/api/auth.api";
 import { verificarEstadoSistema } from "../features/setup/api/setup.api";
+import { alExpirarSesion } from "../utils/fetch";
 
 interface AppState {
 	configurado: boolean | null;
@@ -65,3 +66,7 @@ export const useAppStore = create<AppState>((set) => ({
 		set({ autenticado: false, usuarioEmail: null });
 	},
 }));
+
+alExpirarSesion(() => {
+	useAppStore.setState({ autenticado: false, usuarioEmail: null });
+});

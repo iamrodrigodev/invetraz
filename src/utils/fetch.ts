@@ -1,13 +1,49 @@
 import type { z } from "zod";
 
+type ManejadorExpiracion = () => void;
+let manejadorSesionExpirada: ManejadorExpiracion | null = null;
+
+export function alExpirarSesion(callback: ManejadorExpiracion): void {
+	manejadorSesionExpirada = callback;
+}
+
 export async function fetchSeguro(
 	url: string,
 	options: RequestInit = {},
 ): Promise<Response> {
 	try {
 		options.credentials = "include";
-		return await fetch(url, options);
-	} catch (_error) {
+		const res = await fetch(url, options);
+
+		if (
+			res.status === 401 &&
+			!url.includes("/auth/login") &&
+			!url.includes("/auth/logout")
+		) {
+			if (typeof window !== "undefined") {
+				const sesionEstabaActiva =
+					localStorage.getItem("sesion_activa") === "true";
+				if (sesionEstabaActiva) {
+					sessionStorage.setItem("motivo_salida", "sesion_expirada");
+				}
+				localStorage.removeItem("sesion_activa");
+				localStorage.removeItem("jwt");
+				localStorage.removeItem("moduloActivo");
+			}
+
+			if (manejadorSesionExpirada) {
+				manejadorSesionExpirada();
+			}
+		}
+
+		return res;
+	} catch (error) {
+		if (
+			error instanceof Error &&
+			error.message.includes("El servidor no responde")
+		) {
+			throw error;
+		}
 		throw new Error(
 			"El servidor no responde. Verifica que esté encendido o revisa tu conexión a internet.",
 		);
