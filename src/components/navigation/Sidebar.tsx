@@ -93,14 +93,14 @@ export function Sidebar({
 						onClick={manejarCerrarSesion}
 						title="Cerrar Sesión"
 						className={cn(
-							"flex h-11 items-center font-medium text-[15px] bg-red-600 text-white shadow-2xs transition-all duration-200 ease-in-out hover:bg-red-700 active:scale-98 cursor-pointer",
+							"flex h-11 items-center font-medium text-[15px] bg-white text-red-600 transition-all duration-200 ease-in-out hover:bg-red-50 hover:text-red-700 active:bg-red-100/70 active:scale-98 cursor-pointer",
 							estaColapsado
 								? "mx-auto w-11 justify-center rounded-xl"
 								: "w-full rounded-lg px-3",
 						)}
 					>
 						<LogOut
-							className="h-5 w-5 shrink-0 text-white transition-colors"
+							className="h-5 w-5 shrink-0 text-red-500 transition-colors group-hover/logout:text-red-600"
 							strokeWidth={2}
 						/>
 						<span
