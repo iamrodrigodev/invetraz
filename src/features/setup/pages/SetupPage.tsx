@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, Microscope, RefreshCw, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -151,15 +150,13 @@ export function SetupPage() {
 						/>
 					</div>
 
-					<AnimatePresence mode="wait">
-						{errorApi && (
-							<Alert
-								key="error-setup"
-								message={errorApi}
-								onClose={() => setErrorApi(null)}
-							/>
-						)}
-					</AnimatePresence>
+					{errorApi && (
+						<Alert
+							key="error-setup"
+							message={errorApi}
+							onClose={() => setErrorApi(null)}
+						/>
+					)}
 					<Button
 						type="submit"
 						disabled={!isValid || isSubmitting}

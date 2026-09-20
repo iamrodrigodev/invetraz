@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AnimatePresence } from "framer-motion";
 import {
 	ArrowLeft,
 	CheckCircle2,
@@ -159,16 +158,14 @@ export function ModalCambiarClave({
 						/>
 					</div>
 
-					<AnimatePresence mode="wait">
-						{errorApi && (
-							<Alert
-								key="error-paso1"
-								variant="error"
-								message={errorApi}
-								onClose={limpiarError}
-							/>
-						)}
-					</AnimatePresence>
+					{errorApi && (
+						<Alert
+							key="error-paso1"
+							variant="error"
+							message={errorApi}
+							onClose={limpiarError}
+						/>
+					)}
 
 					<div className="mt-6 flex justify-end gap-3 pt-2">
 						<Button
@@ -261,16 +258,14 @@ export function ModalCambiarClave({
 						/>
 					</div>
 
-					<AnimatePresence mode="wait">
-						{errorApi && (
-							<Alert
-								key="error-paso2"
-								variant="error"
-								message={errorApi}
-								onClose={limpiarError}
-							/>
-						)}
-					</AnimatePresence>
+					{errorApi && (
+						<Alert
+							key="error-paso2"
+							variant="error"
+							message={errorApi}
+							onClose={limpiarError}
+						/>
+					)}
 
 					<div className="mt-6 flex justify-end gap-3 pt-2">
 						<Button

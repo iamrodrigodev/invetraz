@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AnimatePresence } from "framer-motion";
 import { ExternalLink, Key, RefreshCw, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -158,26 +157,24 @@ export function ConfiguracionPage() {
 				</p>
 			</div>
 
-			{/* Mensajes de retroalimentación con Framer Motion */}
-			<AnimatePresence mode="wait">
-				{mensajeExito && (
-					<Alert
-						key="alerta-exito"
-						variant="success"
-						message={mensajeExito}
-						onClose={() => setMensajeExito(null)}
-					/>
-				)}
+			{/* Mensajes de retroalimentación */}
+			{mensajeExito && (
+				<Alert
+					key="alerta-exito"
+					variant="success"
+					message={mensajeExito}
+					onClose={() => setMensajeExito(null)}
+				/>
+			)}
 
-				{mensajeError && (
-					<Alert
-						key="alerta-error"
-						variant="error"
-						message={mensajeError}
-						onClose={() => setMensajeError(null)}
-					/>
-				)}
-			</AnimatePresence>
+			{mensajeError && (
+				<Alert
+					key="alerta-error"
+					variant="error"
+					message={mensajeError}
+					onClose={() => setMensajeError(null)}
+				/>
+			)}
 
 			{/* Contenedor principal en 2 columnas */}
 			<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
