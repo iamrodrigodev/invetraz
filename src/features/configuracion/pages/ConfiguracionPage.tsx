@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Key, RefreshCw, Save } from "lucide-react";
+import { ExternalLink, Key, RefreshCw, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Alert, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Skeleton } from "../../../components/ui";
@@ -171,19 +171,14 @@ export function ConfiguracionPage() {
 
 	return (
 		<div className="space-y-6 p-4 sm:p-6 lg:p-8">
-			{/* Encabezado con estado */}
-			<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-				<div>
-					<h1 className="font-extrabold font-heading text-2xl text-slate-900 tracking-tight sm:text-3xl">
-						Configuración de Google Classroom
-					</h1>
-					<p className="mt-1 text-sm text-slate-500">
-						Administra las credenciales de la API de Google para la sincronización de clases y tareas.
-					</p>
-				</div>
-				<div>
-					<EstadoConexionBadge estado={estadoConexion} />
-				</div>
+			{/* Encabezado */}
+			<div>
+				<h1 className="font-extrabold font-heading text-2xl text-slate-900 tracking-tight sm:text-3xl">
+					Configuración de Google Classroom
+				</h1>
+				<p className="mt-1 text-sm text-slate-500">
+					Administra las credenciales de la API de Google para la sincronización de clases y tareas.
+				</p>
 			</div>
 
 			{/* Mensajes de retroalimentación */}
@@ -209,15 +204,26 @@ export function ConfiguracionPage() {
 				<div className="lg:col-span-2">
 					<Card>
 						<CardHeader>
-							<div className="flex items-center gap-2 text-primary font-semibold">
-								<Key size={18} />
-								<span>Credenciales OAuth 2.0</span>
+							<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+								<div className="flex items-center gap-2 text-primary font-semibold">
+									<Key size={18} />
+									<span>Credenciales OAuth 2.0</span>
+								</div>
+								<EstadoConexionBadge estado={estadoConexion} />
 							</div>
 							<CardTitle className="text-lg text-slate-900 font-bold">
 								Credenciales de API de Google
 							</CardTitle>
 							<CardDescription>
-								Ingresa el Client ID, Client Secret y Refresh Token generados en Google Cloud Console.
+								Ingresa el Client ID, Client Secret y Refresh Token generados en{" "}
+								<a
+									href="https://console.cloud.google.com"
+									target="_blank"
+									rel="noreferrer"
+									className="inline-flex items-center gap-1 font-semibold text-primary hover:underline"
+								>
+									Google Cloud Console <ExternalLink size={12} />
+								</a>.
 							</CardDescription>
 						</CardHeader>
 
@@ -226,7 +232,19 @@ export function ConfiguracionPage() {
 								<CampoCredencial
 									id="googleClientId"
 									label="Google Client ID"
-									descripcion="Identificador de cliente OAuth 2.0 generado en Google Cloud Console"
+									descripcion={
+										<span>
+											Identificador de cliente OAuth 2.0 generado en{" "}
+											<a
+												href="https://console.cloud.google.com"
+												target="_blank"
+												rel="noreferrer"
+												className="font-medium text-primary hover:underline inline-flex items-center gap-0.5"
+											>
+												Google Cloud Console <ExternalLink size={11} />
+											</a>
+										</span>
+									}
 									placeholder="ej. 1234567890-abcdefg.apps.googleusercontent.com"
 									maxLength={VALIDATION_LIMITS.MAX_GOOGLE_CLIENT_ID}
 									errorMessage={errors.googleClientId?.message}
@@ -236,7 +254,7 @@ export function ConfiguracionPage() {
 								<CampoCredencial
 									id="googleClientSecret"
 									label="Google Client Secret"
-									descripcion="Clave secreta del cliente OAuth 2.0. Almacenada con cifrado AES-256"
+									descripcion="Clave secreta del cliente OAuth 2.0"
 									placeholder="ej. GOCSPX-abcdefghijklmnop12345"
 									esSensible
 									maxLength={VALIDATION_LIMITS.MAX_GOOGLE_CLIENT_SECRET}
@@ -247,7 +265,19 @@ export function ConfiguracionPage() {
 								<CampoCredencial
 									id="googleRefreshToken"
 									label="Google Refresh Token"
-									descripcion="Token de actualización permanente para mantener la sesión de Classroom activa"
+									descripcion={
+										<span>
+											Token de actualización permanente generado en{" "}
+											<a
+												href="https://developers.google.com/oauthplayground"
+												target="_blank"
+												rel="noreferrer"
+												className="font-medium text-primary hover:underline inline-flex items-center gap-0.5"
+											>
+												OAuth 2.0 Playground <ExternalLink size={11} />
+											</a>
+										</span>
+									}
 									placeholder="ej. 1//04abcdefghijklmnopqrstuvwxyz"
 									esSensible
 									maxLength={VALIDATION_LIMITS.MAX_GOOGLE_REFRESH_TOKEN}

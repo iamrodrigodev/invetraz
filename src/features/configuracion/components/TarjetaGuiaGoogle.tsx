@@ -1,4 +1,4 @@
-import { ExternalLink, Info, ShieldCheck } from "lucide-react";
+import { ExternalLink, Info } from "lucide-react";
 import type React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/Card";
 
@@ -14,10 +14,18 @@ export const TarjetaGuiaGoogle: React.FC = () => {
 					¿Cómo obtener tus credenciales de Google?
 				</CardTitle>
 			</CardHeader>
-			<CardContent className="space-y-3 text-xs leading-relaxed text-slate-600">
-				<div className="space-y-1.5">
+			<CardContent className="space-y-3.5 text-xs leading-relaxed text-slate-600">
+				<div className="space-y-1">
 					<p className="font-semibold text-slate-800">
-						1. Google Cloud Console:
+						1.{" "}
+						<a
+							href="https://console.cloud.google.com"
+							target="_blank"
+							rel="noreferrer"
+							className="inline-flex items-center gap-1 hover:text-primary hover:underline"
+						>
+							Google Cloud Console <ExternalLink size={12} />
+						</a>:
 					</p>
 					<p>
 						Crea un proyecto en{" "}
@@ -33,7 +41,7 @@ export const TarjetaGuiaGoogle: React.FC = () => {
 					</p>
 				</div>
 
-				<div className="space-y-1.5">
+				<div className="space-y-1">
 					<p className="font-semibold text-slate-800">
 						2. Client ID y Client Secret:
 					</p>
@@ -42,7 +50,7 @@ export const TarjetaGuiaGoogle: React.FC = () => {
 					</p>
 				</div>
 
-				<div className="space-y-1.5">
+				<div className="space-y-1">
 					<p className="font-semibold text-slate-800">
 						3. Google Refresh Token:
 					</p>
@@ -61,13 +69,6 @@ export const TarjetaGuiaGoogle: React.FC = () => {
 							https://www.googleapis.com/auth/classroom.courses
 						</code>{" "}
 						para autorizar y generar el Refresh Token permanente.
-					</p>
-				</div>
-
-				<div className="mt-4 flex items-start gap-2 rounded-xl border border-primary/20 bg-primary-50/50 p-3 text-primary-950">
-					<ShieldCheck size={16} className="mt-0.5 shrink-0 text-primary" />
-					<p className="text-[11px] leading-normal text-slate-700">
-						<strong>Seguridad garantizada:</strong> El Client Secret y el Refresh Token se almacenan de forma cifrada mediante el algoritmo <strong>AES-256</strong> en la base de datos del sistema.
 					</p>
 				</div>
 			</CardContent>
