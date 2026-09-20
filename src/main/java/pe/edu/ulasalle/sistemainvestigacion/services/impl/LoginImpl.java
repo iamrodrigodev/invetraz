@@ -2,6 +2,7 @@ package pe.edu.ulasalle.sistemainvestigacion.services.impl;
 
 import java.util.Locale;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionDeNegocio;
@@ -14,6 +15,7 @@ import pe.edu.ulasalle.sistemainvestigacion.models.Usuario;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.UsuarioRepository;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoLogin;
 
+@Slf4j
 @Service
 public class LoginImpl implements CasoUsoLogin {
 
@@ -35,13 +37,17 @@ public class LoginImpl implements CasoUsoLogin {
 
     @Override
     public LoginRespuesta ejecutar(LoginPeticion peticion) {
+        long tInicio = System.currentTimeMillis();
+
         String emailNormalizado =
                 peticion.email() != null
                         ? peticion.email().trim().toLowerCase(Locale.ROOT)
                         : "";
 
+        long t0 = System.currentTimeMillis();
         Optional<Usuario> usuarioOpt =
                 usuarioRepository.findByEmailIgnoreCase(emailNormalizado);
+        long tDb = System.currentTimeMillis() - t0;
 
         if (usuarioOpt.isEmpty()) {
             passwordEncoder.matches(peticion.password(), HASH_FICTICIO);
@@ -50,17 +56,31 @@ public class LoginImpl implements CasoUsoLogin {
 
         Usuario usuario = usuarioOpt.get();
 
+        long t1 = System.currentTimeMillis();
         if (!passwordEncoder.matches(peticion.password(), usuario.getPassword())) {
             throw new ExcepcionDeNegocio(MensajesDeError.CREDENCIALES_INVALIDAS);
         }
+        long tHash = System.currentTimeMillis() - t1;
 
         if (passwordEncoder.upgradeEncoding(usuario.getPassword())) {
             usuario.setPassword(passwordEncoder.encode(peticion.password()));
-            usuarioRepository.save(usuario);
+            usuarioRepository.saveAndFlush(usuario);
+            log.info("Password de usuario {} actualizado transparentemente a BCrypt", emailNormalizado);
         }
 
+        long t2 = System.currentTimeMillis();
         String token =
                 servicioJwt.generarTokenAcceso(usuario.getId(), ConstantesSeguridad.ROL_ADMIN);
+        long tJwt = System.currentTimeMillis() - t2;
+
+        long tTotal = System.currentTimeMillis() - tInicio;
+        log.info(
+                "Login completado para [{}] en {} ms (DB: {} ms, Hash: {} ms, JWT: {} ms)",
+                emailNormalizado,
+                tTotal,
+                tDb,
+                tHash,
+                tJwt);
 
         return new LoginRespuesta(token);
     }

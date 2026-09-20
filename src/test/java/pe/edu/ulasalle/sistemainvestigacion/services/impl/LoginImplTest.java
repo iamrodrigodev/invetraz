@@ -140,6 +140,6 @@ class LoginImplTest {
         assertNotNull(respuesta);
         assertEquals("token-upgrade", respuesta.tokenAcceso());
         assertEquals(nuevoBcrypt, usuario.getPassword());
-        verify(usuarioRepository).save(usuario);
+        verify(usuarioRepository).saveAndFlush(usuario);
     }
 }
