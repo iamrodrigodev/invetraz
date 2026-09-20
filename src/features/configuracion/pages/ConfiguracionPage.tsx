@@ -18,9 +18,11 @@ import {
 	EstadoConexionBadge,
 	TarjetaGuiaGoogle,
 	TarjetaScopesGoogle,
-	type TipoEstadoConexion,
 } from "../components";
-import { useConfiguracionStore } from "../store/useConfiguracionStore";
+import {
+	resolverEstadoConexion,
+	useConfiguracionStore,
+} from "../store/useConfiguracionStore";
 import {
 	type ActualizarCredencialesPeticion,
 	ActualizarCredencialesPeticionSchema,
@@ -29,6 +31,7 @@ import {
 export function ConfiguracionPage() {
 	const {
 		credenciales,
+		credencialesVerificadas,
 		estadoConexion,
 		cargado,
 		cargarConfiguracion,
@@ -39,8 +42,6 @@ export function ConfiguracionPage() {
 	const [mensajeExito, setMensajeExito] = useState<string | null>(null);
 	const [mensajeError, setMensajeError] = useState<string | null>(null);
 	const [verificando, setVerificando] = useState(false);
-	const [valoresVerificados, setValoresVerificados] =
-		useState<ActualizarCredencialesPeticion | null>(null);
 
 	const {
 		register,
@@ -78,46 +79,36 @@ export function ConfiguracionPage() {
 	const deshabilitarGuardar =
 		!configuracionCompleta || !isDirty || isSubmitting || verificando;
 
-	// Si el usuario modifica cualquier campo, limpiamos el mensaje de éxito previo
 	useEffect(() => {
 		if (isDirty) {
 			setMensajeExito(null);
 		}
 	}, [isDirty]);
 
-	// Comprobamos si los valores actuales en pantalla coinciden con una verificación exitosa reciente
-	const formularioCoincideConVerificados = useMemo(() => {
-		if (!valoresVerificados) return false;
-		return (
-			valoresVerificados.googleClientId === clientId &&
-			valoresVerificados.googleClientSecret === clientSecret &&
-			valoresVerificados.googleRefreshToken === refreshToken
-		);
-	}, [valoresVerificados, clientId, clientSecret, refreshToken]);
-
-	// Determinación dinámica del estado de la conexión en pantalla
-	const estadoConexionVisual: TipoEstadoConexion = useMemo(() => {
-		if (verificando || isSubmitting) {
-			return "verificando";
-		}
-		if (!camposCompletos || tieneErrores) {
-			return "no_configurado";
-		}
-		if (formularioCoincideConVerificados) {
-			return "conectado";
-		}
-		if (isDirty) {
-			return "no_configurado";
-		}
-		return estadoConexion;
+	const estadoConexionVisual = useMemo(() => {
+		return resolverEstadoConexion(estadoConexion, credencialesVerificadas, {
+			verificando,
+			guardando: isSubmitting,
+			camposCompletos,
+			tieneErrores,
+			isDirty,
+			valoresActuales: {
+				googleClientId: clientId || "",
+				googleClientSecret: clientSecret || "",
+				googleRefreshToken: refreshToken || "",
+			},
+		});
 	}, [
+		estadoConexion,
+		credencialesVerificadas,
 		verificando,
 		isSubmitting,
 		camposCompletos,
 		tieneErrores,
-		formularioCoincideConVerificados,
 		isDirty,
-		estadoConexion,
+		clientId,
+		clientSecret,
+		refreshToken,
 	]);
 
 	useEffect(() => {
@@ -142,17 +133,13 @@ export function ConfiguracionPage() {
 		try {
 			setMensajeError(null);
 			setMensajeExito(null);
-
-			// guardarConfiguracion verifica primero con Google Classroom y luego persiste
 			const res = await guardarConfiguracion(data);
 			reset(data);
-			setValoresVerificados(data);
 			setMensajeExito(
 				res?.mensaje ||
 					"Credenciales verificadas con Google y guardadas exitosamente.",
 			);
 		} catch (error) {
-			setValoresVerificados(null);
 			setMensajeError(
 				error instanceof Error
 					? error.message
@@ -177,13 +164,11 @@ export function ConfiguracionPage() {
 			setVerificando(true);
 			const valores = getValues();
 			const res = await verificarConexion(valores);
-			setValoresVerificados(valores);
 			setMensajeExito(
 				res.mensaje ||
 					"¡Conexión verificada exitosamente con Google Classroom!",
 			);
 		} catch (error) {
-			setValoresVerificados(null);
 			setMensajeError(
 				error instanceof Error
 					? error.message
@@ -200,7 +185,6 @@ export function ConfiguracionPage() {
 
 	return (
 		<div className="space-y-6 pb-12">
-			{/* Encabezado */}
 			<div>
 				<h1 className="font-extrabold font-heading text-2xl text-slate-900 tracking-tight sm:text-3xl">
 					Configuración de Google Classroom
@@ -211,7 +195,6 @@ export function ConfiguracionPage() {
 				</p>
 			</div>
 
-			{/* Mensajes de retroalimentación */}
 			{mensajeExito && (
 				<Alert
 					key="alerta-exito"
@@ -230,9 +213,7 @@ export function ConfiguracionPage() {
 				/>
 			)}
 
-			{/* Contenedor principal en 2 columnas */}
 			<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-				{/* Columna izquierda: Formulario de credenciales */}
 				<div className="lg:col-span-2">
 					<Card>
 						<CardHeader>
@@ -310,7 +291,6 @@ export function ConfiguracionPage() {
 									{...register("googleRefreshToken")}
 								/>
 
-								{/* Botones de acción */}
 								<div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row sm:items-center sm:justify-end">
 									<Button
 										type="button"
@@ -359,7 +339,6 @@ export function ConfiguracionPage() {
 					</Card>
 				</div>
 
-				{/* Columna derecha: Tarjetas informativas y scopes en cards independientes */}
 				<div className="space-y-6">
 					<TarjetaGuiaGoogle />
 					<TarjetaScopesGoogle />

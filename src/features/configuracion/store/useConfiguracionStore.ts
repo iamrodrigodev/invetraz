@@ -10,8 +10,50 @@ import type {
 	ResultadoVerificacion,
 } from "../types/ActualizarCredencialesPeticion";
 
+export function sonCredencialesIguales(
+	a: ActualizarCredencialesPeticion | null | undefined,
+	b: ActualizarCredencialesPeticion | null | undefined,
+): boolean {
+	if (!a || !b) return false;
+	return (
+		a.googleClientId.trim() === b.googleClientId.trim() &&
+		a.googleClientSecret.trim() === b.googleClientSecret.trim() &&
+		a.googleRefreshToken.trim() === b.googleRefreshToken.trim()
+	);
+}
+
+export interface EstadoConexionContexto {
+	verificando: boolean;
+	guardando: boolean;
+	camposCompletos: boolean;
+	tieneErrores: boolean;
+	isDirty: boolean;
+	valoresActuales: ActualizarCredencialesPeticion;
+}
+
+export function resolverEstadoConexion(
+	estadoBase: TipoEstadoConexion,
+	credencialesVerificadas: ActualizarCredencialesPeticion | null,
+	ctx: EstadoConexionContexto,
+): TipoEstadoConexion {
+	if (ctx.verificando || ctx.guardando) {
+		return "verificando";
+	}
+	if (!ctx.camposCompletos || ctx.tieneErrores) {
+		return "no_configurado";
+	}
+	if (sonCredencialesIguales(credencialesVerificadas, ctx.valoresActuales)) {
+		return "conectado";
+	}
+	if (ctx.isDirty) {
+		return "no_configurado";
+	}
+	return estadoBase;
+}
+
 interface ConfiguracionState {
 	credenciales: ActualizarCredencialesPeticion;
+	credencialesVerificadas: ActualizarCredencialesPeticion | null;
 	estadoConexion: TipoEstadoConexion;
 	cargado: boolean;
 	cargando: boolean;
@@ -36,6 +78,7 @@ const VALORES_POR_DEFECTO: ActualizarCredencialesPeticion = {
 
 export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 	credenciales: VALORES_POR_DEFECTO,
+	credencialesVerificadas: null,
 	estadoConexion: "no_configurado",
 	cargado: false,
 	cargando: false,
@@ -66,6 +109,7 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 
 			set({
 				credenciales: nuevasCredenciales,
+				credencialesVerificadas: tieneCredenciales ? nuevasCredenciales : null,
 				estadoConexion: tieneCredenciales ? "conectado" : "no_configurado",
 				cargado: true,
 				cargando: false,
@@ -81,14 +125,12 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 	guardarConfiguracion: async (datos: ActualizarCredencialesPeticion) => {
 		set({ cargando: true, estadoConexion: "verificando" });
 		try {
-			// 1. Primero verifica las credenciales en vivo contra Google Classroom
 			const resVerificacion = await verificarConfiguracion(datos);
-
-			// 2. Si Google responde que son válidas, persiste en el backend
 			await actualizarConfiguracion(datos);
 
 			set({
 				credenciales: datos,
+				credencialesVerificadas: datos,
 				estadoConexion: "conectado",
 				cargado: true,
 				cargando: false,
@@ -97,6 +139,7 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 			return resVerificacion;
 		} catch (error) {
 			set({
+				credencialesVerificadas: null,
 				estadoConexion: "error",
 				cargando: false,
 			});
@@ -109,10 +152,16 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 		set({ estadoConexion: "verificando" });
 		try {
 			const res = await verificarConfiguracion(creds);
-			set({ estadoConexion: "conectado" });
+			set({
+				credencialesVerificadas: creds,
+				estadoConexion: "conectado",
+			});
 			return res;
 		} catch (error) {
-			set({ estadoConexion: "error" });
+			set({
+				credencialesVerificadas: null,
+				estadoConexion: "error",
+			});
 			throw error;
 		}
 	},
@@ -124,6 +173,7 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 	limpiar: () => {
 		set({
 			credenciales: VALORES_POR_DEFECTO,
+			credencialesVerificadas: null,
 			estadoConexion: "no_configurado",
 			cargado: false,
 			cargando: false,
