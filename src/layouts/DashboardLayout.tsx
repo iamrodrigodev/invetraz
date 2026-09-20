@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sidebar, TopBar } from "../components/navigation";
 import type { ModuloId } from "../components/navigation/types";
@@ -20,10 +20,16 @@ export function DashboardLayout({
 	const navigate = useNavigate();
 	const cerrarSesionStore = useAppStore((state) => state.cerrarSesion);
 	const [menuLateralAbierto, setMenuLateralAbierto] = useState(false);
-	const [estaColapsado, setEstaColapsado] = useState(false);
+	const [estaColapsado, setEstaColapsado] = useState(() => {
+		return localStorage.getItem("sidebar_colapsado") === "true";
+	});
 	const [modalCerrarSesionAbierto, setModalCerrarSesionAbierto] =
 		useState(false);
 	const [cerrandoSesion, setCerrandoSesion] = useState(false);
+
+	useEffect(() => {
+		localStorage.setItem("sidebar_colapsado", String(estaColapsado));
+	}, [estaColapsado]);
 
 	const manejarSeleccion = (id: ModuloId) => {
 		alCambiarModulo(id);
@@ -63,7 +69,7 @@ export function DashboardLayout({
 					moduloActivo={moduloActivo}
 					alSeleccionarModulo={manejarSeleccion}
 					estaColapsado={estaColapsado}
-					alAlternarColapso={() => setEstaColapsado(!estaColapsado)}
+					alAlternarColapso={() => setEstaColapsado((prev) => !prev)}
 					alSolicitarCerrarSesion={() => setModalCerrarSesionAbierto(true)}
 					className="h-full w-full"
 				/>

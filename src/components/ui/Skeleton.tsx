@@ -67,15 +67,26 @@ export function AuthCardSkeleton() {
 }
 
 export function DashboardSkeleton() {
+	const estaColapsado =
+		typeof window !== "undefined" &&
+		localStorage.getItem("sidebar_colapsado") === "true";
+
 	return (
 		<div className="flex h-screen w-full overflow-hidden bg-slate-50 font-sans text-slate-800">
-			<aside className="hidden h-full w-72 flex-col border-r border-slate-200 bg-white lg:flex">
+			<aside
+				className={cn(
+					"hidden h-full flex-col border-r border-slate-200 bg-white lg:flex",
+					estaColapsado ? "w-20" : "w-72",
+				)}
+			>
 				<div className="flex h-16 shrink-0 items-center border-b border-slate-200 px-[18px]">
 					<div className="flex items-center w-full">
 						<div className="flex h-11 w-11 shrink-0 items-center justify-center">
 							<Skeleton className="h-6 w-6 rounded-lg" />
 						</div>
-						<Skeleton className="ml-1.5 h-5 w-40 rounded-md" />
+						{!estaColapsado && (
+							<Skeleton className="ml-1.5 h-5 w-40 rounded-md" />
+						)}
 					</div>
 				</div>
 
@@ -85,7 +96,9 @@ export function DashboardSkeleton() {
 							<div className="flex h-11 w-11 shrink-0 items-center justify-center">
 								<Skeleton className="h-5 w-5 rounded-md" />
 							</div>
-							<Skeleton className="ml-1.5 h-4 w-32 rounded-md" />
+							{!estaColapsado && (
+								<Skeleton className="ml-1.5 h-4 w-32 rounded-md" />
+							)}
 						</div>
 					))}
 				</div>
@@ -95,7 +108,9 @@ export function DashboardSkeleton() {
 						<div className="flex h-11 w-11 shrink-0 items-center justify-center">
 							<Skeleton className="h-5 w-5 shrink-0 rounded-md" />
 						</div>
-						<Skeleton className="ml-1.5 h-4 w-28 rounded-md" />
+						{!estaColapsado && (
+							<Skeleton className="ml-1.5 h-4 w-28 rounded-md" />
+						)}
 					</div>
 				</div>
 			</aside>
