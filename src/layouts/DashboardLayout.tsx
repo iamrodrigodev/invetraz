@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Sidebar, TopBar } from "../components/navigation";
 import type { ModuloId } from "../components/navigation/types";
+import { ModalConfirmacion } from "../components/ui";
+import { useAppStore } from "../store/useAppStore";
 import { cn } from "../utils/cn";
 
 export interface DashboardLayoutProps {
@@ -14,12 +17,28 @@ export function DashboardLayout({
 	alCambiarModulo,
 	children,
 }: DashboardLayoutProps) {
+	const navigate = useNavigate();
+	const cerrarSesionStore = useAppStore((state) => state.cerrarSesion);
 	const [menuLateralAbierto, setMenuLateralAbierto] = useState(false);
 	const [estaColapsado, setEstaColapsado] = useState(false);
+	const [modalCerrarSesionAbierto, setModalCerrarSesionAbierto] =
+		useState(false);
+	const [cerrandoSesion, setCerrandoSesion] = useState(false);
 
 	const manejarSeleccion = (id: ModuloId) => {
 		alCambiarModulo(id);
 		setMenuLateralAbierto(false);
+	};
+
+	const manejarConfirmarCerrarSesion = async () => {
+		setCerrandoSesion(true);
+		try {
+			await cerrarSesionStore();
+			navigate("/login", { replace: true });
+		} finally {
+			setCerrandoSesion(false);
+			setModalCerrarSesionAbierto(false);
+		}
 	};
 
 	return (
@@ -45,6 +64,7 @@ export function DashboardLayout({
 					alSeleccionarModulo={manejarSeleccion}
 					estaColapsado={estaColapsado}
 					alAlternarColapso={() => setEstaColapsado(!estaColapsado)}
+					alSolicitarCerrarSesion={() => setModalCerrarSesionAbierto(true)}
 					className="h-full w-full"
 				/>
 			</div>
@@ -53,6 +73,7 @@ export function DashboardLayout({
 				<TopBar
 					moduloActivo={moduloActivo}
 					alAbrirMenuMovil={() => setMenuLateralAbierto(true)}
+					alSolicitarCerrarSesion={() => setModalCerrarSesionAbierto(true)}
 				/>
 
 				<main className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto p-6">
@@ -61,6 +82,18 @@ export function DashboardLayout({
 					</div>
 				</main>
 			</div>
+
+			<ModalConfirmacion
+				abierto={modalCerrarSesionAbierto}
+				titulo="¿Estás seguro de que deseas salir?"
+				descripcion="Tendrás que volver a iniciar sesión para acceder al sistema."
+				textoConfirmar="Sí, cerrar sesión"
+				textoCancelar="Cancelar"
+				cargando={cerrandoSesion}
+				varianteBoton="destructivo"
+				alConfirmar={manejarConfirmarCerrarSesion}
+				alCerrar={() => setModalCerrarSesionAbierto(false)}
+			/>
 		</div>
 	);
 }

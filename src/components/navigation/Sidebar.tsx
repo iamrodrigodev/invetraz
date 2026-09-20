@@ -15,6 +15,7 @@ export interface SidebarProps {
 	estaColapsado: boolean;
 	alAlternarColapso: () => void;
 	className?: string;
+	alSolicitarCerrarSesion?: () => void;
 }
 
 export function Sidebar({
@@ -23,6 +24,7 @@ export function Sidebar({
 	estaColapsado,
 	alAlternarColapso,
 	className,
+	alSolicitarCerrarSesion,
 }: SidebarProps) {
 	const navigate = useNavigate();
 	const cerrarSesionStore = useAppStore((state) => state.cerrarSesion);
@@ -90,7 +92,7 @@ export function Sidebar({
 				<div className="group/logout relative flex w-full justify-center">
 					<button
 						type="button"
-						onClick={manejarCerrarSesion}
+						onClick={alSolicitarCerrarSesion ?? manejarCerrarSesion}
 						title="Cerrar Sesión"
 						className={cn(
 							"flex h-11 items-center font-medium text-[15px] bg-white text-red-600 transition-all duration-200 ease-in-out hover:bg-red-50 hover:text-red-700 active:bg-red-100/70 active:scale-98 cursor-pointer",

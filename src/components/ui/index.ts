@@ -4,6 +4,7 @@ export * from "./Button";
 export * from "./Card";
 export * from "./Input";
 export * from "./Modal";
+export * from "./ModalConfirmacion";
 export * from "./ModuloEnConstruccion";
 export * from "./Skeleton";
 export * from "./Spinner";

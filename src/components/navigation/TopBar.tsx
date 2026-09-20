@@ -12,12 +12,14 @@ export interface TopBarProps {
 	moduloActivo: ModuloId;
 	alAbrirMenuMovil?: () => void;
 	className?: string;
+	alSolicitarCerrarSesion?: () => void;
 }
 
 export function TopBar({
 	moduloActivo,
 	alAbrirMenuMovil,
 	className,
+	alSolicitarCerrarSesion,
 }: TopBarProps) {
 	const navigate = useNavigate();
 	const cerrarSesionStore = useAppStore((state) => state.cerrarSesion);
@@ -138,7 +140,14 @@ export function TopBar({
 
 								<button
 									type="button"
-									onClick={cerrarSesion}
+									onClick={() => {
+										setMenuUsuarioAbierto(false);
+										if (alSolicitarCerrarSesion) {
+											alSolicitarCerrarSesion();
+										} else {
+											cerrarSesion();
+										}
+									}}
 									className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-medium text-red-600 transition-all duration-150 hover:bg-red-50 hover:text-red-700 active:bg-red-100/80 active:scale-98 cursor-pointer sm:text-sm"
 								>
 									<LogOut
