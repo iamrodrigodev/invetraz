@@ -1,7 +1,8 @@
 package pe.edu.ulasalle.sistemainvestigacion.services.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.ClaseRespuesta;
@@ -25,15 +26,20 @@ public class ListarClasesAlumnoImpl implements CasoUsoListarClasesAlumno {
         List<ClaseClassroom> clases = claseRepository.listarPorAlumno();
         log.info("Clases de estudiante obtenidas: {}", clases.size());
 
-        return clases.stream()
-                .map(
-                        clase ->
-                                ClaseRespuesta.builder()
-                                        .idClassroom(clase.getIdClassroom())
-                                        .nombre(clase.getNombre())
-                                        .estado(clase.getEstado())
-                                        .enlaceClase(clase.getEnlaceClase())
-                                        .build())
-                .collect(Collectors.toList());
+        if (clases.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<ClaseRespuesta> resultado = new ArrayList<>(clases.size());
+        for (ClaseClassroom clase : clases) {
+            resultado.add(
+                    ClaseRespuesta.builder()
+                            .idClassroom(clase.getIdClassroom())
+                            .nombre(clase.getNombre())
+                            .estado(clase.getEstado())
+                            .enlaceClase(clase.getEnlaceClase())
+                            .build());
+        }
+        return resultado;
     }
 }

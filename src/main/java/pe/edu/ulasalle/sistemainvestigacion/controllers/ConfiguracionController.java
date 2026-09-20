@@ -28,7 +28,7 @@ public class ConfiguracionController {
 
     @GetMapping
     public ResponseEntity<ActualizarCredencialesPeticion> obtenerConfiguracion() {
-        var configOpt = configuracionRepository.findAll().stream().findFirst();
+        var configOpt = configuracionRepository.findFirstByOrderByIdAsc();
 
         if (configOpt.isEmpty()) {
             return ResponseEntity.ok(new ActualizarCredencialesPeticion("", "", ""));
@@ -50,8 +50,7 @@ public class ConfiguracionController {
     public ResponseEntity<Void> actualizarConfiguracion(
             @Valid @RequestBody ActualizarCredencialesPeticion peticion) {
         ConfiguracionSistema config =
-                configuracionRepository.findAll().stream()
-                        .findFirst()
+                configuracionRepository.findFirstByOrderByIdAsc()
                         .orElse(ConfiguracionSistema.builder().build());
 
         if (config.getId() == null) {

@@ -1,12 +1,12 @@
 package pe.edu.ulasalle.sistemainvestigacion.repositories.impl;
 
 import com.google.api.services.classroom.model.Course;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.CacheClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ManejadorErroresGoogle;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.enums.EstadoClase;
@@ -17,13 +17,22 @@ import pe.edu.ulasalle.sistemainvestigacion.repositories.ClaseRepository;
 @Repository
 public class ClaseClassroomRepositoryImpl implements ClaseRepository {
 
+    private static final List<String> ESTADOS_CURSO_VISIBLES = List.of("ACTIVE", "PROVISIONED");
+    private static final String CAMPOS_CURSO_LECTURA = "courses(id,name,courseState,alternateLink)";
+    private static final String CAMPOS_CURSO_CREACION = "id,name,courseState,alternateLink";
+    private static final String CAMPOS_CURSO_EDICION = "id,courseState";
+
     private final ProveedorClassroom proveedorClassroom;
     private final ManejadorErroresGoogle manejadorErroresGoogle;
+    private final CacheClassroom cacheClassroom;
 
     public ClaseClassroomRepositoryImpl(
-            ProveedorClassroom proveedorClassroom, ManejadorErroresGoogle manejadorErroresGoogle) {
+            ProveedorClassroom proveedorClassroom,
+            ManejadorErroresGoogle manejadorErroresGoogle,
+            CacheClassroom cacheClassroom) {
         this.proveedorClassroom = proveedorClassroom;
         this.manejadorErroresGoogle = manejadorErroresGoogle;
+        this.cacheClassroom = cacheClassroom;
     }
 
     @Override
@@ -37,7 +46,14 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
                             .setCourseState(clase.getEstado().name());
 
             Course cursoCreado =
-                    proveedorClassroom.obtenerCliente().courses().create(curso).execute();
+                    proveedorClassroom
+                            .obtenerCliente()
+                            .courses()
+                            .create(curso)
+                            .setFields(CAMPOS_CURSO_CREACION)
+                            .execute();
+
+            cacheClassroom.invalidarClases();
 
             return ClaseClassroom.builder()
                     .idClassroom(cursoCreado.getId())
@@ -60,7 +76,10 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
                     .courses()
                     .patch(idClassroom, cursoCambios)
                     .setUpdateMask("courseState")
+                    .setFields(CAMPOS_CURSO_EDICION)
                     .execute();
+
+            cacheClassroom.invalidarClases();
         } catch (Exception e) {
             throw manejadorErroresGoogle.manejar("ClaseClassroomRepository.archivar", e);
         }
@@ -68,6 +87,15 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
 
     @Override
     public List<ClaseClassroom> listarPorDocente() {
+        return cacheClassroom.obtenerClases("DOCENTE", this::consultarClasesDocenteDirecto);
+    }
+
+    @Override
+    public List<ClaseClassroom> listarPorAlumno() {
+        return cacheClassroom.obtenerClases("ALUMNO", this::consultarClasesAlumnoDirecto);
+    }
+
+    private List<ClaseClassroom> consultarClasesDocenteDirecto() {
         try {
             var response =
                     proveedorClassroom
@@ -76,8 +104,8 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
                             .list()
                             .setTeacherId("me")
                             .setPageSize(20)
-                            .setCourseStates(Arrays.asList("ACTIVE", "PROVISIONED"))
-                            .setFields("courses(id,name,courseState,alternateLink)")
+                            .setCourseStates(ESTADOS_CURSO_VISIBLES)
+                            .setFields(CAMPOS_CURSO_LECTURA)
                             .execute();
             return mapearCursos(response.getCourses());
         } catch (Exception e) {
@@ -85,8 +113,7 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
         }
     }
 
-    @Override
-    public List<ClaseClassroom> listarPorAlumno() {
+    private List<ClaseClassroom> consultarClasesAlumnoDirecto() {
         try {
             var response =
                     proveedorClassroom
@@ -95,8 +122,8 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
                             .list()
                             .setStudentId("me")
                             .setPageSize(20)
-                            .setCourseStates(Arrays.asList("ACTIVE", "PROVISIONED"))
-                            .setFields("courses(id,name,courseState,alternateLink)")
+                            .setCourseStates(ESTADOS_CURSO_VISIBLES)
+                            .setFields(CAMPOS_CURSO_LECTURA)
                             .execute();
             return mapearCursos(response.getCourses());
         } catch (Exception e) {
@@ -108,19 +135,19 @@ public class ClaseClassroomRepositoryImpl implements ClaseRepository {
         if (cursos == null || cursos.isEmpty()) {
             return Collections.emptyList();
         }
-        return cursos.stream()
-                .map(
-                        curso ->
-                                ClaseClassroom.builder()
-                                        .idClassroom(curso.getId())
-                                        .nombre(curso.getName())
-                                        .estado(
-                                                curso.getCourseState() != null
-                                                        ? EstadoClase.valueOf(
-                                                                curso.getCourseState())
-                                                        : EstadoClase.PROVISIONED)
-                                        .enlaceClase(curso.getAlternateLink())
-                                        .build())
-                .collect(Collectors.toList());
+        List<ClaseClassroom> resultado = new ArrayList<>(cursos.size());
+        for (Course curso : cursos) {
+            String estadoStr = curso.getCourseState();
+            EstadoClase estado =
+                    estadoStr != null ? EstadoClase.valueOf(estadoStr) : EstadoClase.PROVISIONED;
+            resultado.add(
+                    ClaseClassroom.builder()
+                            .idClassroom(curso.getId())
+                            .nombre(curso.getName())
+                            .estado(estado)
+                            .enlaceClase(curso.getAlternateLink())
+                            .build());
+        }
+        return resultado;
     }
 }

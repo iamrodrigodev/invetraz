@@ -19,12 +19,26 @@ import pe.edu.ulasalle.sistemainvestigacion.repositories.ConfiguracionSistemaRep
 @Component
 public class ProveedorClassroom {
 
+    private static final NetHttpTransport HTTP_TRANSPORT;
+
+    static {
+        try {
+            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        } catch (Exception e) {
+            throw new IllegalStateException("No se pudo inicializar el transporte HTTP de Google", e);
+        }
+    }
+
     private final ConfiguracionSistemaRepository configuracionRepository;
+    private final CacheClassroom cacheClassroom;
     private volatile Classroom cachedClient;
     private final Lock lock = new ReentrantLock();
 
-    public ProveedorClassroom(ConfiguracionSistemaRepository configuracionRepository) {
+    public ProveedorClassroom(
+            ConfiguracionSistemaRepository configuracionRepository,
+            CacheClassroom cacheClassroom) {
         this.configuracionRepository = configuracionRepository;
+        this.cacheClassroom = cacheClassroom;
     }
 
     public Classroom obtenerCliente() {
@@ -49,6 +63,7 @@ public class ProveedorClassroom {
         lock.lock();
         try {
             this.cachedClient = null;
+            this.cacheClassroom.invalidarTodo();
         } finally {
             lock.unlock();
         }
@@ -56,7 +71,7 @@ public class ProveedorClassroom {
 
     private Classroom construirNuevoCliente() {
         try {
-            var configOpt = configuracionRepository.findAll().stream().findFirst();
+            var configOpt = configuracionRepository.findFirstByOrderByIdAsc();
 
             if (configOpt.isEmpty()) {
                 throw new ExcepcionPersonalizada(MensajesDeError.ERROR_CONFIGURACION_GOOGLE);
@@ -89,15 +104,14 @@ public class ProveedorClassroom {
             HttpRequestInitializer requestInitializer =
                     request -> {
                         adapter.initialize(request);
-                        request.setConnectTimeout(10000);
-                        request.setReadTimeout(20000);
+                        request.setConnectTimeout(5000);
+                        request.setReadTimeout(15000);
+                        request.setNumberOfRetries(2);
                     };
-
-            NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 
             this.cachedClient =
                     new Classroom.Builder(
-                                    httpTransport,
+                                    HTTP_TRANSPORT,
                                     GsonFactory.getDefaultInstance(),
                                     requestInitializer)
                             .setApplicationName("SistemaDeInvestigacion")

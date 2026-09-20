@@ -7,11 +7,12 @@ import com.google.api.services.classroom.model.TimeOfDay;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.CacheClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ManejadorErroresGoogle;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.enums.EstadoTarea;
@@ -24,39 +25,27 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
 
     private static final ZoneId ZONA_LIMA = ZoneId.of("America/Lima");
     private static final ZoneId ZONA_UTC = ZoneId.of("UTC");
+    private static final String CAMPOS_TAREA =
+            "id,courseId,title,description,state,alternateLink,dueDate,dueTime,maxPoints";
+    private static final String CAMPOS_LISTA_TAREAS =
+            "courseWork(" + CAMPOS_TAREA + ")";
 
     private final ProveedorClassroom proveedorClassroom;
     private final ManejadorErroresGoogle manejadorErroresGoogle;
+    private final CacheClassroom cacheClassroom;
 
     public TareaClassroomRepositoryImpl(
-            ProveedorClassroom proveedorClassroom, ManejadorErroresGoogle manejadorErroresGoogle) {
+            ProveedorClassroom proveedorClassroom,
+            ManejadorErroresGoogle manejadorErroresGoogle,
+            CacheClassroom cacheClassroom) {
         this.proveedorClassroom = proveedorClassroom;
         this.manejadorErroresGoogle = manejadorErroresGoogle;
+        this.cacheClassroom = cacheClassroom;
     }
 
     @Override
     public List<TareaClassroom> listarPorClase(String idClase) {
-        try {
-            ListCourseWorkResponse response =
-                    proveedorClassroom
-                            .obtenerCliente()
-                            .courses()
-                            .courseWork()
-                            .list(idClase)
-                            .setFields(
-                                    "courseWork(id,courseId,title,description,state,alternateLink,dueDate,dueTime,maxPoints)")
-                            .execute();
-
-            List<CourseWork> tareas = response.getCourseWork();
-            if (tareas == null || tareas.isEmpty()) {
-                return Collections.emptyList();
-            }
-
-            return tareas.stream().map(this::mapearTarea).collect(Collectors.toList());
-        } catch (Exception e) {
-            throw manejadorErroresGoogle.manejar(
-                    "TareaClassroomRepository.listarPorClase (" + idClase + ")", e);
-        }
+        return cacheClassroom.obtenerTareas(idClase, () -> consultarTareasClaseDirecto(idClase));
     }
 
     @Override
@@ -96,12 +85,42 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
                             .courses()
                             .courseWork()
                             .create(idClase, coursework)
+                            .setFields(CAMPOS_TAREA)
                             .execute();
+
+            cacheClassroom.invalidarTareas(idClase);
 
             return mapearTarea(tareaCreada);
         } catch (Exception e) {
             throw manejadorErroresGoogle.manejar(
                     "TareaClassroomRepository.guardar (" + idClase + ")", e);
+        }
+    }
+
+    private List<TareaClassroom> consultarTareasClaseDirecto(String idClase) {
+        try {
+            ListCourseWorkResponse response =
+                    proveedorClassroom
+                            .obtenerCliente()
+                            .courses()
+                            .courseWork()
+                            .list(idClase)
+                            .setFields(CAMPOS_LISTA_TAREAS)
+                            .execute();
+
+            List<CourseWork> tareas = response.getCourseWork();
+            if (tareas == null || tareas.isEmpty()) {
+                return Collections.emptyList();
+            }
+
+            List<TareaClassroom> resultado = new ArrayList<>(tareas.size());
+            for (CourseWork cw : tareas) {
+                resultado.add(mapearTarea(cw));
+            }
+            return resultado;
+        } catch (Exception e) {
+            throw manejadorErroresGoogle.manejar(
+                    "TareaClassroomRepository.listarPorClase (" + idClase + ")", e);
         }
     }
 
