@@ -102,7 +102,7 @@ export const TarjetaScopesGoogle: React.FC = () => {
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="space-y-3 text-xs leading-relaxed text-slate-600">
-				<div className="space-y-1.5">
+				<div className="space-y-1">
 					{SCOPES_DISPONIBLES.map((item) => {
 						const estaCopiado = copiadoId === item.id;
 						return (
@@ -110,15 +110,15 @@ export const TarjetaScopesGoogle: React.FC = () => {
 								key={item.id}
 								type="button"
 								onClick={() => copiarTexto(item.scope, item.id)}
-								className={`group flex w-full items-center justify-between gap-2 rounded-xl border p-2.5 text-left transition-all cursor-pointer select-none ${
+								className={`group flex w-full items-center justify-between gap-2 rounded-xl p-2.5 text-left transition-all cursor-pointer select-none ${
 									estaCopiado
-										? "border-primary/40 bg-primary-50/70 text-primary shadow-xs"
-										: "border-slate-200/80 bg-slate-50/50 hover:border-slate-300 hover:bg-slate-100/60 text-slate-700"
+										? "bg-primary-50 text-primary font-medium shadow-2xs"
+										: "hover:bg-slate-50 text-slate-700"
 								}`}
 								title={`Clic para copiar scope de ${item.nombre}`}
 							>
 								<div className="min-w-0 flex-1">
-									<div className="flex items-center gap-1.5">
+									<div className="flex items-center gap-2">
 										<span
 											className={`h-1.5 w-1.5 shrink-0 rounded-full transition-colors ${
 												estaCopiado
@@ -126,23 +126,25 @@ export const TarjetaScopesGoogle: React.FC = () => {
 													: "bg-slate-400 group-hover:bg-primary"
 											}`}
 										/>
-										<span className="font-semibold text-slate-900 text-[11px]">
+										<span className="font-semibold text-slate-900 text-xs">
 											{item.nombre}
 										</span>
 									</div>
-									<p className="mt-0.5 font-mono text-[10px] text-slate-500 truncate group-hover:text-slate-700">
+									<p className="mt-0.5 pl-3.5 font-mono text-[11px] text-slate-500 truncate group-hover:text-slate-700">
 										{item.scope}
 									</p>
 								</div>
-								<div className="shrink-0 flex items-center gap-1 pl-2 text-[10px]">
+								<div className="shrink-0 flex items-center gap-1 pl-2 text-xs">
 									{estaCopiado ? (
 										<>
-											<Check size={12} className="text-primary" />
-											<span className="font-bold text-primary">Copiado</span>
+											<Check size={13} className="text-primary" />
+											<span className="font-bold text-primary text-[11px]">
+												Copiado
+											</span>
 										</>
 									) : (
 										<Copy
-											size={12}
+											size={13}
 											className="text-slate-400 transition-colors group-hover:text-primary"
 										/>
 									)}

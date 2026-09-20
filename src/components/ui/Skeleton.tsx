@@ -144,10 +144,19 @@ export function ConfiguracionSkeleton() {
 						</div>
 						<Skeleton className="mt-2 h-6 w-48 rounded-md" />
 						<Skeleton className="mt-1.5 h-4 w-64 rounded-md" />
-						<div className="mt-4 space-y-2">
-							<Skeleton className="h-12 w-full rounded-lg" />
-							<Skeleton className="h-12 w-full rounded-lg" />
-							<Skeleton className="h-12 w-full rounded-lg" />
+						<div className="mt-4 space-y-3">
+							<div className="space-y-1">
+								<Skeleton className="h-4 w-36 rounded-md" />
+								<Skeleton className="h-3 w-56 rounded-md" />
+							</div>
+							<div className="space-y-1">
+								<Skeleton className="h-4 w-40 rounded-md" />
+								<Skeleton className="h-3 w-64 rounded-md" />
+							</div>
+							<div className="space-y-1">
+								<Skeleton className="h-4 w-36 rounded-md" />
+								<Skeleton className="h-3 w-52 rounded-md" />
+							</div>
 						</div>
 					</div>
 				</div>
