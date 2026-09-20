@@ -2,7 +2,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ExternalLink, Key, RefreshCw, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Alert, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Skeleton } from "../../../components/ui";
+import {
+	Alert,
+	Button,
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+	ConfiguracionSkeleton,
+} from "../../../components/ui";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
 import {
 	actualizarConfiguracion,
@@ -156,46 +165,11 @@ export function ConfiguracionPage() {
 	};
 
 	if (cargandoInicial) {
-		return (
-			<div className="space-y-6 p-4 sm:p-6 lg:p-8">
-				<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-					<div>
-						<Skeleton className="h-8 w-64" />
-						<Skeleton className="mt-2 h-4 w-96" />
-					</div>
-					<Skeleton className="h-6 w-36" />
-				</div>
-				<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-					<div className="space-y-4 lg:col-span-2">
-						<Card>
-							<CardHeader>
-								<Skeleton className="h-6 w-48" />
-								<Skeleton className="h-4 w-72" />
-							</CardHeader>
-							<CardContent className="space-y-5">
-								<Skeleton className="h-10 w-full" />
-								<Skeleton className="h-10 w-full" />
-								<Skeleton className="h-10 w-full" />
-							</CardContent>
-						</Card>
-					</div>
-					<div>
-						<Card>
-							<CardHeader>
-								<Skeleton className="h-6 w-36" />
-							</CardHeader>
-							<CardContent className="space-y-3">
-								<Skeleton className="h-24 w-full" />
-							</CardContent>
-						</Card>
-					</div>
-				</div>
-			</div>
-		);
+		return <ConfiguracionSkeleton />;
 	}
 
 	return (
-		<div className="space-y-6 p-4 sm:p-6 lg:p-8">
+		<div className="space-y-6">
 			{/* Encabezado */}
 			<div>
 				<h1 className="font-extrabold font-heading text-2xl text-slate-900 tracking-tight sm:text-3xl">
@@ -240,15 +214,7 @@ export function ConfiguracionPage() {
 								Credenciales de API de Google
 							</CardTitle>
 							<CardDescription>
-								Ingresa el Client ID, Client Secret y Refresh Token generados en{" "}
-								<a
-									href="https://console.cloud.google.com"
-									target="_blank"
-									rel="noreferrer"
-									className="inline-flex items-center gap-1 font-semibold text-primary hover:underline"
-								>
-									Google Cloud Console <ExternalLink size={12} />
-								</a>.
+								Ingresa el Client ID, Client Secret y Refresh Token correspondientes.
 							</CardDescription>
 						</CardHeader>
 

@@ -81,10 +81,74 @@ export function AuthCardSkeleton({ esSetup }: AuthCardSkeletonProps = {}) {
 	);
 }
 
+export function ConfiguracionSkeleton() {
+	return (
+		<div className="space-y-6">
+			{/* Encabezado */}
+			<div>
+				<Skeleton className="h-8 w-72 rounded-lg" />
+				<Skeleton className="mt-2 h-4 w-96 rounded-md" />
+			</div>
+
+			{/* Contenedor principal en 2 columnas */}
+			<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+				{/* Columna izquierda: Formulario de credenciales */}
+				<div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs lg:col-span-2">
+					<div className="border-b border-slate-100 pb-5">
+						<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+							<Skeleton className="h-5 w-44 rounded-md" />
+							<Skeleton className="h-6 w-36 rounded-full" />
+						</div>
+						<Skeleton className="mt-3 h-6 w-56 rounded-md" />
+						<Skeleton className="mt-1.5 h-4 w-80 rounded-md" />
+					</div>
+					<div className="space-y-5 pt-5">
+						<div className="space-y-1.5">
+							<Skeleton className="h-4 w-28 rounded-md" />
+							<Skeleton className="h-10 w-full rounded-lg" />
+							<Skeleton className="h-3.5 w-64 rounded-md" />
+						</div>
+						<div className="space-y-1.5">
+							<Skeleton className="h-4 w-36 rounded-md" />
+							<Skeleton className="h-10 w-full rounded-lg" />
+							<Skeleton className="h-3.5 w-52 rounded-md" />
+						</div>
+						<div className="space-y-1.5">
+							<Skeleton className="h-4 w-36 rounded-md" />
+							<Skeleton className="h-10 w-full rounded-lg" />
+							<Skeleton className="h-3.5 w-56 rounded-md" />
+						</div>
+						<div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row sm:items-center sm:justify-end">
+							<Skeleton className="h-10 w-full sm:w-36 rounded-lg" />
+							<Skeleton className="h-10 w-full sm:w-44 rounded-lg" />
+						</div>
+					</div>
+				</div>
+
+				{/* Columna derecha: Tarjeta informativa y guía */}
+				<div className="rounded-2xl border border-slate-200/80 bg-slate-50/50 p-6 shadow-xs">
+					<Skeleton className="h-5 w-40 rounded-md" />
+					<Skeleton className="mt-2 h-6 w-56 rounded-md" />
+					<div className="mt-4 space-y-4">
+						<Skeleton className="h-16 w-full rounded-lg" />
+						<Skeleton className="h-16 w-full rounded-lg" />
+						<Skeleton className="h-20 w-full rounded-lg" />
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}
+
 export function DashboardSkeleton() {
 	const estaColapsado =
 		typeof window !== "undefined" &&
 		localStorage.getItem("sidebar_colapsado") === "true";
+
+	const moduloActivo =
+		typeof window !== "undefined"
+			? localStorage.getItem("moduloActivo") || "actividades"
+			: "actividades";
 
 	return (
 		<div className="flex h-screen w-full overflow-hidden bg-slate-50 font-sans text-slate-800">
@@ -106,7 +170,7 @@ export function DashboardSkeleton() {
 				</div>
 
 				<div className="flex-1 space-y-1.5 py-5 px-[18px]">
-					{[1, 2, 3].map((i) => (
+					{[1, 2, 3, 4].map((i) => (
 						<div key={i} className="flex h-11 w-full items-center rounded-xl">
 							<div className="flex h-11 w-11 shrink-0 items-center justify-center">
 								<Skeleton className="h-5 w-5 rounded-md" />
@@ -143,9 +207,13 @@ export function DashboardSkeleton() {
 					</div>
 				</header>
 
-				<main className="flex flex-1 flex-col overflow-y-auto p-6">
+				<main className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto p-6">
 					<div className="flex h-full min-h-0 w-full flex-1 flex-col">
-						<PageSkeleton />
+						{moduloActivo === "configuracion" ? (
+							<ConfiguracionSkeleton />
+						) : (
+							<PageSkeleton />
+						)}
 					</div>
 				</main>
 			</div>
