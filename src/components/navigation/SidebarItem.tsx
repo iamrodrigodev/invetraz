@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { cn } from "../../utils/cn";
 import type { ItemNavegacion } from "./types";
 
@@ -26,12 +27,14 @@ export function SidebarItem({
 				className,
 			)}
 		>
-			<button
+			<motion.button
 				type="button"
+				whileTap={{ scale: 0.97 }}
+				transition={{ duration: 0.1 }}
 				onClick={alHacerClic}
 				title={item.titulo}
 				className={cn(
-					"flex h-11 items-center font-medium text-[15px] transition-all duration-200 ease-in-out cursor-pointer active:scale-98",
+					"flex h-11 items-center font-medium text-[15px] transition-colors duration-200 cursor-pointer",
 					estaColapsado
 						? "mx-auto w-11 justify-center rounded-xl"
 						: "w-full rounded-lg px-3",
@@ -59,7 +62,7 @@ export function SidebarItem({
 				>
 					{etiqueta}
 				</span>
-			</button>
+			</motion.button>
 
 			{estaColapsado && (
 				<div className="pointer-events-none absolute left-full top-1/2 ml-2.5 -translate-y-1/2 z-50 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-medium text-white shadow-md opacity-0 group-hover/item:opacity-100 transition-opacity duration-150">
