@@ -29,14 +29,14 @@ public class VerificarAutenticacionImpl implements CasoUsoVerificarAutenticacion
             return new VerificarAutenticacionRespuesta(false, null);
         }
 
-        String email = null;
         if (autenticacion.getPrincipal() instanceof UUID idUsuario) {
             Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
-            if (usuario != null) {
-                email = usuario.getEmail();
+            if (usuario == null) {
+                return new VerificarAutenticacionRespuesta(false, null);
             }
+            return new VerificarAutenticacionRespuesta(true, usuario.getEmail());
         }
 
-        return new VerificarAutenticacionRespuesta(true, email);
+        return new VerificarAutenticacionRespuesta(false, null);
     }
 }

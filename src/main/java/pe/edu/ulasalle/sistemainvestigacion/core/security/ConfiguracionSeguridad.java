@@ -63,10 +63,42 @@ public class ConfiguracionSeguridad {
                                         .requestMatchers("/api/v1/setup/**")
                                         .permitAll()
                                         .requestMatchers(
-                                                "/api/v1/auth/login", "/api/v1/auth/logout")
+                                                "/api/v1/auth/login",
+                                                "/api/v1/auth/logout",
+                                                "/api/v1/auth/me")
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated())
+                .exceptionHandling(
+                        excepciones ->
+                                excepciones
+                                        .authenticationEntryPoint(
+                                                (solicitud, respuesta, authException) -> {
+                                                    respuesta.setContentType(
+                                                            "application/json;charset=UTF-8");
+                                                    respuesta.setStatus(
+                                                            jakarta.servlet.http.HttpServletResponse
+                                                                    .SC_UNAUTHORIZED);
+                                                    respuesta
+                                                            .getWriter()
+                                                            .write(
+                                                                    "{\"exito\":false,\"codigo\":401,\"mensaje\":\"No"
+                                                                        + " autenticado o sesion"
+                                                                        + " expirada\"}");
+                                                })
+                                        .accessDeniedHandler(
+                                                (solicitud, respuesta, accessDeniedException) -> {
+                                                    respuesta.setContentType(
+                                                            "application/json;charset=UTF-8");
+                                                    respuesta.setStatus(
+                                                            jakarta.servlet.http.HttpServletResponse
+                                                                    .SC_FORBIDDEN);
+                                                    respuesta
+                                                            .getWriter()
+                                                            .write(
+                                                                    "{\"exito\":false,\"codigo\":403,\"mensaje\":\"Acceso"
+                                                                        + " denegado\"}");
+                                                }))
                 .addFilterBefore(
                         filtroAutenticacionJwt, UsernamePasswordAuthenticationFilter.class);
 

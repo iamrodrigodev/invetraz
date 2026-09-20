@@ -36,4 +36,17 @@ class ObtenerEstadoSetupImplTest {
 
         assertTrue(respuesta.configurado());
     }
+
+    @Test
+    void cuandoYaEstaMarcadoComoConfigurado_noConsultaRepositorio() {
+        when(usuarioRepository.count()).thenReturn(1L);
+
+        EstadoSetupRespuesta respuesta1 = obtenerEstadoSetup.ejecutar();
+        assertTrue(respuesta1.configurado());
+
+        // Segunda llamada debe usar cache sin volver a consultar el repositorio
+        EstadoSetupRespuesta respuesta2 = obtenerEstadoSetup.ejecutar();
+        assertTrue(respuesta2.configurado());
+        org.mockito.Mockito.verify(usuarioRepository, org.mockito.Mockito.times(1)).count();
+    }
 }

@@ -9,6 +9,7 @@ import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoObtenerEs
 public class ObtenerEstadoSetupImpl implements CasoUsoObtenerEstadoSetup {
 
     private final UsuarioRepository usuarioRepository;
+    private volatile boolean configurado = false;
 
     public ObtenerEstadoSetupImpl(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
@@ -16,6 +17,13 @@ public class ObtenerEstadoSetupImpl implements CasoUsoObtenerEstadoSetup {
 
     @Override
     public EstadoSetupRespuesta ejecutar() {
-        return new EstadoSetupRespuesta(usuarioRepository.count() > 0);
+        if (configurado) {
+            return new EstadoSetupRespuesta(true);
+        }
+        boolean estaConfigurado = usuarioRepository.count() > 0;
+        if (estaConfigurado) {
+            this.configurado = true;
+        }
+        return new EstadoSetupRespuesta(estaConfigurado);
     }
 }

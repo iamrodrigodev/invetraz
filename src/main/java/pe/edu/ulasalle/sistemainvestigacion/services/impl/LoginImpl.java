@@ -58,9 +58,17 @@ public class LoginImpl implements CasoUsoLogin {
         long tDb = System.currentTimeMillis() - t0;
 
         if (usuarioOpt.isEmpty()) {
+            long tHash0 = System.currentTimeMillis();
             passwordEncoder.matches(peticion.password(), HASH_FICTICIO);
+            long dHash = System.currentTimeMillis() - tHash0;
             servicioLimitadorIntentos.registrarFallo(
                     claveRateLimit, 5, 60_000L, MensajesDeError.DEMASIADOS_INTENTOS_LOGIN);
+            log.warn(
+                    "Login fallido (usuario no encontrado): [{}] en {} ms (DB: {} ms, FicticioHash: {} ms)",
+                    emailNormalizado,
+                    System.currentTimeMillis() - tInicio,
+                    tDb,
+                    dHash);
             throw new ExcepcionDeNegocio(MensajesDeError.CREDENCIALES_INVALIDAS);
         }
 
@@ -68,8 +76,15 @@ public class LoginImpl implements CasoUsoLogin {
 
         long t1 = System.currentTimeMillis();
         if (!passwordEncoder.matches(peticion.password(), usuario.getPassword())) {
+            long dHash = System.currentTimeMillis() - t1;
             servicioLimitadorIntentos.registrarFallo(
                     claveRateLimit, 5, 60_000L, MensajesDeError.DEMASIADOS_INTENTOS_LOGIN);
+            log.warn(
+                    "Login fallido (password incorrecto): [{}] en {} ms (DB: {} ms, Hash: {} ms)",
+                    emailNormalizado,
+                    System.currentTimeMillis() - tInicio,
+                    tDb,
+                    dHash);
             throw new ExcepcionDeNegocio(MensajesDeError.CREDENCIALES_INVALIDAS);
         }
         long tHash = System.currentTimeMillis() - t1;

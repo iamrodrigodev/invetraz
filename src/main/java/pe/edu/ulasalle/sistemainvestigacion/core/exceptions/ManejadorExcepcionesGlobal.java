@@ -128,6 +128,20 @@ public class ManejadorExcepcionesGlobal {
                 .body(respuesta);
     }
 
+    @ExceptionHandler(org.springframework.web.HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ApiRespuesta<Void>> manejarTipoMedioNoSoportado(
+            org.springframework.web.HttpMediaTypeNotSupportedException excepcion,
+            HttpServletRequest solicitud) {
+        log.warn("Tipo de medio no soportado en {}: {}", solicitud.getRequestURI(), excepcion.getMessage());
+        ApiRespuesta<Void> respuesta =
+                ApiRespuesta.error(
+                        HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(),
+                        "Tipo de contenido no soportado. Se requiere application/json.",
+                        solicitud.getRequestURI(),
+                        null);
+        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(respuesta);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiRespuesta<Void>> manejarErrorInterno(
             Exception excepcion, HttpServletRequest solicitud) {

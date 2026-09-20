@@ -103,4 +103,34 @@ class VerificarAutenticacionImplTest {
         assertFalse(respuesta.autenticado());
         assertNull(respuesta.email());
     }
+
+    @Test
+    void ejecutar_usuarioNoEncontradoEnBd_retornaAutenticadoFalse() {
+        UUID idUsuario = UUID.randomUUID();
+        Authentication autenticacion = mock(Authentication.class);
+        when(autenticacion.isAuthenticated()).thenReturn(true);
+        when(autenticacion.getPrincipal()).thenReturn(idUsuario);
+        when(usuarioRepository.findById(idUsuario)).thenReturn(Optional.empty());
+
+        SecurityContextHolder.getContext().setAuthentication(autenticacion);
+
+        VerificarAutenticacionRespuesta respuesta = servicio.ejecutar();
+
+        assertFalse(respuesta.autenticado());
+        assertNull(respuesta.email());
+    }
+
+    @Test
+    void ejecutar_principalNoEsUuid_retornaAutenticadoFalse() {
+        Authentication autenticacion = mock(Authentication.class);
+        when(autenticacion.isAuthenticated()).thenReturn(true);
+        when(autenticacion.getPrincipal()).thenReturn("stringNoUuid");
+
+        SecurityContextHolder.getContext().setAuthentication(autenticacion);
+
+        VerificarAutenticacionRespuesta respuesta = servicio.ejecutar();
+
+        assertFalse(respuesta.autenticado());
+        assertNull(respuesta.email());
+    }
 }
