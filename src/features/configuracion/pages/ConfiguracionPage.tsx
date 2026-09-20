@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence } from "framer-motion";
-import { ExternalLink, Key, Loader2, RefreshCw, Save } from "lucide-react";
+import { ExternalLink, Key, RefreshCw, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -294,7 +294,7 @@ export function ConfiguracionPage() {
 										}
 									>
 										{isSubmitting ? (
-											<Loader2 size={16} className="mr-2 animate-spin" />
+											<RefreshCw size={16} className="mr-2 animate-spin" />
 										) : (
 											<Save size={16} className="mr-2" />
 										)}

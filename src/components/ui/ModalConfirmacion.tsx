@@ -1,4 +1,4 @@
-import { AlertCircle, Check, LogOut, X } from "lucide-react";
+import { AlertCircle, Check, LogOut, RefreshCw, X } from "lucide-react";
 import { Button } from "./Button";
 import { Modal } from "./Modal";
 
@@ -69,16 +69,25 @@ export function ModalConfirmacion({
 					type="button"
 					variant={varianteBoton === "destructivo" ? "destructive" : "default"}
 					onClick={alConfirmar}
-					isLoading={cargando}
+					disabled={cargando}
 					className="h-11 w-full rounded-xl font-semibold text-[15px] shadow-sm active:scale-98"
 					size="lg"
 				>
-					{varianteBoton === "destructivo" ? (
-						<LogOut size={18} className="mr-2" />
+					{cargando ? (
+						<>
+							<RefreshCw size={18} className="mr-2 animate-spin" />
+							Cargando...
+						</>
 					) : (
-						<Check size={18} className="mr-2" />
+						<>
+							{varianteBoton === "destructivo" ? (
+								<LogOut size={18} className="mr-2" />
+							) : (
+								<Check size={18} className="mr-2" />
+							)}
+							{textoConfirmar}
+						</>
 					)}
-					{textoConfirmar}
 				</Button>
 				<Button
 					type="button"

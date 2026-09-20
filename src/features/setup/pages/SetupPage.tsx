@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence } from "framer-motion";
-import { Eye, EyeOff, Microscope, UserPlus } from "lucide-react";
+import { Eye, EyeOff, Microscope, RefreshCw, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -162,13 +162,21 @@ export function SetupPage() {
 					</AnimatePresence>
 					<Button
 						type="submit"
-						disabled={!isValid}
-						isLoading={isSubmitting}
+						disabled={!isValid || isSubmitting}
 						className="w-full font-bold"
 						size="lg"
 					>
-						<UserPlus size={18} className="mr-2" />
-						Crear Administrador
+						{isSubmitting ? (
+							<>
+								<RefreshCw size={18} className="mr-2 animate-spin" />
+								Creando administrador...
+							</>
+						) : (
+							<>
+								<UserPlus size={18} className="mr-2" />
+								Crear Administrador
+							</>
+						)}
 					</Button>
 				</form>
 			</div>

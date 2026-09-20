@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence } from "framer-motion";
-import { Eye, EyeOff, LogIn, Microscope } from "lucide-react";
+import { Eye, EyeOff, LogIn, Microscope, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -126,13 +126,21 @@ export function LoginPage() {
 					</AnimatePresence>
 					<Button
 						type="submit"
-						disabled={!isValid}
-						isLoading={isSubmitting}
+						disabled={!isValid || isSubmitting}
 						className="w-full font-bold"
 						size="lg"
 					>
-						<LogIn size={18} className="mr-2" />
-						Ingresar
+						{isSubmitting ? (
+							<>
+								<RefreshCw size={18} className="mr-2 animate-spin" />
+								Ingresando...
+							</>
+						) : (
+							<>
+								<LogIn size={18} className="mr-2" />
+								Ingresar
+							</>
+						)}
 					</Button>
 				</form>
 			</div>

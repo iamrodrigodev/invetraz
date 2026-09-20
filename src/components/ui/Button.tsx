@@ -1,4 +1,4 @@
-import { Loader2 } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import type React from "react";
 import { forwardRef } from "react";
 import { cn } from "../../utils/cn";
@@ -68,7 +68,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 				{...props}
 			>
 				{isLoading && (
-					<Loader2
+					<RefreshCw
 						className="h-4 w-4 shrink-0 animate-spin"
 						aria-hidden="true"
 					/>

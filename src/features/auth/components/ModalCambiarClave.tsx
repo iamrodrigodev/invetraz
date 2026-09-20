@@ -5,6 +5,7 @@ import {
 	CheckCircle2,
 	Eye,
 	EyeOff,
+	RefreshCw,
 	Save,
 	ShieldCheck,
 	X,
@@ -182,10 +183,13 @@ export function ModalCambiarClave({
 						<Button
 							type="submit"
 							disabled={!formPaso1.formState.isValid || cargando}
-							isLoading={cargando}
 						>
-							<CheckCircle2 size={16} className="mr-1.5" />
-							Verificar
+							{cargando ? (
+								<RefreshCw size={16} className="mr-1.5 animate-spin" />
+							) : (
+								<CheckCircle2 size={16} className="mr-1.5" />
+							)}
+							{cargando ? "Verificando..." : "Verificar"}
 						</Button>
 					</div>
 				</form>
@@ -284,10 +288,13 @@ export function ModalCambiarClave({
 						<Button
 							type="submit"
 							disabled={!formPaso2.formState.isValid || cargando}
-							isLoading={cargando}
 						>
-							<Save size={16} className="mr-1.5" />
-							Actualizar contraseña
+							{cargando ? (
+								<RefreshCw size={16} className="mr-1.5 animate-spin" />
+							) : (
+								<Save size={16} className="mr-1.5" />
+							)}
+							{cargando ? "Actualizando..." : "Actualizar contraseña"}
 						</Button>
 					</div>
 				</form>
