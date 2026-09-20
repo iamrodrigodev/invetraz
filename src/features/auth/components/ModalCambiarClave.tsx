@@ -241,7 +241,10 @@ export function ModalCambiarClave({
 						<Button
 							variant="ghost"
 							type="button"
-							onClick={() => setPaso(1)}
+							onClick={() => {
+								limpiarError();
+								setPaso(1);
+							}}
 							disabled={cargando}
 						>
 							Atrás

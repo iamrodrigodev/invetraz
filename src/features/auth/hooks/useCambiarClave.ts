@@ -3,6 +3,7 @@ import type {
 	CambiarClavePaso1FormData,
 	CambiarClavePaso2FormData,
 } from "../../../schemas/auth.schemas";
+import { cambiarPassword, verificarPasswordActual } from "../api/auth.api";
 
 export type EstadoCambiarClave =
 	| { tipo: "inactivo" }
@@ -13,6 +14,7 @@ export type EstadoCambiarClave =
 
 export function useCambiarClave() {
 	const [paso, setPaso] = useState<1 | 2>(1);
+	const [claveActualVerificada, setClaveActualVerificada] = useState("");
 	const [estado, setEstado] = useState<EstadoCambiarClave>({
 		tipo: "inactivo",
 	});
@@ -29,35 +31,42 @@ export function useCambiarClave() {
 	};
 
 	const verificarPaso1 = async (
-		_data: CambiarClavePaso1FormData,
+		data: CambiarClavePaso1FormData,
 	): Promise<boolean> => {
 		setEstado({ tipo: "verificando" });
 		try {
-			await new Promise((resolve) => setTimeout(resolve, 800));
+			await verificarPasswordActual(data.claveActual);
+			setClaveActualVerificada(data.claveActual);
 			setPaso(2);
 			setEstado({ tipo: "inactivo" });
 			return true;
-		} catch (_error) {
+		} catch (error) {
 			setEstado({
 				tipo: "error",
-				mensaje: "La contraseña actual es incorrecta",
+				mensaje:
+					error instanceof Error
+						? error.message
+						: "La contraseña actual es incorrecta",
 			});
 			return false;
 		}
 	};
 
 	const actualizarClave = async (
-		_data: CambiarClavePaso2FormData,
+		data: CambiarClavePaso2FormData,
 	): Promise<boolean> => {
 		setEstado({ tipo: "actualizando" });
 		try {
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			await cambiarPassword(claveActualVerificada, data.nuevaClave);
 			setEstado({ tipo: "exito" });
 			return true;
-		} catch (_error) {
+		} catch (error) {
 			setEstado({
 				tipo: "error",
-				mensaje: "Hubo un error al actualizar la contraseña",
+				mensaje:
+					error instanceof Error
+						? error.message
+						: "Hubo un error al actualizar la contraseña",
 			});
 			return false;
 		}
@@ -65,6 +74,7 @@ export function useCambiarClave() {
 
 	const reiniciar = () => {
 		setPaso(1);
+		setClaveActualVerificada("");
 		setEstado({ tipo: "inactivo" });
 	};
 

@@ -59,3 +59,44 @@ export async function logout(): Promise<void> {
 		method: "POST",
 	});
 }
+
+export async function verificarPasswordActual(password: string): Promise<void> {
+	const res = await fetchSeguro(
+		`${entorno.VITE_API_BASE_URL}/auth/verificar-password`,
+		{
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ password }),
+		},
+	);
+
+	if (!res.ok) {
+		const msj = await extraerMensajeError(
+			res,
+			"La contraseña actual es incorrecta",
+		);
+		throw new Error(msj);
+	}
+}
+
+export async function cambiarPassword(
+	passwordActual: string,
+	passwordNueva: string,
+): Promise<void> {
+	const res = await fetchSeguro(
+		`${entorno.VITE_API_BASE_URL}/auth/cambiar-password`,
+		{
+			method: "PUT",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ passwordActual, passwordNueva }),
+		},
+	);
+
+	if (!res.ok) {
+		const msj = await extraerMensajeError(
+			res,
+			"Hubo un error al actualizar la contraseña",
+		);
+		throw new Error(msj);
+	}
+}
