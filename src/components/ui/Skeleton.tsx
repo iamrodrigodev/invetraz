@@ -98,19 +98,23 @@ export function DashboardSkeleton() {
 				</div>
 
 				<div className="border-t border-slate-200/80 p-3 py-4">
-					<Skeleton className="h-11 w-full rounded-lg" />
+					<div className="flex h-11 items-center gap-3 rounded-lg px-3">
+						<Skeleton className="h-5 w-5 shrink-0 rounded-md" />
+						<Skeleton className="h-4 w-28 rounded-md" />
+					</div>
 				</div>
 			</aside>
 
 			<div className="flex min-w-0 flex-1 flex-col overflow-hidden">
 				<header className="flex h-16 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-4 lg:px-8">
 					<Skeleton className="h-6 w-48 rounded-md" />
-					<div className="flex items-center gap-3">
-						<div className="hidden sm:flex flex-col items-end gap-1">
-							<Skeleton className="h-4 w-32 rounded-md" />
-							<Skeleton className="h-3 w-20 rounded-full" />
+					<div className="flex items-center gap-3 rounded-2xl p-1.5 pr-2.5">
+						<Skeleton className="h-9 w-9 shrink-0 rounded-full" />
+						<div className="hidden sm:flex flex-col items-start gap-1.5 text-left">
+							<Skeleton className="h-3.5 w-36 rounded-md md:w-44" />
+							<Skeleton className="h-4 w-24 rounded-full" />
 						</div>
-						<Skeleton className="h-9 w-9 rounded-full" />
+						<Skeleton className="h-4 w-4 shrink-0 rounded-md" />
 					</div>
 				</header>
 
