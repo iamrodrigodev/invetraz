@@ -47,3 +47,79 @@ export function PageSkeleton({ className }: PageSkeletonProps = {}) {
 		</motion.div>
 	);
 }
+
+export function AuthCardSkeleton() {
+	return (
+		<div className="flex min-h-screen w-full items-center justify-center bg-slate-50 p-4 font-sans">
+			<div className="w-full max-w-120 rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xs md:p-12">
+				<div className="mb-8 flex flex-col items-center text-center">
+					<Skeleton className="mb-4 h-14 w-14 rounded-2xl" />
+					<Skeleton className="mb-2 h-8 w-64 rounded-xl md:w-72" />
+					<Skeleton className="h-4 w-56 rounded-md md:w-64" />
+				</div>
+
+				<div className="space-y-6">
+					<div>
+						<Skeleton className="mb-2 h-4 w-32 rounded-md" />
+						<Skeleton className="h-10 w-full rounded-lg" />
+					</div>
+					<div>
+						<Skeleton className="mb-2 h-4 w-24 rounded-md" />
+						<Skeleton className="h-10 w-full rounded-lg" />
+					</div>
+					<Skeleton className="mt-2 h-11 w-full rounded-xl" />
+				</div>
+			</div>
+		</div>
+	);
+}
+
+export function DashboardSkeleton() {
+	return (
+		<div className="flex h-screen w-full overflow-hidden bg-slate-50 font-sans text-slate-800">
+			<aside className="hidden h-full w-72 flex-col border-r border-slate-200 bg-white lg:flex">
+				<div className="flex h-16 shrink-0 items-center border-b border-slate-200 px-6">
+					<div className="flex items-center gap-3">
+						<Skeleton className="h-6 w-6 rounded-lg" />
+						<Skeleton className="h-5 w-40 rounded-md" />
+					</div>
+				</div>
+
+				<div className="flex-1 space-y-2 p-3 pt-6">
+					{[1, 2, 3].map((i) => (
+						<div
+							key={i}
+							className="flex h-11 items-center gap-3 rounded-lg px-3"
+						>
+							<Skeleton className="h-5 w-5 rounded-md" />
+							<Skeleton className="h-4 w-32 rounded-md" />
+						</div>
+					))}
+				</div>
+
+				<div className="border-t border-slate-200/80 p-3 py-4">
+					<Skeleton className="h-11 w-full rounded-lg" />
+				</div>
+			</aside>
+
+			<div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+				<header className="flex h-16 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-4 lg:px-8">
+					<Skeleton className="h-6 w-48 rounded-md" />
+					<div className="flex items-center gap-3">
+						<div className="hidden sm:flex flex-col items-end gap-1">
+							<Skeleton className="h-4 w-32 rounded-md" />
+							<Skeleton className="h-3 w-20 rounded-full" />
+						</div>
+						<Skeleton className="h-9 w-9 rounded-full" />
+					</div>
+				</header>
+
+				<main className="flex flex-1 flex-col overflow-y-auto p-6">
+					<div className="flex h-full min-h-0 w-full flex-1 flex-col">
+						<PageSkeleton />
+					</div>
+				</main>
+			</div>
+		</div>
+	);
+}
