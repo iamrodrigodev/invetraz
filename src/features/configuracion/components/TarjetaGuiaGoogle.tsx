@@ -112,95 +112,92 @@ export const TarjetaGuiaGoogle: React.FC = () => {
 						>
 							OAuth 2.0 Playground <ExternalLink size={11} />
 						</a>{" "}
-						con tus credenciales. No te limites solo a cursos; en <em>Input your own scopes</em> puedes autorizar los permisos que requiera el sistema:
+						con tus credenciales. En <em>Input your own scopes</em> autoriza los permisos necesarios para la sincronización:
 					</p>
 
-					{/* Lista interactiva de scopes copiables */}
-					<div className="space-y-1.5 pt-1">
-						{SCOPES_DISPONIBLES.map((item) => {
-							const estaCopiado = copiadoId === item.id;
-							return (
-								<div
-									key={item.id}
-									onClick={() => copiarTexto(item.scope, item.id)}
-									onKeyDown={(e) => {
-										if (e.key === "Enter" || e.key === " ") {
-											e.preventDefault();
-											copiarTexto(item.scope, item.id);
-										}
-									}}
-									role="button"
-									tabIndex={0}
-									className={`group relative flex flex-col gap-0.5 rounded-lg border p-2 text-[11px] transition-all cursor-pointer select-none ${
-										estaCopiado
-											? "border-emerald-400 bg-emerald-50/80 text-emerald-950 shadow-xs"
-											: "border-slate-200 bg-white hover:border-primary/50 hover:bg-slate-50/90 text-slate-700"
-									}`}
-									title="Haz clic para copiar este scope"
-								>
-									<div className="flex items-center justify-between font-medium">
-										<span className="font-semibold text-slate-800">
-											{item.nombre}
-										</span>
-										<span className="flex items-center gap-1 text-[10px]">
+					{/* Contenedor compacto de scopes con diseño integrado y colores de la app */}
+					<div className="rounded-xl border border-slate-200/90 bg-white p-2.5 shadow-xs">
+						<div className="mb-1.5 flex items-center justify-between border-b border-slate-100 pb-1.5">
+							<span className="text-[11px] font-semibold text-slate-700">
+								Scopes de Classroom
+							</span>
+							<button
+								type="button"
+								onClick={() =>
+									copiarTexto(
+										SCOPES_DISPONIBLES.map((s) => s.scope).join(" "),
+										"todos",
+									)
+								}
+								className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-medium transition-all cursor-pointer ${
+									copiadoId === "todos"
+										? "bg-primary-50 text-primary font-semibold"
+										: "text-slate-600 hover:bg-slate-100 hover:text-primary active:scale-95"
+								}`}
+								title="Copiar todos los scopes separados por espacio"
+							>
+								{copiadoId === "todos" ? (
+									<>
+										<Check size={11} className="text-primary" />
+										<span>¡Copiados!</span>
+									</>
+								) : (
+									<>
+										<Copy size={11} className="text-slate-400" />
+										<span>Copiar todos</span>
+									</>
+								)}
+							</button>
+						</div>
+
+						<div className="space-y-1">
+							{SCOPES_DISPONIBLES.map((item) => {
+								const estaCopiado = copiadoId === item.id;
+								return (
+									<div
+										key={item.id}
+										onClick={() => copiarTexto(item.scope, item.id)}
+										onKeyDown={(e) => {
+											if (e.key === "Enter" || e.key === " ") {
+												e.preventDefault();
+												copiarTexto(item.scope, item.id);
+											}
+										}}
+										role="button"
+										tabIndex={0}
+										className={`group flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-[11px] transition-all cursor-pointer select-none ${
+											estaCopiado
+												? "bg-primary-50 text-primary font-medium"
+												: "hover:bg-slate-50 text-slate-600"
+										}`}
+										title={`Clic para copiar scope de ${item.nombre}`}
+									>
+										<div className="flex items-center gap-1.5 min-w-0">
+											<span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary/40 group-hover:bg-primary transition-colors" />
+											<span className="font-mono text-[10px] truncate text-slate-600 group-hover:text-slate-900">
+												{item.scope}
+											</span>
+										</div>
+										<span className="shrink-0 flex items-center gap-1 text-[10px]">
 											{estaCopiado ? (
 												<>
-													<Check size={12} className="text-emerald-600" />
-													<span className="font-semibold text-emerald-700">
-														¡Copiado!
-													</span>
+													<Check size={11} className="text-primary" />
+													<span className="font-semibold text-primary">Copiado</span>
 												</>
 											) : (
-												<>
-													<Copy
-														size={11}
-														className="text-slate-400 transition-colors group-hover:text-primary"
-													/>
-													<span className="text-slate-400 transition-colors group-hover:text-primary">
-														Copiar
-													</span>
-												</>
+												<Copy
+													size={10}
+													className="text-slate-300 transition-colors group-hover:text-primary"
+												/>
 											)}
 										</span>
 									</div>
-									<code className="break-all font-mono text-[10px] text-slate-500 group-hover:text-slate-800">
-										{item.scope}
-									</code>
-								</div>
-							);
-						})}
-					</div>
+								);
+							})}
+						</div>
 
-					{/* Botón para copiar todos los scopes juntos */}
-					<div className="pt-1">
-						<button
-							type="button"
-							onClick={() =>
-								copiarTexto(
-									SCOPES_DISPONIBLES.map((s) => s.scope).join(" "),
-									"todos",
-								)
-							}
-							className={`w-full inline-flex items-center justify-center gap-1.5 rounded-lg border py-1.5 px-2.5 text-[11px] font-medium transition-all cursor-pointer ${
-								copiadoId === "todos"
-									? "border-emerald-400 bg-emerald-50 text-emerald-800 font-semibold shadow-xs"
-									: "border-slate-200 bg-white text-slate-700 hover:border-primary/40 hover:bg-primary-50/30 hover:text-primary"
-							}`}
-						>
-							{copiadoId === "todos" ? (
-								<>
-									<Check size={13} className="text-emerald-600" />
-									<span>¡Todos los scopes copiados!</span>
-								</>
-							) : (
-								<>
-									<Copy size={12} />
-									<span>Copiar todos los scopes (separados por espacio)</span>
-								</>
-							)}
-						</button>
-						<p className="mt-1 text-[10px] text-slate-400 text-center">
-							Pégalos en OAuth 2.0 Playground para autorizar la integración completa.
+						<p className="mt-2 border-t border-slate-100 pt-2 text-[10px] text-slate-500 leading-normal">
+							No se limita solo a cursos: puedes agregar tareas (<code className="rounded bg-slate-100 px-1 py-0.5 text-[9px] text-slate-700">coursework</code>) o participantes (<code className="rounded bg-slate-100 px-1 py-0.5 text-[9px] text-slate-700">rosters</code>) según lo que requiera el sistema.
 						</p>
 					</div>
 				</div>
