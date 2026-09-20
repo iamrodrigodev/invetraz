@@ -4,6 +4,7 @@ import { VALIDATION_LIMITS } from "../../../constants/validations";
 export const ActualizarCredencialesPeticionSchema = z.object({
 	googleClientId: z
 		.string()
+		.trim()
 		.min(1, "El Client ID es obligatorio")
 		.max(
 			VALIDATION_LIMITS.MAX_GOOGLE_CLIENT_ID,
@@ -11,6 +12,7 @@ export const ActualizarCredencialesPeticionSchema = z.object({
 		),
 	googleClientSecret: z
 		.string()
+		.trim()
 		.min(1, "El Client Secret es obligatorio")
 		.max(
 			VALIDATION_LIMITS.MAX_GOOGLE_CLIENT_SECRET,
@@ -18,6 +20,7 @@ export const ActualizarCredencialesPeticionSchema = z.object({
 		),
 	googleRefreshToken: z
 		.string()
+		.trim()
 		.min(1, "El Refresh Token es obligatorio")
 		.max(
 			VALIDATION_LIMITS.MAX_GOOGLE_REFRESH_TOKEN,
@@ -27,4 +30,23 @@ export const ActualizarCredencialesPeticionSchema = z.object({
 
 export type ActualizarCredencialesPeticion = z.infer<
 	typeof ActualizarCredencialesPeticionSchema
+>;
+
+export const ConfiguracionRespuestaSchema = z.object({
+	googleClientId: z.string().optional().default(""),
+	googleClientSecret: z.string().optional().default(""),
+	googleRefreshToken: z.string().optional().default(""),
+});
+
+export type ConfiguracionRespuesta = z.infer<
+	typeof ConfiguracionRespuestaSchema
+>;
+
+export const ResultadoVerificacionSchema = z.object({
+	valido: z.boolean(),
+	mensaje: z.string(),
+});
+
+export type ResultadoVerificacion = z.infer<
+	typeof ResultadoVerificacionSchema
 >;

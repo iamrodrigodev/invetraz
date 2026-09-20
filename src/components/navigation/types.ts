@@ -1,7 +1,12 @@
 import type { LucideIcon } from "lucide-react";
 import { z } from "zod";
 
-export const ModuloIdSchema = z.enum(["actividades", "reportes", "plantillas"]);
+export const ModuloIdSchema = z.enum([
+	"actividades",
+	"reportes",
+	"plantillas",
+	"configuracion",
+]);
 
 export type ModuloId = z.infer<typeof ModuloIdSchema>;
 

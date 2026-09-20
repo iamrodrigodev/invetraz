@@ -1,4 +1,4 @@
-import { BarChart3, ClipboardCheck, LayoutTemplate } from "lucide-react";
+import { BarChart3, ClipboardCheck, LayoutTemplate, Settings } from "lucide-react";
 import type { ItemNavegacion } from "../components/navigation/types";
 
 export const ELEMENTOS_NAVEGACION: ItemNavegacion[] = [
@@ -22,5 +22,12 @@ export const ELEMENTOS_NAVEGACION: ItemNavegacion[] = [
 		etiquetaMenu: "Plantillas",
 		icono: LayoutTemplate,
 		descripcion: "Modelos y formatos de registro",
+	},
+	{
+		id: "configuracion",
+		titulo: "Configuración del Sistema",
+		etiquetaMenu: "Configuración",
+		icono: Settings,
+		descripcion: "Credenciales y parámetros de integración",
 	},
 ];

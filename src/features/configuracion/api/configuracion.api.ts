@@ -1,10 +1,34 @@
-﻿import { entorno } from "../../../config/entorno";
-import { extraerMensajeError, fetchSeguro } from "../../../utils/fetch";
-import type { ActualizarCredencialesPeticion } from "../types/ActualizarCredencialesPeticion";
+import { entorno } from "../../../config/entorno";
+import { crearApiRespuestaSchema } from "../../../schemas/api.schemas";
+import {
+	extraerMensajeError,
+	fetchSeguro,
+	parsearConEsquema,
+} from "../../../utils/fetch";
+import {
+	type ActualizarCredencialesPeticion,
+	type ConfiguracionRespuesta,
+	ConfiguracionRespuestaSchema,
+	type ResultadoVerificacion,
+	ResultadoVerificacionSchema,
+} from "../types/ActualizarCredencialesPeticion";
 
-function getAuthHeaders(): HeadersInit {
-	const token = localStorage.getItem("jwt");
-	return token ? { Authorization: `Bearer ${token}` } : {};
+export async function obtenerConfiguracion(): Promise<ConfiguracionRespuesta> {
+	const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/configuracion`, {
+		method: "GET",
+	});
+
+	if (!res.ok) {
+		const msj = await extraerMensajeError(
+			res,
+			"Error al obtener la configuración del sistema",
+		);
+		throw new Error(msj);
+	}
+
+	const wrapperSchema = crearApiRespuestaSchema(ConfiguracionRespuestaSchema);
+	const wrapper = await parsearConEsquema(res, wrapperSchema);
+	return wrapper.datos;
 }
 
 export async function actualizarConfiguracion(
@@ -14,7 +38,6 @@ export async function actualizarConfiguracion(
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
-			...getAuthHeaders(),
 		},
 		body: JSON.stringify(peticion),
 	});
@@ -26,4 +49,36 @@ export async function actualizarConfiguracion(
 		);
 		throw new Error(msj);
 	}
+}
+
+export async function verificarConfiguracion(
+	peticion?: ActualizarCredencialesPeticion,
+): Promise<ResultadoVerificacion> {
+	const init: RequestInit = {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+	};
+
+	if (peticion) {
+		init.body = JSON.stringify(peticion);
+	}
+
+	const res = await fetchSeguro(
+		`${entorno.VITE_API_BASE_URL}/configuracion/verificar`,
+		init,
+	);
+
+	if (!res.ok) {
+		const msj = await extraerMensajeError(
+			res,
+			"No se pudo verificar la conexión con Google Classroom",
+		);
+		throw new Error(msj);
+	}
+
+	const wrapperSchema = crearApiRespuestaSchema(ResultadoVerificacionSchema);
+	const wrapper = await parsearConEsquema(res, wrapperSchema);
+	return wrapper.datos;
 }
