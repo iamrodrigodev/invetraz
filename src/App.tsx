@@ -1,15 +1,11 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { ModuloId } from "./components/navigation/types";
-import { PageSkeleton } from "./components/ui";
 import { DashboardLayout } from "./layouts";
-
-const ActividadesSeguimientoPage = lazy(
-	() => import("./pages/ActividadesSeguimientoPage"),
-);
-const ReportesPage = lazy(() => import("./pages/ReportesPage"));
-const PlantillasSeguimientoPage = lazy(
-	() => import("./pages/PlantillasSeguimientoPage"),
-);
+import {
+	ActividadesSeguimientoPage,
+	PlantillasSeguimientoPage,
+	ReportesPage,
+} from "./pages";
 
 export default function App() {
 	const [moduloActivo, setModuloActivo] = useState<ModuloId>(() => {
@@ -26,11 +22,9 @@ export default function App() {
 			moduloActivo={moduloActivo}
 			alCambiarModulo={setModuloActivo}
 		>
-			<Suspense fallback={<PageSkeleton />}>
-				{moduloActivo === "actividades" && <ActividadesSeguimientoPage />}
-				{moduloActivo === "reportes" && <ReportesPage />}
-				{moduloActivo === "plantillas" && <PlantillasSeguimientoPage />}
-			</Suspense>
+			{moduloActivo === "actividades" && <ActividadesSeguimientoPage />}
+			{moduloActivo === "reportes" && <ReportesPage />}
+			{moduloActivo === "plantillas" && <PlantillasSeguimientoPage />}
 		</DashboardLayout>
 	);
 }
