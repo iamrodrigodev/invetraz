@@ -1,48 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ShieldCheck } from "lucide-react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Alert, Button, Input, Modal } from "../../../components/ui";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
-
-const Paso1Schema = z.object({
-	claveActual: z
-		.string()
-		.min(1, "Ingresa tu contraseña actual")
-		.max(
-			VALIDATION_LIMITS.MAX_PASSWORD,
-			`La contraseña no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres`,
-		),
-});
-
-const Paso2Schema = z
-	.object({
-		nuevaClave: z
-			.string()
-			.min(
-				VALIDATION_LIMITS.MIN_PASSWORD,
-				`La contraseña debe tener al menos ${VALIDATION_LIMITS.MIN_PASSWORD} caracteres`,
-			)
-			.max(
-				VALIDATION_LIMITS.MAX_PASSWORD,
-				`La contraseña no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres`,
-			),
-		confirmarClave: z
-			.string()
-			.min(1, "Confirma tu nueva contraseña")
-			.max(
-				VALIDATION_LIMITS.MAX_PASSWORD,
-				`La contraseña no puede exceder los ${VALIDATION_LIMITS.MAX_PASSWORD} caracteres`,
-			),
-	})
-	.refine((data) => data.nuevaClave === data.confirmarClave, {
-		message: "Las contraseñas no coinciden",
-		path: ["confirmarClave"],
-	});
-
-type Paso1Form = z.infer<typeof Paso1Schema>;
-type Paso2Form = z.infer<typeof Paso2Schema>;
+import {
+	type CambiarClavePaso1FormData,
+	CambiarClavePaso1Schema,
+	type CambiarClavePaso2FormData,
+	CambiarClavePaso2Schema,
+} from "../../../schemas/auth.schemas";
+import { useCambiarClave } from "../hooks/useCambiarClave";
 
 export interface ModalCambiarClaveProps {
 	abierto: boolean;
@@ -53,56 +20,49 @@ export function ModalCambiarClave({
 	abierto,
 	alCerrar,
 }: ModalCambiarClaveProps) {
-	const [paso, setPaso] = useState<1 | 2>(1);
-	const [cargando, setCargando] = useState(false);
-	const [errorApi, setErrorApi] = useState<string | null>(null);
-	const [exito, setExito] = useState(false);
+	const {
+		paso,
+		setPaso,
+		cargando,
+		exito,
+		errorApi,
+		limpiarError,
+		verificarPaso1,
+		actualizarClave,
+		reiniciar,
+	} = useCambiarClave();
 
-	const formPaso1 = useForm<Paso1Form>({
-		resolver: zodResolver(Paso1Schema),
+	const formPaso1 = useForm<CambiarClavePaso1FormData>({
+		resolver: zodResolver(CambiarClavePaso1Schema),
+		mode: "onChange",
 	});
 
-	const formPaso2 = useForm<Paso2Form>({
-		resolver: zodResolver(Paso2Schema),
+	const formPaso2 = useForm<CambiarClavePaso2FormData>({
+		resolver: zodResolver(CambiarClavePaso2Schema),
+		mode: "onChange",
 	});
 
 	const manejarCierre = () => {
 		alCerrar();
 		setTimeout(() => {
-			setPaso(1);
+			reiniciar();
 			formPaso1.reset();
 			formPaso2.reset();
-			setErrorApi(null);
-			setExito(false);
 		}, 300);
 	};
 
-	const onVerificarPaso1 = async (_data: Paso1Form) => {
-		setCargando(true);
-		setErrorApi(null);
-		try {
-			await new Promise((resolve) => setTimeout(resolve, 800));
-			setPaso(2);
-		} catch (_error) {
-			setErrorApi("La contraseña actual es incorrecta");
-		} finally {
-			setCargando(false);
-		}
+	const onVerificarPaso1 = async (data: CambiarClavePaso1FormData) => {
+		limpiarError();
+		await verificarPaso1(data);
 	};
 
-	const onActualizarClave = async (_data: Paso2Form) => {
-		setCargando(true);
-		setErrorApi(null);
-		try {
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-			setExito(true);
+	const onActualizarClave = async (data: CambiarClavePaso2FormData) => {
+		limpiarError();
+		const ok = await actualizarClave(data);
+		if (ok) {
 			setTimeout(() => {
 				manejarCierre();
 			}, 2000);
-		} catch (_error) {
-			setErrorApi("Hubo un error al actualizar la contraseña");
-		} finally {
-			setCargando(false);
 		}
 	};
 
@@ -135,11 +95,7 @@ export function ModalCambiarClave({
 					</p>
 
 					{errorApi && (
-						<Alert
-							variant="error"
-							message={errorApi}
-							onClose={() => setErrorApi(null)}
-						/>
+						<Alert variant="error" message={errorApi} onClose={limpiarError} />
 					)}
 
 					<div>
@@ -169,7 +125,11 @@ export function ModalCambiarClave({
 						>
 							Cancelar
 						</Button>
-						<Button type="submit" isLoading={cargando}>
+						<Button
+							type="submit"
+							disabled={!formPaso1.formState.isValid || cargando}
+							isLoading={cargando}
+						>
 							Verificar
 						</Button>
 					</div>
@@ -180,11 +140,7 @@ export function ModalCambiarClave({
 					className="space-y-5"
 				>
 					{errorApi && (
-						<Alert
-							variant="error"
-							message={errorApi}
-							onClose={() => setErrorApi(null)}
-						/>
+						<Alert variant="error" message={errorApi} onClose={limpiarError} />
 					)}
 
 					<div>
@@ -232,7 +188,11 @@ export function ModalCambiarClave({
 						>
 							Atrás
 						</Button>
-						<Button type="submit" isLoading={cargando}>
+						<Button
+							type="submit"
+							disabled={!formPaso2.formState.isValid || cargando}
+							isLoading={cargando}
+						>
 							Actualizar contraseña
 						</Button>
 					</div>

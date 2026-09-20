@@ -1,9 +1,10 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, KeyRound, LogOut, Menu, ShieldCheck } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ELEMENTOS_NAVEGACION } from "../../constants/navigation";
 import { ModalCambiarClave } from "../../features/auth/components/ModalCambiarClave";
+import { useClickOutside } from "../../hooks/useClickOutside";
 import { useAppStore } from "../../store/useAppStore";
 import { cn } from "../../utils/cn";
 import type { ModuloId } from "./types";
@@ -28,6 +29,12 @@ export function TopBar({
 	const [menuUsuarioAbierto, setMenuUsuarioAbierto] = useState(false);
 	const menuRef = useRef<HTMLDivElement>(null);
 
+	useClickOutside(
+		menuRef,
+		() => setMenuUsuarioAbierto(false),
+		menuUsuarioAbierto,
+	);
+
 	const elementoActual = ELEMENTOS_NAVEGACION.find(
 		(item) => item.id === moduloActivo,
 	);
@@ -40,16 +47,6 @@ export function TopBar({
 		await cerrarSesionStore();
 		navigate("/login", { replace: true });
 	};
-
-	useEffect(() => {
-		const manejarClicFuera = (event: MouseEvent) => {
-			if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-				setMenuUsuarioAbierto(false);
-			}
-		};
-		document.addEventListener("mousedown", manejarClicFuera);
-		return () => document.removeEventListener("mousedown", manejarClicFuera);
-	}, []);
 
 	return (
 		<>

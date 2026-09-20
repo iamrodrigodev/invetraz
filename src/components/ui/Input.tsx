@@ -1,5 +1,5 @@
 import type React from "react";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useId, useState } from "react";
 import { cn } from "../../utils/cn";
 
 export interface InputProps
@@ -13,6 +13,7 @@ export interface InputProps
 export const Input = forwardRef<HTMLInputElement, InputProps>(
 	(
 		{
+			id,
 			className,
 			error,
 			errorMessage,
@@ -27,6 +28,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 		},
 		ref,
 	) => {
+		const generatedId = useId();
+		const inputId = id || generatedId;
+		const errorId = `${inputId}-error`;
+
 		const [charCount, setCharCount] = useState<number>(() => {
 			if (typeof value === "string") return value.length;
 			if (typeof defaultValue === "string") return defaultValue.length;
@@ -54,7 +59,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 			<div className="w-full">
 				<div className="relative w-full">
 					<input
+						id={inputId}
 						type={type}
+						ref={ref}
+						maxLength={maxLength}
+						value={value}
+						defaultValue={defaultValue}
+						onChange={handleChange}
+						aria-invalid={hasError}
+						aria-describedby={hasError && errorMessage ? errorId : undefined}
 						className={cn(
 							"flex h-10 w-full appearance-none rounded-lg bg-white px-3.5 py-2 text-sm placeholder:text-slate-400 outline-none focus:outline-none border-0 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200",
 							hasError
@@ -63,11 +76,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 							rightElement ? "pr-10" : "",
 							className,
 						)}
-						ref={ref}
-						maxLength={maxLength}
-						value={value}
-						defaultValue={defaultValue}
-						onChange={handleChange}
 						{...props}
 					/>
 					{rightElement && (
@@ -80,7 +88,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 					<div className="mt-1.5 flex items-start justify-between gap-3 text-xs">
 						<div className="flex-1 min-w-0">
 							{errorMessage && (
-								<p className="font-medium text-red-600 leading-tight">
+								<p
+									id={errorId}
+									role="alert"
+									className="font-medium text-red-600 leading-tight"
+								>
 									{errorMessage}
 								</p>
 							)}

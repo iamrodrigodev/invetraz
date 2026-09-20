@@ -1,14 +1,16 @@
 import { entorno } from "../../../config/entorno";
 import {
-	extraerMensajeError,
-	fetchSeguro,
-	parsearJsonSeguro,
-} from "../../../utils/fetch";
-import type { LoginPeticion } from "../types/LoginPeticion";
-import {
+	crearApiRespuestaSchema,
 	type LoginRespuesta,
 	LoginRespuestaSchema,
-} from "../types/LoginRespuesta";
+	VerificarAutenticacionRespuestaSchema,
+} from "../../../schemas/api.schemas";
+import {
+	extraerMensajeError,
+	fetchSeguro,
+	parsearConEsquema,
+} from "../../../utils/fetch";
+import type { LoginPeticion } from "../types/LoginPeticion";
 
 export async function login(peticion: LoginPeticion): Promise<LoginRespuesta> {
 	const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/auth/login`, {
@@ -22,8 +24,9 @@ export async function login(peticion: LoginPeticion): Promise<LoginRespuesta> {
 		throw new Error(msj);
 	}
 
-	const wrapper = await parsearJsonSeguro<{ datos: unknown }>(res);
-	return LoginRespuestaSchema.parse(wrapper.datos);
+	const wrapperSchema = crearApiRespuestaSchema(LoginRespuestaSchema);
+	const wrapper = await parsearConEsquema(res, wrapperSchema);
+	return wrapper.datos;
 }
 
 export interface ResultadoAutenticacion {
@@ -37,10 +40,14 @@ export async function verificarAutenticacion(): Promise<ResultadoAutenticacion> 
 			method: "GET",
 		});
 		if (!res.ok) return { autenticado: false };
-		const wrapper = await res.json();
+
+		const wrapperSchema = crearApiRespuestaSchema(
+			VerificarAutenticacionRespuestaSchema,
+		);
+		const wrapper = await parsearConEsquema(res, wrapperSchema);
 		return {
-			autenticado: wrapper.datos?.autenticado === true,
-			email: wrapper.datos?.email || null,
+			autenticado: wrapper.datos.autenticado,
+			email: wrapper.datos.email ?? null,
 		};
 	} catch (_error) {
 		return { autenticado: false };

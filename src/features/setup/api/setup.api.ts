@@ -1,11 +1,14 @@
 import { entorno } from "../../../config/entorno";
 import {
+	crearApiRespuestaSchema,
+	EstadoSetupRespuestaSchema,
+} from "../../../schemas/api.schemas";
+import {
 	extraerMensajeError,
 	fetchSeguro,
-	parsearJsonSeguro,
+	parsearConEsquema,
 } from "../../../utils/fetch";
 import type { CrearAdminPeticion } from "../types/CrearAdminPeticion";
-import { EstadoSetupRespuestaSchema } from "../types/EstadoSetupRespuesta";
 
 export async function verificarEstadoSistema(): Promise<boolean> {
 	try {
@@ -16,14 +19,9 @@ export async function verificarEstadoSistema(): Promise<boolean> {
 			return true;
 		}
 
-		const wrapper = await parsearJsonSeguro<{ datos: unknown }>(res);
-		const parsed = EstadoSetupRespuestaSchema.safeParse(wrapper.datos);
-
-		if (parsed.success) {
-			return parsed.data.configurado;
-		}
-
-		return true;
+		const wrapperSchema = crearApiRespuestaSchema(EstadoSetupRespuestaSchema);
+		const wrapper = await parsearConEsquema(res, wrapperSchema);
+		return wrapper.datos.configurado;
 	} catch (_e) {
 		// Ante error de red o servidor apagado, asumir configurado (true) para ir al login
 		return true;

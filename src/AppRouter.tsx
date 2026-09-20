@@ -8,8 +8,12 @@ import { SetupPage } from "./features/setup/pages/SetupPage";
 import { useAppStore } from "./store/useAppStore";
 
 export function AppRouter() {
-	const { configurado, autenticado, estadoVerificado, verificarEstadoGlobal } =
-		useAppStore();
+	const configurado = useAppStore((state) => state.configurado);
+	const autenticado = useAppStore((state) => state.autenticado);
+	const estadoVerificado = useAppStore((state) => state.estadoVerificado);
+	const verificarEstadoGlobal = useAppStore(
+		(state) => state.verificarEstadoGlobal,
+	);
 
 	useEffect(() => {
 		verificarEstadoGlobal();

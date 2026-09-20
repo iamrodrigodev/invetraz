@@ -1,6 +1,9 @@
-﻿import type { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { z } from "zod";
 
-export type ModuloId = "actividades" | "reportes" | "plantillas";
+export const ModuloIdSchema = z.enum(["actividades", "reportes", "plantillas"]);
+
+export type ModuloId = z.infer<typeof ModuloIdSchema>;
 
 export interface ItemNavegacion {
 	id: ModuloId;

@@ -1,30 +1,27 @@
 import { useEffect, useState } from "react";
-import type { ModuloId } from "./components/navigation/types";
+import { REGISTRO_MODULOS } from "./components/navigation/modulosRegistry";
+import { type ModuloId, ModuloIdSchema } from "./components/navigation/types";
 import { DashboardLayout } from "./layouts";
-import {
-	ActividadesSeguimientoPage,
-	PlantillasSeguimientoPage,
-	ReportesPage,
-} from "./pages";
 
 export default function App() {
 	const [moduloActivo, setModuloActivo] = useState<ModuloId>(() => {
 		const guardado = localStorage.getItem("moduloActivo");
-		return (guardado as ModuloId) || "actividades";
+		return ModuloIdSchema.catch("actividades").parse(guardado);
 	});
 
 	useEffect(() => {
 		localStorage.setItem("moduloActivo", moduloActivo);
 	}, [moduloActivo]);
 
+	const ComponenteActivo =
+		REGISTRO_MODULOS[moduloActivo] ?? REGISTRO_MODULOS.actividades;
+
 	return (
 		<DashboardLayout
 			moduloActivo={moduloActivo}
 			alCambiarModulo={setModuloActivo}
 		>
-			{moduloActivo === "actividades" && <ActividadesSeguimientoPage />}
-			{moduloActivo === "reportes" && <ReportesPage />}
-			{moduloActivo === "plantillas" && <PlantillasSeguimientoPage />}
+			<ComponenteActivo />
 		</DashboardLayout>
 	);
 }
