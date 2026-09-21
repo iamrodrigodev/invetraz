@@ -93,10 +93,9 @@ export const TarjetaDocGoogleCloud: React.FC = () => {
 						<Button
 							type="button"
 							variant="default"
-							size="sm"
-							className="w-full sm:w-auto"
+							className="w-full sm:w-auto font-medium"
 						>
-							<ExternalLink size={14} className="mr-1.5" />
+							<ExternalLink size={16} className="mr-2" />
 							Ir a Google Cloud Console
 						</Button>
 					</a>

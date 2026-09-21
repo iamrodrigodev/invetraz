@@ -61,18 +61,17 @@ export const TarjetaDocOAuthPlayground: React.FC = () => {
 							<Button
 								type="button"
 								variant="default"
-								size="sm"
 								onClick={copiarTodosLosScopes}
-								className="w-full sm:w-auto"
+								className="w-full sm:w-auto font-medium"
 							>
 								{copiadoTodos ? (
 									<>
-										<Check size={13} className="mr-1.5" />
+										<Check size={16} className="mr-2" />
 										<span>¡Scopes copiados!</span>
 									</>
 								) : (
 									<>
-										<Copy size={13} className="mr-1.5" />
+										<Copy size={16} className="mr-2" />
 										<span>Copiar todos los scopes juntos</span>
 									</>
 								)}
@@ -105,10 +104,9 @@ export const TarjetaDocOAuthPlayground: React.FC = () => {
 						<Button
 							type="button"
 							variant="default"
-							size="sm"
-							className="w-full sm:w-auto"
+							className="w-full sm:w-auto font-medium"
 						>
-							<ExternalLink size={14} className="mr-1.5" />
+							<ExternalLink size={16} className="mr-2" />
 							Ir a OAuth 2.0 Playground
 						</Button>
 					</a>
