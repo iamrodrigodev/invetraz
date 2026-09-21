@@ -19,15 +19,7 @@ export function LoginPage() {
 	const [showPassword, setShowPassword] = useState(false);
 
 	useEffect(() => {
-		if (
-			typeof window !== "undefined" &&
-			sessionStorage.getItem("motivo_salida") === "sesion_expirada"
-		) {
-			sessionStorage.removeItem("motivo_salida");
-			setErrorApi(
-				"Tu sesión ha expirado por tiempo límite. Por favor, inicia sesión nuevamente.",
-			);
-		}
+		sessionStorage.removeItem("motivo_salida");
 	}, []);
 
 	const {
