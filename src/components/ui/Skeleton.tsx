@@ -22,19 +22,18 @@ export interface PageSkeletonProps {
 export function PageSkeleton({ className }: PageSkeletonProps = {}) {
 	return (
 		<div
-			className={cn(
-				"flex h-full min-h-[450px] w-full flex-1 flex-col items-center justify-center rounded-3xl border border-slate-200/60 bg-white p-8 text-center shadow-xs md:p-12",
-				className,
-			)}
+			className={cn("space-y-6 w-full", className)}
 			role="status"
 			aria-busy="true"
 			aria-label="Cargando contenido..."
 		>
-			<Skeleton className="mb-6 h-14 w-14 rounded-2xl" />
-			<Skeleton className="mb-3 h-8 w-64 rounded-xl md:w-80" />
-			<div className="flex w-full max-w-md flex-col items-center gap-2">
-				<Skeleton className="h-4 w-full rounded-lg" />
-				<Skeleton className="h-4 w-3/4 rounded-lg" />
+			<div>
+				<Skeleton className="h-8 w-72 rounded-lg" />
+				<Skeleton className="mt-2 h-4 w-96 rounded-md max-w-full" />
+			</div>
+			<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+				<Skeleton className="h-64 w-full rounded-2xl" />
+				<Skeleton className="h-64 w-full rounded-2xl" />
 			</div>
 		</div>
 	);
