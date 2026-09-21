@@ -8,7 +8,7 @@ import type React from "react";
 import { Badge, Button, Card, CardContent } from "../../../components/ui";
 import type { PlantillaXlsx } from "../types/plantillas.types";
 
-interface TarjetaPlantillaProps {
+export interface TarjetaPlantillaProps {
 	plantilla: PlantillaXlsx;
 }
 
@@ -43,16 +43,17 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 		plantilla.tipoMime === "application/vnd.google-apps.spreadsheet";
 
 	return (
-		<Card className="group relative flex flex-col justify-between border-slate-200/90 bg-white transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-500/50 hover:shadow-md">
+		<Card className="group relative flex flex-col justify-between border-slate-200/90 bg-white transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-300 hover:shadow-md h-full">
 			<CardContent className="p-5 flex flex-col justify-between h-full space-y-4">
 				<div className="space-y-3">
-					<div className="flex items-start justify-between gap-3">
-						<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 ring-1 ring-emerald-600/10">
-							<FileSpreadsheet size={22} className="stroke-[2.2]" />
-						</div>
+					<div className="flex items-center justify-between gap-3">
+						<FileSpreadsheet
+							size={26}
+							className="text-primary stroke-[2.2] shrink-0"
+						/>
 						<Badge
-							variant="success"
-							className="text-[11px] font-semibold uppercase tracking-wider"
+							variant="primary"
+							className="text-[10.5px] font-semibold uppercase tracking-wider"
 						>
 							{esGoogleSheet ? "Google Sheets" : "XLSX"}
 						</Badge>
@@ -60,7 +61,7 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 
 					<div>
 						<h3
-							className="font-semibold text-slate-900 text-sm leading-snug line-clamp-2 group-hover:text-emerald-700 transition-colors"
+							className="font-bold text-slate-900 text-sm leading-snug line-clamp-2 group-hover:text-primary transition-colors"
 							title={plantilla.nombre}
 						>
 							{plantilla.nombre}
@@ -68,17 +69,17 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 					</div>
 				</div>
 
-				<div className="space-y-3 pt-2 border-t border-slate-100 text-xs text-slate-500">
+				<div className="space-y-3 pt-3 border-t border-slate-100 text-xs text-slate-500">
 					<div className="flex items-center justify-between">
 						<span>Tamaño</span>
-						<span className="font-medium text-slate-700">
+						<span className="font-semibold text-slate-700">
 							{formatearTamano(plantilla.tamanoBytes)}
 						</span>
 					</div>
 
 					<div className="flex items-center justify-between gap-2">
-						<span className="inline-flex items-center gap-1">
-							<Calendar size={13} className="text-slate-400" />
+						<span className="inline-flex items-center gap-1.5">
+							<Calendar size={13} className="text-slate-400 shrink-0" />
 							Modificado
 						</span>
 						<span className="font-medium text-slate-700 text-[11px]">
@@ -96,9 +97,9 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 							>
 								<Button
 									type="button"
-									variant="outline"
+									variant="default"
 									size="sm"
-									className="w-full text-xs font-medium text-slate-700 hover:text-emerald-700 hover:border-emerald-300 active:scale-[0.98]"
+									className="w-full h-8 px-3 text-xs font-medium shadow-xs"
 								>
 									<ExternalLink size={13} className="mr-1.5" />
 									Abrir en Drive
@@ -116,9 +117,9 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 							>
 								<Button
 									type="button"
-									variant="ghost"
+									variant="outline"
 									size="sm"
-									className="px-2.5 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50"
+									className="h-8 px-2.5 text-slate-700 hover:text-primary hover:border-primary-300"
 								>
 									<Download size={14} />
 								</Button>

@@ -1,11 +1,11 @@
 import {
-	AlertCircle,
+	ChevronLeft,
+	ChevronRight,
 	ExternalLink,
 	FileSpreadsheet,
+	FolderCheck,
 	FolderGit2,
-	FolderOpen,
 	RefreshCw,
-	Search,
 	Settings,
 } from "lucide-react";
 import type React from "react";
@@ -17,12 +17,13 @@ import {
 	Button,
 	Card,
 	CardContent,
-	Input,
 	Skeleton,
 } from "../../../components/ui";
 import { obtenerPlantillas } from "../api/plantillas.api";
 import { TarjetaPlantilla } from "../components/TarjetaPlantilla";
 import type { CarpetaPlantillasRespuesta } from "../types/plantillas.types";
+
+const ITEMS_POR_PAGINA = 9;
 
 const IDS_ESQUELETO = [
 	"esq-1",
@@ -33,6 +34,7 @@ const IDS_ESQUELETO = [
 	"esq-6",
 	"esq-7",
 	"esq-8",
+	"esq-9",
 ];
 
 export const PlantillasSeguimientoPage: React.FC = () => {
@@ -40,7 +42,7 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 	const [datos, setDatos] = useState<CarpetaPlantillasRespuesta | null>(null);
 	const [cargando, setCargando] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
-	const [busqueda, setBusqueda] = useState<string>("");
+	const [paginaActual, setPaginaActual] = useState<number>(1);
 
 	const cargar = useCallback(async () => {
 		setCargando(true);
@@ -48,6 +50,7 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 		try {
 			const res = await obtenerPlantillas();
 			setDatos(res);
+			setPaginaActual(1);
 		} catch (err) {
 			setError(
 				err instanceof Error
@@ -63,17 +66,28 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 		cargar();
 	}, [cargar]);
 
-	const plantillasFiltradas = useMemo(() => {
+	const totalPlantillas = datos?.plantillas?.length ?? 0;
+	const totalPaginas = Math.max(
+		1,
+		Math.ceil(totalPlantillas / ITEMS_POR_PAGINA),
+	);
+
+	useEffect(() => {
+		if (paginaActual > totalPaginas) {
+			setPaginaActual(1);
+		}
+	}, [paginaActual, totalPaginas]);
+
+	const indiceInicio = (paginaActual - 1) * ITEMS_POR_PAGINA;
+	const indiceFin = indiceInicio + ITEMS_POR_PAGINA;
+
+	const plantillasPaginadas = useMemo(() => {
 		if (!datos?.plantillas) return [];
-		const termino = busqueda.trim().toLowerCase();
-		if (!termino) return datos.plantillas;
-		return datos.plantillas.filter((p) =>
-			p.nombre.toLowerCase().includes(termino),
-		);
-	}, [datos?.plantillas, busqueda]);
+		return datos.plantillas.slice(indiceInicio, indiceFin);
+	}, [datos?.plantillas, indiceInicio, indiceFin]);
 
 	return (
-		<div className="space-y-6 pb-12">
+		<div className="space-y-6 pb-12 w-full">
 			<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 				<div>
 					<h1 className="font-extrabold font-heading text-2xl text-slate-900 tracking-tight sm:text-3xl">
@@ -94,11 +108,11 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 						>
 							<Button
 								type="button"
-								variant="outline"
+								variant="default"
 								size="sm"
-								className="text-xs font-medium text-slate-700 hover:text-emerald-700"
+								className="h-9 px-3 text-xs font-medium shadow-xs"
 							>
-								<ExternalLink size={14} className="mr-1.5" />
+								<ExternalLink size={13} className="mr-1.5" />
 								Abrir carpeta en Drive
 							</Button>
 						</a>
@@ -109,11 +123,11 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 						size="sm"
 						onClick={cargar}
 						disabled={cargando}
-						className="text-xs font-medium text-slate-700"
+						className="h-9 text-xs font-medium text-slate-700"
 						title="Sincronizar plantillas con Google Drive"
 					>
 						<RefreshCw
-							size={14}
+							size={13}
 							className={`mr-1.5 ${cargando ? "animate-spin text-primary" : ""}`}
 						/>
 						{cargando ? "Sincronizando..." : "Sincronizar"}
@@ -131,21 +145,21 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 			)}
 
 			{cargando && (
-				<div className="space-y-4">
+				<div className="space-y-6">
 					<Card className="border-slate-200/80 bg-white p-4">
 						<div className="flex items-center justify-between">
 							<Skeleton className="h-6 w-48" />
 							<Skeleton className="h-6 w-24" />
 						</div>
 					</Card>
-					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+					<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
 						{IDS_ESQUELETO.map((id) => (
 							<Card
 								key={id}
 								className="border-slate-200/80 bg-white p-5 space-y-4"
 							>
 								<div className="flex justify-between items-center">
-									<Skeleton className="h-10 w-10 rounded-lg" />
+									<Skeleton className="h-8 w-8 rounded-md" />
 									<Skeleton className="h-5 w-16" />
 								</div>
 								<Skeleton className="h-5 w-full" />
@@ -160,7 +174,7 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 			{!cargando && !datos?.carpetaConfigurada && (
 				<Card className="border-dashed border-2 border-slate-300 bg-slate-50/50 py-12 text-center">
 					<CardContent className="flex flex-col items-center justify-center space-y-4 max-w-md mx-auto">
-						<div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-100 text-amber-600 shadow-inner">
+						<div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary">
 							<FolderGit2 size={28} />
 						</div>
 						<div className="space-y-1">
@@ -187,90 +201,128 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 			)}
 
 			{!cargando && datos?.carpetaConfigurada && (
-				<div className="space-y-4">
+				<div className="space-y-6">
 					<Card className="border-slate-200/90 bg-white shadow-xs">
-						<CardContent className="p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+						<CardContent className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
 							<div className="flex items-center gap-3">
-								<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-									<FolderOpen size={20} />
-								</div>
+								<FolderCheck
+									size={24}
+									className="text-primary stroke-[2.2] shrink-0"
+								/>
 								<div>
-									<div className="flex items-center gap-2">
-										<span className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+									<div className="flex items-center gap-2 flex-wrap">
+										<span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
 											Carpeta vinculada:
 										</span>
-										<Badge variant="slate" className="font-bold">
+										<Badge variant="primary" className="font-semibold text-xs">
 											{datos.carpetaNombre || "Carpeta de Google Drive"}
 										</Badge>
 									</div>
-									<p className="text-xs text-slate-500 mt-0.5">
-										{datos.plantillas.length}{" "}
-										{datos.plantillas.length === 1
-											? "plantilla encontrada"
-											: "plantillas encontradas"}
+									<p className="text-xs text-slate-600 mt-1">
+										{totalPlantillas}{" "}
+										{totalPlantillas === 1
+											? "plantilla disponible"
+											: "plantillas disponibles"}{" "}
+										en Google Drive
 									</p>
-								</div>
-							</div>
-
-							<div className="w-full sm:w-72">
-								<div className="relative">
-									<Search
-										size={15}
-										className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-									/>
-									<Input
-										type="text"
-										value={busqueda}
-										onChange={(e) => setBusqueda(e.target.value)}
-										placeholder="Buscar plantilla..."
-										className="pl-9 text-xs h-9"
-									/>
 								</div>
 							</div>
 						</CardContent>
 					</Card>
 
-					{plantillasFiltradas.length === 0 ? (
+					{totalPlantillas === 0 ? (
 						<Card className="border-dashed border-2 border-slate-200 bg-slate-50/50 py-12 text-center">
 							<CardContent className="flex flex-col items-center justify-center space-y-3 max-w-sm mx-auto">
-								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-400">
-									{busqueda ? (
-										<AlertCircle size={24} />
-									) : (
-										<FileSpreadsheet size={24} />
-									)}
-								</div>
+								<FileSpreadsheet size={28} className="text-primary" />
 								<div className="space-y-1">
 									<h4 className="font-semibold text-slate-800 text-sm">
-										{busqueda
-											? "Sin coincidencias"
-											: "No hay archivos en la carpeta"}
+										No hay archivos en la carpeta
 									</h4>
 									<p className="text-xs text-slate-500">
-										{busqueda
-											? `No encontramos ninguna plantilla con el término "${busqueda}".`
-											: "No se encontraron archivos de hojas de cálculo (.xlsx) en la carpeta de Drive vinculada."}
+										No se encontraron archivos de hojas de cálculo (.xlsx) en la
+										carpeta de Drive vinculada.
 									</p>
 								</div>
-								{busqueda && (
-									<Button
-										type="button"
-										variant="outline"
-										size="sm"
-										onClick={() => setBusqueda("")}
-										className="text-xs mt-1"
-									>
-										Limpiar filtro
-									</Button>
-								)}
 							</CardContent>
 						</Card>
 					) : (
-						<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-							{plantillasFiltradas.map((plantilla) => (
-								<TarjetaPlantilla key={plantilla.id} plantilla={plantilla} />
-							))}
-						</div>
+						<>
+							<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+								{plantillasPaginadas.map((plantilla) => (
+									<TarjetaPlantilla key={plantilla.id} plantilla={plantilla} />
+								))}
+							</div>
+
+							<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-slate-200/80">
+								<p className="text-xs text-slate-600">
+									Mostrando{" "}
+									<span className="font-semibold text-slate-900">
+										{indiceInicio + 1}
+									</span>{" "}
+									a{" "}
+									<span className="font-semibold text-slate-900">
+										{Math.min(indiceFin, totalPlantillas)}
+									</span>{" "}
+									de{" "}
+									<span className="font-semibold text-slate-900">
+										{totalPlantillas}
+									</span>{" "}
+									{totalPlantillas === 1 ? "plantilla" : "plantillas"}
+								</p>
+
+								{totalPaginas > 1 && (
+									<div className="flex items-center gap-1.5 self-center sm:self-auto">
+										<Button
+											type="button"
+											variant="outline"
+											size="sm"
+											onClick={() =>
+												setPaginaActual((prev) => Math.max(1, prev - 1))
+											}
+											disabled={paginaActual === 1}
+											className="h-8 px-2.5 text-xs font-medium"
+										>
+											<ChevronLeft size={14} className="mr-1" />
+											Anterior
+										</Button>
+
+										<div className="flex items-center gap-1">
+											{Array.from(
+												{ length: totalPaginas },
+												(_, i) => i + 1,
+											).map((num) => (
+												<Button
+													key={num}
+													type="button"
+													variant={paginaActual === num ? "default" : "outline"}
+													size="sm"
+													onClick={() => setPaginaActual(num)}
+													className="h-8 w-8 p-0 text-xs font-medium"
+												>
+													{num}
+												</Button>
+											))}
+										</div>
+
+										<Button
+											type="button"
+											variant="outline"
+											size="sm"
+											onClick={() =>
+												setPaginaActual((prev) =>
+													Math.min(totalPaginas, prev + 1),
+												)
+											}
+											disabled={paginaActual === totalPaginas}
+											className="h-8 px-2.5 text-xs font-medium"
+										>
+											Siguiente
+											<ChevronRight size={14} className="ml-1" />
+										</Button>
+									</div>
+								)}
+							</div>
+						</>
 					)}
 				</div>
 			)}

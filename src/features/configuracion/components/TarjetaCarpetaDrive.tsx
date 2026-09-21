@@ -133,9 +133,7 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 	const cabeceraVinculada = carpetaId ? (
 		<div className="rounded-xl border border-primary-200/80 bg-gradient-to-r from-primary-50/70 via-primary-50/40 to-blue-50/30 p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3.5 transition-all">
 			<div className="flex items-center gap-3 min-w-0">
-				<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-primary border border-primary-100 shadow-xs">
-					<FolderCheck size={20} className="text-primary stroke-[2.2]" />
-				</div>
+				<FolderCheck size={24} className="text-primary stroke-[2.2] shrink-0" />
 				<div className="space-y-1 min-w-0">
 					<div className="flex items-center gap-2 flex-wrap">
 						<span className="text-sm font-bold text-slate-900 truncate">
@@ -148,9 +146,9 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 							Carpeta vinculada
 						</Badge>
 					</div>
-					<div className="flex items-center gap-1.5 text-xs text-slate-600">
-						<span className="font-medium text-slate-500">ID:</span>
-						<code className="font-mono text-xs bg-white/90 border border-primary-100/90 text-slate-700 px-1.5 py-0.5 rounded select-all break-all">
+					<div className="flex items-center gap-1.5 text-xs">
+						<span className="font-semibold text-slate-700">ID:</span>
+						<code className="font-mono text-xs font-semibold text-slate-800 select-all break-all">
 							{carpetaId}
 						</code>
 					</div>
