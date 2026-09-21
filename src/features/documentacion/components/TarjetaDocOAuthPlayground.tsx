@@ -61,7 +61,7 @@ export const TarjetaDocOAuthPlayground: React.FC = () => {
 						<div className="pt-1">
 							<Button
 								type="button"
-								variant="default"
+								variant="outline"
 								onClick={copiarTodosLosScopes}
 								className="w-full sm:w-auto font-medium"
 							>

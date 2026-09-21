@@ -85,7 +85,7 @@ export const TarjetaDocClassroom: React.FC = () => {
 										</span>
 										<Button
 											type="button"
-											variant="default"
+											variant="outline"
 											size="sm"
 											onClick={() => copiarScope(item.scope, item.id)}
 											className="h-6 px-2 text-[11px] shrink-0"

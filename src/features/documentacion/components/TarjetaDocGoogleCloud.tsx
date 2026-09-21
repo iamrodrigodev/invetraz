@@ -67,7 +67,7 @@ export const TarjetaDocGoogleCloud: React.FC = () => {
 							</code>
 							<Button
 								type="button"
-								variant="default"
+								variant="outline"
 								size="sm"
 								onClick={copiarUri}
 								className="shrink-0"

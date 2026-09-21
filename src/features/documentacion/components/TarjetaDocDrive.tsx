@@ -61,7 +61,7 @@ export const TarjetaDocDrive: React.FC = () => {
 							</code>
 							<Button
 								type="button"
-								variant="default"
+								variant="outline"
 								size="sm"
 								onClick={copiarScope}
 								className="h-6 px-2 text-[11px] shrink-0"
