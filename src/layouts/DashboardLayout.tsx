@@ -32,7 +32,7 @@ export function DashboardLayout({
 	}, [estaColapsado]);
 
 	const manejarSeleccion = (id: ModuloId) => {
-		alCambiarModulo(id);
+		if (id !== moduloActivo) alCambiarModulo(id);
 		setMenuLateralAbierto(false);
 	};
 
@@ -60,7 +60,7 @@ export function DashboardLayout({
 
 			<div
 				className={cn(
-					"fixed inset-y-0 left-0 z-30 w-72 transform transition-all duration-300 ease-in-out lg:static lg:inset-0 lg:translate-x-0",
+					"fixed inset-y-0 left-0 z-30 w-72 transform transition-[width,transform] duration-300 ease-in-out lg:static lg:inset-0 lg:translate-x-0",
 					menuLateralAbierto ? "translate-x-0" : "-translate-x-full",
 					estaColapsado ? "lg:w-20" : "lg:w-72",
 				)}

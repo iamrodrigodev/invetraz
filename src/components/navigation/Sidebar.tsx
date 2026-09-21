@@ -38,8 +38,7 @@ export function Sidebar({
 	return (
 		<aside
 			className={cn(
-				"relative flex h-full flex-col border-r border-slate-200 bg-white text-slate-600 select-none",
-				estaColapsado ? "w-20" : "w-72",
+				"relative flex h-full w-full flex-col border-r border-slate-200 bg-white text-slate-600 select-none",
 				className,
 			)}
 		>

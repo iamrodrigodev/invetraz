@@ -19,7 +19,7 @@ export function Logo({ estaColapsado = false, className }: LogoProps) {
 			</div>
 			<div
 				className={cn(
-					"flex items-center whitespace-nowrap transition-all duration-300 ease-in-out font-heading overflow-hidden",
+					"flex items-center whitespace-nowrap transition-[margin,max-width,opacity] duration-300 ease-in-out font-heading overflow-hidden",
 					estaColapsado
 						? "ml-0 max-w-0 opacity-0"
 						: "ml-1.5 max-w-xs opacity-100",

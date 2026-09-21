@@ -30,7 +30,7 @@ export function SidebarItem({
 					"flex h-11 w-full items-center rounded-xl font-medium text-[15px] transition-colors duration-150 ease-in-out cursor-pointer overflow-hidden",
 					esActivo
 						? "bg-primary text-white shadow-xs"
-						: "text-slate-800 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200/80",
+						: "text-slate-800 hover:bg-slate-100 hover:text-slate-900",
 				)}
 			>
 				<div className="flex h-11 w-11 shrink-0 items-center justify-center">
@@ -46,7 +46,7 @@ export function SidebarItem({
 				</div>
 				<span
 					className={cn(
-						"overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out text-left",
+						"overflow-hidden whitespace-nowrap transition-[margin,max-width,opacity] duration-300 ease-in-out text-left",
 						estaColapsado
 							? "ml-0 max-w-0 opacity-0"
 							: "ml-1.5 max-w-45 opacity-100",

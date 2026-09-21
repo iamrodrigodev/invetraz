@@ -18,7 +18,7 @@ export function BotonCerrarSesion({
 				type="button"
 				onClick={alHacerClic}
 				aria-label="Cerrar Sesión"
-				className="flex h-11 w-full items-center rounded-xl font-medium text-[15px] bg-white text-red-600 transition-colors duration-150 ease-in-out hover:bg-red-50 hover:text-red-700 active:bg-red-100/70 active:scale-98 cursor-pointer overflow-hidden"
+				className="flex h-11 w-full items-center rounded-xl font-medium text-[15px] bg-white text-red-600 transition-colors duration-150 ease-in-out hover:bg-red-50 hover:text-red-700 cursor-pointer overflow-hidden"
 			>
 				<div className="flex h-11 w-11 shrink-0 items-center justify-center">
 					<LogOut
@@ -28,7 +28,7 @@ export function BotonCerrarSesion({
 				</div>
 				<span
 					className={cn(
-						"overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out text-left",
+						"overflow-hidden whitespace-nowrap transition-[margin,max-width,opacity] duration-300 ease-in-out text-left",
 						estaColapsado
 							? "ml-0 max-w-0 opacity-0"
 							: "ml-1.5 max-w-45 opacity-100",
