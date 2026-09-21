@@ -64,7 +64,11 @@ export function LoginPage() {
 					</p>
 				</div>
 
-				<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					autoComplete="off"
+					className="space-y-6"
+				>
 					<div>
 						<label
 							htmlFor="email"
@@ -77,7 +81,9 @@ export function LoginPage() {
 							type="email"
 							placeholder="admin@ulasalle.edu.pe"
 							maxLength={VALIDATION_LIMITS.MAX_EMAIL}
-							autoComplete="email"
+							autoComplete="off"
+							data-lpignore="true"
+							data-1p-ignore="true"
 							errorMessage={errors.email?.message}
 							{...register("email")}
 						/>
@@ -95,7 +101,9 @@ export function LoginPage() {
 							type={showPassword ? "text" : "password"}
 							placeholder="Ingresa tu contraseña"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
-							autoComplete="current-password"
+							autoComplete="off"
+							data-lpignore="true"
+							data-1p-ignore="true"
 							errorMessage={errors.password?.message}
 							{...register("password")}
 							rightElement={
