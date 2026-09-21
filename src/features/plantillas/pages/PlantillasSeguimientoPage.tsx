@@ -17,25 +17,13 @@ import {
 	Button,
 	Card,
 	CardContent,
-	Skeleton,
+	PlantillasSkeleton,
 } from "../../../components/ui";
 import { obtenerPlantillas } from "../api/plantillas.api";
 import { TarjetaPlantilla } from "../components/TarjetaPlantilla";
 import type { CarpetaPlantillasRespuesta } from "../types/plantillas.types";
 
-const ITEMS_POR_PAGINA = 9;
-
-const IDS_ESQUELETO = [
-	"esq-1",
-	"esq-2",
-	"esq-3",
-	"esq-4",
-	"esq-5",
-	"esq-6",
-	"esq-7",
-	"esq-8",
-	"esq-9",
-];
+const ITEMS_POR_PAGINA = 12;
 
 export const PlantillasSeguimientoPage: React.FC = () => {
 	const navigate = useNavigate();
@@ -100,20 +88,20 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 						</p>
 					</div>
 
-					<div className="flex items-center gap-2">
+					<div className="flex flex-wrap items-center gap-3">
 						{datos?.carpetaConfigurada && datos.carpetaId && (
 							<a
 								href={`https://drive.google.com/drive/folders/${datos.carpetaId}`}
 								target="_blank"
 								rel="noreferrer"
+								className="w-full sm:w-auto"
 							>
 								<Button
 									type="button"
 									variant="default"
-									size="sm"
-									className="h-9 px-3 text-xs font-medium shadow-xs"
+									className="w-full sm:w-auto shadow-xs"
 								>
-									<ExternalLink size={13} className="mr-1.5" />
+									<ExternalLink size={16} className="mr-2" />
 									Abrir carpeta en Drive
 								</Button>
 							</a>
@@ -121,15 +109,14 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 						<Button
 							type="button"
 							variant="outline"
-							size="sm"
 							onClick={cargar}
 							disabled={cargando}
-							className="h-9 text-xs font-medium text-slate-700"
+							className="w-full sm:w-auto text-slate-700"
 							title="Sincronizar plantillas con Google Drive"
 						>
 							<RefreshCw
-								size={13}
-								className={`mr-1.5 ${cargando ? "animate-spin text-primary" : ""}`}
+								size={16}
+								className={`mr-2 ${cargando ? "animate-spin text-primary" : ""}`}
 							/>
 							{cargando ? "Sincronizando..." : "Sincronizar"}
 						</Button>
@@ -145,35 +132,10 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 					/>
 				)}
 
-				{cargando && (
-					<div className="space-y-6">
-						<Card className="border-slate-200/80 bg-white p-4 max-w-5xl">
-							<div className="flex items-center justify-between">
-								<Skeleton className="h-6 w-48" />
-								<Skeleton className="h-6 w-24" />
-							</div>
-						</Card>
-						<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl">
-							{IDS_ESQUELETO.map((id) => (
-								<Card
-									key={id}
-									className="border-slate-200/80 bg-white p-5 space-y-4"
-								>
-									<div className="flex justify-between items-center">
-										<Skeleton className="h-8 w-8 rounded-md" />
-										<Skeleton className="h-5 w-16" />
-									</div>
-									<Skeleton className="h-5 w-full" />
-									<Skeleton className="h-4 w-3/4" />
-									<Skeleton className="h-8 w-full rounded-md" />
-								</Card>
-							))}
-						</div>
-					</div>
-				)}
+				{cargando && <PlantillasSkeleton />}
 
 				{!cargando && !datos?.carpetaConfigurada && (
-					<Card className="border-dashed border-2 border-slate-300 bg-slate-50/50 py-12 text-center">
+					<Card className="border-dashed border-2 border-slate-300 bg-slate-50/50 py-12 text-center w-full">
 						<CardContent className="flex flex-col items-center justify-center space-y-4 max-w-md mx-auto">
 							<div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary">
 								<FolderGit2 size={28} />
@@ -203,23 +165,26 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 
 				{!cargando && datos?.carpetaConfigurada && (
 					<div className="space-y-6">
-						<Card className="border-slate-200/90 bg-white shadow-xs max-w-5xl">
+						<Card className="border-slate-200/90 bg-white shadow-xs w-full">
 							<CardContent className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-								<div className="flex items-center gap-3">
+								<div className="flex items-center gap-3 min-w-0">
 									<FolderCheck
 										size={24}
 										className="text-primary stroke-[2.2] shrink-0"
 									/>
-									<div>
+									<div className="min-w-0">
 										<div className="flex items-center gap-2 flex-wrap">
-											<span className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+											<span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
 												Carpeta vinculada:
 											</span>
-											<Badge variant="primary" className="font-medium text-xs">
+											<Badge
+												variant="primary"
+												className="font-semibold text-xs py-0.5 px-2.5"
+											>
 												{datos.carpetaNombre || "Carpeta de Google Drive"}
 											</Badge>
 										</div>
-										<p className="text-xs text-slate-600 mt-1">
+										<p className="text-xs text-slate-600 mt-0.5">
 											{totalPlantillas}{" "}
 											{totalPlantillas === 1
 												? "plantilla disponible"
@@ -228,11 +193,21 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 										</p>
 									</div>
 								</div>
+								{datos.carpetaId && (
+									<div className="flex items-center gap-2 text-xs text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200/60 self-start sm:self-auto shrink-0">
+										<span className="font-medium text-slate-400">
+											ID Carpeta:
+										</span>
+										<code className="font-mono text-xs text-slate-700 select-all">
+											{datos.carpetaId}
+										</code>
+									</div>
+								)}
 							</CardContent>
 						</Card>
 
 						{totalPlantillas === 0 ? (
-							<Card className="border-dashed border-2 border-slate-200 bg-slate-50/50 py-12 text-center max-w-5xl">
+							<Card className="border-dashed border-2 border-slate-200 bg-slate-50/50 py-12 text-center w-full">
 								<CardContent className="flex flex-col items-center justify-center space-y-3 max-w-sm mx-auto">
 									<FileSpreadsheet size={28} className="text-primary" />
 									<div className="space-y-1">
@@ -247,7 +222,7 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 								</CardContent>
 							</Card>
 						) : (
-							<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl">
+							<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full">
 								{plantillasPaginadas.map((plantilla) => (
 									<TarjetaPlantilla key={plantilla.id} plantilla={plantilla} />
 								))}
@@ -258,7 +233,7 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 			</div>
 
 			{!cargando && datos?.carpetaConfigurada && totalPlantillas > 0 && (
-				<div className="mt-auto pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 max-w-5xl">
+				<div className="mt-auto pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full">
 					<p className="text-xs text-slate-600">
 						Mostrando{" "}
 						<span className="font-semibold text-slate-900">
