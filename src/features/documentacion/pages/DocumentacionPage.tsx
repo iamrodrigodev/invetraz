@@ -1,13 +1,15 @@
 import { BookOpen } from "lucide-react";
 import type React from "react";
 import {
-	TarjetaGuiaGoogle,
-	TarjetaScopesGoogle,
-} from "../../configuracion/components";
+	TarjetaDocClassroom,
+	TarjetaDocDrive,
+	TarjetaDocGoogleCloud,
+	TarjetaDocOAuthPlayground,
+} from "../components";
 
 export const DocumentacionPage: React.FC = () => {
 	return (
-		<div className="space-y-6 pb-12">
+		<div className="space-y-6 pb-12 w-full">
 			<div>
 				<div className="flex items-center gap-2.5 text-primary mb-1">
 					<BookOpen size={22} className="shrink-0" />
@@ -22,8 +24,10 @@ export const DocumentacionPage: React.FC = () => {
 			</div>
 
 			<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-				<TarjetaGuiaGoogle />
-				<TarjetaScopesGoogle />
+				<TarjetaDocGoogleCloud />
+				<TarjetaDocClassroom />
+				<TarjetaDocDrive />
+				<TarjetaDocOAuthPlayground />
 			</div>
 		</div>
 	);
