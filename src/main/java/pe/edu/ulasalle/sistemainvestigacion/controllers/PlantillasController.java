@@ -30,6 +30,14 @@ public class PlantillasController {
         return ApiRespuesta.ok(MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(), respuesta);
     }
 
+    @PostMapping("/verificar")
+    public ResponseEntity<ApiRespuesta<CarpetaPlantillasRespuestaDto>> verificarCarpeta(
+            @Valid @RequestBody VincularCarpetaDrivePeticion peticion) {
+        CarpetaPlantillasRespuestaDto respuesta =
+                servicioDrivePlantillas.verificarCarpeta(peticion.carpetaUrlOId());
+        return ApiRespuesta.ok(MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(), respuesta);
+    }
+
     @PostMapping("/carpeta")
     public ResponseEntity<ApiRespuesta<CarpetaPlantillasRespuestaDto>> vincularCarpeta(
             @Valid @RequestBody VincularCarpetaDrivePeticion peticion) {

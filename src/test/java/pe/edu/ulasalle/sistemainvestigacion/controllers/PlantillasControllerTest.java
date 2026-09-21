@@ -61,6 +61,29 @@ class PlantillasControllerTest {
     }
 
     @Test
+    void verificarCarpeta_delegaEnServicioYRetornaPlantillas() {
+        String urlOId = "https://drive.google.com/drive/folders/folder-abc";
+        CarpetaPlantillasRespuestaDto dto =
+                CarpetaPlantillasRespuestaDto.builder()
+                        .carpetaConfigurada(true)
+                        .carpetaId("folder-abc")
+                        .carpetaNombre("Formatos")
+                        .plantillas(Collections.emptyList())
+                        .build();
+
+        when(servicioDrivePlantillas.verificarCarpeta(urlOId)).thenReturn(dto);
+
+        VincularCarpetaDrivePeticion peticion = new VincularCarpetaDrivePeticion(urlOId);
+        ResponseEntity<ApiRespuesta<CarpetaPlantillasRespuestaDto>> response =
+                controller.verificarCarpeta(peticion);
+
+        assertEquals(200, response.getStatusCode().value());
+        assertNotNull(response.getBody());
+        assertEquals("folder-abc", response.getBody().getDatos().carpetaId());
+        verify(servicioDrivePlantillas).verificarCarpeta(urlOId);
+    }
+
+    @Test
     void vincularCarpeta_delegaEnServicioYRetornaPlantillas() {
         String urlOId = "https://drive.google.com/drive/folders/folder-abc";
         CarpetaPlantillasRespuestaDto dto =

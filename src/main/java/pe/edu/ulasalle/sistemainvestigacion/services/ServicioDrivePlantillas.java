@@ -50,8 +50,8 @@ public class ServicioDrivePlantillas {
         return limpia;
     }
 
-    @Transactional
-    public CarpetaPlantillasRespuestaDto vincularCarpeta(String urlOId) {
+    @Transactional(readOnly = true)
+    public CarpetaPlantillasRespuestaDto verificarCarpeta(String urlOId) {
         String folderId = extraerIdCarpeta(urlOId);
         if (folderId.isBlank()) {
             throw new ExcepcionDeNegocio(
@@ -96,6 +96,13 @@ public class ServicioDrivePlantillas {
                     "El enlace proporcionado no pertenece a una carpeta, sino a un archivo.");
         }
 
+        return obtenerPlantillas(folderId, carpetaGoogle.getName());
+    }
+
+    @Transactional
+    public CarpetaPlantillasRespuestaDto vincularCarpeta(String urlOId) {
+        CarpetaPlantillasRespuestaDto verificada = verificarCarpeta(urlOId);
+
         ConfiguracionSistema config =
                 configuracionRepository
                         .findFirstByOrderByIdAsc()
@@ -105,11 +112,11 @@ public class ServicioDrivePlantillas {
                                                 "Primero debes configurar las credenciales maestras"
                                                         + " de Google."));
 
-        config.setGoogleDriveFolderId(folderId);
-        config.setGoogleDriveFolderName(carpetaGoogle.getName());
+        config.setGoogleDriveFolderId(verificada.carpetaId());
+        config.setGoogleDriveFolderName(verificada.carpetaNombre());
         configuracionRepository.save(config);
 
-        return obtenerPlantillas(folderId, carpetaGoogle.getName());
+        return verificada;
     }
 
     @Transactional(readOnly = true)
