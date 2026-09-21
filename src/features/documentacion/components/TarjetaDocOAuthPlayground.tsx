@@ -49,7 +49,8 @@ export const TarjetaDocOAuthPlayground: React.FC = () => {
 				<ol className="list-decimal list-inside space-y-2.5">
 					<li>
 						En <strong>OAuth 2.0 Playground</strong>, haz clic en el engranaje
-						(⚙️), marca <strong>Use your own OAuth credentials</strong> y pega tu{" "}
+						de configuración, marca{" "}
+						<strong>Use your own OAuth credentials</strong> y pega tu{" "}
 						<strong>Client ID</strong> y <strong>Client Secret</strong>.
 					</li>
 					<li className="space-y-1.5">
