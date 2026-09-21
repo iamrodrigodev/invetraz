@@ -25,8 +25,9 @@ export function SidebarItem({
 				type="button"
 				onClick={alHacerClic}
 				aria-label={item.titulo}
+				aria-current={esActivo ? "page" : undefined}
 				className={cn(
-					"flex h-11 w-full items-center rounded-xl font-medium text-[15px] transition-colors duration-150 ease-in-out cursor-pointer active:scale-98 overflow-hidden",
+					"flex h-11 w-full items-center rounded-xl font-medium text-[15px] transition-colors duration-150 ease-in-out cursor-pointer overflow-hidden",
 					esActivo
 						? "bg-primary text-white shadow-xs"
 						: "text-slate-800 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200/80",
@@ -40,7 +41,7 @@ export function SidebarItem({
 								? "text-white"
 								: "text-slate-700 group-hover/item:text-slate-900",
 						)}
-						strokeWidth={esActivo ? 2.5 : 2}
+						strokeWidth={2.2}
 					/>
 				</div>
 				<span
