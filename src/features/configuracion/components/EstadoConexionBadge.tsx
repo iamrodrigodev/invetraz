@@ -4,6 +4,7 @@ import { Badge } from "../../../components/ui/Badge";
 
 export type TipoEstadoConexion =
 	| "conectado"
+	| "guardado_pendiente"
 	| "no_configurado"
 	| "verificando"
 	| "error";
@@ -23,6 +24,13 @@ export const EstadoConexionBadge: React.FC<EstadoConexionBadgeProps> = ({
 				<Badge variant="success" className={className}>
 					<CheckCircle2 size={13} className="shrink-0 text-emerald-600" />
 					<span>Conexión activa con Google</span>
+				</Badge>
+			);
+		case "guardado_pendiente":
+			return (
+				<Badge variant="warning" className={className}>
+					<AlertCircle size={13} className="shrink-0 text-amber-600" />
+					<span>Guardada, no verificada</span>
 				</Badge>
 			);
 		case "verificando":

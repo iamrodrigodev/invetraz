@@ -44,35 +44,29 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 
 	return (
 		<Card className="border-slate-200/90 bg-white shadow-xs">
-			<CardContent className="space-y-4 p-5">
-				<div className="space-y-3">
-					<div className="flex items-start justify-between gap-3">
-						<div className="flex h-7 w-7 shrink-0 items-center justify-center">
-							<FileSpreadsheet
-								size={23}
-								className="text-primary stroke-[2.2]"
-							/>
-						</div>
-						<Badge
-							variant={esGoogleSheet ? "success" : "primary"}
-							className="shrink-0 text-[10.5px] font-semibold uppercase tracking-wider"
+			<CardContent className="space-y-4 px-6 pb-5 pt-6">
+				<div className="flex items-center justify-between gap-4">
+					<div className="min-w-0">
+						<h3
+							className="line-clamp-2 font-bold text-sm text-slate-900 leading-snug"
+							title={plantilla.nombre}
 						>
-							{esGoogleSheet ? "Google Sheets" : "XLSX"}
-						</Badge>
+							{plantilla.nombre}
+						</h3>
 					</div>
-
-					<h3
-						className="line-clamp-2 font-bold text-sm text-slate-900 leading-snug"
-						title={plantilla.nombre}
+					<Badge
+						variant={esGoogleSheet ? "success" : "primary"}
+						className="shrink-0 text-[10.5px] font-semibold uppercase tracking-wider"
 					>
-						{plantilla.nombre}
-					</h3>
+						<FileSpreadsheet size={12} className="shrink-0" />
+						{esGoogleSheet ? "Google Sheets" : "XLSX"}
+					</Badge>
 				</div>
 
-				<div className="space-y-3 border-t border-slate-100 pt-3 text-xs text-slate-500">
+				<div className="space-y-3 border-t border-slate-100 pt-3 text-xs text-slate-600">
 					<div className="flex items-center justify-between gap-3">
-						<span className="text-slate-500">Tamaño</span>
-						<span className="truncate text-right font-semibold text-slate-700">
+						<span>Tamaño</span>
+						<span className="truncate text-right font-medium text-slate-800">
 							{formatearTamano(plantilla.tamanoBytes)}
 						</span>
 					</div>
@@ -82,7 +76,7 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 							<Calendar size={13} className="text-slate-400 shrink-0" />
 							Modificado
 						</span>
-						<span className="truncate text-right font-medium text-[11px] text-slate-700">
+						<span className="truncate text-right font-medium text-[11px] text-slate-800">
 							{formatearFecha(plantilla.ultimaModificacion)}
 						</span>
 					</div>
@@ -105,7 +99,7 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 								className="w-full"
 							>
 								<ExternalLink size={16} className="mr-2" />
-								Abrir en Drive
+								Abrir Sheet
 							</Button>
 						) : null}
 

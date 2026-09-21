@@ -81,7 +81,7 @@ interface ConfiguracionState {
 	verificarConexion: (
 		datos?: ActualizarCredencialesPeticion,
 	) => Promise<ResultadoVerificacion>;
-	actualizarCarpetaDrive: (id: string, nombre: string) => void;
+	actualizarCarpetaDrive: (id: string, nombre: string | null) => void;
 	setEstadoConexion: (estado: TipoEstadoConexion) => void;
 	limpiar: () => void;
 }
@@ -192,7 +192,7 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 		}
 	},
 
-	actualizarCarpetaDrive: (id: string, nombre: string) => {
+	actualizarCarpetaDrive: (id: string, nombre: string | null) => {
 		set((state) => ({
 			credenciales: {
 				...state.credenciales,

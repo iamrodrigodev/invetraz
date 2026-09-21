@@ -1,6 +1,7 @@
 import { ExternalLink, FolderGit2 } from "lucide-react";
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
+import { resolverVistaCarpetaDrive } from "../../../components/drive/estadoCarpetaDrive";
 import { TarjetaCarpetaVinculada } from "../../../components/drive/TarjetaCarpetaVinculada";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
 import {
@@ -14,7 +15,7 @@ import { TarjetaConexionBase } from "./TarjetaConexionBase";
 interface TarjetaCarpetaDriveProps {
 	carpetaIdInicial?: string | null | undefined;
 	carpetaNombreInicial?: string | null | undefined;
-	onCarpetaActualizada?: (id: string, nombre: string) => void;
+	onCarpetaActualizada?: (id: string, nombre: string | null) => void;
 }
 
 function normalizarId(entrada: string): string {
@@ -85,10 +86,13 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 				carpetaUrlOId: inputUrl.trim(),
 			});
 			const nuevoId = res.carpetaId ?? idActual;
-			const nuevoNombre = res.carpetaNombre ?? "Carpeta de Google Drive";
+			const nuevoNombre = res.carpetaNombre ?? null;
 			setCarpetaId(nuevoId);
 			setCarpetaNombre(nuevoNombre);
 			onCarpetaActualizada?.(nuevoId, nuevoNombre);
+			if (!res.carpetaNombre) {
+				return "Carpeta guardada en la configuración. No se pudo verificar en Google Drive; revisa el enlace o los permisos y vuelve a verificar la conexión.";
+			}
 			return `Carpeta verificada con Google y guardada exitosamente: "${nuevoNombre}" (${res.plantillas.length} ${
 				res.plantillas.length === 1 ? "plantilla" : "plantillas"
 			} .xlsx encontradas).`;
@@ -98,6 +102,7 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 		mensajeFalloPrevio:
 			"Esta carpeta falló la validación. Modifícala para intentar guardar.",
 		mensajeSinCambios: "Modifica el enlace o ID para guardar cambios",
+		permitirGuardarConFallo: true,
 	});
 
 	const onProbarConexion = async () => {
@@ -122,6 +127,14 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 	const mensajeErrorBanner =
 		conexion.mensajeError ||
 		(tocado && !errorDescartado ? errorValidacion : null);
+	const vistaCarpeta = resolverVistaCarpetaDrive({
+		carpetaId,
+		carpetaNombre,
+	});
+	const estadoConexionCarpeta =
+		conexion.estadoVisual === "conectado" && vistaCarpeta.estaPendiente
+			? "guardado_pendiente"
+			: conexion.estadoVisual;
 
 	const onLimpiarError = () => {
 		if (conexion.mensajeError) {
@@ -132,9 +145,10 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 
 	const cabeceraVinculada = carpetaId ? (
 		<TarjetaCarpetaVinculada
-			nombre={carpetaNombre}
+			nombre={vistaCarpeta.nombreVisible}
 			carpetaId={carpetaId}
 			textoBoton="Abrir en Drive"
+			estado={vistaCarpeta.estado}
 		/>
 	) : null;
 
@@ -143,8 +157,9 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 			titulo="Carpeta de Plantillas de Seguimiento"
 			descripcion="Indica la carpeta de Google Drive donde residen los formatos y plantillas (.xlsx). El sistema leerá los archivos directamente en vivo."
 			icono={FolderGit2}
-			estado={conexion.estadoVisual}
+			estado={estadoConexionCarpeta}
 			mensajeExito={conexion.mensajeExito}
+			varianteMensajeExito={vistaCarpeta.estaPendiente ? "warning" : "success"}
 			mensajeError={mensajeErrorBanner}
 			onLimpiarExito={() => conexion.setMensajeExito(null)}
 			onLimpiarError={onLimpiarError}

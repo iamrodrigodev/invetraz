@@ -1,14 +1,8 @@
-import {
-	ChevronLeft,
-	ChevronRight,
-	FileSpreadsheet,
-	FolderGit2,
-	RefreshCw,
-	Settings,
-} from "lucide-react";
+import { FileSpreadsheet, FolderGit2, RefreshCw, Settings } from "lucide-react";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { resolverVistaCarpetaDrive } from "../../../components/drive/estadoCarpetaDrive";
 import { TarjetaCarpetaVinculada } from "../../../components/drive/TarjetaCarpetaVinculada";
 import {
 	Alert,
@@ -18,6 +12,7 @@ import {
 	PlantillasSkeleton,
 } from "../../../components/ui";
 import { obtenerPlantillas } from "../api/plantillas.api";
+import { PiePaginacionPlantillas } from "../components/PiePaginacionPlantillas";
 import { TarjetaPlantilla } from "../components/TarjetaPlantilla";
 import type { CarpetaPlantillasRespuesta } from "../types/plantillas.types";
 
@@ -71,13 +66,17 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 		if (!datos?.plantillas) return [];
 		return datos.plantillas.slice(indiceInicio, indiceFin);
 	}, [datos?.plantillas, indiceInicio, indiceFin]);
+	const vistaCarpeta = resolverVistaCarpetaDrive({
+		carpetaId: datos?.carpetaId,
+		carpetaNombre: datos?.carpetaNombre,
+	});
 
 	if (cargando && !datos) {
 		return <PlantillasSkeleton />;
 	}
 
 	return (
-		<div className="w-full space-y-6 pb-12">
+		<div className="flex min-h-full w-full flex-1 flex-col">
 			<div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
 				<div className="min-w-0">
 					<h1 className="font-extrabold font-heading text-2xl text-slate-900 tracking-tight sm:text-3xl">
@@ -109,149 +108,96 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 			</div>
 
 			{error && (
-				<Alert
-					key="alerta-error"
-					variant="error"
-					message={error}
-					onClose={() => setError(null)}
-				/>
-			)}
-
-			{!datos?.carpetaConfigurada && (
-				<Card className="border-dashed border-2 border-slate-300 bg-slate-50/50 py-12 text-center w-full">
-					<CardContent className="flex flex-col items-center justify-center space-y-4 max-w-md mx-auto">
-						<div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary">
-							<FolderGit2 size={28} />
-						</div>
-						<div className="space-y-1">
-							<h3 className="font-bold text-slate-900 text-lg">
-								Carpeta de Google Drive no configurada
-							</h3>
-							<p className="text-xs text-slate-600 leading-relaxed">
-								Para consultar las plantillas de seguimiento, debes vincular el
-								enlace de la carpeta de Google Drive en la sección de
-								configuración del sistema.
-							</p>
-						</div>
-						<Button
-							type="button"
-							variant="default"
-							onClick={() => navigate("/configuracion")}
-							className="mt-2 text-xs font-semibold"
-						>
-							<Settings size={14} className="mr-1.5" />
-							Configurar carpeta ahora
-						</Button>
-					</CardContent>
-				</Card>
-			)}
-
-			{datos?.carpetaConfigurada && (
-				<div className="space-y-5">
-					{datos.carpetaId && (
-						<TarjetaCarpetaVinculada
-							nombre={datos.carpetaNombre}
-							carpetaId={datos.carpetaId}
-							textoBoton="Abrir en Drive"
-						/>
-					)}
-
-					{totalPlantillas === 0 ? (
-						<Card className="border-dashed border-2 border-slate-200 bg-slate-50/50 py-12 text-center w-full">
-							<CardContent className="flex flex-col items-center justify-center space-y-3 max-w-sm mx-auto">
-								<FileSpreadsheet size={28} className="text-primary" />
-								<div className="space-y-1">
-									<h4 className="font-semibold text-slate-800 text-sm">
-										No hay archivos en la carpeta
-									</h4>
-									<p className="text-xs text-slate-500">
-										No se encontraron archivos de hojas de cálculo (.xlsx) en la
-										carpeta de Drive vinculada.
-									</p>
-								</div>
-							</CardContent>
-						</Card>
-					) : (
-						<>
-							<div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-								{plantillasPaginadas.map((plantilla) => (
-									<TarjetaPlantilla key={plantilla.id} plantilla={plantilla} />
-								))}
-							</div>
-
-							<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-slate-200/80 w-full">
-								<p className="text-xs text-slate-600">
-									Mostrando{" "}
-									<span className="font-semibold text-slate-900">
-										{indiceInicio + 1}
-									</span>{" "}
-									a{" "}
-									<span className="font-semibold text-slate-900">
-										{Math.min(indiceFin, totalPlantillas)}
-									</span>{" "}
-									de{" "}
-									<span className="font-semibold text-slate-900">
-										{totalPlantillas}
-									</span>{" "}
-									{totalPlantillas === 1 ? "plantilla" : "plantillas"}
-								</p>
-
-								{totalPaginas > 1 && (
-									<div className="flex items-center gap-1.5 self-center sm:self-auto">
-										<Button
-											type="button"
-											variant="outline"
-											size="sm"
-											onClick={() =>
-												setPaginaActual((prev) => Math.max(1, prev - 1))
-											}
-											disabled={paginaActual === 1}
-											className="h-8 px-2.5 text-xs font-medium"
-										>
-											<ChevronLeft size={14} className="mr-1" />
-											Anterior
-										</Button>
-
-										<div className="flex items-center gap-1">
-											{Array.from(
-												{ length: totalPaginas },
-												(_, i) => i + 1,
-											).map((num) => (
-												<Button
-													key={num}
-													type="button"
-													variant={paginaActual === num ? "default" : "outline"}
-													size="sm"
-													onClick={() => setPaginaActual(num)}
-													className="h-8 w-8 p-0 text-xs font-medium"
-												>
-													{num}
-												</Button>
-											))}
-										</div>
-
-										<Button
-											type="button"
-											variant="outline"
-											size="sm"
-											onClick={() =>
-												setPaginaActual((prev) =>
-													Math.min(totalPaginas, prev + 1),
-												)
-											}
-											disabled={paginaActual === totalPaginas}
-											className="h-8 px-2.5 text-xs font-medium"
-										>
-											Siguiente
-											<ChevronRight size={14} className="ml-1" />
-										</Button>
-									</div>
-								)}
-							</div>
-						</>
-					)}
+				<div className="mt-5">
+					<Alert
+						key="alerta-error"
+						variant="error"
+						message={error}
+						onClose={() => setError(null)}
+					/>
 				</div>
 			)}
+
+			<div className="mt-6 flex flex-1 flex-col">
+				{!datos?.carpetaConfigurada && (
+					<Card className="border-dashed border-2 border-slate-300 bg-slate-50/50 py-12 text-center w-full">
+						<CardContent className="flex flex-col items-center justify-center space-y-4 max-w-md mx-auto">
+							<div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary">
+								<FolderGit2 size={28} />
+							</div>
+							<div className="space-y-1">
+								<h3 className="font-bold text-slate-900 text-lg">
+									Carpeta de Google Drive no configurada
+								</h3>
+								<p className="text-xs text-slate-600 leading-relaxed">
+									Para consultar las plantillas de seguimiento, debes vincular
+									el enlace de la carpeta de Google Drive en la sección de
+									configuración del sistema.
+								</p>
+							</div>
+							<Button
+								type="button"
+								variant="default"
+								onClick={() => navigate("/configuracion")}
+								className="mt-2 text-xs font-semibold"
+							>
+								<Settings size={14} className="mr-1.5" />
+								Configurar carpeta ahora
+							</Button>
+						</CardContent>
+					</Card>
+				)}
+
+				{datos?.carpetaConfigurada && (
+					<div className="flex flex-1 flex-col">
+						{datos.carpetaId && (
+							<TarjetaCarpetaVinculada
+								nombre={vistaCarpeta.nombreVisible}
+								carpetaId={datos.carpetaId}
+								textoBoton="Abrir en Drive"
+								estado={vistaCarpeta.estado}
+							/>
+						)}
+
+						{totalPlantillas === 0 ? (
+							<Card className="mt-5 border-dashed border-2 border-slate-200 bg-slate-50/50 py-12 text-center w-full">
+								<CardContent className="flex flex-col items-center justify-center space-y-3 max-w-sm mx-auto">
+									<FileSpreadsheet size={28} className="text-primary" />
+									<div className="space-y-1">
+										<h4 className="font-semibold text-slate-800 text-sm">
+											{vistaCarpeta.tituloVacio}
+										</h4>
+										<p className="text-xs text-slate-500">
+											{vistaCarpeta.descripcionVacia}
+										</p>
+									</div>
+								</CardContent>
+							</Card>
+						) : (
+							<>
+								<div className="mt-5 grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+									{plantillasPaginadas.map((plantilla) => (
+										<TarjetaPlantilla
+											key={plantilla.id}
+											plantilla={plantilla}
+										/>
+									))}
+								</div>
+
+								<PiePaginacionPlantillas
+									indiceInicio={indiceInicio}
+									indiceFin={indiceFin}
+									totalItems={totalPlantillas}
+									paginaActual={paginaActual}
+									totalPaginas={totalPaginas}
+									onCambiarPagina={setPaginaActual}
+									className="mt-auto"
+								/>
+							</>
+						)}
+					</div>
+				)}
+			</div>
 		</div>
 	);
 };

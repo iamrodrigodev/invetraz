@@ -12,6 +12,7 @@ export interface OpcionesVerificacionConexion<T> {
 	mensajeValidacionIncompleta?: string;
 	mensajeFalloPrevio?: string;
 	mensajeSinCambios?: string;
+	permitirGuardarConFallo?: boolean;
 }
 
 export function useVerificacionConexion<T>({
@@ -25,6 +26,7 @@ export function useVerificacionConexion<T>({
 	mensajeValidacionIncompleta = "Completa todos los campos requeridos antes de continuar",
 	mensajeFalloPrevio = "Estos datos fallaron la validación previa. Modifícalos para intentar de nuevo.",
 	mensajeSinCambios = "Modifica los campos para guardar cambios",
+	permitirGuardarConFallo = false,
 }: OpcionesVerificacionConexion<T>) {
 	const [verificando, setVerificando] = useState(false);
 	const [guardando, setGuardando] = useState(false);
@@ -72,7 +74,7 @@ export function useVerificacionConexion<T>({
 	const deshabilitarGuardar =
 		guardando ||
 		verificando ||
-		esIgualAFallidas ||
+		(!permitirGuardarConFallo && esIgualAFallidas) ||
 		(esIgualAGuardadas && !ultimoIntentoGuardado) ||
 		esIgualAUltimoIntento;
 
@@ -87,7 +89,7 @@ export function useVerificacionConexion<T>({
 		if (!esValido) {
 			return mensajeValidacionIncompleta;
 		}
-		if (esIgualAFallidas) {
+		if (!permitirGuardarConFallo && esIgualAFallidas) {
 			return mensajeFalloPrevio;
 		}
 		if (
@@ -106,6 +108,7 @@ export function useVerificacionConexion<T>({
 		mensajeValidacionIncompleta,
 		mensajeFalloPrevio,
 		mensajeSinCambios,
+		permitirGuardarConFallo,
 	]);
 
 	const estadoVisual: TipoEstadoConexion = useMemo(() => {

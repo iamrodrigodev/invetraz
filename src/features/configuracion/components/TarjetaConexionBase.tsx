@@ -20,6 +20,7 @@ export interface TarjetaConexionBaseProps {
 	icono: React.ComponentType<{ size?: number; className?: string }>;
 	estado: TipoEstadoConexion;
 	mensajeExito?: string | null | undefined;
+	varianteMensajeExito?: "success" | "warning" | undefined;
 	mensajeError?: string | null | undefined;
 	onLimpiarExito?: (() => void) | undefined;
 	onLimpiarError?: (() => void) | undefined;
@@ -45,6 +46,7 @@ export const TarjetaConexionBase: React.FC<TarjetaConexionBaseProps> = ({
 	icono: Icono,
 	estado,
 	mensajeExito,
+	varianteMensajeExito = "success",
 	mensajeError,
 	onLimpiarExito,
 	onLimpiarError,
@@ -119,7 +121,7 @@ export const TarjetaConexionBase: React.FC<TarjetaConexionBaseProps> = ({
 			<CardContent className="flex flex-col flex-1 space-y-5">
 				{mensajeExito && (
 					<Alert
-						variant="success"
+						variant={varianteMensajeExito}
 						message={mensajeExito}
 						{...(onLimpiarExito ? { onClose: onLimpiarExito } : {})}
 					/>

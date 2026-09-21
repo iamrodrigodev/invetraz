@@ -1,17 +1,33 @@
-import { CircleCheck, ExternalLink, FolderCheck } from "lucide-react";
+import {
+	AlertTriangle,
+	CircleCheck,
+	ExternalLink,
+	FolderCheck,
+} from "lucide-react";
 import type React from "react";
 import { Badge, Button } from "../ui";
+import type { EstadoCarpetaDrive } from "./estadoCarpetaDrive";
+import { resolverVistaCarpetaDrive } from "./estadoCarpetaDrive";
 
 export interface TarjetaCarpetaVinculadaProps {
 	nombre?: string | null | undefined;
 	carpetaId: string;
 	textoBoton?: string;
+	estado?: EstadoCarpetaDrive;
 }
 
 export const TarjetaCarpetaVinculada: React.FC<
 	TarjetaCarpetaVinculadaProps
-> = ({ nombre, carpetaId, textoBoton = "Abrir en Drive" }) => {
-	const nombreCarpeta = nombre || "Carpeta de Google Drive";
+> = ({
+	nombre,
+	carpetaId,
+	textoBoton = "Abrir en Drive",
+	estado = "verificada",
+}) => {
+	const vista = resolverVistaCarpetaDrive({
+		carpetaId,
+		carpetaNombre: estado === "pendiente" ? null : nombre,
+	});
 
 	return (
 		<div className="flex flex-col gap-3 rounded-xl border border-slate-200/80 bg-white p-3.5 transition-all sm:flex-row sm:items-center sm:justify-between">
@@ -20,14 +36,18 @@ export const TarjetaCarpetaVinculada: React.FC<
 				<div className="min-w-0 space-y-1">
 					<div className="flex flex-wrap items-center gap-2">
 						<span className="truncate text-sm font-medium uppercase text-slate-900">
-							{nombreCarpeta}
+							{vista.nombreVisible}
 						</span>
 						<Badge
-							variant="success"
+							variant={vista.estaPendiente ? "warning" : "success"}
 							className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-normal"
 						>
-							<CircleCheck size={11} className="shrink-0" />
-							Carpeta vinculada
+							{vista.estaPendiente ? (
+								<AlertTriangle size={11} className="shrink-0" />
+							) : (
+								<CircleCheck size={11} className="shrink-0" />
+							)}
+							{vista.badgeTexto}
 						</Badge>
 					</div>
 					<div className="flex items-center gap-1.5 text-xs">

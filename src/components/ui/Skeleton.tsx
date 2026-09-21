@@ -307,21 +307,17 @@ export function PlantillasSkeleton() {
 				</div>
 			</div>
 
-			<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 w-full">
+			<div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 				{[1, 2, 3, 4, 5, 6].map((i) => (
 					<div
 						key={i}
-						className="rounded-2xl border border-slate-200/90 bg-white p-5 space-y-4 shadow-xs"
+						className="rounded-2xl border border-slate-200/90 bg-white px-6 pb-5 pt-6 space-y-4 shadow-xs"
 					>
 						<div className="flex justify-between items-center">
-							<Skeleton className="h-7 w-7 rounded-lg" />
-							<Skeleton className="h-5 w-24 rounded-full" />
+							<Skeleton className="h-4 w-36 rounded-md" />
+							<Skeleton className="h-5 w-32 rounded-full" />
 						</div>
-						<div className="space-y-1.5">
-							<Skeleton className="h-4 w-3/4 rounded-md" />
-							<Skeleton className="h-4 w-1/2 rounded-md" />
-						</div>
-						<div className="space-y-2.5 pt-3 border-t border-slate-100">
+						<div className="space-y-3 pt-3 border-t border-slate-100">
 							<div className="flex justify-between items-center">
 								<Skeleton className="h-3.5 w-16 rounded-md" />
 								<Skeleton className="h-3.5 w-14 rounded-md" />
@@ -331,7 +327,7 @@ export function PlantillasSkeleton() {
 								<Skeleton className="h-3.5 w-28 rounded-md" />
 							</div>
 							<div className="pt-2">
-								<Skeleton className="h-8 w-full rounded-lg" />
+								<Skeleton className="h-9 w-full rounded-lg" />
 							</div>
 						</div>
 					</div>
