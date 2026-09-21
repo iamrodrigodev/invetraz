@@ -11,7 +11,7 @@ interface AppState {
 	estadoVerificado: boolean;
 	verificarEstadoGlobal: () => Promise<void>;
 	setConfigurado: (valor: boolean) => void;
-	setAutenticado: (valor: boolean) => void;
+	setAutenticado: (valor: boolean, email?: string | null) => void;
 	cerrarSesion: () => Promise<void>;
 }
 
@@ -21,11 +21,13 @@ const configuradoCacheado =
 const sesionPreviaActiva =
 	typeof window !== "undefined" &&
 	localStorage.getItem("sesion_activa") === "true";
+const usuarioEmailCacheado =
+	typeof window !== "undefined" ? localStorage.getItem("usuario_email") : null;
 
 export const useAppStore = create<AppState>((set) => ({
 	configurado: configuradoCacheado ? true : null,
 	autenticado: sesionPreviaActiva ? null : false,
-	usuarioEmail: null,
+	usuarioEmail: usuarioEmailCacheado,
 	estadoVerificado: configuradoCacheado && !sesionPreviaActiva,
 	verificarEstadoGlobal: async () => {
 		try {
@@ -35,18 +37,27 @@ export const useAppStore = create<AppState>((set) => ({
 			]);
 			if (resAuth.autenticado) {
 				localStorage.setItem("sesion_activa", "true");
+				if (resAuth.email) {
+					localStorage.setItem("usuario_email", resAuth.email);
+				}
 			} else {
 				localStorage.removeItem("sesion_activa");
+				localStorage.removeItem("usuario_email");
 			}
 			set({
 				configurado: esConfigurado,
 				autenticado: resAuth.autenticado,
-				usuarioEmail: resAuth.email || null,
+				usuarioEmail:
+					resAuth.email ||
+					(typeof window !== "undefined"
+						? localStorage.getItem("usuario_email")
+						: null),
 				estadoVerificado: true,
 			});
 		} catch (error) {
 			console.error("Error al verificar estado global", error);
 			localStorage.removeItem("sesion_activa");
+			localStorage.removeItem("usuario_email");
 			set({
 				configurado: true,
 				autenticado: false,
@@ -61,19 +72,27 @@ export const useAppStore = create<AppState>((set) => ({
 		}
 		set({ configurado: valor });
 	},
-	setAutenticado: (valor: boolean) => {
+	setAutenticado: (valor: boolean, email?: string | null) => {
 		if (valor) {
 			localStorage.setItem("sesion_activa", "true");
+			if (email) {
+				localStorage.setItem("usuario_email", email);
+			}
 		} else {
 			localStorage.removeItem("sesion_activa");
+			localStorage.removeItem("usuario_email");
 		}
-		set({ autenticado: valor });
+		set((state) => ({
+			autenticado: valor,
+			usuarioEmail: email !== undefined ? email : state.usuarioEmail,
+		}));
 	},
 	cerrarSesion: async () => {
 		try {
 			await logout();
 		} catch (_error) {}
 		localStorage.removeItem("sesion_activa");
+		localStorage.removeItem("usuario_email");
 		localStorage.removeItem("jwt");
 		localStorage.removeItem("moduloActivo");
 		useConfiguracionStore.getState().limpiar();
@@ -82,6 +101,7 @@ export const useAppStore = create<AppState>((set) => ({
 }));
 
 alExpirarSesion(() => {
+	localStorage.removeItem("usuario_email");
 	useAppStore.setState({ autenticado: false, usuarioEmail: null });
 	useConfiguracionStore.getState().limpiar();
 });

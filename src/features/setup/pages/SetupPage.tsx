@@ -41,7 +41,7 @@ export function SetupPage() {
 				password: payload.password,
 			});
 			setConfigurado(true);
-			setAutenticado(true);
+			setAutenticado(true, payload.email.trim().toLowerCase());
 			navigate("/", { replace: true });
 		} catch (error) {
 			const mensaje =

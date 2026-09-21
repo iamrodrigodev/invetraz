@@ -39,7 +39,7 @@ export function TopBar({
 		(item) => item.id === moduloActivo,
 	);
 	const titulo = elementoActual?.titulo || "Sistema de Investigación";
-	const emailMostrar = usuarioEmail || "admin@ulasalle.edu.pe";
+	const emailMostrar = usuarioEmail || "Administrador";
 	const iniciales = emailMostrar.substring(0, 2).toUpperCase();
 
 	const cerrarSesion = async () => {

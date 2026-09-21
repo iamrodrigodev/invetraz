@@ -43,7 +43,7 @@ export function LoginPage() {
 		try {
 			setErrorApi(null);
 			await login(data);
-			setAutenticado(true);
+			setAutenticado(true, data.email.trim().toLowerCase());
 			navigate("/", { replace: true });
 		} catch (error) {
 			setErrorApi(
