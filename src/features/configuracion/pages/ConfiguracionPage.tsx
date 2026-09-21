@@ -21,6 +21,7 @@ import {
 } from "../components";
 import {
 	resolverEstadoConexion,
+	sonCredencialesIguales,
 	useConfiguracionStore,
 } from "../store/useConfiguracionStore";
 import {
@@ -42,6 +43,8 @@ export function ConfiguracionPage() {
 	const [mensajeExito, setMensajeExito] = useState<string | null>(null);
 	const [mensajeError, setMensajeError] = useState<string | null>(null);
 	const [verificando, setVerificando] = useState(false);
+	const [ultimoIntentoGuardado, setUltimoIntentoGuardado] =
+		useState<ActualizarCredencialesPeticion | null>(null);
 
 	const {
 		register,
@@ -50,7 +53,7 @@ export function ConfiguracionPage() {
 		getValues,
 		trigger,
 		watch,
-		formState: { errors, isSubmitting, isDirty },
+		formState: { errors, isSubmitting },
 	} = useForm<ActualizarCredencialesPeticion>({
 		resolver: zodResolver(ActualizarCredencialesPeticionSchema),
 		mode: "onChange",
@@ -63,8 +66,19 @@ export function ConfiguracionPage() {
 		"googleRefreshToken",
 	]);
 
+	const valoresActuales: ActualizarCredencialesPeticion = useMemo(
+		() => ({
+			googleClientId: clientId || "",
+			googleClientSecret: clientSecret || "",
+			googleRefreshToken: refreshToken || "",
+		}),
+		[clientId, clientSecret, refreshToken],
+	);
+
 	const camposCompletos = Boolean(
-		clientId?.trim() && clientSecret?.trim() && refreshToken?.trim(),
+		valoresActuales.googleClientId.trim() &&
+			valoresActuales.googleClientSecret.trim() &&
+			valoresActuales.googleRefreshToken.trim(),
 	);
 
 	const tieneErrores = Boolean(
@@ -74,10 +88,14 @@ export function ConfiguracionPage() {
 	);
 
 	const configuracionCompleta = camposCompletos && !tieneErrores;
+	const yaIntentado = sonCredencialesIguales(
+		ultimoIntentoGuardado,
+		valoresActuales,
+	);
 	const deshabilitarVerificar =
 		!configuracionCompleta || verificando || isSubmitting;
 	const deshabilitarGuardar =
-		!configuracionCompleta || !isDirty || isSubmitting || verificando;
+		!configuracionCompleta || yaIntentado || isSubmitting || verificando;
 
 	const estadoConexionVisual = useMemo(() => {
 		return resolverEstadoConexion({
@@ -88,11 +106,7 @@ export function ConfiguracionPage() {
 			guardando: isSubmitting,
 			camposCompletos,
 			tieneErrores,
-			valoresActuales: {
-				googleClientId: clientId || "",
-				googleClientSecret: clientSecret || "",
-				googleRefreshToken: refreshToken || "",
-			},
+			valoresActuales,
 		});
 	}, [
 		credenciales,
@@ -102,9 +116,7 @@ export function ConfiguracionPage() {
 		isSubmitting,
 		camposCompletos,
 		tieneErrores,
-		clientId,
-		clientSecret,
-		refreshToken,
+		valoresActuales,
 	]);
 
 	useEffect(() => {
@@ -112,6 +124,7 @@ export function ConfiguracionPage() {
 			cargarConfiguracion()
 				.then((datos) => {
 					reset(datos);
+					setUltimoIntentoGuardado(datos);
 				})
 				.catch((error) => {
 					setMensajeError(
@@ -122,15 +135,18 @@ export function ConfiguracionPage() {
 				});
 		} else {
 			reset(credenciales);
+			setUltimoIntentoGuardado(credenciales);
 		}
 	}, [cargado, cargarConfiguracion, credenciales, reset]);
 
 	const onGuardar = async (data: ActualizarCredencialesPeticion) => {
+		setUltimoIntentoGuardado(data);
 		try {
 			setMensajeError(null);
 			setMensajeExito(null);
 			const res = await guardarConfiguracion(data);
 			reset(data);
+			setUltimoIntentoGuardado(data);
 			setMensajeExito(
 				res?.mensaje ||
 					"Credenciales verificadas con Google y guardadas exitosamente.",
@@ -318,7 +334,7 @@ export function ConfiguracionPage() {
 										title={
 											!configuracionCompleta
 												? "Completa todos los campos requeridos para guardar"
-												: !isDirty
+												: yaIntentado
 													? "Modifica al menos un campo para guardar cambios"
 													: undefined
 										}

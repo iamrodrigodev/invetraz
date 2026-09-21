@@ -61,12 +61,6 @@ export function resolverEstadoConexion(
 	) {
 		return "conectado";
 	}
-	if (
-		sonCredencialesIguales(ctx.credencialesGuardadas, ctx.valoresActuales) &&
-		tieneCredencialesCompletas(ctx.credencialesGuardadas)
-	) {
-		return "conectado";
-	}
 	return "no_configurado";
 }
 
@@ -161,17 +155,12 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 
 			return resVerificacion;
 		} catch (error) {
-			set((state) => ({
-				credencialesVerificadas: sonCredencialesIguales(
-					state.credencialesVerificadas,
-					datos,
-				)
-					? null
-					: state.credencialesVerificadas,
+			set({
+				credencialesVerificadas: null,
 				credencialesFallidas: datos,
 				estadoConexion: "error",
 				cargando: false,
-			}));
+			});
 			throw error;
 		}
 	},
@@ -181,28 +170,18 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 		set({ estadoConexion: "verificando" });
 		try {
 			const res = await verificarConfiguracion(creds);
-			set((state) => ({
+			set({
 				credencialesVerificadas: creds,
-				credencialesFallidas: sonCredencialesIguales(
-					state.credencialesFallidas,
-					creds,
-				)
-					? null
-					: state.credencialesFallidas,
+				credencialesFallidas: null,
 				estadoConexion: "conectado",
-			}));
+			});
 			return res;
 		} catch (error) {
-			set((state) => ({
-				credencialesVerificadas: sonCredencialesIguales(
-					state.credencialesVerificadas,
-					creds,
-				)
-					? null
-					: state.credencialesVerificadas,
+			set({
+				credencialesVerificadas: null,
 				credencialesFallidas: creds,
 				estadoConexion: "error",
-			}));
+			});
 			throw error;
 		}
 	},
