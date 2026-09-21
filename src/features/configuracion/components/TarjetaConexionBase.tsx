@@ -100,17 +100,20 @@ export const TarjetaConexionBase: React.FC<TarjetaConexionBaseProps> = ({
 
 	return (
 		<Card className="flex flex-col h-full">
-			<CardHeader>
-				<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-					<div className="space-y-1">
-						<CardTitle className="flex items-center gap-2 text-slate-900 font-bold">
-							<Icono size={18} className="text-primary shrink-0" />
-							<span>{titulo}</span>
-						</CardTitle>
-						<CardDescription>{descripcion}</CardDescription>
-					</div>
-					<EstadoConexionBadge estado={estado} />
+			<CardHeader className="space-y-2 pb-4">
+				<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+					<CardTitle className="flex items-center gap-2 text-slate-900 font-bold text-base sm:text-lg">
+						<Icono size={19} className="text-primary shrink-0" />
+						<span>{titulo}</span>
+					</CardTitle>
+					<EstadoConexionBadge
+						estado={estado}
+						className="self-start sm:self-auto shrink-0"
+					/>
 				</div>
+				<CardDescription className="text-xs text-slate-600 leading-relaxed">
+					{descripcion}
+				</CardDescription>
 			</CardHeader>
 
 			<CardContent className="flex flex-col flex-1 space-y-5">
