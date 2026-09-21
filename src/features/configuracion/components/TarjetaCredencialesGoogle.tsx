@@ -123,9 +123,31 @@ export const TarjetaCredencialesGoogle: React.FC = () => {
 		await conexion.ejecutarVerificar();
 	};
 
-	const onGuardarFormulario = handleSubmit(async () => {
-		await conexion.ejecutarGuardar();
-	});
+	const tieneErrorConexion = Boolean(
+		conexion.mensajeError || conexion.estadoVisual === "error",
+	);
+
+	const ultimosValoresRef = useRef(valoresActuales);
+	useEffect(() => {
+		if (
+			conexion.mensajeError &&
+			!sonCredencialesIguales(ultimosValoresRef.current, valoresActuales)
+		) {
+			ultimosValoresRef.current = valoresActuales;
+			conexion.setMensajeError(null);
+		}
+	}, [valoresActuales, conexion]);
+
+	const onGuardarFormulario = handleSubmit(
+		async () => {
+			await conexion.ejecutarGuardar();
+		},
+		() => {
+			conexion.setMensajeError(
+				"Por favor, completa todos los campos requeridos antes de guardar.",
+			);
+		},
+	);
 
 	return (
 		<TarjetaConexionBase
@@ -166,7 +188,7 @@ export const TarjetaCredencialesGoogle: React.FC = () => {
 				placeholder="ej. 1234567890-abcdefg.apps.googleusercontent.com"
 				maxLength={VALIDATION_LIMITS.MAX_GOOGLE_CLIENT_ID}
 				charCount={clientId?.length ?? 0}
-				errorMessage={errors.googleClientId?.message}
+				error={Boolean(errors.googleClientId || tieneErrorConexion)}
 				{...register("googleClientId")}
 			/>
 
@@ -178,7 +200,7 @@ export const TarjetaCredencialesGoogle: React.FC = () => {
 				esSensible
 				maxLength={VALIDATION_LIMITS.MAX_GOOGLE_CLIENT_SECRET}
 				charCount={clientSecret?.length ?? 0}
-				errorMessage={errors.googleClientSecret?.message}
+				error={Boolean(errors.googleClientSecret || tieneErrorConexion)}
 				{...register("googleClientSecret")}
 			/>
 
@@ -202,7 +224,7 @@ export const TarjetaCredencialesGoogle: React.FC = () => {
 				esSensible
 				maxLength={VALIDATION_LIMITS.MAX_GOOGLE_REFRESH_TOKEN}
 				charCount={refreshToken?.length ?? 0}
-				errorMessage={errors.googleRefreshToken?.message}
+				error={Boolean(errors.googleRefreshToken || tieneErrorConexion)}
 				{...register("googleRefreshToken")}
 			/>
 		</TarjetaConexionBase>

@@ -175,7 +175,9 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 					if (conexion.mensajeError) conexion.setMensajeError(null);
 				}}
 				disabled={conexion.verificando || conexion.guardando}
-				errorMessage={conexion.mensajeError ?? undefined}
+				error={Boolean(
+					conexion.mensajeError || conexion.estadoVisual === "error",
+				)}
 			/>
 		</TarjetaConexionBase>
 	);
