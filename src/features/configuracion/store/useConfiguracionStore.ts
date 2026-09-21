@@ -81,7 +81,11 @@ interface ConfiguracionState {
 	verificarConexion: (
 		datos?: ActualizarCredencialesPeticion,
 	) => Promise<ResultadoVerificacion>;
-	actualizarCarpetaDrive: (id: string, nombre: string | null) => void;
+	actualizarCarpetaDrive: (
+		id: string,
+		nombre: string | null,
+		verificado?: boolean,
+	) => void;
 	setEstadoConexion: (estado: TipoEstadoConexion) => void;
 	limpiar: () => void;
 }
@@ -92,6 +96,8 @@ const VALORES_POR_DEFECTO: ActualizarCredencialesPeticion = {
 	googleRefreshToken: "",
 	googleDriveFolderId: null,
 	googleDriveFolderName: null,
+	googleVerificado: false,
+	driveVerificado: false,
 };
 
 export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
@@ -120,6 +126,8 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 				googleRefreshToken: config.googleRefreshToken || "",
 				googleDriveFolderId: config.googleDriveFolderId ?? null,
 				googleDriveFolderName: config.googleDriveFolderName ?? null,
+				googleVerificado: config.googleVerificado ?? false,
+				driveVerificado: config.driveVerificado ?? false,
 			};
 
 			const tieneCredenciales = Boolean(
@@ -128,13 +136,19 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 					nuevasCredenciales.googleRefreshToken,
 			);
 
+			const estadoDeterminado: TipoEstadoConexion = !tieneCredenciales
+				? "no_configurado"
+				: config.googleVerificado
+					? "conectado"
+					: "guardado_pendiente";
+
 			set({
 				credenciales: nuevasCredenciales,
-				credencialesVerificadas: null,
+				credencialesVerificadas: config.googleVerificado
+					? nuevasCredenciales
+					: null,
 				credencialesFallidas: null,
-				estadoConexion: tieneCredenciales
-					? "guardado_pendiente"
-					: "no_configurado",
+				estadoConexion: estadoDeterminado,
 				cargado: true,
 				cargando: false,
 			});
@@ -150,11 +164,15 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 		set({ cargando: true, estadoConexion: "verificando" });
 		try {
 			const resVerificacion = await verificarConfiguracion(datos);
-			await actualizarConfiguracion(datos);
+			const datosConEstado = {
+				...datos,
+				googleVerificado: true,
+			};
+			await actualizarConfiguracion(datosConEstado);
 
 			set({
-				credenciales: datos,
-				credencialesVerificadas: datos,
+				credenciales: datosConEstado,
+				credencialesVerificadas: datosConEstado,
 				credencialesFallidas: null,
 				estadoConexion: "conectado",
 				cargado: true,
@@ -163,9 +181,13 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 
 			return resVerificacion;
 		} catch (error) {
-			await actualizarConfiguracion(datos);
+			const datosConEstado = {
+				...datos,
+				googleVerificado: false,
+			};
+			await actualizarConfiguracion(datosConEstado);
 			set({
-				credenciales: datos,
+				credenciales: datosConEstado,
 				credencialesVerificadas: null,
 				credencialesFallidas: null,
 				estadoConexion: "guardado_pendiente",
@@ -188,6 +210,10 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 		try {
 			const res = await verificarConfiguracion(creds);
 			set({
+				credenciales: {
+					...get().credenciales,
+					googleVerificado: true,
+				},
 				credencialesVerificadas: creds,
 				credencialesFallidas: null,
 				estadoConexion: "conectado",
@@ -203,12 +229,20 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 		}
 	},
 
-	actualizarCarpetaDrive: (id: string, nombre: string | null) => {
+	actualizarCarpetaDrive: (
+		id: string,
+		nombre: string | null,
+		verificado?: boolean,
+	) => {
 		set((state) => ({
 			credenciales: {
 				...state.credenciales,
 				googleDriveFolderId: id,
 				googleDriveFolderName: nombre,
+				driveVerificado:
+					verificado !== undefined
+						? verificado
+						: Boolean(nombre || state.credenciales.driveVerificado),
 			},
 		}));
 	},

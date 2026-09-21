@@ -75,9 +75,10 @@ export const ConfiguracionPage: React.FC = () => {
 				<TarjetaCarpetaDrive
 					carpetaIdInicial={credenciales.googleDriveFolderId}
 					carpetaNombreInicial={credenciales.googleDriveFolderName}
+					carpetaVerificadaInicial={credenciales.driveVerificado}
 					estadoCredencialesGoogle={estadoConexion}
-					onCarpetaActualizada={(id, nombre) => {
-						actualizarCarpetaDrive(id, nombre);
+					onCarpetaActualizada={(id, nombre, verificado) => {
+						actualizarCarpetaDrive(id, nombre, verificado);
 					}}
 				/>
 			</div>

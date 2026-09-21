@@ -17,6 +17,7 @@ export const CarpetaPlantillasRespuestaSchema = z.object({
 	carpetaId: z.string().nullable().optional(),
 	carpetaNombre: z.string().nullable().optional(),
 	plantillas: z.array(PlantillaXlsxSchema),
+	driveVerificado: z.boolean().optional().default(false),
 });
 
 export type CarpetaPlantillasRespuesta = z.infer<

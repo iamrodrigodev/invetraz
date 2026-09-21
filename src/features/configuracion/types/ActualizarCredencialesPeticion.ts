@@ -28,6 +28,8 @@ export const ActualizarCredencialesPeticionSchema = z.object({
 		),
 	googleDriveFolderId: z.string().trim().nullable().optional(),
 	googleDriveFolderName: z.string().trim().nullable().optional(),
+	googleVerificado: z.boolean().optional(),
+	driveVerificado: z.boolean().optional(),
 });
 
 export type ActualizarCredencialesPeticion = z.infer<
@@ -40,6 +42,8 @@ export const ConfiguracionRespuestaSchema = z.object({
 	googleRefreshToken: z.string().optional().default(""),
 	googleDriveFolderId: z.string().nullable().optional().default(null),
 	googleDriveFolderName: z.string().nullable().optional().default(null),
+	googleVerificado: z.boolean().optional().default(false),
+	driveVerificado: z.boolean().optional().default(false),
 });
 
 export type ConfiguracionRespuesta = z.infer<

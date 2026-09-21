@@ -99,8 +99,7 @@ export function useVerificacionConexion<T>({
 		verificando ||
 		(!permitirGuardarConFallo && esIgualAFallidas) ||
 		(!permitirGuardarSinCambios &&
-			((esIgualAGuardadas && !ultimoIntentoGuardado) ||
-				esIgualAUltimoIntento));
+			((esIgualAGuardadas && !ultimoIntentoGuardado) || esIgualAUltimoIntento));
 
 	const tooltipVerificar = useMemo(() => {
 		if (!esValido) {
@@ -118,8 +117,7 @@ export function useVerificacionConexion<T>({
 		}
 		if (
 			!permitirGuardarSinCambios &&
-			(esIgualAUltimoIntento ||
-				(esIgualAGuardadas && !ultimoIntentoGuardado))
+			(esIgualAUltimoIntento || (esIgualAGuardadas && !ultimoIntentoGuardado))
 		) {
 			return mensajeSinCambios;
 		}
