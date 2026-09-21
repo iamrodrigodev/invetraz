@@ -53,31 +53,30 @@ export const TarjetaDocOAuthPlayground: React.FC = () => {
 						<strong>Use your own OAuth credentials</strong> y pega tu{" "}
 						<strong>Client ID</strong> y <strong>Client Secret</strong>.
 					</li>
-					<li className="space-y-1.5">
+					<li>
 						<span>
 							En <strong>Step 1</strong>, en el campo{" "}
 							<em>Input your own scopes</em>, pega los 4 scopes juntos:
 						</span>
-						<div className="pt-1">
-							<Button
-								type="button"
-								variant="outline"
-								onClick={copiarTodosLosScopes}
-								className="w-full sm:w-auto font-medium"
-							>
-								{copiadoTodos ? (
-									<>
-										<Check size={16} className="mr-2" />
-										<span>¡Scopes copiados!</span>
-									</>
-								) : (
-									<>
-										<Copy size={16} className="mr-2" />
-										<span>Copiar todos los scopes juntos</span>
-									</>
-								)}
-							</Button>
-						</div>
+						<Button
+							type="button"
+							variant="outline"
+							size="sm"
+							onClick={copiarTodosLosScopes}
+							className="inline-flex h-6 px-2 text-[11px] align-middle ml-2"
+						>
+							{copiadoTodos ? (
+								<>
+									<Check size={11} className="mr-1" />
+									<span>Copiado</span>
+								</>
+							) : (
+								<>
+									<Copy size={11} className="mr-1" />
+									<span>Copiar</span>
+								</>
+							)}
+						</Button>
 					</li>
 					<li>
 						Presiona <strong>Authorize APIs</strong> e inicia sesión con la
