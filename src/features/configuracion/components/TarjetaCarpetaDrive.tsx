@@ -96,7 +96,7 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = (
 					{!credencialesGoogleVerificadas && !credencialesGoogleVerificando && (
 						<Alert
 							variant="warning"
-							message="Google Cloud está guardado, pero no verificado. Verifica esa conexión antes de usar Drive o plantillas."
+							message="Como las credenciales de Google Cloud no están verificadas, tampoco lo estarán en las plantillas de seguimiento. Verifica esa conexión antes de usar Drive o plantillas."
 						/>
 					)}
 					{tarjetaCarpeta}

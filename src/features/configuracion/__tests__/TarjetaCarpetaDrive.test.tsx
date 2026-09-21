@@ -14,7 +14,7 @@ describe("TarjetaCarpetaDrive", () => {
 		);
 
 		expect(
-			screen.queryByText(/Google Cloud está guardado, pero no verificado/i),
+			screen.queryByText(/tampoco lo estarán en las plantillas/i),
 		).toBeNull();
 
 		// No debe decir 'Conexión activa con Google' prematuramente mientras Google Cloud verifica
@@ -41,7 +41,7 @@ describe("TarjetaCarpetaDrive", () => {
 		);
 
 		expect(
-			screen.getByText(/Google Cloud está guardado, pero no verificado/i),
+			screen.getByText(/tampoco lo estarán en las plantillas/i),
 		).toBeDefined();
 	});
 
@@ -58,7 +58,7 @@ describe("TarjetaCarpetaDrive", () => {
 		expect(screen.getByText("Plantillas Verificadas")).toBeDefined();
 		expect(screen.getByText("Carpeta vinculada")).toBeDefined();
 		expect(
-			screen.queryByText(/Google Cloud está guardado, pero no verificado/i),
+			screen.queryByText(/tampoco lo estarán en las plantillas/i),
 		).toBeNull();
 	});
 });
