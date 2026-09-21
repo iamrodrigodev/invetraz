@@ -31,7 +31,6 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = (
 		conexion,
 		credencialesGoogleVerificadas,
 		credencialesGoogleVerificando,
-		valorGuardadoVerificado,
 		estadoConexionCarpeta,
 		mensajeErrorCampo,
 		mensajeErrorBanner,
@@ -43,11 +42,8 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = (
 	} = useCarpetaDriveConfig(props);
 
 	const estadoTarjetaCarpeta: EstadoCarpetaDrive = (() => {
-		if (conexion.verificando) {
+		if (conexion.verificando || credencialesGoogleVerificando) {
 			return "verificando";
-		}
-		if (credencialesGoogleVerificando) {
-			return valorGuardadoVerificado ? "verificada" : "pendiente";
 		}
 		if (
 			credencialesGoogleVerificadas &&

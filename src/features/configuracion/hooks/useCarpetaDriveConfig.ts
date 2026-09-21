@@ -145,15 +145,11 @@ export function useCarpetaDriveConfig({
 	});
 
 	const estadoConexionCarpeta: TipoEstadoConexion = (() => {
-		if (conexion.estadoVisual === "verificando") {
+		if (
+			conexion.estadoVisual === "verificando" ||
+			credencialesGoogleVerificando
+		) {
 			return "verificando";
-		}
-		if (credencialesGoogleVerificando) {
-			return valorGuardadoVerificado
-				? "conectado"
-				: carpetaId
-					? "guardado_pendiente"
-					: "no_configurado";
 		}
 		if (!credencialesGoogleVerificadas) {
 			return carpetaId ? "guardado_pendiente" : "no_configurado";

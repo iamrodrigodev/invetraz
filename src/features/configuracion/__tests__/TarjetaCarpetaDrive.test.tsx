@@ -17,6 +17,10 @@ describe("TarjetaCarpetaDrive", () => {
 			screen.queryByText(/Google Cloud está guardado, pero no verificado/i),
 		).toBeNull();
 
+		// No debe decir 'Conexión activa con Google' prematuramente mientras Google Cloud verifica
+		expect(screen.queryByText("Conexión activa con Google")).toBeNull();
+		expect(screen.getByText("Verificando conexión...")).toBeDefined();
+
 		// El botón de verificación debe indicar que espera a Google Cloud
 		const botonVerificar = screen.getByRole("button", {
 			name: /Verificar Conexión/i,
