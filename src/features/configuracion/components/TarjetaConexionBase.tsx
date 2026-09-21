@@ -99,7 +99,7 @@ export const TarjetaConexionBase: React.FC<TarjetaConexionBaseProps> = ({
 	);
 
 	return (
-		<Card>
+		<Card className="flex flex-col h-full">
 			<CardHeader>
 				<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 					<div className="space-y-1">
@@ -113,7 +113,7 @@ export const TarjetaConexionBase: React.FC<TarjetaConexionBaseProps> = ({
 				</div>
 			</CardHeader>
 
-			<CardContent className="space-y-5">
+			<CardContent className="flex flex-col flex-1 space-y-5">
 				{mensajeExito && (
 					<Alert
 						variant="success"
@@ -133,13 +133,16 @@ export const TarjetaConexionBase: React.FC<TarjetaConexionBaseProps> = ({
 				{cabeceraExtra}
 
 				{esFormulario ? (
-					<form onSubmit={onSubmit} className="space-y-5">
-						{children}
+					<form
+						onSubmit={onSubmit}
+						className="flex flex-col flex-1 justify-between space-y-5"
+					>
+						<div className="space-y-5">{children}</div>
 						{renderBotones()}
 					</form>
 				) : (
-					<div className="space-y-5">
-						{children}
+					<div className="flex flex-col flex-1 justify-between space-y-5">
+						<div className="space-y-5">{children}</div>
 						{renderBotones()}
 					</div>
 				)}
