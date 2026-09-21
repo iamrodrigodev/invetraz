@@ -67,10 +67,9 @@ export function useVerificacionConexion<T>({
 		[valorGuardado, sonIguales, valorActual],
 	);
 
-	const deshabilitarVerificar = !esValido || verificando || guardando;
+	const deshabilitarVerificar = verificando || guardando;
 
 	const deshabilitarGuardar =
-		!esValido ||
 		guardando ||
 		verificando ||
 		esIgualAFallidas ||

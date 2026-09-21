@@ -51,6 +51,7 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 	const idActual = useMemo(() => normalizarId(inputUrl), [inputUrl]);
 	const camposCompletos = Boolean(inputUrl.trim());
 	const [tocado, setTocado] = useState(false);
+	const [errorDescartado, setErrorDescartado] = useState(false);
 
 	const errorValidacion = useMemo(() => {
 		const limpia = inputUrl.trim();
@@ -69,7 +70,7 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 		valorActual: idActual,
 		valorGuardado: carpetaId,
 		sonIguales: (a, b) => (a ?? "") === (b ?? ""),
-		esValido: camposCompletos,
+		esValido: Boolean(camposCompletos && !errorValidacion),
 		tieneValorGuardado: Boolean(carpetaId),
 		onVerificar: async () => {
 			const res = await verificarCarpetaDrive({
@@ -101,6 +102,7 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 
 	const onProbarConexion = async () => {
 		setTocado(true);
+		setErrorDescartado(false);
 		if (errorValidacion) {
 			return;
 		}
@@ -110,10 +112,22 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 	const onGuardarFormulario = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setTocado(true);
+		setErrorDescartado(false);
 		if (errorValidacion) {
 			return;
 		}
 		await conexion.ejecutarGuardar();
+	};
+
+	const mensajeErrorBanner =
+		conexion.mensajeError ||
+		(tocado && !errorDescartado ? errorValidacion : null);
+
+	const onLimpiarError = () => {
+		if (conexion.mensajeError) {
+			conexion.setMensajeError(null);
+		}
+		setErrorDescartado(true);
 	};
 
 	const cabeceraVinculada = carpetaId ? (
@@ -157,9 +171,9 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 			icono={FolderGit2}
 			estado={conexion.estadoVisual}
 			mensajeExito={conexion.mensajeExito}
-			mensajeError={conexion.mensajeError}
+			mensajeError={mensajeErrorBanner}
 			onLimpiarExito={() => conexion.setMensajeExito(null)}
-			onLimpiarError={() => conexion.setMensajeError(null)}
+			onLimpiarError={onLimpiarError}
 			verificando={conexion.verificando}
 			guardando={conexion.guardando}
 			deshabilitarVerificar={conexion.deshabilitarVerificar}
@@ -201,9 +215,14 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 				onChange={(e) => {
 					setInputUrl(e.target.value);
 					setTocado(true);
+					setErrorDescartado(false);
 					if (conexion.mensajeError) conexion.setMensajeError(null);
+					if (conexion.mensajeExito) conexion.setMensajeExito(null);
 				}}
-				onBlur={() => setTocado(true)}
+				onBlur={() => {
+					setTocado(true);
+					setErrorDescartado(false);
+				}}
 				disabled={conexion.verificando || conexion.guardando}
 				error={Boolean(mensajeErrorCampo)}
 				errorMessage={mensajeErrorCampo}

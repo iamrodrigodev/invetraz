@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ExternalLink, Key } from "lucide-react";
 import type React from "react";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
 import { useVerificacionConexion } from "../hooks";
@@ -112,12 +112,28 @@ export const TarjetaCredencialesGoogle: React.FC = () => {
 		mensajeSinCambios: "Modifica al menos un campo para guardar cambios",
 	});
 
+	const [tocado, setTocado] = useState(false);
+	const [errorDescartado, setErrorDescartado] = useState(false);
+
+	const errorValidacion = useMemo(() => {
+		const errores = [
+			errors.googleClientId?.message,
+			errors.googleClientSecret?.message,
+			errors.googleRefreshToken?.message,
+		].filter(Boolean);
+
+		if (errores.length === 0) return null;
+		if (errores.length > 1) {
+			return "Por favor, completa todos los campos requeridos antes de continuar.";
+		}
+		return errores[0] as string;
+	}, [errors]);
+
 	const onProbarConexion = async () => {
+		setTocado(true);
+		setErrorDescartado(false);
 		const formValido = await trigger();
 		if (!formValido) {
-			conexion.setMensajeError(
-				"Por favor, completa todos los campos requeridos antes de verificar.",
-			);
 			return;
 		}
 		await conexion.ejecutarVerificar();
@@ -125,25 +141,41 @@ export const TarjetaCredencialesGoogle: React.FC = () => {
 
 	const ultimosValoresRef = useRef(valoresActuales);
 	useEffect(() => {
-		if (
-			conexion.mensajeError &&
-			!sonCredencialesIguales(ultimosValoresRef.current, valoresActuales)
-		) {
+		if (!sonCredencialesIguales(ultimosValoresRef.current, valoresActuales)) {
 			ultimosValoresRef.current = valoresActuales;
-			conexion.setMensajeError(null);
+			setTocado(true);
+			setErrorDescartado(false);
+			if (conexion.mensajeError) {
+				conexion.setMensajeError(null);
+			}
+			if (conexion.mensajeExito) {
+				conexion.setMensajeExito(null);
+			}
 		}
 	}, [valoresActuales, conexion]);
 
 	const onGuardarFormulario = handleSubmit(
 		async () => {
+			setTocado(true);
+			setErrorDescartado(false);
 			await conexion.ejecutarGuardar();
 		},
 		() => {
-			conexion.setMensajeError(
-				"Por favor, completa todos los campos requeridos antes de guardar.",
-			);
+			setTocado(true);
+			setErrorDescartado(false);
 		},
 	);
+
+	const mensajeErrorBanner =
+		conexion.mensajeError ||
+		(tocado && !errorDescartado ? errorValidacion : null);
+
+	const onLimpiarError = () => {
+		if (conexion.mensajeError) {
+			conexion.setMensajeError(null);
+		}
+		setErrorDescartado(true);
+	};
 
 	return (
 		<TarjetaConexionBase
@@ -152,9 +184,9 @@ export const TarjetaCredencialesGoogle: React.FC = () => {
 			icono={Key}
 			estado={conexion.estadoVisual}
 			mensajeExito={conexion.mensajeExito}
-			mensajeError={conexion.mensajeError}
+			mensajeError={mensajeErrorBanner}
 			onLimpiarExito={() => conexion.setMensajeExito(null)}
-			onLimpiarError={() => conexion.setMensajeError(null)}
+			onLimpiarError={onLimpiarError}
 			verificando={conexion.verificando}
 			guardando={conexion.guardando}
 			deshabilitarVerificar={conexion.deshabilitarVerificar}
