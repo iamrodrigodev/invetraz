@@ -5,11 +5,11 @@ export const emailInstitucionalSchema = z
 	.string()
 	.trim()
 	.min(1, { message: "El correo es obligatorio" })
-	.email({ message: "Correo inválido" })
 	.max(VALIDATION_LIMITS.MAX_EMAIL, {
 		message: `El correo no puede exceder los ${VALIDATION_LIMITS.MAX_EMAIL} caracteres`,
 	})
-	.endsWith("@ulasalle.edu.pe", {
+	.pipe(z.email({ error: "Correo inválido" }))
+	.refine((email) => email.endsWith("@ulasalle.edu.pe"), {
 		message: "Debe ser un correo institucional (@ulasalle.edu.pe)",
 	});
 
