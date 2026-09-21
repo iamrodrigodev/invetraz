@@ -68,7 +68,7 @@ public class ServicioDrivePlantillas {
                 configuracionRepository.save(config);
             }
             throw new ExcepcionDeNegocio(
-                    "Google Cloud está guardado, pero no verificado. Verifica esa conexión antes de usar Drive o plantillas.");
+                    "Como las credenciales de Google Cloud no están verificadas, tampoco lo estarán en las plantillas de seguimiento. Verifica esa conexión antes de usar Drive o plantillas.");
         }
 
         File carpetaGoogle;
