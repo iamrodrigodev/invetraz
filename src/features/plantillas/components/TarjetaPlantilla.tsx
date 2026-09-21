@@ -88,24 +88,25 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 					</div>
 
 					<div className="flex items-center gap-2 pt-2">
-						{plantilla.enlaceWeb && (
-							<a
-								href={plantilla.enlaceWeb}
-								target="_blank"
-								rel="noreferrer"
+						{plantilla.enlaceWeb ? (
+							<Button
+								type="button"
+								variant="default"
+								onClick={() => {
+									if (plantilla.enlaceWeb) {
+										window.open(
+											plantilla.enlaceWeb,
+											"_blank",
+											"noopener,noreferrer",
+										);
+									}
+								}}
 								className="flex-1"
 							>
-								<Button
-									type="button"
-									variant="default"
-									size="sm"
-									className="w-full h-8 px-3 text-xs font-medium shadow-xs"
-								>
-									<ExternalLink size={13} className="mr-1.5" />
-									Abrir en Drive
-								</Button>
-							</a>
-						)}
+								<ExternalLink size={16} className="mr-2" />
+								Abrir en Drive
+							</Button>
+						) : null}
 
 						{plantilla.enlaceDescarga && (
 							<a
@@ -118,10 +119,9 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 								<Button
 									type="button"
 									variant="outline"
-									size="sm"
-									className="h-8 px-2.5 text-slate-700 hover:text-primary hover:border-primary-300"
+									className="px-3 text-slate-700 hover:text-primary hover:border-primary-300"
 								>
-									<Download size={14} />
+									<Download size={16} />
 								</Button>
 							</a>
 						)}

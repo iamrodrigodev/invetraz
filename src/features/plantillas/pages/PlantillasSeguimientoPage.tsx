@@ -74,166 +74,166 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 		return datos.plantillas.slice(indiceInicio, indiceFin);
 	}, [datos?.plantillas, indiceInicio, indiceFin]);
 
-	return (
-		<div className="flex flex-col min-h-[calc(100vh-9.5rem)] justify-between space-y-6 pb-6 w-full">
-			<div className="space-y-6 flex-1">
-				<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-					<div>
-						<h1 className="font-extrabold font-heading text-2xl text-slate-900 tracking-tight sm:text-3xl">
-							Plantillas de Seguimiento
-						</h1>
-						<p className="mt-1 text-sm text-slate-600">
-							Archivos y formatos de investigación (.xlsx) sincronizados en
-							tiempo real desde Google Drive.
-						</p>
-					</div>
+	if (cargando) {
+		return <PlantillasSkeleton />;
+	}
 
-					<div className="flex flex-wrap items-center gap-3">
-						{datos?.carpetaConfigurada && datos.carpetaId && (
-							<a
-								href={`https://drive.google.com/drive/folders/${datos.carpetaId}`}
-								target="_blank"
-								rel="noreferrer"
-								className="w-full sm:w-auto"
-							>
-								<Button
-									type="button"
-									variant="default"
-									className="w-full sm:w-auto shadow-xs"
-								>
-									<ExternalLink size={16} className="mr-2" />
-									Abrir carpeta en Drive
-								</Button>
-							</a>
-						)}
-						<Button
-							type="button"
-							variant="outline"
-							onClick={cargar}
-							disabled={cargando}
-							className="w-full sm:w-auto text-slate-700"
-							title="Sincronizar plantillas con Google Drive"
-						>
-							<RefreshCw
-								size={16}
-								className={`mr-2 ${cargando ? "animate-spin text-primary" : ""}`}
-							/>
-							{cargando ? "Sincronizando..." : "Sincronizar"}
-						</Button>
-					</div>
+	return (
+		<div className="space-y-6 pb-12 w-full">
+			<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+				<div>
+					<h1 className="font-extrabold font-heading text-2xl text-slate-900 tracking-tight sm:text-3xl">
+						Plantillas de Seguimiento
+					</h1>
+					<p className="mt-1 text-sm text-slate-600">
+						Archivos y formatos de investigación (.xlsx) sincronizados en tiempo
+						real desde Google Drive.
+					</p>
 				</div>
 
-				{error && (
-					<Alert
-						key="alerta-error"
-						variant="error"
-						message={error}
-						onClose={() => setError(null)}
-					/>
-				)}
-
-				{cargando && <PlantillasSkeleton />}
-
-				{!cargando && !datos?.carpetaConfigurada && (
-					<Card className="border-dashed border-2 border-slate-300 bg-slate-50/50 py-12 text-center w-full">
-						<CardContent className="flex flex-col items-center justify-center space-y-4 max-w-md mx-auto">
-							<div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary">
-								<FolderGit2 size={28} />
-							</div>
-							<div className="space-y-1">
-								<h3 className="font-bold text-slate-900 text-lg">
-									Carpeta de Google Drive no configurada
-								</h3>
-								<p className="text-xs text-slate-600 leading-relaxed">
-									Para consultar las plantillas de seguimiento, debes vincular
-									el enlace de la carpeta de Google Drive en la sección de
-									configuración del sistema.
-								</p>
-							</div>
-							<Button
-								type="button"
-								variant="default"
-								onClick={() => navigate("/configuracion")}
-								className="mt-2 text-xs font-semibold"
-							>
-								<Settings size={14} className="mr-1.5" />
-								Configurar carpeta ahora
-							</Button>
-						</CardContent>
-					</Card>
-				)}
-
-				{!cargando && datos?.carpetaConfigurada && (
-					<div className="space-y-6">
-						<Card className="border-slate-200/90 bg-white shadow-xs w-full">
-							<CardContent className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-								<div className="flex items-center gap-3 min-w-0">
-									<FolderCheck
-										size={24}
-										className="text-primary stroke-[2.2] shrink-0"
-									/>
-									<div className="min-w-0">
-										<div className="flex items-center gap-2 flex-wrap">
-											<span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-												Carpeta vinculada:
-											</span>
-											<Badge
-												variant="primary"
-												className="font-semibold text-xs py-0.5 px-2.5"
-											>
-												{datos.carpetaNombre || "Carpeta de Google Drive"}
-											</Badge>
-										</div>
-										<p className="text-xs text-slate-600 mt-0.5">
-											{totalPlantillas}{" "}
-											{totalPlantillas === 1
-												? "plantilla disponible"
-												: "plantillas disponibles"}{" "}
-											en Google Drive
-										</p>
-									</div>
-								</div>
-								{datos.carpetaId && (
-									<div className="flex items-center gap-2 text-xs text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200/60 self-start sm:self-auto shrink-0">
-										<span className="font-medium text-slate-400">
-											ID Carpeta:
-										</span>
-										<code className="font-mono text-xs text-slate-700 select-all">
-											{datos.carpetaId}
-										</code>
-									</div>
-								)}
-							</CardContent>
-						</Card>
-
-						{totalPlantillas === 0 ? (
-							<Card className="border-dashed border-2 border-slate-200 bg-slate-50/50 py-12 text-center w-full">
-								<CardContent className="flex flex-col items-center justify-center space-y-3 max-w-sm mx-auto">
-									<FileSpreadsheet size={28} className="text-primary" />
-									<div className="space-y-1">
-										<h4 className="font-semibold text-slate-800 text-sm">
-											No hay archivos en la carpeta
-										</h4>
-										<p className="text-xs text-slate-500">
-											No se encontraron archivos de hojas de cálculo (.xlsx) en
-											la carpeta de Drive vinculada.
-										</p>
-									</div>
-								</CardContent>
-							</Card>
-						) : (
-							<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full">
-								{plantillasPaginadas.map((plantilla) => (
-									<TarjetaPlantilla key={plantilla.id} plantilla={plantilla} />
-								))}
-							</div>
-						)}
-					</div>
-				)}
+				<div className="flex flex-wrap items-center gap-3">
+					<Button
+						type="button"
+						variant="outline"
+						onClick={cargar}
+						disabled={cargando}
+						className="w-full sm:w-auto"
+						title="Sincronizar plantillas con Google Drive"
+					>
+						<RefreshCw
+							size={16}
+							className={`mr-2 ${cargando ? "animate-spin text-primary" : ""}`}
+						/>
+						{cargando ? "Sincronizando..." : "Sincronizar"}
+					</Button>
+					{datos?.carpetaConfigurada && datos.carpetaId && (
+						<Button
+							type="button"
+							variant="default"
+							onClick={() =>
+								window.open(
+									`https://drive.google.com/drive/folders/${datos.carpetaId}`,
+									"_blank",
+									"noopener,noreferrer",
+								)
+							}
+							className="w-full sm:w-auto"
+						>
+							<ExternalLink size={16} className="mr-2" />
+							Abrir carpeta en Drive
+						</Button>
+					)}
+				</div>
 			</div>
 
-			{!cargando && datos?.carpetaConfigurada && totalPlantillas > 0 && (
-				<div className="mt-auto pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full">
+			{error && (
+				<Alert
+					key="alerta-error"
+					variant="error"
+					message={error}
+					onClose={() => setError(null)}
+				/>
+			)}
+
+			{!datos?.carpetaConfigurada && (
+				<Card className="border-dashed border-2 border-slate-300 bg-slate-50/50 py-12 text-center w-full">
+					<CardContent className="flex flex-col items-center justify-center space-y-4 max-w-md mx-auto">
+						<div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary">
+							<FolderGit2 size={28} />
+						</div>
+						<div className="space-y-1">
+							<h3 className="font-bold text-slate-900 text-lg">
+								Carpeta de Google Drive no configurada
+							</h3>
+							<p className="text-xs text-slate-600 leading-relaxed">
+								Para consultar las plantillas de seguimiento, debes vincular el
+								enlace de la carpeta de Google Drive en la sección de
+								configuración del sistema.
+							</p>
+						</div>
+						<Button
+							type="button"
+							variant="default"
+							onClick={() => navigate("/configuracion")}
+							className="mt-2 text-xs font-semibold"
+						>
+							<Settings size={14} className="mr-1.5" />
+							Configurar carpeta ahora
+						</Button>
+					</CardContent>
+				</Card>
+			)}
+
+			{datos?.carpetaConfigurada && (
+				<div className="space-y-6">
+					<Card className="border-slate-200/90 bg-white shadow-xs w-full">
+						<CardContent className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+							<div className="flex items-center gap-3 min-w-0">
+								<FolderCheck
+									size={24}
+									className="text-primary stroke-[2.2] shrink-0"
+								/>
+								<div className="min-w-0">
+									<div className="flex items-center gap-2 flex-wrap">
+										<span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+											Carpeta vinculada:
+										</span>
+										<Badge
+											variant="primary"
+											className="font-semibold text-xs py-0.5 px-2.5"
+										>
+											{datos.carpetaNombre || "Carpeta de Google Drive"}
+										</Badge>
+									</div>
+									<p className="text-xs text-slate-600 mt-0.5">
+										{totalPlantillas}{" "}
+										{totalPlantillas === 1
+											? "plantilla disponible"
+											: "plantillas disponibles"}{" "}
+										en Google Drive
+									</p>
+								</div>
+							</div>
+							{datos.carpetaId && (
+								<div className="flex items-center gap-2 text-xs text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200/60 self-start sm:self-auto shrink-0">
+									<span className="font-medium text-slate-400">
+										ID Carpeta:
+									</span>
+									<code className="font-mono text-xs text-slate-700 select-all">
+										{datos.carpetaId}
+									</code>
+								</div>
+							)}
+						</CardContent>
+					</Card>
+
+					{totalPlantillas === 0 ? (
+						<Card className="border-dashed border-2 border-slate-200 bg-slate-50/50 py-12 text-center w-full">
+							<CardContent className="flex flex-col items-center justify-center space-y-3 max-w-sm mx-auto">
+								<FileSpreadsheet size={28} className="text-primary" />
+								<div className="space-y-1">
+									<h4 className="font-semibold text-slate-800 text-sm">
+										No hay archivos en la carpeta
+									</h4>
+									<p className="text-xs text-slate-500">
+										No se encontraron archivos de hojas de cálculo (.xlsx) en la
+										carpeta de Drive vinculada.
+									</p>
+								</div>
+							</CardContent>
+						</Card>
+					) : (
+						<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full">
+							{plantillasPaginadas.map((plantilla) => (
+								<TarjetaPlantilla key={plantilla.id} plantilla={plantilla} />
+							))}
+						</div>
+					)}
+				</div>
+			)}
+
+			{datos?.carpetaConfigurada && totalPlantillas > 0 && (
+				<div className="pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full">
 					<p className="text-xs text-slate-600">
 						Mostrando{" "}
 						<span className="font-semibold text-slate-900">

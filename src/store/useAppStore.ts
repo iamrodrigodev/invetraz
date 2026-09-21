@@ -48,10 +48,10 @@ if (sesionPreviaActiva) {
 }
 
 export const useAppStore = create<AppState>((set) => ({
-	configurado: configuradoCacheado ? true : null,
-	autenticado: sesionPreviaActiva ? null : false,
+	configurado: sesionPreviaActiva || configuradoCacheado ? true : null,
+	autenticado: sesionPreviaActiva,
 	usuarioEmail: usuarioEmailCacheado,
-	estadoVerificado: configuradoCacheado && !sesionPreviaActiva,
+	estadoVerificado: Boolean(sesionPreviaActiva || configuradoCacheado),
 	verificarEstadoGlobal: async () => {
 		try {
 			const [esConfigurado, resAuth] = await Promise.all([
