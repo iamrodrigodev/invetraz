@@ -211,10 +211,10 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 								/>
 								<div>
 									<div className="flex items-center gap-2 flex-wrap">
-										<span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+										<span className="text-xs font-medium text-slate-500 uppercase tracking-wider">
 											Carpeta vinculada:
 										</span>
-										<Badge variant="primary" className="font-semibold text-xs">
+										<Badge variant="primary" className="font-medium text-xs">
 											{datos.carpetaNombre || "Carpeta de Google Drive"}
 										</Badge>
 									</div>
