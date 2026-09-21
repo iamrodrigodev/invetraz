@@ -123,10 +123,6 @@ export const TarjetaCredencialesGoogle: React.FC = () => {
 		await conexion.ejecutarVerificar();
 	};
 
-	const tieneErrorConexion = Boolean(
-		conexion.mensajeError || conexion.estadoVisual === "error",
-	);
-
 	const ultimosValoresRef = useRef(valoresActuales);
 	useEffect(() => {
 		if (
@@ -188,7 +184,8 @@ export const TarjetaCredencialesGoogle: React.FC = () => {
 				placeholder="ej. 1234567890-abcdefg.apps.googleusercontent.com"
 				maxLength={VALIDATION_LIMITS.MAX_GOOGLE_CLIENT_ID}
 				charCount={clientId?.length ?? 0}
-				error={Boolean(errors.googleClientId || tieneErrorConexion)}
+				error={Boolean(errors.googleClientId)}
+				errorMessage={errors.googleClientId?.message}
 				{...register("googleClientId")}
 			/>
 
@@ -200,7 +197,8 @@ export const TarjetaCredencialesGoogle: React.FC = () => {
 				esSensible
 				maxLength={VALIDATION_LIMITS.MAX_GOOGLE_CLIENT_SECRET}
 				charCount={clientSecret?.length ?? 0}
-				error={Boolean(errors.googleClientSecret || tieneErrorConexion)}
+				error={Boolean(errors.googleClientSecret)}
+				errorMessage={errors.googleClientSecret?.message}
 				{...register("googleClientSecret")}
 			/>
 
@@ -224,7 +222,8 @@ export const TarjetaCredencialesGoogle: React.FC = () => {
 				esSensible
 				maxLength={VALIDATION_LIMITS.MAX_GOOGLE_REFRESH_TOKEN}
 				charCount={refreshToken?.length ?? 0}
-				error={Boolean(errors.googleRefreshToken || tieneErrorConexion)}
+				error={Boolean(errors.googleRefreshToken)}
+				errorMessage={errors.googleRefreshToken?.message}
 				{...register("googleRefreshToken")}
 			/>
 		</TarjetaConexionBase>

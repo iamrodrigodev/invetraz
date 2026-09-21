@@ -50,6 +50,20 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 
 	const idActual = useMemo(() => normalizarId(inputUrl), [inputUrl]);
 	const camposCompletos = Boolean(inputUrl.trim());
+	const [tocado, setTocado] = useState(false);
+
+	const errorValidacion = useMemo(() => {
+		const limpia = inputUrl.trim();
+		if (!limpia) {
+			return "El enlace o ID de la carpeta de Google Drive es obligatorio";
+		}
+		if (inputUrl.length > VALIDATION_LIMITS.MAX_GOOGLE_DRIVE_FOLDER_ID) {
+			return `El enlace o ID no puede exceder los ${VALIDATION_LIMITS.MAX_GOOGLE_DRIVE_FOLDER_ID} caracteres`;
+		}
+		return null;
+	}, [inputUrl]);
+
+	const mensajeErrorCampo = tocado ? errorValidacion : null;
 
 	const conexion = useVerificacionConexion<string>({
 		valorActual: idActual,
@@ -85,8 +99,20 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 		mensajeSinCambios: "Modifica el enlace o ID para guardar cambios",
 	});
 
+	const onProbarConexion = async () => {
+		setTocado(true);
+		if (errorValidacion) {
+			return;
+		}
+		await conexion.ejecutarVerificar();
+	};
+
 	const onGuardarFormulario = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setTocado(true);
+		if (errorValidacion) {
+			return;
+		}
 		await conexion.ejecutarGuardar();
 	};
 
@@ -140,7 +166,7 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 			deshabilitarGuardar={conexion.deshabilitarGuardar}
 			tooltipVerificar={conexion.tooltipVerificar}
 			tooltipGuardar={conexion.tooltipGuardar}
-			onVerificar={conexion.ejecutarVerificar}
+			onVerificar={onProbarConexion}
 			esFormulario={true}
 			onSubmit={onGuardarFormulario}
 			cabeceraExtra={cabeceraVinculada}
@@ -174,12 +200,13 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 				value={inputUrl}
 				onChange={(e) => {
 					setInputUrl(e.target.value);
+					setTocado(true);
 					if (conexion.mensajeError) conexion.setMensajeError(null);
 				}}
+				onBlur={() => setTocado(true)}
 				disabled={conexion.verificando || conexion.guardando}
-				error={Boolean(
-					conexion.mensajeError || conexion.estadoVisual === "error",
-				)}
+				error={Boolean(mensajeErrorCampo)}
+				errorMessage={mensajeErrorCampo}
 			/>
 		</TarjetaConexionBase>
 	);
