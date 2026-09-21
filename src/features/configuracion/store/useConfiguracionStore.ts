@@ -22,18 +22,29 @@ export function sonCredencialesIguales(
 	);
 }
 
+export function tieneCredencialesCompletas(
+	c: ActualizarCredencialesPeticion | null | undefined,
+): boolean {
+	if (!c) return false;
+	return Boolean(
+		c.googleClientId?.trim() &&
+			c.googleClientSecret?.trim() &&
+			c.googleRefreshToken?.trim(),
+	);
+}
+
 export interface EstadoConexionContexto {
+	credencialesGuardadas: ActualizarCredencialesPeticion;
+	credencialesVerificadas: ActualizarCredencialesPeticion | null;
+	credencialesFallidas: ActualizarCredencialesPeticion | null;
+	valoresActuales: ActualizarCredencialesPeticion;
 	verificando: boolean;
 	guardando: boolean;
 	camposCompletos: boolean;
 	tieneErrores: boolean;
-	isDirty: boolean;
-	valoresActuales: ActualizarCredencialesPeticion;
 }
 
 export function resolverEstadoConexion(
-	estadoBase: TipoEstadoConexion,
-	credencialesVerificadas: ActualizarCredencialesPeticion | null,
 	ctx: EstadoConexionContexto,
 ): TipoEstadoConexion {
 	if (ctx.verificando || ctx.guardando) {
@@ -42,18 +53,27 @@ export function resolverEstadoConexion(
 	if (!ctx.camposCompletos || ctx.tieneErrores) {
 		return "no_configurado";
 	}
-	if (sonCredencialesIguales(credencialesVerificadas, ctx.valoresActuales)) {
+	if (sonCredencialesIguales(ctx.credencialesFallidas, ctx.valoresActuales)) {
+		return "error";
+	}
+	if (
+		sonCredencialesIguales(ctx.credencialesVerificadas, ctx.valoresActuales)
+	) {
 		return "conectado";
 	}
-	if (ctx.isDirty) {
-		return "no_configurado";
+	if (
+		sonCredencialesIguales(ctx.credencialesGuardadas, ctx.valoresActuales) &&
+		tieneCredencialesCompletas(ctx.credencialesGuardadas)
+	) {
+		return "conectado";
 	}
-	return estadoBase;
+	return "no_configurado";
 }
 
 interface ConfiguracionState {
 	credenciales: ActualizarCredencialesPeticion;
 	credencialesVerificadas: ActualizarCredencialesPeticion | null;
+	credencialesFallidas: ActualizarCredencialesPeticion | null;
 	estadoConexion: TipoEstadoConexion;
 	cargado: boolean;
 	cargando: boolean;
@@ -79,6 +99,7 @@ const VALORES_POR_DEFECTO: ActualizarCredencialesPeticion = {
 export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 	credenciales: VALORES_POR_DEFECTO,
 	credencialesVerificadas: null,
+	credencialesFallidas: null,
 	estadoConexion: "no_configurado",
 	cargado: false,
 	cargando: false,
@@ -110,6 +131,7 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 			set({
 				credenciales: nuevasCredenciales,
 				credencialesVerificadas: tieneCredenciales ? nuevasCredenciales : null,
+				credencialesFallidas: null,
 				estadoConexion: tieneCredenciales ? "conectado" : "no_configurado",
 				cargado: true,
 				cargando: false,
@@ -131,6 +153,7 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 			set({
 				credenciales: datos,
 				credencialesVerificadas: datos,
+				credencialesFallidas: null,
 				estadoConexion: "conectado",
 				cargado: true,
 				cargando: false,
@@ -138,11 +161,17 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 
 			return resVerificacion;
 		} catch (error) {
-			set({
-				credencialesVerificadas: null,
+			set((state) => ({
+				credencialesVerificadas: sonCredencialesIguales(
+					state.credencialesVerificadas,
+					datos,
+				)
+					? null
+					: state.credencialesVerificadas,
+				credencialesFallidas: datos,
 				estadoConexion: "error",
 				cargando: false,
-			});
+			}));
 			throw error;
 		}
 	},
@@ -152,16 +181,28 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 		set({ estadoConexion: "verificando" });
 		try {
 			const res = await verificarConfiguracion(creds);
-			set({
+			set((state) => ({
 				credencialesVerificadas: creds,
+				credencialesFallidas: sonCredencialesIguales(
+					state.credencialesFallidas,
+					creds,
+				)
+					? null
+					: state.credencialesFallidas,
 				estadoConexion: "conectado",
-			});
+			}));
 			return res;
 		} catch (error) {
-			set({
-				credencialesVerificadas: null,
+			set((state) => ({
+				credencialesVerificadas: sonCredencialesIguales(
+					state.credencialesVerificadas,
+					creds,
+				)
+					? null
+					: state.credencialesVerificadas,
+				credencialesFallidas: creds,
 				estadoConexion: "error",
-			});
+			}));
 			throw error;
 		}
 	},
@@ -174,6 +215,7 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 		set({
 			credenciales: VALORES_POR_DEFECTO,
 			credencialesVerificadas: null,
+			credencialesFallidas: null,
 			estadoConexion: "no_configurado",
 			cargado: false,
 			cargando: false,

@@ -8,6 +8,7 @@ export interface InputProps
 	errorMessage?: React.ReactNode;
 	rightElement?: React.ReactNode;
 	showCount?: boolean;
+	charCount?: number;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -20,6 +21,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 			type = "text",
 			rightElement,
 			showCount,
+			charCount,
 			maxLength,
 			onChange,
 			value,
@@ -32,7 +34,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 		const inputId = id || generatedId;
 		const errorId = `${inputId}-error`;
 
-		const [charCount, setCharCount] = useState<number>(() => {
+		const [localCharCount, setLocalCharCount] = useState<number>(() => {
 			if (typeof value === "string") return value.length;
 			if (typeof defaultValue === "string") return defaultValue.length;
 			return 0;
@@ -40,18 +42,25 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
 		useEffect(() => {
 			if (value !== undefined && typeof value === "string") {
-				setCharCount(value.length);
+				setLocalCharCount(value.length);
 			}
 		}, [value]);
 
 		const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 			if (showCount || maxLength) {
-				setCharCount(e.target.value.length);
+				setLocalCharCount(e.target.value.length);
 			}
 			if (onChange) {
 				onChange(e);
 			}
 		};
+
+		const countMostrado =
+			typeof charCount === "number"
+				? charCount
+				: typeof value === "string"
+					? value.length
+					: localCharCount;
 
 		const hasError = Boolean(error || errorMessage);
 
@@ -99,7 +108,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 						</div>
 						{showCount && maxLength && (
 							<span className="shrink-0 font-medium text-slate-500">
-								{charCount} / {maxLength}
+								{countMostrado} / {maxLength}
 							</span>
 						)}
 					</div>

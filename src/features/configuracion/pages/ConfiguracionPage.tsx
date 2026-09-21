@@ -32,7 +32,7 @@ export function ConfiguracionPage() {
 	const {
 		credenciales,
 		credencialesVerificadas,
-		estadoConexion,
+		credencialesFallidas,
 		cargado,
 		cargarConfiguracion,
 		guardarConfiguracion,
@@ -79,19 +79,15 @@ export function ConfiguracionPage() {
 	const deshabilitarGuardar =
 		!configuracionCompleta || !isDirty || isSubmitting || verificando;
 
-	useEffect(() => {
-		if (isDirty) {
-			setMensajeExito(null);
-		}
-	}, [isDirty]);
-
 	const estadoConexionVisual = useMemo(() => {
-		return resolverEstadoConexion(estadoConexion, credencialesVerificadas, {
+		return resolverEstadoConexion({
+			credencialesGuardadas: credenciales,
+			credencialesVerificadas,
+			credencialesFallidas,
 			verificando,
 			guardando: isSubmitting,
 			camposCompletos,
 			tieneErrores,
-			isDirty,
 			valoresActuales: {
 				googleClientId: clientId || "",
 				googleClientSecret: clientSecret || "",
@@ -99,13 +95,13 @@ export function ConfiguracionPage() {
 			},
 		});
 	}, [
-		estadoConexion,
+		credenciales,
 		credencialesVerificadas,
+		credencialesFallidas,
 		verificando,
 		isSubmitting,
 		camposCompletos,
 		tieneErrores,
-		isDirty,
 		clientId,
 		clientSecret,
 		refreshToken,
@@ -253,6 +249,7 @@ export function ConfiguracionPage() {
 									}
 									placeholder="ej. 1234567890-abcdefg.apps.googleusercontent.com"
 									maxLength={VALIDATION_LIMITS.MAX_GOOGLE_CLIENT_ID}
+									charCount={clientId?.length ?? 0}
 									errorMessage={errors.googleClientId?.message}
 									{...register("googleClientId")}
 								/>
@@ -264,6 +261,7 @@ export function ConfiguracionPage() {
 									placeholder="ej. GOCSPX-abcdefghijklmnop12345"
 									esSensible
 									maxLength={VALIDATION_LIMITS.MAX_GOOGLE_CLIENT_SECRET}
+									charCount={clientSecret?.length ?? 0}
 									errorMessage={errors.googleClientSecret?.message}
 									{...register("googleClientSecret")}
 								/>
@@ -287,6 +285,7 @@ export function ConfiguracionPage() {
 									placeholder="ej. 1//04abcdefghijklmnopqrstuvwxyz"
 									esSensible
 									maxLength={VALIDATION_LIMITS.MAX_GOOGLE_REFRESH_TOKEN}
+									charCount={refreshToken?.length ?? 0}
 									errorMessage={errors.googleRefreshToken?.message}
 									{...register("googleRefreshToken")}
 								/>
