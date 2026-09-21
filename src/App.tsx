@@ -8,14 +8,13 @@ export default function App() {
 	const { pathname } = useLocation();
 	const navigate = useNavigate();
 	const ruta = pathname.slice(1);
-	const moduloActivo = ModuloIdSchema.catch("actividades").parse(ruta);
+	const moduloActivo = ModuloIdSchema.catch("actividades").parse(
+		pathname === "/" ? localStorage.getItem("moduloActivo") : ruta,
+	);
 
 	useEffect(() => {
 		if (pathname === "/") {
-			const guardado = ModuloIdSchema.catch("actividades").parse(
-				localStorage.getItem("moduloActivo"),
-			);
-			navigate(`/${guardado}`, { replace: true });
+			navigate(`/${moduloActivo}`, { replace: true });
 		} else if (ruta !== moduloActivo) {
 			navigate(`/${moduloActivo}`, { replace: true });
 		} else {
