@@ -6,6 +6,7 @@ export const ModuloIdSchema = z.enum([
 	"reportes",
 	"plantillas",
 	"configuracion",
+	"documentacion",
 ]);
 
 export type ModuloId = z.infer<typeof ModuloIdSchema>;

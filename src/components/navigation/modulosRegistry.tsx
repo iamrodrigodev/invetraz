@@ -2,6 +2,7 @@ import type React from "react";
 import {
 	ActividadesSeguimientoPage,
 	ConfiguracionPage,
+	DocumentacionPage,
 	PlantillasSeguimientoPage,
 	ReportesPage,
 } from "../../pages";
@@ -12,4 +13,5 @@ export const REGISTRO_MODULOS: Record<ModuloId, React.ComponentType> = {
 	reportes: ReportesPage,
 	plantillas: PlantillasSeguimientoPage,
 	configuracion: ConfiguracionPage,
+	documentacion: DocumentacionPage,
 };

@@ -1,5 +1,6 @@
 import {
 	BarChart3,
+	BookOpen,
 	ClipboardCheck,
 	LayoutTemplate,
 	Settings,
@@ -34,5 +35,12 @@ export const ELEMENTOS_NAVEGACION: ItemNavegacion[] = [
 		etiquetaMenu: "Configuración",
 		icono: Settings,
 		descripcion: "Credenciales y parámetros de integración",
+	},
+	{
+		id: "documentacion",
+		titulo: "Documentación de Integración",
+		etiquetaMenu: "Documentación",
+		icono: BookOpen,
+		descripcion: "Guías de Google Classroom y permisos",
 	},
 ];
