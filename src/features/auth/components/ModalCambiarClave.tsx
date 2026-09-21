@@ -106,9 +106,7 @@ export function ModalCambiarClave({
 		>
 			{exito ? (
 				<div className="flex flex-col items-center justify-center py-6 text-center">
-					<div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-green-600">
-						<ShieldCheck className="h-7 w-7" />
-					</div>
+					<ShieldCheck className="mb-4 h-10 w-10 text-green-600" />
 					<h4 className="mb-2 text-lg font-semibold text-slate-900 font-heading">
 						Contraseña actualizada
 					</h4>
