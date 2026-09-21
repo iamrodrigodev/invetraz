@@ -15,25 +15,31 @@ export function Skeleton({ className, ...props }: SkeletonProps) {
 	);
 }
 
-export interface PageSkeletonProps {
-	className?: string;
+export interface ModuloEnConstruccionSkeletonProps {
+	modulo: "actividades" | "reportes";
 }
 
-export function PageSkeleton({ className }: PageSkeletonProps = {}) {
+export function ModuloEnConstruccionSkeleton({
+	modulo,
+}: ModuloEnConstruccionSkeletonProps) {
 	return (
 		<div
-			className={cn("space-y-6 w-full", className)}
+			className="flex h-full min-h-[450px] w-full flex-1 flex-col items-center justify-center rounded-3xl border border-slate-200/60 bg-white p-8 text-center shadow-xs md:p-12"
 			role="status"
 			aria-busy="true"
 			aria-label="Cargando contenido..."
 		>
-			<div>
-				<Skeleton className="h-8 w-72 rounded-lg" />
-				<Skeleton className="mt-2 h-4 w-96 rounded-md max-w-full" />
-			</div>
-			<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-				<Skeleton className="h-64 w-full rounded-2xl" />
-				<Skeleton className="h-64 w-full rounded-2xl" />
+			<Skeleton className="mb-6 h-14 w-14 rounded-xl" />
+			<Skeleton
+				className={cn(
+					"mb-2 h-8 max-w-full rounded-lg md:h-9",
+					modulo === "actividades" ? "w-80 md:w-96" : "w-32 md:w-40",
+				)}
+			/>
+			<div className="flex w-full max-w-md flex-col items-center gap-2">
+				<Skeleton className="h-4 w-full rounded-md" />
+				<Skeleton className="h-4 w-11/12 rounded-md" />
+				<Skeleton className="h-4 w-2/3 rounded-md" />
 			</div>
 		</div>
 	);
@@ -413,7 +419,11 @@ export function DashboardSkeleton() {
 						) : moduloActivo === "plantillas" ? (
 							<PlantillasSkeleton />
 						) : (
-							<PageSkeleton />
+							<ModuloEnConstruccionSkeleton
+								modulo={
+									moduloActivo === "reportes" ? "reportes" : "actividades"
+								}
+							/>
 						)}
 					</div>
 				</main>
