@@ -43,4 +43,17 @@ describe("TarjetaCarpetaVinculada", () => {
 		expect(screen.getByText(/carpeta guardada sin verificar/i)).toBeDefined();
 		expect(screen.getByText("Guardada, no verificada")).toBeDefined();
 	});
+
+	it("renderiza correctamente en estado no_disponible con nombre preservado y badge 'No se puede usar'", () => {
+		render(
+			<TarjetaCarpetaVinculada
+				carpetaId="folder-abc-123"
+				nombre="Plantillas de Seguimiento"
+				estado="no_disponible"
+			/>,
+		);
+
+		expect(screen.getByText("Plantillas de Seguimiento")).toBeDefined();
+		expect(screen.getByText("No se puede usar")).toBeDefined();
+	});
 });

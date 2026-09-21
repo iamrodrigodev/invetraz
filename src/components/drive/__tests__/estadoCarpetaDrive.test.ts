@@ -63,4 +63,19 @@ describe("resolverVistaCarpetaDrive", () => {
 		expect(vista.nombreVisible).toBe("Plantillas 2026");
 		expect(vista.badgeTexto).toBe("Carpeta vinculada");
 	});
+
+	it("maneja estado no_disponible mostrando badge 'No se puede usar' y preservando el nombre", () => {
+		const vista = resolverVistaCarpetaDrive({
+			carpetaId: "folder-123",
+			carpetaNombre: "Plantillas de Investigación",
+			estado: "no_disponible",
+		});
+
+		expect(vista.estado).toBe("no_disponible");
+		expect(vista.estaNoDisponible).toBe(true);
+		expect(vista.estaPendiente).toBe(false);
+		expect(vista.estaVerificando).toBe(false);
+		expect(vista.nombreVisible).toBe("Plantillas de Investigación");
+		expect(vista.badgeTexto).toBe("No se puede usar");
+	});
 });

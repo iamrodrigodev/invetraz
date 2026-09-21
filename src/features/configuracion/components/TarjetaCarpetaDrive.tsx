@@ -45,6 +45,9 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = (
 		if (conexion.verificando || credencialesGoogleVerificando) {
 			return "verificando";
 		}
+		if (!credencialesGoogleVerificadas) {
+			return "no_disponible";
+		}
 		if (
 			credencialesGoogleVerificadas &&
 			estadoConexionCarpeta === "conectado"

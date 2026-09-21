@@ -33,7 +33,7 @@ export const TarjetaCarpetaVinculada: React.FC<
 
 	const badgeVariant = vista.estaVerificando
 		? "primary"
-		: vista.estaPendiente
+		: vista.estaNoDisponible || vista.estaPendiente
 			? "warning"
 			: "success";
 
@@ -52,7 +52,7 @@ export const TarjetaCarpetaVinculada: React.FC<
 						>
 							{vista.estaVerificando ? (
 								<RefreshCw size={11} className="shrink-0 animate-spin" />
-							) : vista.estaPendiente ? (
+							) : vista.estaNoDisponible || vista.estaPendiente ? (
 								<AlertTriangle size={11} className="shrink-0" />
 							) : (
 								<CircleCheck size={11} className="shrink-0" />

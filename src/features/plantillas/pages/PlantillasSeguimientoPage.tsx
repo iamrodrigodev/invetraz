@@ -87,8 +87,9 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 	});
 	const credencialesGoogleVerificadas =
 		estadoCredencialesGoogle === "conectado";
-	const estadoVisualCarpeta: EstadoCarpetaDrive =
-		credencialesGoogleVerificadas && datos?.driveVerificado
+	const estadoVisualCarpeta: EstadoCarpetaDrive = !credencialesGoogleVerificadas
+		? "no_disponible"
+		: datos?.driveVerificado
 			? "verificada"
 			: "pendiente";
 	const tituloVacioPlantillas = credencialesGoogleVerificadas

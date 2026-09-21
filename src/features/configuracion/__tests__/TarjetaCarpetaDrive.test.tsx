@@ -30,7 +30,7 @@ describe("TarjetaCarpetaDrive", () => {
 		);
 	});
 
-	it("muestra alerta de advertencia cuando Google Cloud está en 'guardado_pendiente'", () => {
+	it("muestra alerta de advertencia y estado 'No se puede usar' cuando Google Cloud está en 'guardado_pendiente'", () => {
 		render(
 			<TarjetaCarpetaDrive
 				carpetaIdInicial="folder-123"
@@ -43,6 +43,11 @@ describe("TarjetaCarpetaDrive", () => {
 		expect(
 			screen.getByText(/tampoco lo estarán en las plantillas/i),
 		).toBeDefined();
+
+		// Preserva el nombre de la carpeta y muestra el badge 'No se puede usar'
+		expect(screen.getByText("Mis Plantillas")).toBeDefined();
+		const badgesNoDisponible = screen.getAllByText("No se puede usar");
+		expect(badgesNoDisponible.length).toBeGreaterThan(0);
 	});
 
 	it("muestra carpeta vinculada correctamente cuando las credenciales están conectadas", () => {

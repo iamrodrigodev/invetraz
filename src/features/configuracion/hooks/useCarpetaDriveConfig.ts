@@ -152,7 +152,7 @@ export function useCarpetaDriveConfig({
 			return "verificando";
 		}
 		if (!credencialesGoogleVerificadas) {
-			return carpetaId ? "guardado_pendiente" : "no_configurado";
+			return carpetaId ? "no_disponible" : "no_configurado";
 		}
 		if (conexion.estadoVisual === "conectado") {
 			return "conectado";

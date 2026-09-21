@@ -7,7 +7,8 @@ export type TipoEstadoConexion =
 	| "guardado_pendiente"
 	| "no_configurado"
 	| "verificando"
-	| "error";
+	| "error"
+	| "no_disponible";
 
 interface EstadoConexionBadgeProps {
 	estado: TipoEstadoConexion;
@@ -31,6 +32,13 @@ export const EstadoConexionBadge: React.FC<EstadoConexionBadgeProps> = ({
 				<Badge variant="warning" className={className}>
 					<AlertCircle size={13} className="shrink-0 text-amber-600" />
 					<span>Guardada, no verificada</span>
+				</Badge>
+			);
+		case "no_disponible":
+			return (
+				<Badge variant="warning" className={className}>
+					<AlertCircle size={13} className="shrink-0 text-amber-600" />
+					<span>No se puede usar</span>
 				</Badge>
 			);
 		case "verificando":
