@@ -44,9 +44,6 @@ public class ServicioDrivePlantillas {
         if (matcher.find()) {
             return matcher.group(1);
         }
-        if (!limpia.contains("/") && !limpia.contains("?")) {
-            return limpia;
-        }
         return limpia;
     }
 

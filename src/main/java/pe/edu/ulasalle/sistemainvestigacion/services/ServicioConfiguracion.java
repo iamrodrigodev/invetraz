@@ -172,15 +172,20 @@ public class ServicioConfiguracion {
         } catch (ExcepcionDeNegocio e) {
             throw e;
         } catch (Exception e) {
-            String mensajeDetalle = e.getMessage() != null ? e.getMessage() : "Error desconocido";
-            if (mensajeDetalle.contains("invalid_grant")) {
-                mensajeDetalle =
-                        "El Refresh Token es inválido, ha expirado o fue revocado en Google Cloud.";
-            } else if (mensajeDetalle.contains("invalid_client")
-                    || mensajeDetalle.contains("unauthorized_client")) {
-                mensajeDetalle = "El Client ID o Client Secret son incorrectos.";
-            }
+            String mensajeDetalle = resolverMensajeDetalle(e);
             throw new ExcepcionDeNegocio("Error al conectar con Google: " + mensajeDetalle);
         }
+    }
+
+    private String resolverMensajeDetalle(Exception e) {
+        String mensajeDetalle = e.getMessage() != null ? e.getMessage() : "Error desconocido";
+        if (mensajeDetalle.contains("invalid_grant")) {
+            return "El Refresh Token es inválido, ha expirado o fue revocado en Google Cloud.";
+        }
+        if (mensajeDetalle.contains("invalid_client")
+                || mensajeDetalle.contains("unauthorized_client")) {
+            return "El Client ID o Client Secret son incorrectos.";
+        }
+        return mensajeDetalle;
     }
 }
