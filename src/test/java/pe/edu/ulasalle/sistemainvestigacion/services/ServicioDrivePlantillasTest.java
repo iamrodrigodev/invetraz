@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -58,6 +59,31 @@ class ServicioDrivePlantillasTest {
     }
 
     @Test
+    void vincularCarpeta_cuandoDriveFalla_guardaIdNormalizado() {
+        ConfiguracionSistema config =
+                ConfiguracionSistema.builder()
+                        .googleClientId("id")
+                        .googleClientSecret("sec")
+                        .googleRefreshToken("ref")
+                        .build();
+
+        when(configuracionRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.of(config));
+        when(proveedorDrive.obtenerCliente()).thenThrow(new RuntimeException("Drive no disponible"));
+
+        CarpetaPlantillasRespuestaDto resultado =
+                servicio.vincularCarpeta(
+                        "https://drive.google.com/drive/folders/folder-pendiente");
+
+        assertTrue(resultado.carpetaConfigurada());
+        assertEquals("folder-pendiente", resultado.carpetaId());
+        assertNull(resultado.carpetaNombre());
+        assertTrue(resultado.plantillas().isEmpty());
+        assertEquals("folder-pendiente", config.getGoogleDriveFolderId());
+        assertNull(config.getGoogleDriveFolderName());
+        verify(configuracionRepository).save(config);
+    }
+
+    @Test
     void obtenerPlantillasConfiguradas_cuandoNoHayConfiguracion_retornaVacio() {
         when(configuracionRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.empty());
 
@@ -85,6 +111,28 @@ class ServicioDrivePlantillasTest {
 
         assertFalse(resultado.carpetaConfigurada());
         assertNull(resultado.carpetaId());
+        assertTrue(resultado.plantillas().isEmpty());
+    }
+
+    @Test
+    void obtenerPlantillasConfiguradas_cuandoDriveFalla_retornaCarpetaSinPlantillas() {
+        ConfiguracionSistema config =
+                ConfiguracionSistema.builder()
+                        .googleClientId("id")
+                        .googleClientSecret("sec")
+                        .googleRefreshToken("ref")
+                        .googleDriveFolderId("folder-pendiente")
+                        .googleDriveFolderName(null)
+                        .build();
+
+        when(configuracionRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.of(config));
+        when(proveedorDrive.obtenerCliente()).thenThrow(new RuntimeException("Drive no disponible"));
+
+        CarpetaPlantillasRespuestaDto resultado = servicio.obtenerPlantillasConfiguradas();
+
+        assertTrue(resultado.carpetaConfigurada());
+        assertEquals("folder-pendiente", resultado.carpetaId());
+        assertNull(resultado.carpetaNombre());
         assertTrue(resultado.plantillas().isEmpty());
     }
 }

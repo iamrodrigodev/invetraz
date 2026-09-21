@@ -58,9 +58,9 @@ public class ServicioDrivePlantillas {
                     "Por favor, ingresa un enlace o ID válido de la carpeta de Google Drive.");
         }
 
-        Drive drive = proveedorDrive.obtenerCliente();
         File carpetaGoogle;
         try {
+            Drive drive = proveedorDrive.obtenerCliente();
             carpetaGoogle =
                     drive.files().get(folderId).setFields("id, name, mimeType, trashed").execute();
         } catch (GoogleJsonResponseException e) {
@@ -101,7 +101,11 @@ public class ServicioDrivePlantillas {
 
     @Transactional
     public CarpetaPlantillasRespuestaDto vincularCarpeta(String urlOId) {
-        CarpetaPlantillasRespuestaDto verificada = verificarCarpeta(urlOId);
+        String folderId = extraerIdCarpeta(urlOId);
+        if (folderId.isBlank()) {
+            throw new ExcepcionDeNegocio(
+                    "Por favor, ingresa un enlace o ID válido de la carpeta de Google Drive.");
+        }
 
         ConfiguracionSistema config =
                 configuracionRepository
@@ -112,11 +116,29 @@ public class ServicioDrivePlantillas {
                                                 "Primero debes configurar las credenciales maestras"
                                                         + " de Google."));
 
-        config.setGoogleDriveFolderId(verificada.carpetaId());
-        config.setGoogleDriveFolderName(verificada.carpetaNombre());
-        configuracionRepository.save(config);
+        try {
+            CarpetaPlantillasRespuestaDto verificada = verificarCarpeta(folderId);
+            config.setGoogleDriveFolderId(verificada.carpetaId());
+            config.setGoogleDriveFolderName(verificada.carpetaNombre());
+            configuracionRepository.save(config);
 
-        return verificada;
+            return verificada;
+        } catch (ExcepcionDeNegocio e) {
+            log.warn(
+                    "Se guardará la carpeta Drive {} aunque no pudo verificarse: {}",
+                    folderId,
+                    e.getMessage());
+            config.setGoogleDriveFolderId(folderId);
+            config.setGoogleDriveFolderName(null);
+            configuracionRepository.save(config);
+
+            return CarpetaPlantillasRespuestaDto.builder()
+                    .carpetaConfigurada(true)
+                    .carpetaId(folderId)
+                    .carpetaNombre(null)
+                    .plantillas(Collections.emptyList())
+                    .build();
+        }
     }
 
     @Transactional(readOnly = true)
@@ -134,12 +156,24 @@ public class ServicioDrivePlantillas {
         }
 
         ConfiguracionSistema config = configOpt.get();
-        return obtenerPlantillas(
-                config.getGoogleDriveFolderId(), config.getGoogleDriveFolderName());
+        try {
+            return obtenerPlantillas(
+                    config.getGoogleDriveFolderId(), config.getGoogleDriveFolderName());
+        } catch (ExcepcionDeNegocio e) {
+            log.warn(
+                    "La carpeta Drive configurada {} no pudo consultarse: {}",
+                    config.getGoogleDriveFolderId(),
+                    e.getMessage());
+            return CarpetaPlantillasRespuestaDto.builder()
+                    .carpetaConfigurada(true)
+                    .carpetaId(config.getGoogleDriveFolderId())
+                    .carpetaNombre(config.getGoogleDriveFolderName())
+                    .plantillas(Collections.emptyList())
+                    .build();
+        }
     }
 
     private CarpetaPlantillasRespuestaDto obtenerPlantillas(String folderId, String folderNombre) {
-        Drive drive = proveedorDrive.obtenerCliente();
         String q =
                 String.format(
                         "'%s' in parents and trashed = false and (mimeType ="
@@ -149,6 +183,7 @@ public class ServicioDrivePlantillas {
 
         List<PlantillaXlsxDto> plantillas = new ArrayList<>();
         try {
+            Drive drive = proveedorDrive.obtenerCliente();
             FileList fileList =
                     drive.files()
                             .list()
