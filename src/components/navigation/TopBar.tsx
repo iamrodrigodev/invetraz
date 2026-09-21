@@ -7,6 +7,7 @@ import { ModalCambiarClave } from "../../features/auth/components/ModalCambiarCl
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { useAppStore } from "../../store/useAppStore";
 import { cn } from "../../utils/cn";
+import { Badge } from "../ui/Badge";
 import type { ModuloId } from "./types";
 
 export interface TopBarProps {
@@ -85,10 +86,13 @@ export function TopBar({
 							<span className="max-w-[160px] truncate font-semibold text-xs text-slate-800 md:max-w-[200px] md:text-sm">
 								{emailMostrar}
 							</span>
-							<span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 font-bold text-[10px] text-primary">
+							<Badge
+								variant="primary"
+								className="gap-1 px-2 py-0.5 text-[10px] tracking-normal"
+							>
 								<ShieldCheck className="h-3 w-3" strokeWidth={2.2} />
 								ADMINISTRADOR
-							</span>
+							</Badge>
 						</div>
 
 						<ChevronDown
@@ -112,10 +116,13 @@ export function TopBar({
 									<p className="truncate font-semibold text-xs text-slate-800">
 										{emailMostrar}
 									</p>
-									<span className="mt-1 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 font-bold text-[10px] text-primary">
+									<Badge
+										variant="primary"
+										className="mt-1 gap-1 px-2 py-0.5 text-[10px] tracking-normal"
+									>
 										<ShieldCheck className="h-3 w-3" strokeWidth={2.2} />
 										ADMINISTRADOR
-									</span>
+									</Badge>
 								</div>
 
 								<button
