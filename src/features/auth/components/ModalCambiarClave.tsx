@@ -118,6 +118,7 @@ export function ModalCambiarClave({
 				<form
 					key="form-paso1"
 					onSubmit={formPaso1.handleSubmit(onVerificarPaso1)}
+					autoComplete="off"
 					className="space-y-5"
 				>
 					<p className="text-sm text-slate-700">
@@ -138,7 +139,9 @@ export function ModalCambiarClave({
 							placeholder="Ingresa tu contraseña actual"
 							disabled={cargando}
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
-							autoComplete="current-password"
+							autoComplete="off"
+							data-lpignore="true"
+							data-1p-ignore="true"
 							errorMessage={formPaso1.formState.errors.claveActual?.message}
 							{...formPaso1.register("claveActual")}
 							rightElement={
@@ -192,6 +195,7 @@ export function ModalCambiarClave({
 				<form
 					key="form-paso2"
 					onSubmit={formPaso2.handleSubmit(onActualizarClave)}
+					autoComplete="off"
 					className="space-y-5"
 				>
 					<div>
@@ -207,7 +211,9 @@ export function ModalCambiarClave({
 							placeholder="Crea tu nueva contraseña"
 							disabled={cargando}
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
-							autoComplete="new-password"
+							autoComplete="off"
+							data-lpignore="true"
+							data-1p-ignore="true"
 							errorMessage={formPaso2.formState.errors.nuevaClave?.message}
 							{...formPaso2.register("nuevaClave")}
 							rightElement={
@@ -238,7 +244,9 @@ export function ModalCambiarClave({
 							placeholder="Confirma la nueva contraseña"
 							disabled={cargando}
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
-							autoComplete="new-password"
+							autoComplete="off"
+							data-lpignore="true"
+							data-1p-ignore="true"
 							errorMessage={formPaso2.formState.errors.confirmarClave?.message}
 							{...formPaso2.register("confirmarClave")}
 							rightElement={
