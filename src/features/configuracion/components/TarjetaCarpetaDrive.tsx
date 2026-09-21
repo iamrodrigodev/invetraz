@@ -1,4 +1,5 @@
 import {
+	AlertCircle,
 	CheckCircle2,
 	ExternalLink,
 	FolderGit2,
@@ -16,9 +17,9 @@ import {
 	CardDescription,
 	CardHeader,
 	CardTitle,
-	Input,
 } from "../../../components/ui";
 import { vincularCarpetaDrive } from "../../plantillas/api/plantillas.api";
+import { CampoCredencial } from "./CampoCredencial";
 
 interface TarjetaCarpetaDriveProps {
 	carpetaIdInicial?: string | null | undefined;
@@ -81,21 +82,30 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 	};
 
 	return (
-		<Card className="border-slate-200/90 bg-white">
+		<Card>
 			<CardHeader>
 				<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
 					<div className="flex items-center gap-2 text-primary font-semibold">
 						<FolderGit2 size={18} />
 						<span>Google Drive</span>
 					</div>
-					{carpetaId ? (
-						<Badge variant="success" className="w-fit font-semibold text-xs">
-							<CheckCircle2 size={13} className="mr-1 text-emerald-600" />
-							Carpeta vinculada
+					{vinculando ? (
+						<Badge variant="primary">
+							<RefreshCw
+								size={13}
+								className="shrink-0 animate-spin text-primary"
+							/>
+							<span>Verificando carpeta...</span>
+						</Badge>
+					) : carpetaId ? (
+						<Badge variant="success">
+							<CheckCircle2 size={13} className="shrink-0 text-emerald-600" />
+							<span>Carpeta vinculada</span>
 						</Badge>
 					) : (
-						<Badge variant="warning" className="w-fit font-semibold text-xs">
-							Sin carpeta vinculada
+						<Badge variant="warning">
+							<AlertCircle size={13} className="shrink-0 text-amber-600" />
+							<span>Sin carpeta vinculada</span>
 						</Badge>
 					)}
 				</div>
@@ -109,7 +119,7 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 				</CardDescription>
 			</CardHeader>
 
-			<CardContent className="space-y-4">
+			<CardContent className="space-y-5">
 				{mensajeExito && (
 					<Alert
 						key="alerta-carpeta-exito"
@@ -129,14 +139,19 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 				)}
 
 				{carpetaId && (
-					<div className="rounded-lg border border-slate-200 bg-slate-50/70 p-3.5 text-xs text-slate-700 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-						<div className="space-y-0.5">
-							<span className="font-semibold text-slate-900 block">
-								{carpetaNombre || "Carpeta configurada"}
-							</span>
-							<span className="font-mono text-[11px] text-slate-500 break-all">
+					<div className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+						<div className="space-y-1">
+							<div className="flex items-center gap-2">
+								<span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+									Carpeta vinculada:
+								</span>
+								<Badge variant="slate" className="font-bold">
+									{carpetaNombre || "Carpeta de Google Drive"}
+								</Badge>
+							</div>
+							<p className="font-mono text-xs text-slate-500 break-all">
 								ID: {carpetaId}
-							</span>
+							</p>
 						</div>
 						<a
 							href={`https://drive.google.com/drive/folders/${carpetaId}`}
@@ -150,51 +165,59 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 								size="sm"
 								className="text-xs text-slate-700 hover:text-emerald-700 w-full sm:w-auto"
 							>
-								<ExternalLink size={13} className="mr-1.5" />
+								<ExternalLink size={14} className="mr-1.5" />
 								Abrir en Drive
 							</Button>
 						</a>
 					</div>
 				)}
 
-				<form onSubmit={onVincular} className="space-y-3 pt-1">
-					<div className="space-y-1.5">
-						<label
-							htmlFor="carpetaUrlOId"
-							className="block font-semibold text-slate-800 text-xs"
-						>
-							{carpetaId
-								? "Cambiar carpeta vinculada (Enlace o ID):"
-								: "Enlace o ID de la carpeta de Google Drive:"}
-						</label>
-						<Input
-							id="carpetaUrlOId"
-							type="text"
-							value={inputUrl}
-							onChange={(e) => setInputUrl(e.target.value)}
-							placeholder="ej. https://drive.google.com/drive/folders/1abc123... o 1abc123..."
-							className="text-xs h-9 font-mono"
-							disabled={vinculando}
-						/>
-						<p className="text-[11px] text-slate-500">
-							Asegúrate de que la cuenta de Google configurada tenga permisos de
-							lectura sobre esta carpeta y que el scope de Drive esté
-							habilitado.
-						</p>
-					</div>
+				<form onSubmit={onVincular} className="space-y-5">
+					<CampoCredencial
+						id="carpetaUrlOId"
+						label={
+							carpetaId
+								? "Cambiar carpeta vinculada"
+								: "Enlace o ID de la carpeta de Google Drive"
+						}
+						obligatorio={!carpetaId}
+						descripcion={
+							<span>
+								Indica el enlace web o el identificador de la carpeta donde se
+								almacenan las plantillas (.xlsx). La cuenta configurada debe
+								tener permisos de lectura.{" "}
+								<a
+									href="https://drive.google.com"
+									target="_blank"
+									rel="noreferrer"
+									className="font-medium text-primary hover:underline inline-flex items-center gap-0.5"
+								>
+									Google Drive <ExternalLink size={11} />
+								</a>
+							</span>
+						}
+						placeholder="ej. https://drive.google.com/drive/folders/1abc123... o 1abc123..."
+						showCount={false}
+						value={inputUrl}
+						onChange={(e) => {
+							setInputUrl(e.target.value);
+							if (mensajeError) setMensajeError(null);
+						}}
+						disabled={vinculando}
+						errorMessage={mensajeError ?? undefined}
+					/>
 
-					<div className="flex justify-end pt-1">
+					<div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row sm:items-center sm:justify-end">
 						<Button
 							type="submit"
 							variant="default"
-							size="sm"
 							disabled={vinculando || !inputUrl.trim()}
-							className="w-full sm:w-auto text-xs"
+							className="w-full sm:w-auto"
 						>
 							{vinculando ? (
-								<RefreshCw size={14} className="mr-1.5 animate-spin" />
+								<RefreshCw size={16} className="mr-2 animate-spin" />
 							) : (
-								<Link2 size={14} className="mr-1.5" />
+								<Link2 size={16} className="mr-2" />
 							)}
 							{vinculando ? "Verificando carpeta..." : "Vincular y Verificar"}
 						</Button>
