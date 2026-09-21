@@ -2,7 +2,10 @@ import { FileSpreadsheet, FolderGit2, RefreshCw, Settings } from "lucide-react";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { resolverVistaCarpetaDrive } from "../../../components/drive/estadoCarpetaDrive";
+import {
+	type EstadoCarpetaDrive,
+	resolverVistaCarpetaDrive,
+} from "../../../components/drive/estadoCarpetaDrive";
 import { TarjetaCarpetaVinculada } from "../../../components/drive/TarjetaCarpetaVinculada";
 import {
 	Alert,
@@ -83,16 +86,21 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 		carpetaNombre: datos?.carpetaNombre,
 	});
 	const credencialesGoogleVerificadas =
-		estadoCredencialesGoogle === "conectado";
-	const estadoVisualCarpeta = credencialesGoogleVerificadas
-		? vistaCarpeta.estado
-		: "pendiente";
-	const tituloVacioPlantillas = credencialesGoogleVerificadas
-		? vistaCarpeta.tituloVacio
-		: "Google Cloud pendiente de verificación";
-	const descripcionVaciaPlantillas = credencialesGoogleVerificadas
-		? vistaCarpeta.descripcionVacia
-		: "Verifica las credenciales de Google Cloud antes de sincronizar Drive o consultar plantillas.";
+		estadoCredencialesGoogle === "conectado" || Boolean(datos?.driveVerificado);
+	const estadoVisualCarpeta: EstadoCarpetaDrive =
+		datos?.driveVerificado ||
+		(credencialesGoogleVerificadas && vistaCarpeta.estado === "verificada")
+			? "verificada"
+			: "pendiente";
+	const carpetaEstaVerificada = estadoVisualCarpeta === "verificada";
+	const tituloVacioPlantillas =
+		carpetaEstaVerificada || credencialesGoogleVerificadas
+			? vistaCarpeta.tituloVacio
+			: "Google Cloud pendiente de verificación";
+	const descripcionVaciaPlantillas =
+		carpetaEstaVerificada || credencialesGoogleVerificadas
+			? vistaCarpeta.descripcionVacia
+			: "Verifica las credenciales de Google Cloud antes de sincronizar Drive o consultar plantillas.";
 
 	if (cargando && !datos) {
 		return <PlantillasSkeleton />;
