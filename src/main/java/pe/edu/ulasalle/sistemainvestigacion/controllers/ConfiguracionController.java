@@ -45,7 +45,14 @@ public class ConfiguracionController {
         if (configOpt.isEmpty()) {
             return ApiRespuesta.ok(
                     MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(),
-                    new ActualizarCredencialesPeticion("", "", ""));
+                    new ActualizarCredencialesPeticion(
+                            "",
+                            "",
+                            "",
+                            null,
+                            null,
+                            false,
+                            false));
         }
 
         ConfiguracionSistema config = configOpt.get();
@@ -59,7 +66,9 @@ public class ConfiguracionController {
                                 ? config.getGoogleRefreshToken()
                                 : "",
                         config.getGoogleDriveFolderId(),
-                        config.getGoogleDriveFolderName());
+                        config.getGoogleDriveFolderName(),
+                        config.getGoogleVerificado(),
+                        config.getDriveVerificado());
 
         return ApiRespuesta.ok(MensajeConfirmacion.OPERACION_EXITOSA.getMensaje(), datos);
     }
@@ -84,6 +93,14 @@ public class ConfiguracionController {
         }
         if (peticion.googleDriveFolderName() != null) {
             config.setGoogleDriveFolderName(peticion.googleDriveFolderName().trim());
+        }
+
+        if (peticion.googleVerificado() != null) {
+            config.setGoogleVerificado(peticion.googleVerificado());
+        }
+
+        if (peticion.driveVerificado() != null) {
+            config.setDriveVerificado(peticion.driveVerificado());
         }
 
         configuracionRepository.save(config);
@@ -152,6 +169,15 @@ public class ConfiguracionController {
             if (token == null || token.getTokenValue() == null || token.getTokenValue().isBlank()) {
                 throw new ExcepcionDeNegocio(
                         "Google no devolvió un token de acceso válido. Revisa el Refresh Token.");
+            }
+
+            var configOpt = configuracionRepository.findFirstByOrderByIdAsc();
+            if (configOpt.isPresent()) {
+                ConfiguracionSistema config = configOpt.get();
+                if (clientId.equals(config.getGoogleClientId())) {
+                    config.setGoogleVerificado(true);
+                    configuracionRepository.save(config);
+                }
             }
 
             return ApiRespuesta.ok(

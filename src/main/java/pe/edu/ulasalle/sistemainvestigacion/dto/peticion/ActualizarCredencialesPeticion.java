@@ -3,7 +3,6 @@ package pe.edu.ulasalle.sistemainvestigacion.dto.peticion;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import pe.edu.ulasalle.sistemainvestigacion.core.constants.ValidationConstants;
-
 public record ActualizarCredencialesPeticion(
         @NotBlank(message = "El Client ID es obligatorio")
                 @Size(
@@ -22,10 +21,28 @@ public record ActualizarCredencialesPeticion(
                 String googleRefreshToken,
         @Size(max = ValidationConstants.MAX_GOOGLE_DRIVE_FOLDER_ID) String googleDriveFolderId,
         @Size(max = ValidationConstants.MAX_GOOGLE_DRIVE_FOLDER_NAME)
-                String googleDriveFolderName) {
+                String googleDriveFolderName,
+        Boolean googleVerificado,
+        Boolean driveVerificado) {
 
     public ActualizarCredencialesPeticion(
             String googleClientId, String googleClientSecret, String googleRefreshToken) {
-        this(googleClientId, googleClientSecret, googleRefreshToken, null, null);
+        this(googleClientId, googleClientSecret, googleRefreshToken, null, null, false, false);
+    }
+
+    public ActualizarCredencialesPeticion(
+            String googleClientId,
+            String googleClientSecret,
+            String googleRefreshToken,
+            String googleDriveFolderId,
+            String googleDriveFolderName) {
+        this(
+                googleClientId,
+                googleClientSecret,
+                googleRefreshToken,
+                googleDriveFolderId,
+                googleDriveFolderName,
+                false,
+                false);
     }
 }

@@ -10,5 +10,7 @@ CREATE TABLE IF NOT EXISTS configuracion.configuracion_sistema (
     google_client_secret VARCHAR(1000),
     google_refresh_token VARCHAR(1000),
     google_drive_folder_id VARCHAR(255),
-    google_drive_folder_name VARCHAR(255)
+    google_drive_folder_name VARCHAR(255),
+    google_verificado BOOLEAN DEFAULT FALSE,
+    drive_verificado BOOLEAN DEFAULT FALSE
 );

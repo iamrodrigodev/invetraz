@@ -43,6 +43,20 @@ public class ConfiguracionSistema {
             length = ValidationConstants.MAX_GOOGLE_DRIVE_FOLDER_NAME)
     private String googleDriveFolderName;
 
+    @Column(name = "google_verificado")
+    private Boolean googleVerificado;
+
+    @Column(name = "drive_verificado")
+    private Boolean driveVerificado;
+
+    public Boolean getGoogleVerificado() {
+        return Boolean.TRUE.equals(googleVerificado);
+    }
+
+    public Boolean getDriveVerificado() {
+        return Boolean.TRUE.equals(driveVerificado);
+    }
+
     protected ConfiguracionSistema() {}
 
     @Builder
@@ -52,12 +66,16 @@ public class ConfiguracionSistema {
             String googleClientSecret,
             String googleRefreshToken,
             String googleDriveFolderId,
-            String googleDriveFolderName) {
+            String googleDriveFolderName,
+            Boolean googleVerificado,
+            Boolean driveVerificado) {
         this.id = id;
         this.googleClientId = googleClientId;
         this.googleClientSecret = googleClientSecret;
         this.googleRefreshToken = googleRefreshToken;
         this.googleDriveFolderId = googleDriveFolderId;
         this.googleDriveFolderName = googleDriveFolderName;
+        this.googleVerificado = googleVerificado != null ? googleVerificado : Boolean.FALSE;
+        this.driveVerificado = driveVerificado != null ? driveVerificado : Boolean.FALSE;
     }
 }

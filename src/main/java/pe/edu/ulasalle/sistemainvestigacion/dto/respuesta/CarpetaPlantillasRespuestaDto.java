@@ -8,4 +8,5 @@ public record CarpetaPlantillasRespuestaDto(
         boolean carpetaConfigurada,
         String carpetaId,
         String carpetaNombre,
-        List<PlantillaXlsxDto> plantillas) {}
+        List<PlantillaXlsxDto> plantillas,
+        Boolean driveVerificado) {}

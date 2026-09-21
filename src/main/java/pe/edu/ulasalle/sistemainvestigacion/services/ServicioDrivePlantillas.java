@@ -120,9 +120,16 @@ public class ServicioDrivePlantillas {
             CarpetaPlantillasRespuestaDto verificada = verificarCarpeta(folderId);
             config.setGoogleDriveFolderId(verificada.carpetaId());
             config.setGoogleDriveFolderName(verificada.carpetaNombre());
+            config.setDriveVerificado(true);
             configuracionRepository.save(config);
 
-            return verificada;
+            return CarpetaPlantillasRespuestaDto.builder()
+                    .carpetaConfigurada(true)
+                    .carpetaId(verificada.carpetaId())
+                    .carpetaNombre(verificada.carpetaNombre())
+                    .plantillas(verificada.plantillas())
+                    .driveVerificado(true)
+                    .build();
         } catch (ExcepcionDeNegocio e) {
             log.warn(
                     "Se guardará la carpeta Drive {} aunque no pudo verificarse: {}",
@@ -130,6 +137,7 @@ public class ServicioDrivePlantillas {
                     e.getMessage());
             config.setGoogleDriveFolderId(folderId);
             config.setGoogleDriveFolderName(null);
+            config.setDriveVerificado(false);
             configuracionRepository.save(config);
 
             return CarpetaPlantillasRespuestaDto.builder()
@@ -137,6 +145,7 @@ public class ServicioDrivePlantillas {
                     .carpetaId(folderId)
                     .carpetaNombre(null)
                     .plantillas(Collections.emptyList())
+                    .driveVerificado(false)
                     .build();
         }
     }
@@ -152,6 +161,7 @@ public class ServicioDrivePlantillas {
                     .carpetaId(null)
                     .carpetaNombre(null)
                     .plantillas(Collections.emptyList())
+                    .driveVerificado(false)
                     .build();
         }
 
@@ -169,6 +179,7 @@ public class ServicioDrivePlantillas {
                     .carpetaId(config.getGoogleDriveFolderId())
                     .carpetaNombre(config.getGoogleDriveFolderName())
                     .plantillas(Collections.emptyList())
+                    .driveVerificado(config.getDriveVerificado())
                     .build();
         }
     }
@@ -225,6 +236,7 @@ public class ServicioDrivePlantillas {
                 .carpetaId(folderId)
                 .carpetaNombre(folderNombre)
                 .plantillas(plantillas)
+                .driveVerificado(true)
                 .build();
     }
 }
