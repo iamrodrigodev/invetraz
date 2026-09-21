@@ -65,6 +65,7 @@ class ServicioDrivePlantillasTest {
                         .googleClientId("id")
                         .googleClientSecret("sec")
                         .googleRefreshToken("ref")
+                        .googleVerificado(true)
                         .build();
 
         when(configuracionRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.of(config));
@@ -80,6 +81,31 @@ class ServicioDrivePlantillasTest {
         assertTrue(resultado.plantillas().isEmpty());
         assertEquals("folder-pendiente", config.getGoogleDriveFolderId());
         assertNull(config.getGoogleDriveFolderName());
+        verify(configuracionRepository).save(config);
+    }
+
+    @Test
+    void vincularCarpeta_cuandoGoogleNoVerificado_guardaCarpetaConDriveNoVerificado() {
+        ConfiguracionSistema config =
+                ConfiguracionSistema.builder()
+                        .googleClientId("id")
+                        .googleClientSecret("sec")
+                        .googleRefreshToken("ref")
+                        .googleVerificado(false)
+                        .driveVerificado(true)
+                        .build();
+
+        when(configuracionRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.of(config));
+
+        CarpetaPlantillasRespuestaDto resultado =
+                servicio.vincularCarpeta(
+                        "https://drive.google.com/drive/folders/folder-pendiente");
+
+        assertTrue(resultado.carpetaConfigurada());
+        assertEquals("folder-pendiente", resultado.carpetaId());
+        assertNull(resultado.carpetaNombre());
+        assertFalse(resultado.driveVerificado());
+        assertFalse(config.getDriveVerificado());
         verify(configuracionRepository).save(config);
     }
 
@@ -123,6 +149,7 @@ class ServicioDrivePlantillasTest {
                         .googleRefreshToken("ref")
                         .googleDriveFolderId("folder-pendiente")
                         .googleDriveFolderName(null)
+                        .googleVerificado(true)
                         .build();
 
         when(configuracionRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.of(config));
@@ -134,5 +161,32 @@ class ServicioDrivePlantillasTest {
         assertEquals("folder-pendiente", resultado.carpetaId());
         assertNull(resultado.carpetaNombre());
         assertTrue(resultado.plantillas().isEmpty());
+        assertFalse(resultado.driveVerificado());
+    }
+
+    @Test
+    void obtenerPlantillasConfiguradas_cuandoGoogleNoVerificado_corrigeDriveYRetornaSinPlantillas() {
+        ConfiguracionSistema config =
+                ConfiguracionSistema.builder()
+                        .googleClientId("id")
+                        .googleClientSecret("sec")
+                        .googleRefreshToken("ref")
+                        .googleDriveFolderId("folder-pendiente")
+                        .googleDriveFolderName("Carpeta")
+                        .googleVerificado(false)
+                        .driveVerificado(true)
+                        .build();
+
+        when(configuracionRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.of(config));
+
+        CarpetaPlantillasRespuestaDto resultado = servicio.obtenerPlantillasConfiguradas();
+
+        assertTrue(resultado.carpetaConfigurada());
+        assertEquals("folder-pendiente", resultado.carpetaId());
+        assertEquals("Carpeta", resultado.carpetaNombre());
+        assertFalse(resultado.driveVerificado());
+        assertFalse(config.getDriveVerificado());
+        assertTrue(resultado.plantillas().isEmpty());
+        verify(configuracionRepository).save(config);
     }
 }

@@ -32,7 +32,7 @@ public class ServicioConfiguracion {
         this.proveedorDrive = proveedorDrive;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public ActualizarCredencialesPeticion obtenerConfiguracion() {
         var configOpt = configuracionRepository.findFirstByOrderByIdAsc();
 
@@ -42,14 +42,23 @@ public class ServicioConfiguracion {
         }
 
         ConfiguracionSistema config = configOpt.get();
+        boolean googleVerificado = Boolean.TRUE.equals(config.getGoogleVerificado());
+        boolean driveVerificado = Boolean.TRUE.equals(config.getDriveVerificado());
+
+        if (!googleVerificado && driveVerificado) {
+            config.setDriveVerificado(false);
+            configuracionRepository.save(config);
+            driveVerificado = false;
+        }
+
         return new ActualizarCredencialesPeticion(
                 config.getGoogleClientId() != null ? config.getGoogleClientId() : "",
                 config.getGoogleClientSecret() != null ? config.getGoogleClientSecret() : "",
                 config.getGoogleRefreshToken() != null ? config.getGoogleRefreshToken() : "",
                 config.getGoogleDriveFolderId(),
                 config.getGoogleDriveFolderName(),
-                config.getGoogleVerificado(),
-                config.getDriveVerificado());
+                googleVerificado,
+                driveVerificado);
     }
 
     @Transactional
@@ -73,11 +82,12 @@ public class ServicioConfiguracion {
             config.setGoogleDriveFolderName(peticion.googleDriveFolderName().trim());
         }
 
-        if (peticion.googleVerificado() != null) {
-            config.setGoogleVerificado(peticion.googleVerificado());
-        }
+        boolean googleVerificado = Boolean.TRUE.equals(peticion.googleVerificado());
+        config.setGoogleVerificado(googleVerificado);
 
-        if (peticion.driveVerificado() != null) {
+        if (!googleVerificado) {
+            config.setDriveVerificado(false);
+        } else if (peticion.driveVerificado() != null) {
             config.setDriveVerificado(peticion.driveVerificado());
         }
 

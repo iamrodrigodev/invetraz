@@ -97,6 +97,53 @@ class ServicioConfiguracionTest {
     }
 
     @Test
+    void obtenerConfiguracion_cuandoGoogleNoVerificadoYDriveVerificado_corrigeDriveVerificadoAFalso() {
+        ConfiguracionSistema config =
+                ConfiguracionSistema.builder()
+                        .id(UUID.randomUUID())
+                        .googleClientId("client-id-123")
+                        .googleClientSecret("client-secret-456")
+                        .googleRefreshToken("refresh-token-789")
+                        .googleDriveFolderId("folder-123")
+                        .googleDriveFolderName("Carpeta Test")
+                        .googleVerificado(false)
+                        .driveVerificado(true)
+                        .build();
+
+        when(configuracionRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.of(config));
+
+        ActualizarCredencialesPeticion respuesta = servicio.obtenerConfiguracion();
+
+        assertNotNull(respuesta);
+        assertEquals(false, respuesta.googleVerificado());
+        assertEquals(false, respuesta.driveVerificado());
+        assertEquals(false, config.getDriveVerificado());
+        verify(configuracionRepository).save(config);
+    }
+
+    @Test
+    void actualizarConfiguracion_cuandoGoogleNoVerificado_fuerzaDriveVerificadoAFalso() {
+        ConfiguracionSistema config =
+                ConfiguracionSistema.builder()
+                        .id(UUID.randomUUID())
+                        .googleVerificado(true)
+                        .driveVerificado(true)
+                        .build();
+
+        when(configuracionRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.of(config));
+
+        ActualizarCredencialesPeticion peticion =
+                new ActualizarCredencialesPeticion(
+                        "client-id", "secret", "refresh", "folder", "folder-name", false, true);
+
+        servicio.actualizarConfiguracion(peticion);
+
+        assertEquals(false, config.getGoogleVerificado());
+        assertEquals(false, config.getDriveVerificado());
+        verify(configuracionRepository).save(config);
+    }
+
+    @Test
     void verificarConfiguracion_sinCredencialesConfiguradas_lanzaExcepcion() {
         when(configuracionRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.empty());
 

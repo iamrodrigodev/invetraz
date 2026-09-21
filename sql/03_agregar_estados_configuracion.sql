@@ -10,3 +10,8 @@ WHERE google_verificado IS NULL;
 UPDATE configuracion.configuracion_sistema
 SET drive_verificado = FALSE
 WHERE drive_verificado IS NULL;
+
+-- Si Google Cloud no está verificado, Drive tampoco puede estar verificado
+UPDATE configuracion.configuracion_sistema
+SET drive_verificado = FALSE
+WHERE google_verificado = FALSE;

@@ -55,6 +55,22 @@ public class ServicioDrivePlantillas {
                     "Por favor, ingresa un enlace o ID válido de la carpeta de Google Drive.");
         }
 
+        var configOpt = configuracionRepository.findFirstByOrderByIdAsc();
+        if (configOpt.isEmpty()) {
+            throw new ExcepcionDeNegocio(
+                    "Primero debes configurar las credenciales maestras de Google.");
+        }
+
+        ConfiguracionSistema config = configOpt.get();
+        if (!Boolean.TRUE.equals(config.getGoogleVerificado())) {
+            if (Boolean.TRUE.equals(config.getDriveVerificado())) {
+                config.setDriveVerificado(false);
+                configuracionRepository.save(config);
+            }
+            throw new ExcepcionDeNegocio(
+                    "Google Cloud está guardado, pero no verificado. Verifica esa conexión antes de usar Drive o plantillas.");
+        }
+
         File carpetaGoogle;
         try {
             Drive drive = proveedorDrive.obtenerCliente();
@@ -93,14 +109,10 @@ public class ServicioDrivePlantillas {
                     "El enlace proporcionado no pertenece a una carpeta, sino a un archivo.");
         }
 
-        var configOpt = configuracionRepository.findFirstByOrderByIdAsc();
-        if (configOpt.isPresent()) {
-            ConfiguracionSistema config = configOpt.get();
-            config.setGoogleDriveFolderId(folderId);
-            config.setGoogleDriveFolderName(carpetaGoogle.getName());
-            config.setDriveVerificado(true);
-            configuracionRepository.save(config);
-        }
+        config.setGoogleDriveFolderId(folderId);
+        config.setGoogleDriveFolderName(carpetaGoogle.getName());
+        config.setDriveVerificado(true);
+        configuracionRepository.save(config);
 
         return obtenerPlantillas(folderId, carpetaGoogle.getName());
     }
@@ -121,6 +133,24 @@ public class ServicioDrivePlantillas {
                                         new ExcepcionDeNegocio(
                                                 "Primero debes configurar las credenciales maestras"
                                                         + " de Google."));
+
+        if (!Boolean.TRUE.equals(config.getGoogleVerificado())) {
+            log.warn(
+                    "Se guardará la carpeta Drive {} sin verificar porque Google Cloud no está verificado",
+                    folderId);
+            config.setGoogleDriveFolderId(folderId);
+            config.setGoogleDriveFolderName(null);
+            config.setDriveVerificado(false);
+            configuracionRepository.save(config);
+
+            return CarpetaPlantillasRespuestaDto.builder()
+                    .carpetaConfigurada(true)
+                    .carpetaId(folderId)
+                    .carpetaNombre(null)
+                    .plantillas(Collections.emptyList())
+                    .driveVerificado(false)
+                    .build();
+        }
 
         try {
             CarpetaPlantillasRespuestaDto verificada = verificarCarpeta(folderId);
@@ -172,6 +202,20 @@ public class ServicioDrivePlantillas {
         }
 
         ConfiguracionSistema config = configOpt.get();
+        if (!Boolean.TRUE.equals(config.getGoogleVerificado())) {
+            if (Boolean.TRUE.equals(config.getDriveVerificado())) {
+                config.setDriveVerificado(false);
+                configuracionRepository.save(config);
+            }
+            return CarpetaPlantillasRespuestaDto.builder()
+                    .carpetaConfigurada(true)
+                    .carpetaId(config.getGoogleDriveFolderId())
+                    .carpetaNombre(config.getGoogleDriveFolderName())
+                    .plantillas(Collections.emptyList())
+                    .driveVerificado(false)
+                    .build();
+        }
+
         try {
             CarpetaPlantillasRespuestaDto res =
                     obtenerPlantillas(
@@ -191,7 +235,7 @@ public class ServicioDrivePlantillas {
                     .carpetaId(config.getGoogleDriveFolderId())
                     .carpetaNombre(config.getGoogleDriveFolderName())
                     .plantillas(Collections.emptyList())
-                    .driveVerificado(config.getDriveVerificado())
+                    .driveVerificado(false)
                     .build();
         }
     }
