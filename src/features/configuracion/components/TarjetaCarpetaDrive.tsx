@@ -2,6 +2,7 @@ import { ExternalLink, FolderGit2 } from "lucide-react";
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Badge, Button } from "../../../components/ui";
+import { VALIDATION_LIMITS } from "../../../constants/validations";
 import {
 	verificarCarpetaDrive,
 	vincularCarpetaDrive,
@@ -168,7 +169,8 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 					</span>
 				}
 				placeholder="ej. https://drive.google.com/drive/folders/1abc123... o 1abc123..."
-				showCount={false}
+				maxLength={VALIDATION_LIMITS.MAX_GOOGLE_DRIVE_FOLDER_ID}
+				charCount={inputUrl.length}
 				value={inputUrl}
 				onChange={(e) => {
 					setInputUrl(e.target.value);
