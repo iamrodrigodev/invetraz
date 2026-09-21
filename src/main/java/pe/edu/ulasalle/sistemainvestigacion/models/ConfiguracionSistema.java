@@ -33,14 +33,31 @@ public class ConfiguracionSistema {
     @Column(name = "google_refresh_token", length = ValidationConstants.MAX_GOOGLE_REFRESH_TOKEN)
     private String googleRefreshToken;
 
+    @Column(
+            name = "google_drive_folder_id",
+            length = ValidationConstants.MAX_GOOGLE_DRIVE_FOLDER_ID)
+    private String googleDriveFolderId;
+
+    @Column(
+            name = "google_drive_folder_name",
+            length = ValidationConstants.MAX_GOOGLE_DRIVE_FOLDER_NAME)
+    private String googleDriveFolderName;
+
     protected ConfiguracionSistema() {}
 
     @Builder
     public ConfiguracionSistema(
-            UUID id, String googleClientId, String googleClientSecret, String googleRefreshToken) {
+            UUID id,
+            String googleClientId,
+            String googleClientSecret,
+            String googleRefreshToken,
+            String googleDriveFolderId,
+            String googleDriveFolderName) {
         this.id = id;
         this.googleClientId = googleClientId;
         this.googleClientSecret = googleClientSecret;
         this.googleRefreshToken = googleRefreshToken;
+        this.googleDriveFolderId = googleDriveFolderId;
+        this.googleDriveFolderName = googleDriveFolderName;
     }
 }

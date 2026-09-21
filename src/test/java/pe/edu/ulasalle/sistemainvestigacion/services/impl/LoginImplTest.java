@@ -31,14 +31,11 @@ import pe.edu.ulasalle.sistemainvestigacion.repositories.UsuarioRepository;
 @ExtendWith(MockitoExtension.class)
 class LoginImplTest {
 
-    @Mock
-    private UsuarioRepository usuarioRepository;
+    @Mock private UsuarioRepository usuarioRepository;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
+    @Mock private PasswordEncoder passwordEncoder;
 
-    @Mock
-    private ServicioJwt servicioJwt;
+    @Mock private ServicioJwt servicioJwt;
 
     private ServicioLimitadorIntentos servicioLimitadorIntentos;
 
@@ -49,10 +46,7 @@ class LoginImplTest {
         servicioLimitadorIntentos = new ServicioLimitadorIntentos();
         loginService =
                 new LoginImpl(
-                        usuarioRepository,
-                        passwordEncoder,
-                        servicioJwt,
-                        servicioLimitadorIntentos);
+                        usuarioRepository, passwordEncoder, servicioJwt, servicioLimitadorIntentos);
     }
 
     @Test
@@ -157,8 +151,7 @@ class LoginImplTest {
         when(usuarioRepository.findByEmailIgnoreCase("bloqueado@ulasalle.edu.pe"))
                 .thenReturn(Optional.empty());
 
-        LoginPeticion peticion =
-                new LoginPeticion("bloqueado@ulasalle.edu.pe", "ClaveErrada123");
+        LoginPeticion peticion = new LoginPeticion("bloqueado@ulasalle.edu.pe", "ClaveErrada123");
 
         for (int i = 0; i < 4; i++) {
             assertThrows(ExcepcionDeNegocio.class, () -> loginService.ejecutar(peticion));
@@ -172,7 +165,8 @@ class LoginImplTest {
                         () -> loginService.ejecutar(peticion));
 
         assertEquals(429, excepcion.getCodigo());
-        assertEquals(MensajesDeError.DEMASIADOS_INTENTOS_LOGIN.getMensaje(), excepcion.getMessage());
+        assertEquals(
+                MensajesDeError.DEMASIADOS_INTENTOS_LOGIN.getMensaje(), excepcion.getMessage());
 
         // Intentos subsiguientes se bloquean inmediatamente
         assertThrows(

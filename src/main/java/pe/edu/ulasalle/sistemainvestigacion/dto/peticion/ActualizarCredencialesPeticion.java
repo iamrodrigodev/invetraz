@@ -19,4 +19,13 @@ public record ActualizarCredencialesPeticion(
                 @Size(
                         max = ValidationConstants.MAX_GOOGLE_REFRESH_TOKEN,
                         message = "El Refresh Token no puede exceder los {max} caracteres")
-                String googleRefreshToken) {}
+                String googleRefreshToken,
+        @Size(max = ValidationConstants.MAX_GOOGLE_DRIVE_FOLDER_ID) String googleDriveFolderId,
+        @Size(max = ValidationConstants.MAX_GOOGLE_DRIVE_FOLDER_NAME)
+                String googleDriveFolderName) {
+
+    public ActualizarCredencialesPeticion(
+            String googleClientId, String googleClientSecret, String googleRefreshToken) {
+        this(googleClientId, googleClientSecret, googleRefreshToken, null, null);
+    }
+}

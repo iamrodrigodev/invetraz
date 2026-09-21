@@ -26,26 +26,19 @@ import pe.edu.ulasalle.sistemainvestigacion.models.ClaseClassroom;
 @ExtendWith(MockitoExtension.class)
 class ClaseClassroomRepositoryImplTest {
 
-    @Mock
-    private ProveedorClassroom proveedorClassroom;
+    @Mock private ProveedorClassroom proveedorClassroom;
 
-    @Mock
-    private ManejadorErroresGoogle manejadorErroresGoogle;
+    @Mock private ManejadorErroresGoogle manejadorErroresGoogle;
 
-    @Mock
-    private CacheClassroom cacheClassroom;
+    @Mock private CacheClassroom cacheClassroom;
 
-    @Mock
-    private Classroom classroom;
+    @Mock private Classroom classroom;
 
-    @Mock
-    private Classroom.Courses courses;
+    @Mock private Classroom.Courses courses;
 
-    @Mock
-    private Classroom.Courses.Create createRequest;
+    @Mock private Classroom.Courses.Create createRequest;
 
-    @Mock
-    private Classroom.Courses.Patch patchRequest;
+    @Mock private Classroom.Courses.Patch patchRequest;
 
     private ClaseClassroomRepositoryImpl repository;
 
@@ -132,7 +125,8 @@ class ClaseClassroomRepositoryImplTest {
         when(courses.patch(eq("class-123"), any(Course.class))).thenReturn(patchRequest);
         when(patchRequest.setUpdateMask("courseState")).thenReturn(patchRequest);
         when(patchRequest.setFields(anyString())).thenReturn(patchRequest);
-        when(patchRequest.execute()).thenReturn(new Course().setId("class-123").setCourseState("ARCHIVED"));
+        when(patchRequest.execute())
+                .thenReturn(new Course().setId("class-123").setCourseState("ARCHIVED"));
 
         repository.archivar("class-123");
 

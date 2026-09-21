@@ -21,7 +21,9 @@ class ServicioLimitadorIntentosTest {
     @Test
     void comprobarBloqueo_sinIntentos_noLanzaExcepcion() {
         assertDoesNotThrow(
-                () -> limitador.comprobarBloqueo("clave1", MensajesDeError.DEMASIADOS_INTENTOS_LOGIN));
+                () ->
+                        limitador.comprobarBloqueo(
+                                "clave1", MensajesDeError.DEMASIADOS_INTENTOS_LOGIN));
     }
 
     @Test
@@ -37,7 +39,10 @@ class ServicioLimitadorIntentosTest {
                         ExcepcionPersonalizada.class,
                         () ->
                                 limitador.registrarFallo(
-                                        clave, 5, 60_000L, MensajesDeError.DEMASIADOS_INTENTOS_LOGIN));
+                                        clave,
+                                        5,
+                                        60_000L,
+                                        MensajesDeError.DEMASIADOS_INTENTOS_LOGIN));
 
         assertEquals(429, ex.getCodigo());
         assertEquals(MensajesDeError.DEMASIADOS_INTENTOS_LOGIN.getMensaje(), ex.getMessage());
@@ -53,7 +58,8 @@ class ServicioLimitadorIntentosTest {
         String clave = "test:user2";
 
         for (int i = 0; i < 4; i++) {
-            limitador.registrarFallo(clave, 5, 60_000L, MensajesDeError.DEMASIADOS_INTENTOS_CONTRASENA);
+            limitador.registrarFallo(
+                    clave, 5, 60_000L, MensajesDeError.DEMASIADOS_INTENTOS_CONTRASENA);
         }
 
         limitador.limpiarIntentos(clave);

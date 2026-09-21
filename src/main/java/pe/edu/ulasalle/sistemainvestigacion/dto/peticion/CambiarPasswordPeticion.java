@@ -18,5 +18,7 @@ public record CambiarPasswordPeticion(
                         message = "La nueva contraseña debe tener entre {min} y {max} caracteres")
                 @Pattern(
                         regexp = "^(?=.*[A-Z])(?=.*\\d).*$",
-                        message = "La nueva contraseña debe contener al menos una letra mayuscula y un numero")
+                        message =
+                                "La nueva contraseña debe contener al menos una letra mayuscula y"
+                                        + " un numero")
                 String passwordNueva) {}

@@ -71,13 +71,16 @@ public class ServicioLimitadorIntentos {
 
     private void limpiarExpiradosSiEsNecesario(long ahora) {
         if (intentosPorClave.size() > UMBRAL_LIMPIEZA) {
-            intentosPorClave.entrySet().removeIf(entry -> {
-                Registro r = entry.getValue();
-                synchronized (r) {
-                    return ahora > r.bloqueadoHasta
-                            && (ahora - r.inicioVentana) > TIEMPO_EXPIRACION_MS;
-                }
-            });
+            intentosPorClave
+                    .entrySet()
+                    .removeIf(
+                            entry -> {
+                                Registro r = entry.getValue();
+                                synchronized (r) {
+                                    return ahora > r.bloqueadoHasta
+                                            && (ahora - r.inicioVentana) > TIEMPO_EXPIRACION_MS;
+                                }
+                            });
         }
     }
 }

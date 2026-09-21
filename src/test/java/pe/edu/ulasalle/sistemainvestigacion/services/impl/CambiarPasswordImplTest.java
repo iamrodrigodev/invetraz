@@ -29,11 +29,9 @@ import pe.edu.ulasalle.sistemainvestigacion.repositories.UsuarioRepository;
 @ExtendWith(MockitoExtension.class)
 class CambiarPasswordImplTest {
 
-    @Mock
-    private UsuarioRepository usuarioRepository;
+    @Mock private UsuarioRepository usuarioRepository;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
+    @Mock private PasswordEncoder passwordEncoder;
 
     private ServicioLimitadorIntentos servicioLimitadorIntentos;
     private CambiarPasswordImpl servicio;
@@ -175,7 +173,6 @@ class CambiarPasswordImplTest {
                 assertThrows(ExcepcionPersonalizada.class, () -> servicio.ejecutar(peticion));
 
         assertEquals(429, ex.getCodigo());
-        assertEquals(
-                MensajesDeError.DEMASIADOS_INTENTOS_CONTRASENA.getMensaje(), ex.getMessage());
+        assertEquals(MensajesDeError.DEMASIADOS_INTENTOS_CONTRASENA.getMensaje(), ex.getMessage());
     }
 }

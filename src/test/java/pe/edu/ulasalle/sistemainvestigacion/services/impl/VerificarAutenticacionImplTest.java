@@ -27,8 +27,7 @@ import pe.edu.ulasalle.sistemainvestigacion.repositories.UsuarioRepository;
 @ExtendWith(MockitoExtension.class)
 class VerificarAutenticacionImplTest {
 
-    @Mock
-    private UsuarioRepository usuarioRepository;
+    @Mock private UsuarioRepository usuarioRepository;
 
     private VerificarAutenticacionImpl servicio;
 

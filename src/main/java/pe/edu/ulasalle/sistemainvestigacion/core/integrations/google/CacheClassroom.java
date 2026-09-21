@@ -22,10 +22,13 @@ public class CacheClassroom {
         }
     }
 
-    private final Map<String, EntradaCache<List<ClaseClassroom>>> cacheClases = new ConcurrentHashMap<>();
-    private final Map<String, EntradaCache<List<TareaClassroom>>> cacheTareas = new ConcurrentHashMap<>();
+    private final Map<String, EntradaCache<List<ClaseClassroom>>> cacheClases =
+            new ConcurrentHashMap<>();
+    private final Map<String, EntradaCache<List<TareaClassroom>>> cacheTareas =
+            new ConcurrentHashMap<>();
 
-    public List<ClaseClassroom> obtenerClases(String clave, Supplier<List<ClaseClassroom>> cargador) {
+    public List<ClaseClassroom> obtenerClases(
+            String clave, Supplier<List<ClaseClassroom>> cargador) {
         long ahora = System.currentTimeMillis();
         EntradaCache<List<ClaseClassroom>> existente = cacheClases.get(clave);
         if (existente != null && existente.estaVigente(ahora)) {
@@ -41,17 +44,22 @@ public class CacheClassroom {
                             if (actual != null && actual.estaVigente(tiempo)) {
                                 return actual;
                             }
-                            log.debug("Cache miss para clases con clave '{}', cargando desde Google", clave);
+                            log.debug(
+                                    "Cache miss para clases con clave '{}', cargando desde Google",
+                                    clave);
                             List<ClaseClassroom> datos = cargador.get();
                             List<ClaseClassroom> inmutable =
-                                    datos != null ? Collections.unmodifiableList(datos) : Collections.emptyList();
+                                    datos != null
+                                            ? Collections.unmodifiableList(datos)
+                                            : Collections.emptyList();
                             return new EntradaCache<>(inmutable, tiempo + TTL_MILLIS);
                         });
 
         return calculada != null ? calculada.datos() : Collections.emptyList();
     }
 
-    public List<TareaClassroom> obtenerTareas(String idClase, Supplier<List<TareaClassroom>> cargador) {
+    public List<TareaClassroom> obtenerTareas(
+            String idClase, Supplier<List<TareaClassroom>> cargador) {
         long ahora = System.currentTimeMillis();
         EntradaCache<List<TareaClassroom>> existente = cacheTareas.get(idClase);
         if (existente != null && existente.estaVigente(ahora)) {
@@ -67,10 +75,15 @@ public class CacheClassroom {
                             if (actual != null && actual.estaVigente(tiempo)) {
                                 return actual;
                             }
-                            log.debug("Cache miss para tareas de la clase '{}', cargando desde Google", idClase);
+                            log.debug(
+                                    "Cache miss para tareas de la clase '{}', cargando desde"
+                                            + " Google",
+                                    idClase);
                             List<TareaClassroom> datos = cargador.get();
                             List<TareaClassroom> inmutable =
-                                    datos != null ? Collections.unmodifiableList(datos) : Collections.emptyList();
+                                    datos != null
+                                            ? Collections.unmodifiableList(datos)
+                                            : Collections.emptyList();
                             return new EntradaCache<>(inmutable, tiempo + TTL_MILLIS);
                         });
 

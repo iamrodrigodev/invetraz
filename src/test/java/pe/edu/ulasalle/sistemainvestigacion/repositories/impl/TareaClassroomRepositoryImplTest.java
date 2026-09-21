@@ -26,26 +26,19 @@ import pe.edu.ulasalle.sistemainvestigacion.models.TareaClassroom;
 @ExtendWith(MockitoExtension.class)
 class TareaClassroomRepositoryImplTest {
 
-    @Mock
-    private ProveedorClassroom proveedorClassroom;
+    @Mock private ProveedorClassroom proveedorClassroom;
 
-    @Mock
-    private ManejadorErroresGoogle manejadorErroresGoogle;
+    @Mock private ManejadorErroresGoogle manejadorErroresGoogle;
 
-    @Mock
-    private CacheClassroom cacheClassroom;
+    @Mock private CacheClassroom cacheClassroom;
 
-    @Mock
-    private Classroom classroom;
+    @Mock private Classroom classroom;
 
-    @Mock
-    private Classroom.Courses courses;
+    @Mock private Classroom.Courses courses;
 
-    @Mock
-    private Classroom.Courses.CourseWork courseWork;
+    @Mock private Classroom.Courses.CourseWork courseWork;
 
-    @Mock
-    private Classroom.Courses.CourseWork.Create createRequest;
+    @Mock private Classroom.Courses.CourseWork.Create createRequest;
 
     private TareaClassroomRepositoryImpl repository;
 
@@ -110,6 +103,7 @@ class TareaClassroomRepositoryImplTest {
         assertEquals(20.0, resultado.getPuntajeMaximo());
         verify(cacheClassroom).invalidarTareas("c1");
         verify(createRequest)
-                .setFields("id,courseId,title,description,state,alternateLink,dueDate,dueTime,maxPoints");
+                .setFields(
+                        "id,courseId,title,description,state,alternateLink,dueDate,dueTime,maxPoints");
     }
 }

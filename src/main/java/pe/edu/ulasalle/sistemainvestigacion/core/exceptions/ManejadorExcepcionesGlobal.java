@@ -132,7 +132,10 @@ public class ManejadorExcepcionesGlobal {
     public ResponseEntity<ApiRespuesta<Void>> manejarTipoMedioNoSoportado(
             org.springframework.web.HttpMediaTypeNotSupportedException excepcion,
             HttpServletRequest solicitud) {
-        log.warn("Tipo de medio no soportado en {}: {}", solicitud.getRequestURI(), excepcion.getMessage());
+        log.warn(
+                "Tipo de medio no soportado en {}: {}",
+                solicitud.getRequestURI(),
+                excepcion.getMessage());
         ApiRespuesta<Void> respuesta =
                 ApiRespuesta.error(
                         HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(),

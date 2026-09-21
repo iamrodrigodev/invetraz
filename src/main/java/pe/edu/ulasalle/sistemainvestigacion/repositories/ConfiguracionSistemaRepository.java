@@ -10,4 +10,3 @@ import pe.edu.ulasalle.sistemainvestigacion.models.ConfiguracionSistema;
 public interface ConfiguracionSistemaRepository extends JpaRepository<ConfiguracionSistema, UUID> {
     Optional<ConfiguracionSistema> findFirstByOrderByIdAsc();
 }
-

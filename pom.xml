@@ -22,6 +22,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <org.projectlombok.version>1.18.36</org.projectlombok.version>
         <google-classroom.version>v1-rev20260511-2.0.0</google-classroom.version>
+        <google-drive.version>v3-rev20260428-2.0.0</google-drive.version>
         <google-api-client.version>2.8.0</google-api-client.version>
         <google-auth.version>1.48.0</google-auth.version>
         <spotless.version>2.44.3</spotless.version>
@@ -95,6 +96,12 @@
             <groupId>com.google.apis</groupId>
             <artifactId>google-api-services-classroom</artifactId>
             <version>${google-classroom.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-drive</artifactId>
+            <version>${google-drive.version}</version>
         </dependency>
 
         <dependency>

@@ -135,7 +135,11 @@ class CacheClassroomTest {
                 () -> {
                     llamadasClase1.incrementAndGet();
                     return List.of(
-                            TareaClassroom.builder().idTarea("t1").idClase("c1").titulo("T1").build());
+                            TareaClassroom.builder()
+                                    .idTarea("t1")
+                                    .idClase("c1")
+                                    .titulo("T1")
+                                    .build());
                 });
 
         cache.obtenerTareas(
@@ -143,7 +147,11 @@ class CacheClassroomTest {
                 () -> {
                     llamadasClase2.incrementAndGet();
                     return List.of(
-                            TareaClassroom.builder().idTarea("t2").idClase("c2").titulo("T2").build());
+                            TareaClassroom.builder()
+                                    .idTarea("t2")
+                                    .idClase("c2")
+                                    .titulo("T2")
+                                    .build());
                 });
 
         assertEquals(1, llamadasClase1.get());
@@ -156,7 +164,11 @@ class CacheClassroomTest {
                 () -> {
                     llamadasClase1.incrementAndGet();
                     return List.of(
-                            TareaClassroom.builder().idTarea("t1_nueva").idClase("c1").titulo("T1 Nueva").build());
+                            TareaClassroom.builder()
+                                    .idTarea("t1_nueva")
+                                    .idClase("c1")
+                                    .titulo("T1 Nueva")
+                                    .build());
                 });
 
         cache.obtenerTareas(
@@ -192,7 +204,11 @@ class CacheClassroomTest {
                 () -> {
                     llamadasTareas.incrementAndGet();
                     return List.of(
-                            TareaClassroom.builder().idTarea("t1").idClase("c1").titulo("T1").build());
+                            TareaClassroom.builder()
+                                    .idTarea("t1")
+                                    .idClase("c1")
+                                    .titulo("T1")
+                                    .build());
                 });
 
         assertEquals(1, llamadasClases.get());

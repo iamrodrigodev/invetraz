@@ -25,7 +25,8 @@ public class ProveedorClassroom {
         try {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         } catch (Exception e) {
-            throw new IllegalStateException("No se pudo inicializar el transporte HTTP de Google", e);
+            throw new IllegalStateException(
+                    "No se pudo inicializar el transporte HTTP de Google", e);
         }
     }
 
@@ -35,8 +36,7 @@ public class ProveedorClassroom {
     private final Lock lock = new ReentrantLock();
 
     public ProveedorClassroom(
-            ConfiguracionSistemaRepository configuracionRepository,
-            CacheClassroom cacheClassroom) {
+            ConfiguracionSistemaRepository configuracionRepository, CacheClassroom cacheClassroom) {
         this.configuracionRepository = configuracionRepository;
         this.cacheClassroom = cacheClassroom;
     }

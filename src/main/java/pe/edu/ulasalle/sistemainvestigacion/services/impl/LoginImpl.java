@@ -44,17 +44,14 @@ public class LoginImpl implements CasoUsoLogin {
         long tInicio = System.currentTimeMillis();
 
         String emailNormalizado =
-                peticion.email() != null
-                        ? peticion.email().trim().toLowerCase(Locale.ROOT)
-                        : "";
+                peticion.email() != null ? peticion.email().trim().toLowerCase(Locale.ROOT) : "";
 
         String claveRateLimit = "login:" + emailNormalizado;
         servicioLimitadorIntentos.comprobarBloqueo(
                 claveRateLimit, MensajesDeError.DEMASIADOS_INTENTOS_LOGIN);
 
         long t0 = System.currentTimeMillis();
-        Optional<Usuario> usuarioOpt =
-                usuarioRepository.findByEmailIgnoreCase(emailNormalizado);
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmailIgnoreCase(emailNormalizado);
         long tDb = System.currentTimeMillis() - t0;
 
         if (usuarioOpt.isEmpty()) {
@@ -64,7 +61,8 @@ public class LoginImpl implements CasoUsoLogin {
             servicioLimitadorIntentos.registrarFallo(
                     claveRateLimit, 5, 60_000L, MensajesDeError.DEMASIADOS_INTENTOS_LOGIN);
             log.warn(
-                    "Login fallido (usuario no encontrado): [{}] en {} ms (DB: {} ms, FicticioHash: {} ms)",
+                    "Login fallido (usuario no encontrado): [{}] en {} ms (DB: {} ms, FicticioHash:"
+                            + " {} ms)",
                     emailNormalizado,
                     System.currentTimeMillis() - tInicio,
                     tDb,
@@ -94,7 +92,9 @@ public class LoginImpl implements CasoUsoLogin {
         if (passwordEncoder.upgradeEncoding(usuario.getPassword())) {
             usuario.setPassword(passwordEncoder.encode(peticion.password()));
             usuarioRepository.saveAndFlush(usuario);
-            log.info("Password de usuario {} actualizado transparentemente a BCrypt", emailNormalizado);
+            log.info(
+                    "Password de usuario {} actualizado transparentemente a BCrypt",
+                    emailNormalizado);
         }
 
         long t2 = System.currentTimeMillis();

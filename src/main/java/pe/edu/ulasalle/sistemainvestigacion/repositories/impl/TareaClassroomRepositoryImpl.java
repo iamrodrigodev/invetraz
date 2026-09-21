@@ -27,8 +27,7 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
     private static final ZoneId ZONA_UTC = ZoneId.of("UTC");
     private static final String CAMPOS_TAREA =
             "id,courseId,title,description,state,alternateLink,dueDate,dueTime,maxPoints";
-    private static final String CAMPOS_LISTA_TAREAS =
-            "courseWork(" + CAMPOS_TAREA + ")";
+    private static final String CAMPOS_LISTA_TAREAS = "courseWork(" + CAMPOS_TAREA + ")";
 
     private final ProveedorClassroom proveedorClassroom;
     private final ManejadorErroresGoogle manejadorErroresGoogle;

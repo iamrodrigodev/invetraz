@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionDeNegocio;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorClassroom;
+import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorDrive;
 import pe.edu.ulasalle.sistemainvestigacion.core.response.ApiRespuesta;
 import pe.edu.ulasalle.sistemainvestigacion.dto.peticion.ActualizarCredencialesPeticion;
 import pe.edu.ulasalle.sistemainvestigacion.models.ConfiguracionSistema;
@@ -25,17 +26,19 @@ import pe.edu.ulasalle.sistemainvestigacion.repositories.ConfiguracionSistemaRep
 @ExtendWith(MockitoExtension.class)
 class ConfiguracionControllerTest {
 
-    @Mock
-    private ConfiguracionSistemaRepository configuracionRepository;
+    @Mock private ConfiguracionSistemaRepository configuracionRepository;
 
-    @Mock
-    private ProveedorClassroom proveedorClassroom;
+    @Mock private ProveedorClassroom proveedorClassroom;
+
+    @Mock private ProveedorDrive proveedorDrive;
 
     private ConfiguracionController controller;
 
     @BeforeEach
     void setUp() {
-        controller = new ConfiguracionController(configuracionRepository, proveedorClassroom);
+        controller =
+                new ConfiguracionController(
+                        configuracionRepository, proveedorClassroom, proveedorDrive);
     }
 
     @Test
@@ -77,31 +80,28 @@ class ConfiguracionControllerTest {
         when(configuracionRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.empty());
 
         ActualizarCredencialesPeticion peticion =
-                new ActualizarCredencialesPeticion("new-client-id", "new-secret", "new-refresh-token");
+                new ActualizarCredencialesPeticion(
+                        "new-client-id", "new-secret", "new-refresh-token");
 
         ResponseEntity<ApiRespuesta<Void>> response = controller.actualizarConfiguracion(peticion);
 
         assertEquals(200, response.getStatusCode().value());
         verify(configuracionRepository).save(any(ConfiguracionSistema.class));
         verify(proveedorClassroom).invalidarCache();
+        verify(proveedorDrive).invalidarCache();
     }
 
     @Test
     void verificarConfiguracion_sinCredencialesConfiguradas_lanzaExcepcion() {
         when(configuracionRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.empty());
 
-        assertThrows(
-                ExcepcionDeNegocio.class,
-                () -> controller.verificarConfiguracion(null));
+        assertThrows(ExcepcionDeNegocio.class, () -> controller.verificarConfiguracion(null));
     }
 
     @Test
     void verificarConfiguracion_conCamposVacios_lanzaExcepcion() {
-        ActualizarCredencialesPeticion peticion =
-                new ActualizarCredencialesPeticion("", "", "");
+        ActualizarCredencialesPeticion peticion = new ActualizarCredencialesPeticion("", "", "");
 
-        assertThrows(
-                ExcepcionDeNegocio.class,
-                () -> controller.verificarConfiguracion(peticion));
+        assertThrows(ExcepcionDeNegocio.class, () -> controller.verificarConfiguracion(peticion));
     }
 }
