@@ -43,17 +43,17 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 		plantilla.tipoMime === "application/vnd.google-apps.spreadsheet";
 
 	return (
-		<Card className="group relative flex flex-col justify-between border-slate-200/90 bg-white transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-300 hover:shadow-md h-full">
+		<Card className="flex flex-col justify-between border-slate-200/90 bg-white shadow-xs h-full">
 			<CardContent className="p-5 flex flex-col justify-between h-full space-y-4">
 				<div className="space-y-3">
 					<div className="flex items-center justify-between gap-3">
 						<FileSpreadsheet
-							size={26}
+							size={24}
 							className="text-primary stroke-[2.2] shrink-0"
 						/>
 						<Badge
 							variant="primary"
-							className="text-[10.5px] font-semibold uppercase tracking-wider"
+							className="text-[10.5px] font-medium uppercase tracking-wider"
 						>
 							{esGoogleSheet ? "Google Sheets" : "XLSX"}
 						</Badge>
@@ -61,7 +61,7 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 
 					<div>
 						<h3
-							className="font-bold text-slate-900 text-sm leading-snug line-clamp-2 group-hover:text-primary transition-colors"
+							className="font-semibold text-slate-800 text-sm leading-snug line-clamp-2"
 							title={plantilla.nombre}
 						>
 							{plantilla.nombre}
@@ -72,7 +72,7 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 				<div className="space-y-3 pt-3 border-t border-slate-100 text-xs text-slate-500">
 					<div className="flex items-center justify-between">
 						<span>Tamaño</span>
-						<span className="font-semibold text-slate-700">
+						<span className="font-medium text-slate-700">
 							{formatearTamano(plantilla.tamanoBytes)}
 						</span>
 					</div>
