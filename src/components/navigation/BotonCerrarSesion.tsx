@@ -17,7 +17,7 @@ export function BotonCerrarSesion({
 			<button
 				type="button"
 				onClick={alHacerClic}
-				title="Cerrar Sesión"
+				aria-label="Cerrar Sesión"
 				className="flex h-11 w-full items-center rounded-xl font-medium text-[15px] bg-white text-red-600 transition-colors duration-150 ease-in-out hover:bg-red-50 hover:text-red-700 active:bg-red-100/70 active:scale-98 cursor-pointer overflow-hidden"
 			>
 				<div className="flex h-11 w-11 shrink-0 items-center justify-center">
@@ -39,9 +39,9 @@ export function BotonCerrarSesion({
 			</button>
 
 			{estaColapsado && (
-				<div className="pointer-events-none absolute left-full top-1/2 ml-2.5 -translate-y-1/2 z-50 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-medium text-white shadow-md opacity-0 group-hover/logout:opacity-100 transition-opacity duration-150">
+				<div className="pointer-events-none absolute left-full top-1/2 ml-2.5 -translate-y-1/2 z-50 whitespace-nowrap rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-md opacity-0 group-hover/logout:opacity-100 transition-opacity duration-150">
 					Cerrar Sesión
-					<div className="absolute -left-1 top-1/2 -translate-y-1/2 border-4 border-transparent border-r-slate-900" />
+					<div className="absolute -left-1 top-1/2 -translate-y-1/2 border-4 border-transparent border-r-red-600" />
 				</div>
 			)}
 		</div>
