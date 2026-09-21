@@ -33,9 +33,9 @@ export interface TarjetaConexionBaseProps {
 	textoVerificar?: string | undefined;
 	textoGuardar?: string | undefined;
 	onVerificar?: (() => void) | undefined;
-	onGuardar?: ((e?: React.FormEvent) => void) | undefined;
+	onGuardar?: ((e?: React.SyntheticEvent) => void) | undefined;
 	esFormulario?: boolean | undefined;
-	onSubmit?: ((e: React.FormEvent) => void) | undefined;
+	onSubmit?: ((e: React.SyntheticEvent) => void) | undefined;
 	cabeceraExtra?: React.ReactNode;
 	children: React.ReactNode;
 }

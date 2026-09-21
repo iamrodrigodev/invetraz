@@ -7,10 +7,10 @@ import { TarjetaConexionBase } from "./TarjetaConexionBase";
 
 export const TarjetaCredencialesGoogle: React.FC = () => {
 	const {
-		register,
-		formState: { errors },
-	} = useCredencialesGoogleConfig().form;
-	const {
+		form: {
+			register,
+			formState: { errors },
+		},
 		campos: { clientId, clientSecret, refreshToken },
 		conexion,
 		mensajeErrorBanner,

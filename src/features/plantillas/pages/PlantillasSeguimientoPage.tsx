@@ -86,21 +86,17 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 		carpetaNombre: datos?.carpetaNombre,
 	});
 	const credencialesGoogleVerificadas =
-		estadoCredencialesGoogle === "conectado" || Boolean(datos?.driveVerificado);
+		estadoCredencialesGoogle === "conectado";
 	const estadoVisualCarpeta: EstadoCarpetaDrive =
-		datos?.driveVerificado ||
-		(credencialesGoogleVerificadas && vistaCarpeta.estado === "verificada")
+		credencialesGoogleVerificadas && datos?.driveVerificado
 			? "verificada"
 			: "pendiente";
-	const carpetaEstaVerificada = estadoVisualCarpeta === "verificada";
-	const tituloVacioPlantillas =
-		carpetaEstaVerificada || credencialesGoogleVerificadas
-			? vistaCarpeta.tituloVacio
-			: "Google Cloud pendiente de verificación";
-	const descripcionVaciaPlantillas =
-		carpetaEstaVerificada || credencialesGoogleVerificadas
-			? vistaCarpeta.descripcionVacia
-			: "Verifica las credenciales de Google Cloud antes de sincronizar Drive o consultar plantillas.";
+	const tituloVacioPlantillas = credencialesGoogleVerificadas
+		? vistaCarpeta.tituloVacio
+		: "Google Cloud pendiente de verificación";
+	const descripcionVaciaPlantillas = credencialesGoogleVerificadas
+		? vistaCarpeta.descripcionVacia
+		: "Verifica las credenciales de Google Cloud antes de sincronizar Drive o consultar plantillas.";
 
 	if (cargando && !datos) {
 		return <PlantillasSkeleton />;

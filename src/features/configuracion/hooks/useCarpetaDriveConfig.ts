@@ -83,7 +83,8 @@ export function useCarpetaDriveConfig({
 	};
 
 	const valorGuardadoVerificado = Boolean(
-		carpetaVerificadaInicial || carpetaNombreInicial,
+		credencialesGoogleVerificadas &&
+			(carpetaVerificadaInicial || carpetaNombreInicial),
 	);
 
 	const conexion = useVerificacionConexion<string>({
@@ -93,9 +94,7 @@ export function useCarpetaDriveConfig({
 		esValido: Boolean(camposCompletos && !errorValidacion),
 		tieneValorGuardado: Boolean(carpetaId),
 		valorGuardadoVerificado,
-		estadoGuardadoSinVerificar: carpetaVerificadaInicial
-			? "conectado"
-			: "guardado_pendiente",
+		estadoGuardadoSinVerificar: "guardado_pendiente",
 		onVerificar: async () => {
 			const res = await verificarCarpetaDrive({
 				carpetaUrlOId: inputUrl.trim(),
@@ -144,13 +143,10 @@ export function useCarpetaDriveConfig({
 	});
 
 	const estadoConexionCarpeta: TipoEstadoConexion = (() => {
-		if (conexion.estadoVisual === "conectado") {
-			return "conectado";
+		if (!credencialesGoogleVerificadas) {
+			return carpetaId ? "guardado_pendiente" : "no_configurado";
 		}
-		if (
-			carpetaVerificadaInicial &&
-			conexion.estadoVisual === "guardado_pendiente"
-		) {
+		if (conexion.estadoVisual === "conectado") {
 			return "conectado";
 		}
 		return conexion.estadoVisual;
@@ -176,7 +172,7 @@ export function useCarpetaDriveConfig({
 		await conexion.ejecutarVerificar();
 	};
 
-	const guardar = async (e: React.FormEvent) => {
+	const guardar = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
 		setTocado(true);
 		setErrorDescartado(false);

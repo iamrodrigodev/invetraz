@@ -92,11 +92,12 @@ export function useVerificacionConexion<T>({
 		[valorGuardado, sonIguales, valorActual],
 	);
 
-	const deshabilitarVerificar = verificando || guardando;
+	const deshabilitarVerificar = verificando || guardando || !esValido;
 
 	const deshabilitarGuardar =
 		guardando ||
 		verificando ||
+		!esValido ||
 		(!permitirGuardarConFallo && esIgualAFallidas) ||
 		(!permitirGuardarSinCambios &&
 			((esIgualAGuardadas && !ultimoIntentoGuardado) || esIgualAUltimoIntento));
@@ -139,32 +140,27 @@ export function useVerificacionConexion<T>({
 		if (verificando || guardando) {
 			return "verificando";
 		}
-		if (!esValido) {
-			return tieneValorGuardado ? "conectado" : "no_configurado";
-		}
 		if (esIgualAFallidas) {
 			return "error";
 		}
-		if (
-			(verificadoEnSesion && sonIguales(verificadoEnSesion, valorActual)) ||
-			(esIgualAGuardadas && valorGuardadoVerificado)
-		) {
+		if (verificadoEnSesion && sonIguales(verificadoEnSesion, valorActual)) {
 			return "conectado";
 		}
-		if (esIgualAGuardadas && estadoGuardadoSinVerificar) {
-			return estadoGuardadoSinVerificar;
+		if (tieneValorGuardado) {
+			if (valorGuardadoVerificado) {
+				return "conectado";
+			}
+			return estadoGuardadoSinVerificar || "guardado_pendiente";
 		}
 		return "no_configurado";
 	}, [
 		verificando,
 		guardando,
-		esValido,
-		tieneValorGuardado,
 		esIgualAFallidas,
 		verificadoEnSesion,
 		sonIguales,
 		valorActual,
-		esIgualAGuardadas,
+		tieneValorGuardado,
 		valorGuardadoVerificado,
 		estadoGuardadoSinVerificar,
 	]);

@@ -45,7 +45,9 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = (
 			carpetaId={carpetaId}
 			textoBoton="Abrir en Drive"
 			estado={
-				estadoConexionCarpeta === "conectado" ? "verificada" : "pendiente"
+				credencialesGoogleVerificadas && estadoConexionCarpeta === "conectado"
+					? "verificada"
+					: "pendiente"
 			}
 		/>
 	) : null;
