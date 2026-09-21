@@ -131,17 +131,17 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 	};
 
 	const cabeceraVinculada = carpetaId ? (
-		<div className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+		<div className="rounded-xl border border-slate-200/80 p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
 			<div className="space-y-1">
-				<div className="flex items-center gap-2">
+				<div className="flex items-center gap-2 flex-wrap">
 					<span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
 						Carpeta vinculada:
 					</span>
-					<Badge variant="slate" className="font-bold">
+					<Badge variant="primary" className="font-semibold">
 						{carpetaNombre || "Carpeta de Google Drive"}
 					</Badge>
 				</div>
-				<p className="font-mono text-xs text-slate-500 break-all">
+				<p className="font-mono text-xs text-slate-400 break-all">
 					ID: {carpetaId}
 				</p>
 			</div>
@@ -153,11 +153,11 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 			>
 				<Button
 					type="button"
-					variant="outline"
+					variant="default"
 					size="sm"
-					className="text-xs text-slate-700 hover:text-emerald-700 w-full sm:w-auto"
+					className="h-8 px-3 text-xs font-medium w-full sm:w-auto"
 				>
-					<ExternalLink size={14} className="mr-1.5" />
+					<ExternalLink size={13} className="mr-1.5" />
 					Abrir en Drive
 				</Button>
 			</a>
