@@ -6,6 +6,7 @@ import { AuthCardSkeleton, DashboardSkeleton } from "./components/ui";
 import { LoginPage } from "./features/auth/pages/LoginPage";
 import { SetupPage } from "./features/setup/pages/SetupPage";
 import { useAppStore } from "./store/useAppStore";
+import { esSesionValida } from "./utils/sesion";
 
 export function AppRouter() {
 	const configurado = useAppStore((state) => state.configurado);
@@ -20,21 +21,23 @@ export function AppRouter() {
 	}, [verificarEstadoGlobal]);
 
 	if (!estadoVerificado || configurado === null) {
-		const tieneSesionPrevia =
-			typeof window !== "undefined" &&
-			localStorage.getItem("sesion_activa") === "true";
+		const tieneSesionPrevia = esSesionValida();
 
 		const esRutaAuth =
 			typeof window !== "undefined" &&
 			(window.location.pathname === "/login" ||
 				window.location.pathname === "/setup");
 
+		const sesionExpirada =
+			typeof window !== "undefined" &&
+			sessionStorage.getItem("motivo_salida") === "sesion_expirada";
+
 		const esSetup =
 			typeof window !== "undefined" &&
 			(window.location.pathname === "/setup" ||
 				(window.location.pathname !== "/login" && configurado !== true));
 
-		if (esRutaAuth || !tieneSesionPrevia) {
+		if (esRutaAuth || !tieneSesionPrevia || sesionExpirada) {
 			return <AuthCardSkeleton esSetup={esSetup} />;
 		}
 

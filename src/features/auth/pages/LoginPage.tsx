@@ -42,8 +42,12 @@ export function LoginPage() {
 	const onSubmit = async (data: LoginPeticion) => {
 		try {
 			setErrorApi(null);
-			await login(data);
-			setAutenticado(true, data.email.trim().toLowerCase());
+			const respuesta = await login(data);
+			setAutenticado(
+				true,
+				data.email.trim().toLowerCase(),
+				respuesta.tokenAcceso,
+			);
 			navigate("/", { replace: true });
 		} catch (error) {
 			setErrorApi(

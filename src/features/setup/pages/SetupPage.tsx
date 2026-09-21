@@ -36,12 +36,16 @@ export function SetupPage() {
 			const { confirmPassword, ...payload } = data;
 			await crearAdmin(payload);
 
-			await login({
+			const loginRes = await login({
 				email: payload.email,
 				password: payload.password,
 			});
 			setConfigurado(true);
-			setAutenticado(true, payload.email.trim().toLowerCase());
+			setAutenticado(
+				true,
+				payload.email.trim().toLowerCase(),
+				loginRes.tokenAcceso,
+			);
 			navigate("/", { replace: true });
 		} catch (error) {
 			const mensaje =

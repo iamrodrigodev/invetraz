@@ -13,6 +13,7 @@ import {
 	ConfiguracionSkeleton,
 } from "../../../components/ui";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
+import { useAppStore } from "../../../store/useAppStore";
 import {
 	CampoCredencial,
 	EstadoConexionBadge,
@@ -175,7 +176,7 @@ export function ConfiguracionPage() {
 					}
 				})
 				.catch((error) => {
-					if (montado) {
+					if (montado && useAppStore.getState().autenticado) {
 						setMensajeError(
 							error instanceof Error
 								? error.message
@@ -221,6 +222,9 @@ export function ConfiguracionPage() {
 					"Credenciales verificadas con Google y guardadas exitosamente.",
 			);
 		} catch (error) {
+			if (!useAppStore.getState().autenticado) {
+				return;
+			}
 			setUltimoIntentoGuardado(datosConCarpeta);
 			setFalloEnSesion(datosConCarpeta);
 			setVerificadoEnSesion(null);
@@ -261,6 +265,9 @@ export function ConfiguracionPage() {
 					"¡Conexión verificada exitosamente con Google Classroom!",
 			);
 		} catch (error) {
+			if (!useAppStore.getState().autenticado) {
+				return;
+			}
 			const valoresFallidos: ActualizarCredencialesPeticion = {
 				googleClientId: getValues("googleClientId")?.trim() || "",
 				googleClientSecret: getValues("googleClientSecret")?.trim() || "",
@@ -279,6 +286,12 @@ export function ConfiguracionPage() {
 			setVerificando(false);
 		}
 	};
+
+	const autenticado = useAppStore((state) => state.autenticado);
+
+	if (!autenticado) {
+		return null;
+	}
 
 	if (!cargado) {
 		return <ConfiguracionSkeleton />;

@@ -3,6 +3,12 @@ import { logout, verificarAutenticacion } from "../features/auth/api/auth.api";
 import { useConfiguracionStore } from "../features/configuracion/store/useConfiguracionStore";
 import { verificarEstadoSistema } from "../features/setup/api/setup.api";
 import { alExpirarSesion } from "../utils/fetch";
+import {
+	esSesionValida,
+	guardarSesion,
+	limpiarSesion,
+	programarExpiracionAutomatica,
+} from "../utils/sesion";
 
 interface AppState {
 	configurado: boolean | null;
@@ -11,18 +17,35 @@ interface AppState {
 	estadoVerificado: boolean;
 	verificarEstadoGlobal: () => Promise<void>;
 	setConfigurado: (valor: boolean) => void;
-	setAutenticado: (valor: boolean, email?: string | null) => void;
+	setAutenticado: (
+		valor: boolean,
+		email?: string | null,
+		tokenAcceso?: string,
+	) => void;
 	cerrarSesion: () => Promise<void>;
 }
 
 const configuradoCacheado =
 	typeof window !== "undefined" &&
 	localStorage.getItem("sistema_configurado") === "true";
-const sesionPreviaActiva =
-	typeof window !== "undefined" &&
-	localStorage.getItem("sesion_activa") === "true";
+const sesionPreviaActiva = esSesionValida();
 const usuarioEmailCacheado =
-	typeof window !== "undefined" ? localStorage.getItem("usuario_email") : null;
+	typeof window !== "undefined" && sesionPreviaActiva
+		? localStorage.getItem("usuario_email")
+		: null;
+
+function manejarExpiracionProactiva() {
+	limpiarSesion("sesion_expirada");
+	useAppStore.setState({ autenticado: false, usuarioEmail: null });
+	useConfiguracionStore.getState().limpiar();
+	if (typeof window !== "undefined" && window.location.pathname !== "/login") {
+		window.location.replace("/login");
+	}
+}
+
+if (sesionPreviaActiva) {
+	programarExpiracionAutomatica(manejarExpiracionProactiva);
+}
 
 export const useAppStore = create<AppState>((set) => ({
 	configurado: configuradoCacheado ? true : null,
@@ -36,13 +59,16 @@ export const useAppStore = create<AppState>((set) => ({
 				verificarAutenticacion(),
 			]);
 			if (resAuth.autenticado) {
-				localStorage.setItem("sesion_activa", "true");
-				if (resAuth.email) {
-					localStorage.setItem("usuario_email", resAuth.email);
-				}
+				guardarSesion(undefined, resAuth.email);
 			} else {
-				localStorage.removeItem("sesion_activa");
-				localStorage.removeItem("usuario_email");
+				const sesionEstabaActiva =
+					typeof window !== "undefined" &&
+					localStorage.getItem("sesion_activa") === "true";
+				if (sesionEstabaActiva) {
+					limpiarSesion("sesion_expirada");
+				} else {
+					limpiarSesion();
+				}
 			}
 			set({
 				configurado: esConfigurado,
@@ -56,8 +82,7 @@ export const useAppStore = create<AppState>((set) => ({
 			});
 		} catch (error) {
 			console.error("Error al verificar estado global", error);
-			localStorage.removeItem("sesion_activa");
-			localStorage.removeItem("usuario_email");
+			limpiarSesion();
 			set({
 				configurado: true,
 				autenticado: false,
@@ -72,15 +97,16 @@ export const useAppStore = create<AppState>((set) => ({
 		}
 		set({ configurado: valor });
 	},
-	setAutenticado: (valor: boolean, email?: string | null) => {
+	setAutenticado: (
+		valor: boolean,
+		email?: string | null,
+		tokenAcceso?: string,
+	) => {
 		if (valor) {
-			localStorage.setItem("sesion_activa", "true");
-			if (email) {
-				localStorage.setItem("usuario_email", email);
-			}
+			guardarSesion(tokenAcceso, email);
+			programarExpiracionAutomatica(manejarExpiracionProactiva);
 		} else {
-			localStorage.removeItem("sesion_activa");
-			localStorage.removeItem("usuario_email");
+			limpiarSesion();
 		}
 		set((state) => ({
 			autenticado: valor,
@@ -91,17 +117,13 @@ export const useAppStore = create<AppState>((set) => ({
 		try {
 			await logout();
 		} catch (_error) {}
-		localStorage.removeItem("sesion_activa");
-		localStorage.removeItem("usuario_email");
-		localStorage.removeItem("jwt");
-		localStorage.removeItem("moduloActivo");
+		limpiarSesion();
 		useConfiguracionStore.getState().limpiar();
 		set({ autenticado: false, usuarioEmail: null });
 	},
 }));
 
 alExpirarSesion(() => {
-	localStorage.removeItem("usuario_email");
 	useAppStore.setState({ autenticado: false, usuarioEmail: null });
 	useConfiguracionStore.getState().limpiar();
 });

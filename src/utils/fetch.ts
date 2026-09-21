@@ -1,4 +1,5 @@
 import type { z } from "zod";
+import { limpiarSesion } from "./sesion";
 
 type ManejadorExpiracion = () => void;
 let manejadorSesionExpirada: ManejadorExpiracion | null = null;
@@ -21,19 +22,17 @@ export async function fetchSeguro(
 			!url.includes("/auth/logout") &&
 			!url.includes("/auth/me")
 		) {
-			if (typeof window !== "undefined") {
-				const sesionEstabaActiva =
-					localStorage.getItem("sesion_activa") === "true";
-				if (sesionEstabaActiva) {
-					sessionStorage.setItem("motivo_salida", "sesion_expirada");
-				}
-				localStorage.removeItem("sesion_activa");
-				localStorage.removeItem("jwt");
-				localStorage.removeItem("moduloActivo");
-			}
+			limpiarSesion("sesion_expirada");
 
 			if (manejadorSesionExpirada) {
 				manejadorSesionExpirada();
+			}
+
+			if (
+				typeof window !== "undefined" &&
+				window.location.pathname !== "/login"
+			) {
+				window.location.replace("/login");
 			}
 		}
 
