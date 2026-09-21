@@ -31,6 +31,35 @@ export async function obtenerPlantillas(): Promise<CarpetaPlantillasRespuesta> {
 	return wrapper.datos;
 }
 
+export async function verificarCarpetaDrive(
+	peticion: VincularCarpetaPeticion,
+): Promise<CarpetaPlantillasRespuesta> {
+	const res = await fetchSeguro(
+		`${entorno.VITE_API_BASE_URL}/plantillas/verificar`,
+		{
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(peticion),
+		},
+	);
+
+	if (!res.ok) {
+		const msj = await extraerMensajeError(
+			res,
+			"Error al verificar la carpeta de Google Drive",
+		);
+		throw new Error(msj);
+	}
+
+	const wrapperSchema = crearApiRespuestaSchema(
+		CarpetaPlantillasRespuestaSchema,
+	);
+	const wrapper = await parsearConEsquema(res, wrapperSchema);
+	return wrapper.datos;
+}
+
 export async function vincularCarpetaDrive(
 	peticion: VincularCarpetaPeticion,
 ): Promise<CarpetaPlantillasRespuesta> {

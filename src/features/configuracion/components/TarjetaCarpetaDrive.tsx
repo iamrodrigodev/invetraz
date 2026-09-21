@@ -3,11 +3,12 @@ import {
 	CheckCircle2,
 	ExternalLink,
 	FolderGit2,
-	Link2,
 	RefreshCw,
+	Save,
+	XCircle,
 } from "lucide-react";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
 	Alert,
 	Badge,
@@ -18,13 +19,24 @@ import {
 	CardHeader,
 	CardTitle,
 } from "../../../components/ui";
-import { vincularCarpetaDrive } from "../../plantillas/api/plantillas.api";
+import {
+	verificarCarpetaDrive,
+	vincularCarpetaDrive,
+} from "../../plantillas/api/plantillas.api";
 import { CampoCredencial } from "./CampoCredencial";
 
 interface TarjetaCarpetaDriveProps {
 	carpetaIdInicial?: string | null | undefined;
 	carpetaNombreInicial?: string | null | undefined;
 	onCarpetaActualizada?: (id: string, nombre: string) => void;
+}
+
+function normalizarId(entrada: string): string {
+	const limpia = entrada.trim();
+	if (!limpia) return "";
+	const match = /(?:folders\/|id=)([a-zA-Z0-9_-]+)/.exec(limpia);
+	if (match?.[1]) return match[1];
+	return limpia;
 }
 
 export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
@@ -38,46 +50,150 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 	const [carpetaNombre, setCarpetaNombre] = useState<string | null>(
 		carpetaNombreInicial ?? null,
 	);
-	const [inputUrl, setInputUrl] = useState<string>("");
-	const [vinculando, setVinculando] = useState<boolean>(false);
+	const [inputUrl, setInputUrl] = useState<string>(carpetaIdInicial ?? "");
+	const [verificando, setVerificando] = useState<boolean>(false);
+	const [guardando, setGuardando] = useState<boolean>(false);
 	const [mensajeExito, setMensajeExito] = useState<string | null>(null);
 	const [mensajeError, setMensajeError] = useState<string | null>(null);
 
+	const [ultimoIntentoGuardado, setUltimoIntentoGuardado] = useState<
+		string | null
+	>(carpetaIdInicial ?? null);
+	const [verificadoEnSesion, setVerificadoEnSesion] = useState<string | null>(
+		carpetaIdInicial ? normalizarId(carpetaIdInicial) : null,
+	);
+	const [falloEnSesion, setFalloEnSesion] = useState<string | null>(null);
+
 	useEffect(() => {
-		if (carpetaIdInicial) setCarpetaId(carpetaIdInicial);
-		if (carpetaNombreInicial) setCarpetaNombre(carpetaNombreInicial);
+		if (carpetaIdInicial) {
+			setCarpetaId(carpetaIdInicial);
+			setInputUrl(carpetaIdInicial);
+			setUltimoIntentoGuardado(carpetaIdInicial);
+			setVerificadoEnSesion(normalizarId(carpetaIdInicial));
+		}
+		if (carpetaNombreInicial) {
+			setCarpetaNombre(carpetaNombreInicial);
+		}
 	}, [carpetaIdInicial, carpetaNombreInicial]);
 
-	const onVincular = async (e: React.FormEvent) => {
-		e.preventDefault();
-		const valorLimpio = inputUrl.trim();
-		if (!valorLimpio) return;
+	const idActual = useMemo(() => normalizarId(inputUrl), [inputUrl]);
+	const camposCompletos = Boolean(inputUrl.trim());
 
-		setVinculando(true);
+	const esIgualAFallidas = Boolean(falloEnSesion && falloEnSesion === idActual);
+	const esIgualAUltimoIntento = Boolean(
+		ultimoIntentoGuardado && normalizarId(ultimoIntentoGuardado) === idActual,
+	);
+	const esIgualAGuardadas = Boolean(carpetaId && carpetaId === idActual);
+
+	const deshabilitarVerificar = !camposCompletos || verificando || guardando;
+	const deshabilitarGuardar =
+		!camposCompletos ||
+		guardando ||
+		verificando ||
+		esIgualAFallidas ||
+		(esIgualAGuardadas && !ultimoIntentoGuardado) ||
+		esIgualAUltimoIntento;
+
+	const estadoVisual = useMemo(() => {
+		if (verificando || guardando) {
+			return "verificando";
+		}
+		if (!camposCompletos) {
+			return carpetaId ? "conectado" : "no_configurado";
+		}
+		if (esIgualAFallidas) {
+			return "error";
+		}
+		if (
+			(verificadoEnSesion && verificadoEnSesion === idActual) ||
+			esIgualAGuardadas
+		) {
+			return "conectado";
+		}
+		return "no_configurado";
+	}, [
+		verificando,
+		guardando,
+		camposCompletos,
+		carpetaId,
+		esIgualAFallidas,
+		verificadoEnSesion,
+		idActual,
+		esIgualAGuardadas,
+	]);
+
+	const onProbarConexion = async () => {
+		const valorLimpio = inputUrl.trim();
+		if (!valorLimpio) {
+			setMensajeError(
+				"Por favor, ingresa un enlace o ID de carpeta antes de verificar.",
+			);
+			return;
+		}
+
+		setVerificando(true);
 		setMensajeError(null);
 		setMensajeExito(null);
 
 		try {
+			const res = await verificarCarpetaDrive({ carpetaUrlOId: valorLimpio });
+			const idVerificado = res.carpetaId ?? idActual;
+			setVerificadoEnSesion(idVerificado);
+			setFalloEnSesion(null);
+			setMensajeExito(
+				`¡Conexión verificada exitosamente con Google Drive! Se encontraron ${res.plantillas.length} ${
+					res.plantillas.length === 1 ? "plantilla" : "plantillas"
+				} .xlsx en "${res.carpetaNombre || "Carpeta de Google Drive"}".`,
+			);
+		} catch (err) {
+			setFalloEnSesion(idActual);
+			setVerificadoEnSesion(null);
+			setMensajeError(
+				err instanceof Error
+					? err.message
+					: "Error al verificar la conexión con la carpeta de Google Drive",
+			);
+		} finally {
+			setVerificando(false);
+		}
+	};
+
+	const onGuardar = async (e: React.FormEvent) => {
+		e.preventDefault();
+		const valorLimpio = inputUrl.trim();
+		if (!valorLimpio) return;
+
+		setGuardando(true);
+		setMensajeError(null);
+		setMensajeExito(null);
+		setUltimoIntentoGuardado(valorLimpio);
+
+		try {
 			const res = await vincularCarpetaDrive({ carpetaUrlOId: valorLimpio });
-			const nuevoId = res.carpetaId ?? "";
+			const nuevoId = res.carpetaId ?? idActual;
 			const nuevoNombre = res.carpetaNombre ?? "Carpeta de Google Drive";
 			setCarpetaId(nuevoId);
 			setCarpetaNombre(nuevoNombre);
-			setInputUrl("");
+			setUltimoIntentoGuardado(valorLimpio);
+			setVerificadoEnSesion(nuevoId);
+			setFalloEnSesion(null);
 			setMensajeExito(
-				`Carpeta vinculada exitosamente: "${nuevoNombre}" (${res.plantillas.length} ${
+				`Carpeta verificada con Google y guardada exitosamente: "${nuevoNombre}" (${res.plantillas.length} ${
 					res.plantillas.length === 1 ? "plantilla" : "plantillas"
 				} .xlsx encontradas).`,
 			);
 			onCarpetaActualizada?.(nuevoId, nuevoNombre);
 		} catch (err) {
+			setUltimoIntentoGuardado(valorLimpio);
+			setFalloEnSesion(idActual);
+			setVerificadoEnSesion(null);
 			setMensajeError(
 				err instanceof Error
 					? err.message
-					: "Error al vincular la carpeta de Google Drive",
+					: "Error al verificar o guardar la carpeta de Google Drive",
 			);
 		} finally {
-			setVinculando(false);
+			setGuardando(false);
 		}
 	};
 
@@ -89,23 +205,30 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 						<FolderGit2 size={18} />
 						<span>Google Drive</span>
 					</div>
-					{vinculando ? (
+					{estadoVisual === "verificando" ? (
 						<Badge variant="primary">
 							<RefreshCw
 								size={13}
 								className="shrink-0 animate-spin text-primary"
 							/>
-							<span>Verificando carpeta...</span>
+							<span>
+								{guardando ? "Guardando..." : "Verificando conexión..."}
+							</span>
 						</Badge>
-					) : carpetaId ? (
+					) : estadoVisual === "error" ? (
+						<Badge variant="destructive">
+							<XCircle size={13} className="shrink-0 text-red-600" />
+							<span>Error de conexión</span>
+						</Badge>
+					) : estadoVisual === "conectado" ? (
 						<Badge variant="success">
 							<CheckCircle2 size={13} className="shrink-0 text-emerald-600" />
-							<span>Carpeta vinculada</span>
+							<span>Conexión activa con Google</span>
 						</Badge>
 					) : (
 						<Badge variant="warning">
 							<AlertCircle size={13} className="shrink-0 text-amber-600" />
-							<span>Sin carpeta vinculada</span>
+							<span>Pendiente de configuración</span>
 						</Badge>
 					)}
 				</div>
@@ -172,7 +295,7 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 					</div>
 				)}
 
-				<form onSubmit={onVincular} className="space-y-5">
+				<form onSubmit={onGuardar} className="space-y-5">
 					<CampoCredencial
 						id="carpetaUrlOId"
 						label={
@@ -203,23 +326,53 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 							setInputUrl(e.target.value);
 							if (mensajeError) setMensajeError(null);
 						}}
-						disabled={vinculando}
+						disabled={verificando || guardando}
 						errorMessage={mensajeError ?? undefined}
 					/>
 
 					<div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row sm:items-center sm:justify-end">
 						<Button
+							type="button"
+							variant="outline"
+							onClick={onProbarConexion}
+							disabled={deshabilitarVerificar}
+							className="w-full sm:w-auto"
+							title={
+								!camposCompletos
+									? "Completa el campo para verificar la conexión"
+									: undefined
+							}
+						>
+							<RefreshCw
+								size={16}
+								className={`mr-2 ${verificando ? "animate-spin text-primary" : ""}`}
+							/>
+							{verificando ? "Verificando..." : "Verificar Conexión"}
+						</Button>
+
+						<Button
 							type="submit"
 							variant="default"
-							disabled={vinculando || !inputUrl.trim()}
+							disabled={deshabilitarGuardar}
 							className="w-full sm:w-auto"
+							title={
+								!camposCompletos
+									? "Completa el campo para guardar"
+									: esIgualAFallidas
+										? "Esta carpeta falló la validación. Modifícala para intentar guardar."
+										: esIgualAUltimoIntento || esIgualAGuardadas
+											? "Modifica el enlace o ID para guardar cambios"
+											: undefined
+							}
 						>
-							{vinculando ? (
+							{guardando ? (
 								<RefreshCw size={16} className="mr-2 animate-spin" />
 							) : (
-								<Link2 size={16} className="mr-2" />
+								<Save size={16} className="mr-2" />
 							)}
-							{vinculando ? "Verificando carpeta..." : "Vincular y Verificar"}
+							{guardando
+								? "Verificando y guardando..."
+								: "Guardar Configuración"}
 						</Button>
 					</div>
 				</form>
