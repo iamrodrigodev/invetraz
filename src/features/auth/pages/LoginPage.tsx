@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, LogIn, Microscope, RefreshCw } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Alert, Button, Input } from "../../../components/ui";
@@ -25,11 +25,26 @@ export function LoginPage() {
 	const {
 		register,
 		handleSubmit,
+		reset,
 		formState: { errors, isSubmitting, isValid },
 	} = useForm<LoginPeticion>({
 		resolver: zodResolver(LoginPeticionSchema),
 		mode: "onChange",
 	});
+
+	useLayoutEffect(() => {
+		const clearRestoredCredentials = () => reset({ email: "", password: "" });
+		clearRestoredCredentials();
+		window.addEventListener("pageshow", clearRestoredCredentials);
+		return () =>
+			window.removeEventListener("pageshow", clearRestoredCredentials);
+	}, [reset]);
+
+	const clearAutofill = (event: React.AnimationEvent<HTMLInputElement>) => {
+		if (event.animationName === "login-autofill-detected") {
+			reset({ email: "", password: "" });
+		}
+	};
 
 	const onSubmit = async (data: LoginPeticion) => {
 		try {
@@ -78,12 +93,14 @@ export function LoginPage() {
 						</label>
 						<Input
 							id="email"
+							className="login-no-autofill"
 							type="email"
 							placeholder="admin@ulasalle.edu.pe"
 							maxLength={VALIDATION_LIMITS.MAX_EMAIL}
 							autoComplete="off"
 							data-lpignore="true"
 							data-1p-ignore="true"
+							onAnimationStart={clearAutofill}
 							errorMessage={errors.email?.message}
 							{...register("email")}
 						/>
@@ -98,12 +115,14 @@ export function LoginPage() {
 						</label>
 						<Input
 							id="password"
+							className="login-no-autofill"
 							type={showPassword ? "text" : "password"}
 							placeholder="Ingresa tu contraseña"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
 							autoComplete="off"
 							data-lpignore="true"
 							data-1p-ignore="true"
+							onAnimationStart={clearAutofill}
 							errorMessage={errors.password?.message}
 							{...register("password")}
 							rightElement={
