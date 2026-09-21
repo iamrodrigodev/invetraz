@@ -1,8 +1,9 @@
-export type EstadoCarpetaDrive = "verificada" | "pendiente";
+export type EstadoCarpetaDrive = "verificada" | "pendiente" | "verificando";
 
 export interface DatosCarpetaDrive {
 	carpetaId?: string | null | undefined;
 	carpetaNombre?: string | null | undefined;
+	estado?: EstadoCarpetaDrive | undefined;
 }
 
 export interface VistaEstadoCarpetaDrive {
@@ -10,6 +11,7 @@ export interface VistaEstadoCarpetaDrive {
 	nombreVisible: string | null;
 	estaConfigurada: boolean;
 	estaPendiente: boolean;
+	estaVerificando: boolean;
 	badgeTexto: string;
 	tituloVacio: string;
 	descripcionVacia: string;
@@ -18,19 +20,46 @@ export interface VistaEstadoCarpetaDrive {
 export function resolverVistaCarpetaDrive({
 	carpetaId,
 	carpetaNombre,
+	estado: estadoExplicito,
 }: DatosCarpetaDrive): VistaEstadoCarpetaDrive {
 	const estaConfigurada = Boolean(carpetaId);
-	const estaPendiente = Boolean(carpetaId && !carpetaNombre);
-	const estado: EstadoCarpetaDrive = estaPendiente ? "pendiente" : "verificada";
+	const estaVerificando = estadoExplicito === "verificando";
+	const estaPendiente =
+		!estaVerificando &&
+		Boolean(
+			carpetaId &&
+				(!carpetaNombre ||
+					estadoExplicito === "pendiente" ||
+					carpetaNombre === "Carpeta guardada sin verificar"),
+		);
+	const estado: EstadoCarpetaDrive = estaVerificando
+		? "verificando"
+		: estaPendiente
+			? "pendiente"
+			: "verificada";
+
+	const nombreVisible = (() => {
+		if (!estaConfigurada) return null;
+		if (carpetaNombre && carpetaNombre !== "Carpeta guardada sin verificar") {
+			return carpetaNombre;
+		}
+		if (estaVerificando) {
+			return "Carpeta en verificación";
+		}
+		return "Carpeta guardada sin verificar";
+	})();
 
 	return {
 		estado,
-		nombreVisible: estaConfigurada
-			? carpetaNombre || "Carpeta guardada sin verificar"
-			: null,
+		nombreVisible,
 		estaConfigurada,
 		estaPendiente,
-		badgeTexto: estaPendiente ? "Guardada, no verificada" : "Carpeta vinculada",
+		estaVerificando,
+		badgeTexto: estaVerificando
+			? "Verificando..."
+			: estaPendiente
+				? "Guardada, no verificada"
+				: "Carpeta vinculada",
 		tituloVacio: estaPendiente
 			? "Carpeta guardada, pendiente de verificación"
 			: "No hay archivos en la carpeta",

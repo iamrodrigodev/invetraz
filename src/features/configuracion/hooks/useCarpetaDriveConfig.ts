@@ -59,6 +59,8 @@ export function useCarpetaDriveConfig({
 	const idActual = useMemo(() => normalizarId(inputUrl), [inputUrl]);
 	const credencialesGoogleVerificadas =
 		estadoCredencialesGoogle === "conectado";
+	const credencialesGoogleVerificando =
+		estadoCredencialesGoogle === "verificando";
 	const camposCompletos = Boolean(inputUrl.trim());
 
 	const errorValidacion = useMemo(() => {
@@ -83,7 +85,7 @@ export function useCarpetaDriveConfig({
 	};
 
 	const valorGuardadoVerificado = Boolean(
-		credencialesGoogleVerificadas &&
+		(credencialesGoogleVerificadas || credencialesGoogleVerificando) &&
 			(carpetaVerificadaInicial || carpetaNombreInicial),
 	);
 
@@ -143,6 +145,16 @@ export function useCarpetaDriveConfig({
 	});
 
 	const estadoConexionCarpeta: TipoEstadoConexion = (() => {
+		if (conexion.estadoVisual === "verificando") {
+			return "verificando";
+		}
+		if (credencialesGoogleVerificando) {
+			return valorGuardadoVerificado
+				? "conectado"
+				: carpetaId
+					? "guardado_pendiente"
+					: "no_configurado";
+		}
 		if (!credencialesGoogleVerificadas) {
 			return carpetaId ? "guardado_pendiente" : "no_configurado";
 		}
@@ -162,7 +174,9 @@ export function useCarpetaDriveConfig({
 		setErrorDescartado(false);
 		if (!credencialesGoogleVerificadas) {
 			conexion.setMensajeError(
-				"Primero verifica las credenciales de Google Cloud. Sin credenciales verificadas no se puede usar Google Drive.",
+				credencialesGoogleVerificando
+					? "Espera a que finalice la verificación de Google Cloud antes de verificar la carpeta."
+					: "Primero verifica las credenciales de Google Cloud. Sin credenciales verificadas no se puede usar Google Drive.",
 			);
 			return;
 		}
@@ -203,6 +217,8 @@ export function useCarpetaDriveConfig({
 		vistaCarpeta,
 		conexion,
 		credencialesGoogleVerificadas,
+		credencialesGoogleVerificando,
+		valorGuardadoVerificado,
 		estadoConexionCarpeta,
 		mensajeErrorCampo,
 		mensajeErrorBanner,

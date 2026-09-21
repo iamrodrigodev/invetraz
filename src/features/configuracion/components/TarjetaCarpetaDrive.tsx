@@ -1,5 +1,6 @@
 import { ExternalLink, FolderGit2 } from "lucide-react";
 import type React from "react";
+import type { EstadoCarpetaDrive } from "../../../components/drive/estadoCarpetaDrive";
 import { TarjetaCarpetaVinculada } from "../../../components/drive/TarjetaCarpetaVinculada";
 import { Alert } from "../../../components/ui";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
@@ -29,6 +30,8 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = (
 		vistaCarpeta,
 		conexion,
 		credencialesGoogleVerificadas,
+		credencialesGoogleVerificando,
+		valorGuardadoVerificado,
 		estadoConexionCarpeta,
 		mensajeErrorCampo,
 		mensajeErrorBanner,
@@ -39,16 +42,28 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = (
 		marcarTocado,
 	} = useCarpetaDriveConfig(props);
 
+	const estadoTarjetaCarpeta: EstadoCarpetaDrive = (() => {
+		if (conexion.verificando) {
+			return "verificando";
+		}
+		if (credencialesGoogleVerificando) {
+			return valorGuardadoVerificado ? "verificada" : "pendiente";
+		}
+		if (
+			credencialesGoogleVerificadas &&
+			estadoConexionCarpeta === "conectado"
+		) {
+			return "verificada";
+		}
+		return "pendiente";
+	})();
+
 	const tarjetaCarpeta = carpetaId ? (
 		<TarjetaCarpetaVinculada
 			nombre={vistaCarpeta.nombreVisible}
 			carpetaId={carpetaId}
 			textoBoton="Abrir en Drive"
-			estado={
-				credencialesGoogleVerificadas && estadoConexionCarpeta === "conectado"
-					? "verificada"
-					: "pendiente"
-			}
+			estado={estadoTarjetaCarpeta}
 		/>
 	) : null;
 
@@ -70,9 +85,11 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = (
 			}
 			deshabilitarGuardar={conexion.deshabilitarGuardar}
 			tooltipVerificar={
-				!credencialesGoogleVerificadas
-					? "Primero verifica las credenciales de Google Cloud"
-					: conexion.tooltipVerificar
+				credencialesGoogleVerificando
+					? "Espera a que finalice la verificación de Google Cloud"
+					: !credencialesGoogleVerificadas
+						? "Primero verifica las credenciales de Google Cloud"
+						: conexion.tooltipVerificar
 			}
 			tooltipGuardar={conexion.tooltipGuardar}
 			onVerificar={verificar}
@@ -80,7 +97,7 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = (
 			onSubmit={guardar}
 			cabeceraExtra={
 				<>
-					{!credencialesGoogleVerificadas && (
+					{!credencialesGoogleVerificadas && !credencialesGoogleVerificando && (
 						<Alert
 							variant="warning"
 							message="Google Cloud está guardado, pero no verificado. Verifica esa conexión antes de usar Drive o plantillas."

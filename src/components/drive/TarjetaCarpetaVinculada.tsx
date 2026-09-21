@@ -3,6 +3,7 @@ import {
 	CircleCheck,
 	ExternalLink,
 	FolderCheck,
+	RefreshCw,
 } from "lucide-react";
 import type React from "react";
 import { Badge, Button } from "../ui";
@@ -27,7 +28,14 @@ export const TarjetaCarpetaVinculada: React.FC<
 	const vista = resolverVistaCarpetaDrive({
 		carpetaId,
 		carpetaNombre: estado === "pendiente" ? null : nombre,
+		estado,
 	});
+
+	const badgeVariant = vista.estaVerificando
+		? "primary"
+		: vista.estaPendiente
+			? "warning"
+			: "success";
 
 	return (
 		<div className="flex flex-col gap-3 rounded-xl border border-slate-200/80 bg-white p-3.5 transition-all sm:flex-row sm:items-center sm:justify-between">
@@ -39,10 +47,12 @@ export const TarjetaCarpetaVinculada: React.FC<
 							{vista.nombreVisible}
 						</span>
 						<Badge
-							variant={vista.estaPendiente ? "warning" : "success"}
+							variant={badgeVariant}
 							className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-normal"
 						>
-							{vista.estaPendiente ? (
+							{vista.estaVerificando ? (
+								<RefreshCw size={11} className="shrink-0 animate-spin" />
+							) : vista.estaPendiente ? (
 								<AlertTriangle size={11} className="shrink-0" />
 							) : (
 								<CircleCheck size={11} className="shrink-0" />
