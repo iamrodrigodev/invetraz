@@ -58,7 +58,13 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 
 	useEffect(() => {
 		if (!configuracionCargada) {
-			cargarConfiguracion().catch(() => undefined);
+			cargarConfiguracion().catch((error: unknown) => {
+				setError(
+					error instanceof Error
+						? error.message
+						: "No se pudo cargar la configuración",
+				);
+			});
 		}
 	}, [configuracionCargada, cargarConfiguracion]);
 

@@ -1,6 +1,5 @@
 import { Check, Copy, ExternalLink, KeyRound } from "lucide-react";
 import type React from "react";
-import { useState } from "react";
 import {
 	Button,
 	Card,
@@ -8,6 +7,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "../../../components/ui";
+import { useCopiarTexto } from "../hooks/useCopiarTexto";
 
 const TODOS_LOS_SCOPES = [
 	"https://www.googleapis.com/auth/classroom.courses",
@@ -17,24 +17,10 @@ const TODOS_LOS_SCOPES = [
 ].join(" ");
 
 export const TarjetaDocOAuthPlayground: React.FC = () => {
-	const [copiadoTodos, setCopiadoTodos] = useState(false);
+	const { copiadoId, copiar } = useCopiarTexto();
+	const copiadoTodos = copiadoId === "unico";
 
-	const copiarTodosLosScopes = async () => {
-		try {
-			await navigator.clipboard.writeText(TODOS_LOS_SCOPES);
-			setCopiadoTodos(true);
-			setTimeout(() => setCopiadoTodos(false), 2000);
-		} catch {
-			const input = document.createElement("textarea");
-			input.value = TODOS_LOS_SCOPES;
-			document.body.appendChild(input);
-			input.select();
-			document.execCommand("copy");
-			document.body.removeChild(input);
-			setCopiadoTodos(true);
-			setTimeout(() => setCopiadoTodos(false), 2000);
-		}
-	};
+	const copiarTodosLosScopes = () => copiar(TODOS_LOS_SCOPES);
 
 	return (
 		<Card className="flex flex-col h-full border-slate-200/80 bg-white">
@@ -99,16 +85,10 @@ export const TarjetaDocOAuthPlayground: React.FC = () => {
 						href="https://developers.google.com/oauthplayground"
 						target="_blank"
 						rel="noreferrer"
-						className="inline-block w-full sm:w-auto"
+						className="inline-flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:w-auto"
 					>
-						<Button
-							type="button"
-							variant="default"
-							className="w-full sm:w-auto font-medium"
-						>
-							<ExternalLink size={16} className="mr-2" />
-							Ir a OAuth 2.0 Playground
-						</Button>
+						<ExternalLink size={16} className="mr-2" />
+						Ir a OAuth 2.0 Playground
 					</a>
 				</div>
 			</CardContent>

@@ -12,6 +12,7 @@ export function AppRouter() {
 	const configurado = useAppStore((state) => state.configurado);
 	const autenticado = useAppStore((state) => state.autenticado);
 	const estadoVerificado = useAppStore((state) => state.estadoVerificado);
+	const errorVerificacion = useAppStore((state) => state.errorVerificacion);
 	const verificarEstadoGlobal = useAppStore(
 		(state) => state.verificarEstadoGlobal,
 	);
@@ -20,7 +21,27 @@ export function AppRouter() {
 		verificarEstadoGlobal();
 	}, [verificarEstadoGlobal]);
 
-	if (!estadoVerificado || configurado === null) {
+	if (estadoVerificado && configurado === null) {
+		return (
+			<div
+				role="alert"
+				className="flex min-h-screen flex-col items-center justify-center gap-4 p-6 text-center"
+			>
+				<p>
+					{errorVerificacion || "No se pudo verificar el estado del sistema."}
+				</p>
+				<button
+					type="button"
+					className="rounded-lg bg-primary px-4 py-2 text-white"
+					onClick={verificarEstadoGlobal}
+				>
+					Reintentar
+				</button>
+			</div>
+		);
+	}
+
+	if (!estadoVerificado) {
 		const tieneSesionPrevia = esSesionValida();
 
 		const esRutaAuth =

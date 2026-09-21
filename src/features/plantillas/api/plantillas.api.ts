@@ -1,10 +1,6 @@
 import { entorno } from "../../../config/entorno";
-import { crearApiRespuestaSchema } from "../../../schemas/api.schemas";
-import {
-	extraerMensajeError,
-	fetchSeguro,
-	parsearConEsquema,
-} from "../../../utils/fetch";
+import { leerDatos } from "../../../utils/api";
+import { fetchSeguro } from "../../../utils/fetch";
 import {
 	type CarpetaPlantillasRespuesta,
 	CarpetaPlantillasRespuestaSchema,
@@ -16,19 +12,11 @@ export async function obtenerPlantillas(): Promise<CarpetaPlantillasRespuesta> {
 		method: "GET",
 	});
 
-	if (!res.ok) {
-		const msj = await extraerMensajeError(
-			res,
-			"Error al consultar las plantillas de seguimiento",
-		);
-		throw new Error(msj);
-	}
-
-	const wrapperSchema = crearApiRespuestaSchema(
+	return leerDatos(
+		res,
 		CarpetaPlantillasRespuestaSchema,
+		"Error al consultar las plantillas de seguimiento",
 	);
-	const wrapper = await parsearConEsquema(res, wrapperSchema);
-	return wrapper.datos;
 }
 
 export async function verificarCarpetaDrive(
@@ -45,19 +33,11 @@ export async function verificarCarpetaDrive(
 		},
 	);
 
-	if (!res.ok) {
-		const msj = await extraerMensajeError(
-			res,
-			"Error al verificar la carpeta de Google Drive",
-		);
-		throw new Error(msj);
-	}
-
-	const wrapperSchema = crearApiRespuestaSchema(
+	return leerDatos(
+		res,
 		CarpetaPlantillasRespuestaSchema,
+		"Error al verificar la carpeta de Google Drive",
 	);
-	const wrapper = await parsearConEsquema(res, wrapperSchema);
-	return wrapper.datos;
 }
 
 export async function vincularCarpetaDrive(
@@ -74,17 +54,9 @@ export async function vincularCarpetaDrive(
 		},
 	);
 
-	if (!res.ok) {
-		const msj = await extraerMensajeError(
-			res,
-			"Error al vincular la carpeta de Google Drive",
-		);
-		throw new Error(msj);
-	}
-
-	const wrapperSchema = crearApiRespuestaSchema(
+	return leerDatos(
+		res,
 		CarpetaPlantillasRespuestaSchema,
+		"Error al vincular la carpeta de Google Drive",
 	);
-	const wrapper = await parsearConEsquema(res, wrapperSchema);
-	return wrapper.datos;
 }

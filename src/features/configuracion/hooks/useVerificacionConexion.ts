@@ -146,7 +146,7 @@ export function useVerificacionConexion<T>({
 		if (verificadoEnSesion && sonIguales(verificadoEnSesion, valorActual)) {
 			return "conectado";
 		}
-		if (tieneValorGuardado) {
+		if (tieneValorGuardado && esIgualAGuardadas) {
 			if (valorGuardadoVerificado) {
 				return "conectado";
 			}
@@ -161,6 +161,7 @@ export function useVerificacionConexion<T>({
 		sonIguales,
 		valorActual,
 		tieneValorGuardado,
+		esIgualAGuardadas,
 		valorGuardadoVerificado,
 		estadoGuardadoSinVerificar,
 	]);

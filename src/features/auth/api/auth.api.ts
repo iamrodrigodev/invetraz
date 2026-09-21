@@ -1,15 +1,11 @@
 import { entorno } from "../../../config/entorno";
 import {
-	crearApiRespuestaSchema,
 	type LoginRespuesta,
 	LoginRespuestaSchema,
 	VerificarAutenticacionRespuestaSchema,
 } from "../../../schemas/api.schemas";
-import {
-	extraerMensajeError,
-	fetchSeguro,
-	parsearConEsquema,
-} from "../../../utils/fetch";
+import { leerDatos } from "../../../utils/api";
+import { extraerMensajeError, fetchSeguro } from "../../../utils/fetch";
 import type { LoginPeticion } from "../types/LoginPeticion";
 
 export async function login(peticion: LoginPeticion): Promise<LoginRespuesta> {
@@ -19,14 +15,7 @@ export async function login(peticion: LoginPeticion): Promise<LoginRespuesta> {
 		body: JSON.stringify(peticion),
 	});
 
-	if (!res.ok) {
-		const msj = await extraerMensajeError(res, "Credenciales inválidas");
-		throw new Error(msj);
-	}
-
-	const wrapperSchema = crearApiRespuestaSchema(LoginRespuestaSchema);
-	const wrapper = await parsearConEsquema(res, wrapperSchema);
-	return wrapper.datos;
+	return leerDatos(res, LoginRespuestaSchema, "Credenciales inválidas");
 }
 
 export interface ResultadoAutenticacion {
@@ -35,23 +24,24 @@ export interface ResultadoAutenticacion {
 }
 
 export async function verificarAutenticacion(): Promise<ResultadoAutenticacion> {
-	try {
-		const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/auth/me`, {
-			method: "GET",
-		});
-		if (!res.ok) return { autenticado: false };
-
-		const wrapperSchema = crearApiRespuestaSchema(
-			VerificarAutenticacionRespuestaSchema,
+	const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/auth/me`, {
+		method: "GET",
+	});
+	if (res.status === 401) return { autenticado: false };
+	if (!res.ok)
+		throw new Error(
+			await extraerMensajeError(res, "No se pudo verificar la sesión"),
 		);
-		const wrapper = await parsearConEsquema(res, wrapperSchema);
-		return {
-			autenticado: wrapper.datos.autenticado,
-			email: wrapper.datos.email ?? null,
-		};
-	} catch (_error) {
-		return { autenticado: false };
-	}
+
+	const datos = await leerDatos(
+		res,
+		VerificarAutenticacionRespuestaSchema,
+		"No se pudo verificar la sesión",
+	);
+	return {
+		autenticado: datos.autenticado,
+		email: datos.email ?? null,
+	};
 }
 
 export async function logout(): Promise<void> {

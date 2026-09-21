@@ -1,38 +1,21 @@
 import { entorno } from "../../../config/entorno";
-import {
-	crearApiRespuestaSchema,
-	EstadoSetupRespuestaSchema,
-} from "../../../schemas/api.schemas";
-import {
-	extraerMensajeError,
-	fetchSeguro,
-	parsearConEsquema,
-} from "../../../utils/fetch";
+import { EstadoSetupRespuestaSchema } from "../../../schemas/api.schemas";
+import { leerDatos } from "../../../utils/api";
+import { extraerMensajeError, fetchSeguro } from "../../../utils/fetch";
 import type { CrearAdminPeticion } from "../types/CrearAdminPeticion";
 
 export async function verificarEstadoSistema(): Promise<boolean> {
-	if (
-		typeof window !== "undefined" &&
-		localStorage.getItem("sistema_configurado") === "true"
-	) {
-		return true;
+	const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/setup/estado`);
+	const datos = await leerDatos(
+		res,
+		EstadoSetupRespuestaSchema,
+		"No se pudo consultar el estado del sistema",
+	);
+	if (typeof window !== "undefined") {
+		if (datos.configurado) localStorage.setItem("sistema_configurado", "true");
+		else localStorage.removeItem("sistema_configurado");
 	}
-
-	try {
-		const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/setup/estado`);
-		if (!res.ok) {
-			return true;
-		}
-
-		const wrapperSchema = crearApiRespuestaSchema(EstadoSetupRespuestaSchema);
-		const wrapper = await parsearConEsquema(res, wrapperSchema);
-		if (wrapper.datos.configurado && typeof window !== "undefined") {
-			localStorage.setItem("sistema_configurado", "true");
-		}
-		return wrapper.datos.configurado;
-	} catch (_e) {
-		return true;
-	}
+	return datos.configurado;
 }
 
 export async function crearAdmin(

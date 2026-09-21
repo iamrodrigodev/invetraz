@@ -1,5 +1,4 @@
 import type { z } from "zod";
-import { limpiarSesion } from "./sesion";
 
 type ManejadorExpiracion = () => void;
 let manejadorSesionExpirada: ManejadorExpiracion | null = null;
@@ -13,26 +12,16 @@ export async function fetchSeguro(
 	options: RequestInit = {},
 ): Promise<Response> {
 	try {
-		options.credentials = "include";
-		const res = await fetch(url, options);
+		const res = await fetch(url, { ...options, credentials: "include" });
 
 		if (
-			(res.status === 401 || res.status === 403) &&
+			res.status === 401 &&
 			!url.includes("/auth/login") &&
 			!url.includes("/auth/logout") &&
 			!url.includes("/auth/me")
 		) {
-			limpiarSesion("sesion_expirada");
-
 			if (manejadorSesionExpirada) {
 				manejadorSesionExpirada();
-			}
-
-			if (
-				typeof window !== "undefined" &&
-				window.location.pathname !== "/login"
-			) {
-				window.location.replace("/login");
 			}
 		}
 
@@ -67,16 +56,6 @@ export async function extraerMensajeError(
 	} catch (_e) {
 		return mensajePorDefecto;
 	}
-}
-
-export async function parsearJsonSeguro<T>(res: Response): Promise<T> {
-	const contentType = res.headers.get("content-type");
-	if (!contentType?.includes("application/json")) {
-		throw new Error(
-			"Error de comunicación con el servidor. Inténtalo de nuevo más tarde.",
-		);
-	}
-	return (await res.json()) as T;
 }
 
 export async function parsearConEsquema<T>(

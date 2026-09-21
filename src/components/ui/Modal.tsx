@@ -1,9 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "../../utils/cn";
+
+let modalesAbiertos = 0;
+let overflowOriginal = "";
 
 export interface ModalProps {
 	abierto: boolean;
@@ -21,24 +24,53 @@ export function Modal({
 	className,
 }: ModalProps) {
 	const [montado, setMontado] = useState(false);
+	const dialogoRef = useRef<HTMLDivElement>(null);
+	const alCerrarRef = useRef(alCerrar);
+	alCerrarRef.current = alCerrar;
 
 	useEffect(() => {
 		setMontado(true);
 	}, []);
 
 	useEffect(() => {
+		if (!abierto) return;
+		const focoAnterior =
+			document.activeElement instanceof HTMLElement
+				? document.activeElement
+				: null;
+		if (modalesAbiertos === 0) overflowOriginal = document.body.style.overflow;
+		modalesAbiertos += 1;
 		const manejarEsc = (e: KeyboardEvent) => {
-			if (e.key === "Escape") alCerrar();
+			if (e.key === "Escape") alCerrarRef.current();
+			if (e.key !== "Tab") return;
+			const elementos = dialogoRef.current?.querySelectorAll<HTMLElement>(
+				'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+			);
+			if (!elementos?.length) {
+				e.preventDefault();
+				return;
+			}
+			const primero = elementos[0];
+			const ultimo = elementos[elementos.length - 1];
+			if (e.shiftKey && document.activeElement === primero) {
+				e.preventDefault();
+				ultimo?.focus();
+			} else if (!e.shiftKey && document.activeElement === ultimo) {
+				e.preventDefault();
+				primero?.focus();
+			}
 		};
-		if (abierto) {
-			document.addEventListener("keydown", manejarEsc);
-			document.body.style.overflow = "hidden";
-		}
+		document.addEventListener("keydown", manejarEsc);
+		document.body.style.overflow = "hidden";
+		requestAnimationFrame(() => dialogoRef.current?.focus());
 		return () => {
 			document.removeEventListener("keydown", manejarEsc);
-			document.body.style.overflow = "unset";
+			modalesAbiertos -= 1;
+			if (modalesAbiertos === 0)
+				document.body.style.overflow = overflowOriginal;
+			focoAnterior?.focus();
 		};
-	}, [abierto, alCerrar]);
+	}, [abierto]);
 
 	if (!montado) return null;
 
@@ -56,6 +88,8 @@ export function Modal({
 						aria-hidden="true"
 					/>
 					<motion.div
+						ref={dialogoRef}
+						tabIndex={-1}
 						initial={{ opacity: 0, scale: 0.96, y: 12 }}
 						animate={{ opacity: 1, scale: 1, y: 0 }}
 						exit={{ opacity: 0, scale: 0.96, y: 12 }}

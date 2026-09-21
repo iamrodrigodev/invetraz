@@ -1,6 +1,5 @@
 import { Check, Copy, ExternalLink, GraduationCap } from "lucide-react";
 import type React from "react";
-import { useState } from "react";
 import {
 	Button,
 	Card,
@@ -8,6 +7,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "../../../components/ui";
+import { useCopiarTexto } from "../hooks/useCopiarTexto";
 
 interface ScopeInfo {
 	id: string;
@@ -34,24 +34,7 @@ const SCOPES_CLASSROOM: ScopeInfo[] = [
 ];
 
 export const TarjetaDocClassroom: React.FC = () => {
-	const [copiadoId, setCopiadoId] = useState<string | null>(null);
-
-	const copiarScope = async (scope: string, id: string) => {
-		try {
-			await navigator.clipboard.writeText(scope);
-			setCopiadoId(id);
-			setTimeout(() => setCopiadoId(null), 2000);
-		} catch {
-			const input = document.createElement("textarea");
-			input.value = scope;
-			document.body.appendChild(input);
-			input.select();
-			document.execCommand("copy");
-			document.body.removeChild(input);
-			setCopiadoId(id);
-			setTimeout(() => setCopiadoId(null), 2000);
-		}
-	};
+	const { copiadoId, copiar: copiarScope } = useCopiarTexto();
 
 	return (
 		<Card className="flex flex-col h-full border-slate-200/80 bg-white">
@@ -117,16 +100,10 @@ export const TarjetaDocClassroom: React.FC = () => {
 						href="https://console.cloud.google.com/apis/library/classroom.googleapis.com"
 						target="_blank"
 						rel="noreferrer"
-						className="inline-block w-full sm:w-auto"
+						className="inline-flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:w-auto"
 					>
-						<Button
-							type="button"
-							variant="default"
-							className="w-full sm:w-auto font-medium"
-						>
-							<ExternalLink size={16} className="mr-2" />
-							Habilitar Classroom API
-						</Button>
+						<ExternalLink size={16} className="mr-2" />
+						Habilitar Classroom API
 					</a>
 				</div>
 			</CardContent>

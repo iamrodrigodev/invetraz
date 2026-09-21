@@ -15,6 +15,7 @@ interface AppState {
 	autenticado: boolean | null;
 	usuarioEmail: string | null;
 	estadoVerificado: boolean;
+	errorVerificacion: string | null;
 	verificarEstadoGlobal: () => Promise<void>;
 	setConfigurado: (valor: boolean) => void;
 	setAutenticado: (
@@ -52,6 +53,7 @@ export const useAppStore = create<AppState>((set) => ({
 	autenticado: sesionPreviaActiva,
 	usuarioEmail: usuarioEmailCacheado,
 	estadoVerificado: Boolean(sesionPreviaActiva || configuradoCacheado),
+	errorVerificacion: null,
 	verificarEstadoGlobal: async () => {
 		try {
 			const [esConfigurado, resAuth] = await Promise.all([
@@ -79,15 +81,16 @@ export const useAppStore = create<AppState>((set) => ({
 						? localStorage.getItem("usuario_email")
 						: null),
 				estadoVerificado: true,
+				errorVerificacion: null,
 			});
 		} catch (error) {
-			console.error("Error al verificar estado global", error);
-			limpiarSesion();
 			set({
-				configurado: true,
-				autenticado: false,
-				usuarioEmail: null,
+				configurado: null,
 				estadoVerificado: true,
+				errorVerificacion:
+					error instanceof Error
+						? error.message
+						: "No se pudo verificar el estado del sistema",
 			});
 		}
 	},
@@ -124,6 +127,5 @@ export const useAppStore = create<AppState>((set) => ({
 }));
 
 alExpirarSesion(() => {
-	useAppStore.setState({ autenticado: false, usuarioEmail: null });
-	useConfiguracionStore.getState().limpiar();
+	manejarExpiracionProactiva();
 });

@@ -1,10 +1,6 @@
 import { entorno } from "../../../config/entorno";
-import { crearApiRespuestaSchema } from "../../../schemas/api.schemas";
-import {
-	extraerMensajeError,
-	fetchSeguro,
-	parsearConEsquema,
-} from "../../../utils/fetch";
+import { leerDatos } from "../../../utils/api";
+import { extraerMensajeError, fetchSeguro } from "../../../utils/fetch";
 import {
 	type ActualizarCredencialesPeticion,
 	type ConfiguracionRespuesta,
@@ -18,17 +14,11 @@ export async function obtenerConfiguracion(): Promise<ConfiguracionRespuesta> {
 		method: "GET",
 	});
 
-	if (!res.ok) {
-		const msj = await extraerMensajeError(
-			res,
-			"Error al obtener la configuración del sistema",
-		);
-		throw new Error(msj);
-	}
-
-	const wrapperSchema = crearApiRespuestaSchema(ConfiguracionRespuestaSchema);
-	const wrapper = await parsearConEsquema(res, wrapperSchema);
-	return wrapper.datos;
+	return leerDatos(
+		res,
+		ConfiguracionRespuestaSchema,
+		"Error al obtener la configuración del sistema",
+	);
 }
 
 export async function actualizarConfiguracion(
@@ -70,15 +60,9 @@ export async function verificarConfiguracion(
 		init,
 	);
 
-	if (!res.ok) {
-		const msj = await extraerMensajeError(
-			res,
-			"No se pudo verificar la conexión con Google Classroom",
-		);
-		throw new Error(msj);
-	}
-
-	const wrapperSchema = crearApiRespuestaSchema(ResultadoVerificacionSchema);
-	const wrapper = await parsearConEsquema(res, wrapperSchema);
-	return wrapper.datos;
+	return leerDatos(
+		res,
+		ResultadoVerificacionSchema,
+		"No se pudo verificar la conexión con Google Classroom",
+	);
 }

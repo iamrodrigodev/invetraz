@@ -23,52 +23,8 @@ export function sonCredencialesIguales(
 	);
 }
 
-export function tieneCredencialesCompletas(
-	c: ActualizarCredencialesPeticion | null | undefined,
-): boolean {
-	if (!c) return false;
-	return Boolean(
-		(c.googleClientId ?? "").trim() &&
-			(c.googleClientSecret ?? "").trim() &&
-			(c.googleRefreshToken ?? "").trim(),
-	);
-}
-
-export interface EstadoConexionContexto {
-	credencialesGuardadas: ActualizarCredencialesPeticion;
-	credencialesVerificadas: ActualizarCredencialesPeticion | null;
-	credencialesFallidas: ActualizarCredencialesPeticion | null;
-	valoresActuales: ActualizarCredencialesPeticion;
-	verificando: boolean;
-	guardando: boolean;
-	camposCompletos: boolean;
-	tieneErrores: boolean;
-}
-
-export function resolverEstadoConexion(
-	ctx: EstadoConexionContexto,
-): TipoEstadoConexion {
-	if (ctx.verificando || ctx.guardando) {
-		return "verificando";
-	}
-	if (!ctx.camposCompletos || ctx.tieneErrores) {
-		return "no_configurado";
-	}
-	if (sonCredencialesIguales(ctx.credencialesFallidas, ctx.valoresActuales)) {
-		return "error";
-	}
-	if (
-		sonCredencialesIguales(ctx.credencialesVerificadas, ctx.valoresActuales)
-	) {
-		return "conectado";
-	}
-	return "no_configurado";
-}
-
 interface ConfiguracionState {
 	credenciales: ActualizarCredencialesPeticion;
-	credencialesVerificadas: ActualizarCredencialesPeticion | null;
-	credencialesFallidas: ActualizarCredencialesPeticion | null;
 	estadoConexion: TipoEstadoConexion;
 	cargado: boolean;
 	cargando: boolean;
@@ -86,7 +42,6 @@ interface ConfiguracionState {
 		nombre: string | null,
 		verificado?: boolean,
 	) => void;
-	setEstadoConexion: (estado: TipoEstadoConexion) => void;
 	limpiar: () => void;
 }
 
@@ -102,8 +57,6 @@ const VALORES_POR_DEFECTO: ActualizarCredencialesPeticion = {
 
 export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 	credenciales: VALORES_POR_DEFECTO,
-	credencialesVerificadas: null,
-	credencialesFallidas: null,
 	estadoConexion: "no_configurado",
 	cargado: false,
 	cargando: false,
@@ -144,10 +97,6 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 
 			set({
 				credenciales: nuevasCredenciales,
-				credencialesVerificadas: config.googleVerificado
-					? nuevasCredenciales
-					: null,
-				credencialesFallidas: null,
 				estadoConexion: estadoDeterminado,
 				cargado: true,
 				cargando: false,
@@ -163,44 +112,43 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 	guardarConfiguracion: async (datos: ActualizarCredencialesPeticion) => {
 		set({ cargando: true, estadoConexion: "verificando" });
 		try {
-			const resVerificacion = await verificarConfiguracion(datos);
+			let resVerificacion: ResultadoVerificacion;
+			try {
+				resVerificacion = await verificarConfiguracion(datos);
+			} catch (error) {
+				resVerificacion = {
+					valido: false,
+					mensaje:
+						error instanceof Error
+							? error.message
+							: "No se pudo verificar la conexión",
+				};
+			}
 			const datosConEstado = {
 				...datos,
-				googleVerificado: true,
+				googleVerificado: resVerificacion.valido,
 			};
 			await actualizarConfiguracion(datosConEstado);
 
 			set({
 				credenciales: datosConEstado,
-				credencialesVerificadas: datosConEstado,
-				credencialesFallidas: null,
-				estadoConexion: "conectado",
+				estadoConexion: resVerificacion.valido
+					? "conectado"
+					: "guardado_pendiente",
 				cargado: true,
-				cargando: false,
 			});
 
-			return resVerificacion;
+			return resVerificacion.valido
+				? resVerificacion
+				: {
+						valido: false,
+						mensaje: `Credenciales guardadas, pero no verificadas: ${resVerificacion.mensaje}`,
+					};
 		} catch (error) {
-			const datosConEstado = {
-				...datos,
-				googleVerificado: false,
-			};
-			await actualizarConfiguracion(datosConEstado);
-			set({
-				credenciales: datosConEstado,
-				credencialesVerificadas: null,
-				credencialesFallidas: null,
-				estadoConexion: "guardado_pendiente",
-				cargado: true,
-				cargando: false,
-			});
-			return {
-				valido: false,
-				mensaje:
-					error instanceof Error
-						? `Credenciales guardadas, pero no verificadas: ${error.message}`
-						: "Credenciales guardadas, pero no verificadas. Revisa los datos y vuelve a verificar la conexión.",
-			};
+			set({ estadoConexion: "error" });
+			throw error;
+		} finally {
+			set({ cargando: false });
 		}
 	},
 
@@ -209,20 +157,17 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 		set({ estadoConexion: "verificando" });
 		try {
 			const res = await verificarConfiguracion(creds);
+			if (!res.valido) throw new Error(res.mensaje);
 			set({
 				credenciales: {
 					...get().credenciales,
 					googleVerificado: true,
 				},
-				credencialesVerificadas: creds,
-				credencialesFallidas: null,
 				estadoConexion: "conectado",
 			});
 			return res;
 		} catch (error) {
 			set({
-				credencialesVerificadas: null,
-				credencialesFallidas: creds,
 				estadoConexion: "error",
 			});
 			throw error;
@@ -247,15 +192,9 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 		}));
 	},
 
-	setEstadoConexion: (estado: TipoEstadoConexion) => {
-		set({ estadoConexion: estado });
-	},
-
 	limpiar: () => {
 		set({
 			credenciales: VALORES_POR_DEFECTO,
-			credencialesVerificadas: null,
-			credencialesFallidas: null,
 			estadoConexion: "no_configurado",
 			cargado: false,
 			cargando: false,

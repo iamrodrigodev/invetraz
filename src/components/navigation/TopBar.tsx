@@ -83,7 +83,7 @@ export function TopBar({
 						</div>
 
 						<div className="hidden flex-col items-start text-left sm:flex">
-							<span className="max-w-[160px] truncate font-semibold text-xs text-slate-800 md:max-w-[200px] md:text-sm">
+							<span className="max-w-40 truncate font-semibold text-xs text-slate-800 md:max-w-50 md:text-sm">
 								{emailMostrar}
 							</span>
 							<Badge

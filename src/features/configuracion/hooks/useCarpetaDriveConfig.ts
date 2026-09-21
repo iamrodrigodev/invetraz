@@ -47,13 +47,9 @@ export function useCarpetaDriveConfig({
 	const [errorDescartado, setErrorDescartado] = useState(false);
 
 	useEffect(() => {
-		if (carpetaIdInicial) {
-			setCarpetaId(carpetaIdInicial);
-			setInputUrl(carpetaIdInicial);
-		}
-		if (carpetaNombreInicial) {
-			setCarpetaNombre(carpetaNombreInicial);
-		}
+		setCarpetaId(carpetaIdInicial ?? null);
+		setInputUrl(carpetaIdInicial ?? "");
+		setCarpetaNombre(carpetaNombreInicial ?? null);
 	}, [carpetaIdInicial, carpetaNombreInicial]);
 
 	const idActual = useMemo(() => normalizarId(inputUrl), [inputUrl]);

@@ -31,7 +31,7 @@ export function BotonCerrarSesion({
 						"overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out text-left",
 						estaColapsado
 							? "ml-0 max-w-0 opacity-0"
-							: "ml-1.5 max-w-[180px] opacity-100",
+							: "ml-1.5 max-w-45 opacity-100",
 					)}
 				>
 					Cerrar Sesión

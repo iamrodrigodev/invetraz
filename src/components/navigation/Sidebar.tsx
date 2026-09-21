@@ -58,13 +58,13 @@ export function Sidebar({
 				)}
 			</button>
 
-			<div className="flex h-16 shrink-0 items-center border-b border-slate-200 px-[18px]">
+			<div className="flex h-16 shrink-0 items-center border-b border-slate-200 px-4.5">
 				<Logo estaColapsado={estaColapsado} />
 			</div>
 
 			<nav
 				className={cn(
-					"flex-1 space-y-1.5 py-5 px-[18px]",
+					"flex-1 space-y-1.5 py-5 px-4.5",
 					estaColapsado
 						? "overflow-visible"
 						: "overflow-x-hidden overflow-y-auto",
@@ -81,7 +81,7 @@ export function Sidebar({
 				))}
 			</nav>
 
-			<div className="border-t border-slate-200/80 py-4 px-[18px]">
+			<div className="border-t border-slate-200/80 py-4 px-4.5">
 				<BotonCerrarSesion
 					estaColapsado={estaColapsado}
 					alHacerClic={alSolicitarCerrarSesion ?? manejarCerrarSesion}

@@ -47,6 +47,29 @@ export const ConfiguracionPage: React.FC = () => {
 	}, [cargado, cargarConfiguracion]);
 
 	if (!cargado) {
+		if (mensajeError) {
+			return (
+				<div className="space-y-4">
+					<Alert variant="error" message={mensajeError} />
+					<button
+						type="button"
+						className="rounded-lg bg-primary px-4 py-2 text-white"
+						onClick={() => {
+							setMensajeError(null);
+							cargarConfiguracion().catch((error: unknown) =>
+								setMensajeError(
+									error instanceof Error
+										? error.message
+										: "Error al cargar la configuración",
+								),
+							);
+						}}
+					>
+						Reintentar
+					</button>
+				</div>
+			);
+		}
 		return <ConfiguracionSkeleton />;
 	}
 
