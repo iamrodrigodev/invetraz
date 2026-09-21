@@ -2,11 +2,9 @@ import { Check, Copy, ExternalLink, GraduationCap } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import {
-	Badge,
 	Button,
 	Card,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "../../../components/ui";
@@ -14,7 +12,6 @@ import {
 interface ScopeInfo {
 	id: string;
 	nombre: string;
-	descripcion: string;
 	scope: string;
 }
 
@@ -22,20 +19,16 @@ const SCOPES_CLASSROOM: ScopeInfo[] = [
 	{
 		id: "courses",
 		nombre: "Cursos y Clases",
-		descripcion: "Lectura de materias, cursos creados y metadatos de aula",
 		scope: "https://www.googleapis.com/auth/classroom.courses",
 	},
 	{
 		id: "coursework",
 		nombre: "Tareas y Actividades",
-		descripcion: "Lectura de trabajos asignados, estados y entregas de alumnos",
 		scope: "https://www.googleapis.com/auth/classroom.coursework.students",
 	},
 	{
 		id: "rosters",
-		nombre: "Listas de Alumnos y Docentes",
-		descripcion:
-			"Lectura de profesores y estudiantes matriculados en cada curso",
+		nombre: "Estudiantes y Docentes",
 		scope: "https://www.googleapis.com/auth/classroom.rosters",
 	},
 ];
@@ -63,88 +56,54 @@ export const TarjetaDocClassroom: React.FC = () => {
 	return (
 		<Card className="flex flex-col h-full border-slate-200/80 bg-white">
 			<CardHeader className="pb-3">
-				<div className="flex items-center justify-between">
-					<div className="flex items-center gap-2 text-primary font-semibold text-sm">
-						<GraduationCap size={18} />
-						<span>Google Classroom</span>
-					</div>
-					<Badge variant="primary" className="font-semibold text-xs">
-						Paso 2
-					</Badge>
-				</div>
-				<CardTitle className="text-base text-slate-900 font-bold tracking-tight">
-					Google Classroom API y Permisos
+				<CardTitle className="flex items-center gap-2 text-base text-slate-900 font-bold tracking-tight">
+					<GraduationCap size={19} className="text-primary shrink-0" />
+					<span>2. Google Classroom API</span>
 				</CardTitle>
-				<CardDescription>
-					Habilita la API de Classroom y autoriza los alcances de lectura
-					necesarios para la sincronización académica.
-				</CardDescription>
 			</CardHeader>
 
 			<CardContent className="flex flex-col flex-1 justify-between space-y-4 text-xs text-slate-700 leading-relaxed">
 				<div className="space-y-3">
-					<div className="rounded-lg border border-slate-100 bg-slate-50/70 p-3 space-y-1">
-						<p className="font-semibold text-slate-900">
-							1. Habilitar Classroom API en Google Cloud
-						</p>
-						<p className="text-slate-600">
-							En tu proyecto de Google Cloud, ingresa a{" "}
-							<em>APIs y servicios &gt; Biblioteca</em>, busca{" "}
-							<strong>Google Classroom API</strong> y haz clic en{" "}
-							<strong>Habilitar</strong>.
-						</p>
-					</div>
-
-					<div className="rounded-lg border border-slate-100 bg-slate-50/70 p-3 space-y-1">
-						<p className="font-semibold text-slate-900">
-							2. Función en el Sistema de Investigación
-						</p>
-						<p className="text-slate-600">
-							Permite importar cursos institucionales en tiempo real, rastrear
-							entregas de estudiantes y asociar revisiones de seguimiento a las
-							actividades oficiales.
-						</p>
-					</div>
+					<p>
+						En Google Cloud, ve a{" "}
+						<strong>APIs y servicios &gt; Biblioteca</strong>, busca{" "}
+						<strong>Google Classroom API</strong> y haz clic en{" "}
+						<strong>Habilitar</strong>.
+					</p>
 
 					<div className="space-y-2">
-						<span className="font-semibold text-slate-900 block text-xs">
-							3. Scopes requeridos de Google Classroom:
+						<span className="font-semibold text-slate-900 block">
+							Scopes requeridos para sincronizar aula:
 						</span>
 						{SCOPES_CLASSROOM.map((item) => {
 							const estaCopiado = copiadoId === item.id;
 							return (
-								<div
-									key={item.id}
-									className="rounded-lg border border-slate-100 bg-slate-50/70 p-2.5 space-y-1.5"
-								>
+								<div key={item.id} className="space-y-1">
 									<div className="flex items-center justify-between">
-										<div>
-											<span className="font-semibold text-slate-900">
-												{item.nombre}
-											</span>
-											<span className="text-slate-500 text-[11px] block">
-												{item.descripcion}
-											</span>
-										</div>
-										<button
+										<span className="font-medium text-slate-800">
+											{item.nombre}:
+										</span>
+										<Button
 											type="button"
+											variant="default"
+											size="sm"
 											onClick={() => copiarScope(item.scope, item.id)}
-											className="inline-flex items-center gap-1 text-primary hover:underline cursor-pointer font-medium text-[11px] shrink-0"
+											className="h-6 px-2 text-[11px] shrink-0"
 										>
 											{estaCopiado ? (
 												<>
-													<Check size={12} />
+													<Check size={11} className="mr-1" />
 													<span>Copiado</span>
 												</>
 											) : (
 												<>
-													<Copy size={12} />
+													<Copy size={11} className="mr-1" />
 													<span>Copiar</span>
 												</>
 											)}
-										</button>
+										</Button>
 									</div>
-									<p className="font-mono text-[10.5px] bg-white border border-slate-200 rounded px-2 py-1 select-all break-all text-slate-800">
+									<p className="font-mono text-[10.5px] bg-slate-50 border border-slate-200 rounded px-2 py-1 select-all break-all text-slate-800">
 										{item.scope}
 									</p>
 								</div>
@@ -162,12 +121,12 @@ export const TarjetaDocClassroom: React.FC = () => {
 					>
 						<Button
 							type="button"
-							variant="outline"
+							variant="default"
 							size="sm"
-							className="w-full sm:w-auto text-xs"
+							className="w-full sm:w-auto"
 						>
 							<ExternalLink size={14} className="mr-1.5" />
-							Habilitar Classroom API en Google Cloud
+							Habilitar Classroom API
 						</Button>
 					</a>
 				</div>

@@ -2,11 +2,9 @@ import { Check, Copy, ExternalLink, KeyRound } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import {
-	Badge,
 	Button,
 	Card,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "../../../components/ui";
@@ -41,103 +39,61 @@ export const TarjetaDocOAuthPlayground: React.FC = () => {
 	return (
 		<Card className="flex flex-col h-full border-slate-200/80 bg-white">
 			<CardHeader className="pb-3">
-				<div className="flex items-center justify-between">
-					<div className="flex items-center gap-2 text-primary font-semibold text-sm">
-						<KeyRound size={18} />
-						<span>Token de Actualización</span>
-					</div>
-					<Badge variant="success" className="font-semibold text-xs">
-						Paso 4
-					</Badge>
-				</div>
-				<CardTitle className="text-base text-slate-900 font-bold tracking-tight">
-					OAuth 2.0 Playground (Google Refresh Token)
+				<CardTitle className="flex items-center gap-2 text-base text-slate-900 font-bold tracking-tight">
+					<KeyRound size={19} className="text-primary shrink-0" />
+					<span>4. OAuth 2.0 Playground (Refresh Token)</span>
 				</CardTitle>
-				<CardDescription>
-					Genera el Refresh Token permanente que permite al backend consultar
-					Classroom y Drive sin caducidad de sesión.
-				</CardDescription>
 			</CardHeader>
 
 			<CardContent className="flex flex-col flex-1 justify-between space-y-4 text-xs text-slate-700 leading-relaxed">
-				<div className="space-y-3">
-					<div className="rounded-lg border border-slate-100 bg-slate-50/70 p-3 space-y-1">
-						<p className="font-semibold text-slate-900">
-							1. Configurar credenciales propias en el Playground
-						</p>
-						<p className="text-slate-600">
-							Ingresa a OAuth 2.0 Playground y haz clic en el ícono de engranaje
-							(⚙️ <em>OAuth 2.0 configuration</em>) en la esquina superior
-							derecha. Marca <strong>Use your own OAuth credentials</strong> y
-							pega tu <strong>OAuth Client ID</strong> y{" "}
-							<strong>OAuth Client Secret</strong>.
-						</p>
-					</div>
-
-					<div className="rounded-lg border border-slate-100 bg-slate-50/70 p-3 space-y-2">
-						<div className="flex items-center justify-between">
-							<p className="font-semibold text-slate-900">
-								2. Autorizar los 4 scopes juntos
-							</p>
-							<button
+				<ol className="list-decimal list-inside space-y-2.5">
+					<li>
+						En <strong>OAuth 2.0 Playground</strong>, haz clic en el engranaje
+						(⚙️), marca <strong>Use your own OAuth credentials</strong> y pega tu{" "}
+						<strong>Client ID</strong> y <strong>Client Secret</strong>.
+					</li>
+					<li className="space-y-1.5">
+						<span>
+							En <strong>Step 1</strong>, en el campo{" "}
+							<em>Input your own scopes</em>, pega los 4 scopes juntos:
+						</span>
+						<div className="pt-1">
+							<Button
 								type="button"
+								variant="default"
+								size="sm"
 								onClick={copiarTodosLosScopes}
-								className={`inline-flex items-center gap-1 font-medium text-xs transition-colors cursor-pointer ${
-									copiadoTodos
-										? "text-primary font-semibold"
-										: "text-slate-600 hover:text-primary active:scale-95"
-								}`}
-								title="Copiar los 4 scopes separados por espacio para pegar en Input your own scopes"
+								className="w-full sm:w-auto"
 							>
 								{copiadoTodos ? (
 									<>
-										<Check size={13} className="text-primary" />
+										<Check size={13} className="mr-1.5" />
 										<span>¡Scopes copiados!</span>
 									</>
 								) : (
 									<>
-										<Copy size={13} className="text-slate-500" />
-										<span>Copiar todos los scopes</span>
+										<Copy size={13} className="mr-1.5" />
+										<span>Copiar todos los scopes juntos</span>
 									</>
 								)}
-							</button>
+							</Button>
 						</div>
-						<p className="text-slate-600">
-							En <em>Step 1 - Select &amp; authorize APIs</em>, baja al campo{" "}
-							<strong>Input your own scopes</strong> y pega la cadena con todos
-							los scopes. Luego presiona el botón azul{" "}
-							<strong>Authorize APIs</strong> e inicia sesión con la cuenta
-							Google institucional.
-						</p>
-						<p className="font-mono text-[10px] bg-white border border-slate-200 rounded px-2 py-1 select-all break-all text-slate-800">
-							{TODOS_LOS_SCOPES}
-						</p>
-					</div>
-
-					<div className="rounded-lg border border-slate-100 bg-slate-50/70 p-3 space-y-1">
-						<p className="font-semibold text-slate-900">
-							3. Intercambiar código y copiar Refresh Token
-						</p>
-						<p className="text-slate-600">
-							En <em>Step 2 - Exchange authorization code for tokens</em>, haz
-							clic en el botón azul{" "}
-							<strong>Exchange authorization code for tokens</strong>. Copia el
-							valor generado en el campo <strong>Refresh token</strong>{" "}
-							(comienza usualmente con <code>{"1//04..."}</code>).
-						</p>
-					</div>
-
-					<div className="rounded-lg border border-slate-100 bg-slate-50/70 p-3 space-y-1">
-						<p className="font-semibold text-slate-900">
-							4. Guardar en el panel de Configuración
-						</p>
-						<p className="text-slate-600">
-							Ingresa las 3 credenciales en el sistema y haz clic en{" "}
-							<strong>Verificar Conexión</strong> para validar el acceso antes
-							de guardar.
-						</p>
-					</div>
-				</div>
+					</li>
+					<li>
+						Presiona <strong>Authorize APIs</strong> e inicia sesión con la
+						cuenta de Google institucional.
+					</li>
+					<li>
+						En <strong>Step 2</strong>, haz clic en{" "}
+						<strong>Exchange authorization code for tokens</strong> y copia el
+						valor del campo <strong>Refresh token</strong> (comienza usualmente
+						con <code>{"1//04..."}</code>).
+					</li>
+					<li>
+						Pega las 3 credenciales en la pantalla de Configuración y haz clic
+						en <strong>Guardar Configuración</strong>.
+					</li>
+				</ol>
 
 				<div className="pt-2">
 					<a
@@ -148,9 +104,9 @@ export const TarjetaDocOAuthPlayground: React.FC = () => {
 					>
 						<Button
 							type="button"
-							variant="outline"
+							variant="default"
 							size="sm"
-							className="w-full sm:w-auto text-xs"
+							className="w-full sm:w-auto"
 						>
 							<ExternalLink size={14} className="mr-1.5" />
 							Ir a OAuth 2.0 Playground

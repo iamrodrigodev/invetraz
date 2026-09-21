@@ -157,11 +157,6 @@ export function DashboardSkeleton() {
 		typeof window !== "undefined" &&
 		localStorage.getItem("sidebar_colapsado") === "true";
 
-	const moduloActivo =
-		typeof window !== "undefined"
-			? localStorage.getItem("moduloActivo") || "actividades"
-			: "actividades";
-
 	return (
 		<div className="flex h-screen w-full overflow-hidden bg-slate-50 font-sans text-slate-800">
 			<aside
@@ -220,13 +215,7 @@ export function DashboardSkeleton() {
 				</header>
 
 				<main className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto p-6">
-					<div className="flex h-full min-h-0 w-full flex-1 flex-col">
-						{moduloActivo === "configuracion" ? (
-							<ConfiguracionSkeleton />
-						) : (
-							<PageSkeleton />
-						)}
-					</div>
+					<div className="flex h-full min-h-0 w-full flex-1 flex-col" />
 				</main>
 			</div>
 		</div>

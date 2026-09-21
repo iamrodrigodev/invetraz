@@ -2,11 +2,9 @@ import { Check, Copy, ExternalLink, FolderGit2 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import {
-	Badge,
 	Button,
 	Card,
 	CardContent,
-	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "../../../components/ui";
@@ -36,97 +34,59 @@ export const TarjetaDocDrive: React.FC = () => {
 	return (
 		<Card className="flex flex-col h-full border-slate-200/80 bg-white">
 			<CardHeader className="pb-3">
-				<div className="flex items-center justify-between">
-					<div className="flex items-center gap-2 text-primary font-semibold text-sm">
-						<FolderGit2 size={18} />
-						<span>Google Drive</span>
-					</div>
-					<Badge variant="warning" className="font-semibold text-xs">
-						Paso 3
-					</Badge>
-				</div>
-				<CardTitle className="text-base text-slate-900 font-bold tracking-tight">
-					Google Drive API y Carpeta de Plantillas
+				<CardTitle className="flex items-center gap-2 text-base text-slate-900 font-bold tracking-tight">
+					<FolderGit2 size={19} className="text-primary shrink-0" />
+					<span>3. Google Drive API</span>
 				</CardTitle>
-				<CardDescription>
-					Habilita la API de Drive y autoriza la lectura directa de formatos y
-					plantillas (.xlsx) de investigación.
-				</CardDescription>
 			</CardHeader>
 
 			<CardContent className="flex flex-col flex-1 justify-between space-y-4 text-xs text-slate-700 leading-relaxed">
-				<div className="space-y-3">
-					<div className="rounded-lg border border-slate-100 bg-slate-50/70 p-3 space-y-1">
-						<p className="font-semibold text-slate-900">
-							1. Habilitar Google Drive API en Google Cloud
-						</p>
-						<p className="text-slate-600">
-							En tu proyecto de Google Cloud, ingresa a{" "}
-							<em>APIs y servicios &gt; Biblioteca</em>, busca{" "}
-							<strong>Google Drive API</strong> y haz clic en{" "}
-							<strong>Habilitar</strong>.
-						</p>
-					</div>
-
-					<div className="rounded-lg border border-slate-100 bg-slate-50/70 p-3 space-y-1">
-						<p className="font-semibold text-slate-900">
-							2. Crear y compartir la carpeta de plantillas
-						</p>
-						<p className="text-slate-600">
-							Crea una carpeta en Google Drive donde residirán las plantillas
-							oficiales de seguimiento en formato Excel (<strong>.xlsx</strong>
-							). Asegúrate de que la cuenta Google institucional tenga permisos
-							de lectura sobre dicha carpeta.
-						</p>
-					</div>
-
-					<div className="rounded-lg border border-slate-100 bg-slate-50/70 p-2.5 space-y-2">
-						<div className="flex items-center justify-between">
-							<div>
-								<span className="font-semibold text-slate-900 block">
-									3. Scope requerido de Google Drive:
-								</span>
-								<span className="text-slate-500 text-[11px] block">
-									Acceso de lectura a metadatos y contenido de archivos
-								</span>
-							</div>
-							<button
+				<ol className="list-decimal list-inside space-y-2.5">
+					<li>
+						En Google Cloud, ve a{" "}
+						<strong>APIs y servicios &gt; Biblioteca</strong>, busca{" "}
+						<strong>Google Drive API</strong> y haz clic en{" "}
+						<strong>Habilitar</strong>.
+					</li>
+					<li>
+						Crea una carpeta en Google Drive para las plantillas (
+						<strong>.xlsx</strong>) y compártela con permisos de lectura con la
+						cuenta institucional.
+					</li>
+					<li className="space-y-1.5">
+						<span>Scope requerido de Google Drive:</span>
+						<div className="flex items-center gap-2 mt-1">
+							<code className="font-mono text-[10.5px] bg-slate-50 border border-slate-200 rounded px-2 py-1 select-all break-all text-slate-800 flex-1">
+								{SCOPE_DRIVE}
+							</code>
+							<Button
 								type="button"
+								variant="default"
+								size="sm"
 								onClick={copiarScope}
-								className="inline-flex items-center gap-1 text-primary hover:underline cursor-pointer font-medium text-[11px] shrink-0"
+								className="h-6 px-2 text-[11px] shrink-0"
 							>
 								{copiado ? (
 									<>
-										<Check size={12} />
+										<Check size={11} className="mr-1" />
 										<span>Copiado</span>
 									</>
 								) : (
 									<>
-										<Copy size={12} />
+										<Copy size={11} className="mr-1" />
 										<span>Copiar</span>
 									</>
 								)}
-							</button>
+							</Button>
 						</div>
-						<p className="font-mono text-[10.5px] bg-white border border-slate-200 rounded px-2 py-1 select-all break-all text-slate-800">
-							{SCOPE_DRIVE}
-						</p>
-					</div>
+					</li>
+					<li>
+						Copia el enlace o identificador de la carpeta y regístralo en la
+						tarjeta de Google Drive en Configuración.
+					</li>
+				</ol>
 
-					<div className="rounded-lg border border-slate-100 bg-slate-50/70 p-3 space-y-1">
-						<p className="font-semibold text-slate-900">
-							4. Vinculación en el sistema
-						</p>
-						<p className="text-slate-600">
-							En la sección de Configuración, puedes pegar el enlace web
-							completo (ej.{" "}
-							<em>https://drive.google.com/drive/folders/ID...</em>) o
-							únicamente el identificador alfanumérico de la carpeta.
-						</p>
-					</div>
-				</div>
-
-				<div className="pt-2 flex flex-wrap gap-2">
+				<div className="pt-2">
 					<a
 						href="https://console.cloud.google.com/apis/library/drive.googleapis.com"
 						target="_blank"
@@ -135,12 +95,12 @@ export const TarjetaDocDrive: React.FC = () => {
 					>
 						<Button
 							type="button"
-							variant="outline"
+							variant="default"
 							size="sm"
-							className="w-full sm:w-auto text-xs"
+							className="w-full sm:w-auto"
 						>
 							<ExternalLink size={14} className="mr-1.5" />
-							Habilitar Drive API en Google Cloud
+							Habilitar Drive API
 						</Button>
 					</a>
 				</div>
