@@ -12,9 +12,9 @@ public record CrearAdminPeticion(
                         max = ValidationConstants.MAX_EMAIL,
                         message = "El correo no puede exceder los {max} caracteres")
                 String email,
-        @NotBlank(message = "La contrasena es obligatoria")
+        @NotBlank(message = "La contraseña es obligatoria")
                 @Size(
                         min = ValidationConstants.MIN_PASSWORD,
                         max = ValidationConstants.MAX_PASSWORD,
-                        message = "La contrasena debe tener entre {min} y {max} caracteres")
+                        message = "La contraseña debe tener entre {min} y {max} caracteres")
                 String password) {}

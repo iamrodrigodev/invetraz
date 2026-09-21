@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import pe.edu.ulasalle.sistemainvestigacion.core.constants.ValidationConstants;
 
 public record CambiarPasswordPeticion(
-        @NotBlank(message = "La contrasena actual es obligatoria")
+        @NotBlank(message = "La contraseña actual es obligatoria")
                 @Size(
                         max = ValidationConstants.MAX_PASSWORD,
                         message = "La contraseña actual no puede exceder los {max} caracteres")

@@ -12,8 +12,8 @@ public record LoginPeticion(
                         max = ValidationConstants.MAX_EMAIL,
                         message = "El correo no puede exceder los {max} caracteres")
                 String email,
-        @NotBlank(message = "La contrasena es obligatoria")
+        @NotBlank(message = "La contraseña es obligatoria")
                 @Size(
                         max = ValidationConstants.MAX_PASSWORD,
-                        message = "La contrasena no puede exceder los {max} caracteres")
+                        message = "La contraseña no puede exceder los {max} caracteres")
                 String password) {}

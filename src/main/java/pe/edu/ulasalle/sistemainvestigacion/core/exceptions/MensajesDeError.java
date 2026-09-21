@@ -2,7 +2,7 @@ package pe.edu.ulasalle.sistemainvestigacion.core.exceptions;
 
 public enum MensajesDeError {
     ADMIN_YA_CONFIGURADO("El administrador ya ha sido configurado previamente", 403),
-    CREDENCIALES_INVALIDAS("Credenciales invalidas. Revisa tu correo o contrasena", 401),
+    CREDENCIALES_INVALIDAS("Credenciales inválidas. Revisa tu correo o contraseña", 401),
     DATOS_INVALIDOS("Los datos enviados son invalidos o no cumplen con el formato requerido", 400),
     ACCESO_DENEGADO("No cuentas con los permisos necesarios para realizar esta operacion", 403),
     SIN_PERMISOS_DOCENTE(
