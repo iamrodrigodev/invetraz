@@ -152,10 +152,53 @@ export function ConfiguracionSkeleton() {
 	);
 }
 
+export function DocumentacionSkeleton() {
+	return (
+		<div className="space-y-6 pb-12 w-full">
+			<div>
+				<div className="flex items-center gap-2.5 mb-1">
+					<Skeleton className="h-6 w-6 rounded-md" />
+					<Skeleton className="h-8 w-80 rounded-lg" />
+				</div>
+				<Skeleton className="mt-2 h-4 w-96 rounded-md" />
+			</div>
+
+			<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+				{[1, 2, 3, 4].map((i) => (
+					<div
+						key={i}
+						className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs flex flex-col justify-between space-y-4"
+					>
+						<div className="space-y-3">
+							<div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+								<Skeleton className="h-5 w-5 rounded-md" />
+								<Skeleton className="h-5 w-56 rounded-md" />
+							</div>
+							<div className="space-y-2.5 pt-1">
+								<Skeleton className="h-3.5 w-full rounded-md" />
+								<Skeleton className="h-3.5 w-5/6 rounded-md" />
+								<Skeleton className="h-3.5 w-4/6 rounded-md" />
+							</div>
+						</div>
+						<div className="pt-2">
+							<Skeleton className="h-9 w-40 rounded-lg" />
+						</div>
+					</div>
+				))}
+			</div>
+		</div>
+	);
+}
+
 export function DashboardSkeleton() {
 	const estaColapsado =
 		typeof window !== "undefined" &&
 		localStorage.getItem("sidebar_colapsado") === "true";
+
+	const moduloActivo =
+		typeof window !== "undefined"
+			? localStorage.getItem("moduloActivo") || "actividades"
+			: "actividades";
 
 	return (
 		<div className="flex h-screen w-full overflow-hidden bg-slate-50 font-sans text-slate-800">
@@ -215,7 +258,15 @@ export function DashboardSkeleton() {
 				</header>
 
 				<main className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto p-6">
-					<div className="flex h-full min-h-0 w-full flex-1 flex-col" />
+					<div className="flex h-full min-h-0 w-full flex-1 flex-col">
+						{moduloActivo === "configuracion" ? (
+							<ConfiguracionSkeleton />
+						) : moduloActivo === "documentacion" ? (
+							<DocumentacionSkeleton />
+						) : (
+							<PageSkeleton />
+						)}
+					</div>
 				</main>
 			</div>
 		</div>

@@ -1,6 +1,6 @@
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { Alert } from "../../../components/ui";
+import { Alert, ConfiguracionSkeleton } from "../../../components/ui";
 import { useAppStore } from "../../../store/useAppStore";
 import { TarjetaCarpetaDrive, TarjetaCredencialesGoogle } from "../components";
 import { useConfiguracionStore } from "../store/useConfiguracionStore";
@@ -40,6 +40,10 @@ export const ConfiguracionPage: React.FC = () => {
 			montado = false;
 		};
 	}, [cargado, cargarConfiguracion]);
+
+	if (!cargado) {
+		return <ConfiguracionSkeleton />;
+	}
 
 	return (
 		<div className="space-y-6 pb-12 w-full">
