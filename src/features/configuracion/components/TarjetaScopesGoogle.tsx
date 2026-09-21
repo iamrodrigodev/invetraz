@@ -30,6 +30,11 @@ const SCOPES_DISPONIBLES: ScopeClassroom[] = [
 		nombre: "3. Estudiantes y docentes",
 		scope: "https://www.googleapis.com/auth/classroom.rosters",
 	},
+	{
+		id: "drive-readonly",
+		nombre: "4. Plantillas en Google Drive",
+		scope: "https://www.googleapis.com/auth/drive.readonly",
+	},
 ];
 
 export const TarjetaScopesGoogle: React.FC = () => {
@@ -89,7 +94,7 @@ export const TarjetaScopesGoogle: React.FC = () => {
 					</button>
 				</div>
 				<CardTitle className="text-base text-slate-900 font-bold tracking-tight">
-					Scopes de Google Classroom
+					Scopes de Google (Classroom & Drive)
 				</CardTitle>
 			</CardHeader>
 			<CardContent className="space-y-2.5 text-xs leading-relaxed text-slate-700">

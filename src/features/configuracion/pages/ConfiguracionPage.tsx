@@ -16,11 +16,12 @@ import { VALIDATION_LIMITS } from "../../../constants/validations";
 import {
 	CampoCredencial,
 	EstadoConexionBadge,
+	TarjetaCarpetaDrive,
 	TarjetaGuiaGoogle,
 	TarjetaScopesGoogle,
+	type TipoEstadoConexion,
 } from "../components";
 import {
-	resolverEstadoConexion,
 	sonCredencialesIguales,
 	useConfiguracionStore,
 } from "../store/useConfiguracionStore";
@@ -32,18 +33,21 @@ import {
 export function ConfiguracionPage() {
 	const {
 		credenciales,
-		credencialesVerificadas,
-		credencialesFallidas,
 		cargado,
 		cargarConfiguracion,
 		guardarConfiguracion,
 		verificarConexion,
+		actualizarCarpetaDrive,
 	} = useConfiguracionStore();
 
 	const [mensajeExito, setMensajeExito] = useState<string | null>(null);
 	const [mensajeError, setMensajeError] = useState<string | null>(null);
 	const [verificando, setVerificando] = useState(false);
 	const [ultimoIntentoGuardado, setUltimoIntentoGuardado] =
+		useState<ActualizarCredencialesPeticion | null>(null);
+	const [verificadoEnSesion, setVerificadoEnSesion] =
+		useState<ActualizarCredencialesPeticion | null>(null);
+	const [falloEnSesion, setFalloEnSesion] =
 		useState<ActualizarCredencialesPeticion | null>(null);
 
 	const {
@@ -71,8 +75,16 @@ export function ConfiguracionPage() {
 			googleClientId: clientId || "",
 			googleClientSecret: clientSecret || "",
 			googleRefreshToken: refreshToken || "",
+			googleDriveFolderId: credenciales.googleDriveFolderId,
+			googleDriveFolderName: credenciales.googleDriveFolderName,
 		}),
-		[clientId, clientSecret, refreshToken],
+		[
+			clientId,
+			clientSecret,
+			refreshToken,
+			credenciales.googleDriveFolderId,
+			credenciales.googleDriveFolderName,
+		],
 	);
 
 	const camposCompletos = Boolean(
@@ -88,33 +100,53 @@ export function ConfiguracionPage() {
 	);
 
 	const configuracionCompleta = camposCompletos && !tieneErrores;
-	const yaIntentado =
-		sonCredencialesIguales(ultimoIntentoGuardado, valoresActuales) ||
-		sonCredencialesIguales(credencialesFallidas, valoresActuales);
+	const esIgualAFallidas = sonCredencialesIguales(
+		falloEnSesion,
+		valoresActuales,
+	);
+	const esIgualAUltimoIntento = sonCredencialesIguales(
+		ultimoIntentoGuardado,
+		valoresActuales,
+	);
+	const esIgualAGuardadas = sonCredencialesIguales(
+		credenciales,
+		valoresActuales,
+	);
+
 	const deshabilitarVerificar =
 		!configuracionCompleta || verificando || isSubmitting;
 	const deshabilitarGuardar =
-		!configuracionCompleta || yaIntentado || isSubmitting || verificando;
+		!configuracionCompleta ||
+		isSubmitting ||
+		verificando ||
+		esIgualAFallidas ||
+		(esIgualAGuardadas && !ultimoIntentoGuardado) ||
+		esIgualAUltimoIntento;
 
-	const estadoConexionVisual = useMemo(() => {
-		return resolverEstadoConexion({
-			credencialesGuardadas: credenciales,
-			credencialesVerificadas,
-			credencialesFallidas,
-			verificando,
-			guardando: isSubmitting,
-			camposCompletos,
-			tieneErrores,
-			valoresActuales,
-		});
+	const estadoConexionVisual: TipoEstadoConexion = useMemo(() => {
+		if (verificando || isSubmitting) {
+			return "verificando";
+		}
+		if (!camposCompletos || tieneErrores) {
+			return "no_configurado";
+		}
+		if (esIgualAFallidas) {
+			return "error";
+		}
+		if (
+			verificadoEnSesion &&
+			sonCredencialesIguales(verificadoEnSesion, valoresActuales)
+		) {
+			return "conectado";
+		}
+		return "no_configurado";
 	}, [
-		credenciales,
-		credencialesVerificadas,
-		credencialesFallidas,
 		verificando,
 		isSubmitting,
 		camposCompletos,
 		tieneErrores,
+		esIgualAFallidas,
+		verificadoEnSesion,
 		valoresActuales,
 	]);
 
@@ -132,6 +164,14 @@ export function ConfiguracionPage() {
 						inicializadoRef.current = true;
 						reset(datos);
 						setUltimoIntentoGuardado(datos);
+						const tieneDatos = Boolean(
+							datos.googleClientId &&
+								datos.googleClientSecret &&
+								datos.googleRefreshToken,
+						);
+						if (tieneDatos) {
+							setVerificadoEnSesion(datos);
+						}
 					}
 				})
 				.catch((error) => {
@@ -147,6 +187,14 @@ export function ConfiguracionPage() {
 			inicializadoRef.current = true;
 			reset(credenciales);
 			setUltimoIntentoGuardado(credenciales);
+			const tieneDatos = Boolean(
+				credenciales.googleClientId &&
+					credenciales.googleClientSecret &&
+					credenciales.googleRefreshToken,
+			);
+			if (tieneDatos) {
+				setVerificadoEnSesion(credenciales);
+			}
 		}
 		return () => {
 			montado = false;
@@ -154,18 +202,28 @@ export function ConfiguracionPage() {
 	}, [cargado, cargarConfiguracion, credenciales, reset]);
 
 	const onGuardar = async (data: ActualizarCredencialesPeticion) => {
-		setUltimoIntentoGuardado(data);
+		const datosConCarpeta: ActualizarCredencialesPeticion = {
+			...data,
+			googleDriveFolderId: credenciales.googleDriveFolderId,
+			googleDriveFolderName: credenciales.googleDriveFolderName,
+		};
+		setUltimoIntentoGuardado(datosConCarpeta);
 		try {
 			setMensajeError(null);
 			setMensajeExito(null);
-			const res = await guardarConfiguracion(data);
-			reset(data);
-			setUltimoIntentoGuardado(data);
+			const res = await guardarConfiguracion(datosConCarpeta);
+			reset(datosConCarpeta);
+			setUltimoIntentoGuardado(datosConCarpeta);
+			setVerificadoEnSesion(datosConCarpeta);
+			setFalloEnSesion(null);
 			setMensajeExito(
 				res?.mensaje ||
 					"Credenciales verificadas con Google y guardadas exitosamente.",
 			);
 		} catch (error) {
+			setUltimoIntentoGuardado(datosConCarpeta);
+			setFalloEnSesion(datosConCarpeta);
+			setVerificadoEnSesion(null);
 			setMensajeError(
 				error instanceof Error
 					? error.message
@@ -192,13 +250,26 @@ export function ConfiguracionPage() {
 				googleClientId: getValues("googleClientId")?.trim() || "",
 				googleClientSecret: getValues("googleClientSecret")?.trim() || "",
 				googleRefreshToken: getValues("googleRefreshToken")?.trim() || "",
+				googleDriveFolderId: credenciales.googleDriveFolderId,
+				googleDriveFolderName: credenciales.googleDriveFolderName,
 			};
 			const res = await verificarConexion(valores);
+			setVerificadoEnSesion(valores);
+			setFalloEnSesion(null);
 			setMensajeExito(
 				res.mensaje ||
 					"¡Conexión verificada exitosamente con Google Classroom!",
 			);
 		} catch (error) {
+			const valoresFallidos: ActualizarCredencialesPeticion = {
+				googleClientId: getValues("googleClientId")?.trim() || "",
+				googleClientSecret: getValues("googleClientSecret")?.trim() || "",
+				googleRefreshToken: getValues("googleRefreshToken")?.trim() || "",
+				googleDriveFolderId: credenciales.googleDriveFolderId,
+				googleDriveFolderName: credenciales.googleDriveFolderName,
+			};
+			setFalloEnSesion(valoresFallidos);
+			setVerificadoEnSesion(null);
 			setMensajeError(
 				error instanceof Error
 					? error.message
@@ -221,7 +292,7 @@ export function ConfiguracionPage() {
 				</h1>
 				<p className="mt-1 text-sm text-slate-600">
 					Administra las credenciales de la API de Google para la sincronización
-					de clases y tareas.
+					de clases, tareas y plantillas de seguimiento.
 				</p>
 			</div>
 
@@ -244,7 +315,7 @@ export function ConfiguracionPage() {
 			)}
 
 			<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-				<div className="lg:col-span-2">
+				<div className="lg:col-span-2 space-y-6">
 					<Card>
 						<CardHeader>
 							<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -352,9 +423,11 @@ export function ConfiguracionPage() {
 										title={
 											!configuracionCompleta
 												? "Completa todos los campos requeridos para guardar"
-												: yaIntentado
-													? "Modifica al menos un campo para guardar cambios"
-													: undefined
+												: esIgualAFallidas
+													? "Estas credenciales fallaron la validación. Modifícalas para intentar guardar."
+													: esIgualAUltimoIntento
+														? "Modifica al menos un campo para guardar cambios"
+														: undefined
 										}
 									>
 										{isSubmitting ? (
@@ -370,6 +443,14 @@ export function ConfiguracionPage() {
 							</form>
 						</CardContent>
 					</Card>
+
+					<TarjetaCarpetaDrive
+						carpetaIdInicial={credenciales.googleDriveFolderId}
+						carpetaNombreInicial={credenciales.googleDriveFolderName}
+						onCarpetaActualizada={(id, nombre) => {
+							actualizarCarpetaDrive(id, nombre);
+						}}
+					/>
 				</div>
 
 				<div className="space-y-6">

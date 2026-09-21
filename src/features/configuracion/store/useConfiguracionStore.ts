@@ -81,6 +81,7 @@ interface ConfiguracionState {
 	verificarConexion: (
 		datos?: ActualizarCredencialesPeticion,
 	) => Promise<ResultadoVerificacion>;
+	actualizarCarpetaDrive: (id: string, nombre: string) => void;
 	setEstadoConexion: (estado: TipoEstadoConexion) => void;
 	limpiar: () => void;
 }
@@ -89,6 +90,8 @@ const VALORES_POR_DEFECTO: ActualizarCredencialesPeticion = {
 	googleClientId: "",
 	googleClientSecret: "",
 	googleRefreshToken: "",
+	googleDriveFolderId: null,
+	googleDriveFolderName: null,
 };
 
 export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
@@ -115,6 +118,8 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 				googleClientId: config.googleClientId || "",
 				googleClientSecret: config.googleClientSecret || "",
 				googleRefreshToken: config.googleRefreshToken || "",
+				googleDriveFolderId: config.googleDriveFolderId ?? null,
+				googleDriveFolderName: config.googleDriveFolderName ?? null,
 			};
 
 			const tieneCredenciales = Boolean(
@@ -185,6 +190,16 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 			});
 			throw error;
 		}
+	},
+
+	actualizarCarpetaDrive: (id: string, nombre: string) => {
+		set((state) => ({
+			credenciales: {
+				...state.credenciales,
+				googleDriveFolderId: id,
+				googleDriveFolderName: nombre,
+			},
+		}));
 	},
 
 	setEstadoConexion: (estado: TipoEstadoConexion) => {

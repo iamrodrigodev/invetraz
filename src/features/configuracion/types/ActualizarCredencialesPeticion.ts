@@ -26,6 +26,8 @@ export const ActualizarCredencialesPeticionSchema = z.object({
 			VALIDATION_LIMITS.MAX_GOOGLE_REFRESH_TOKEN,
 			`El Refresh Token no puede exceder los ${VALIDATION_LIMITS.MAX_GOOGLE_REFRESH_TOKEN} caracteres`,
 		),
+	googleDriveFolderId: z.string().trim().nullable().optional(),
+	googleDriveFolderName: z.string().trim().nullable().optional(),
 });
 
 export type ActualizarCredencialesPeticion = z.infer<
@@ -36,6 +38,8 @@ export const ConfiguracionRespuestaSchema = z.object({
 	googleClientId: z.string().optional().default(""),
 	googleClientSecret: z.string().optional().default(""),
 	googleRefreshToken: z.string().optional().default(""),
+	googleDriveFolderId: z.string().nullable().optional().default(null),
+	googleDriveFolderName: z.string().nullable().optional().default(null),
 });
 
 export type ConfiguracionRespuesta = z.infer<
