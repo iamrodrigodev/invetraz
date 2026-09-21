@@ -2,7 +2,7 @@ import type { z } from "zod";
 import { crearApiRespuestaSchema } from "../schemas/api.schemas";
 import { extraerMensajeError, parsearConEsquema } from "./fetch";
 
-export async function leerDatos<T extends z.ZodTypeAny>(
+export async function leerDatos<T extends z.ZodType>(
 	respuesta: Response,
 	esquema: T,
 	mensajeError: string,

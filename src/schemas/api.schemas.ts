@@ -21,9 +21,7 @@ export const EstadoSetupRespuestaSchema = z.object({
 
 export type EstadoSetupRespuesta = z.infer<typeof EstadoSetupRespuestaSchema>;
 
-export function crearApiRespuestaSchema<T extends z.ZodTypeAny>(
-	datosSchema: T,
-) {
+export function crearApiRespuestaSchema<T extends z.ZodType>(datosSchema: T) {
 	return z.object({
 		estado: z.number().int().optional(),
 		mensaje: z.string().optional(),
