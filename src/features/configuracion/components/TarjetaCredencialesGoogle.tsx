@@ -90,6 +90,8 @@ export const TarjetaCredencialesGoogle: React.FC = () => {
 		sonIguales: sonCredencialesIguales,
 		esValido: configuracionCompleta,
 		tieneValorGuardado,
+		valorGuardadoVerificado: false,
+		estadoGuardadoSinVerificar: "guardado_pendiente",
 		onVerificar: async (val) => {
 			const res = await verificarConexion(val);
 			return (
@@ -100,16 +102,19 @@ export const TarjetaCredencialesGoogle: React.FC = () => {
 		onGuardar: async (val) => {
 			const res = await guardarConfiguracion(val);
 			reset(val);
-			return (
-				res?.mensaje ||
-				"Credenciales verificadas con Google y guardadas exitosamente."
-			);
+			return {
+				mensaje:
+					res?.mensaje ||
+					"Credenciales verificadas con Google y guardadas exitosamente.",
+				verificado: res?.valido !== false,
+			};
 		},
 		mensajeValidacionIncompleta:
 			"Completa todos los campos requeridos antes de continuar",
 		mensajeFalloPrevio:
 			"Estas credenciales fallaron la validación. Modifícalas para intentar guardar.",
 		mensajeSinCambios: "Modifica al menos un campo para guardar cambios",
+		permitirGuardarConFallo: true,
 	});
 
 	const [tocado, setTocado] = useState(false);
@@ -184,6 +189,9 @@ export const TarjetaCredencialesGoogle: React.FC = () => {
 			icono={Key}
 			estado={conexion.estadoVisual}
 			mensajeExito={conexion.mensajeExito}
+			varianteMensajeExito={
+				conexion.estadoVisual === "guardado_pendiente" ? "warning" : "success"
+			}
 			mensajeError={mensajeErrorBanner}
 			onLimpiarExito={() => conexion.setMensajeExito(null)}
 			onLimpiarError={onLimpiarError}

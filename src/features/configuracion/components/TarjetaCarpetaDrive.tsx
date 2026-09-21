@@ -3,6 +3,7 @@ import type React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { resolverVistaCarpetaDrive } from "../../../components/drive/estadoCarpetaDrive";
 import { TarjetaCarpetaVinculada } from "../../../components/drive/TarjetaCarpetaVinculada";
+import { Alert } from "../../../components/ui";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
 import {
 	verificarCarpetaDrive,
@@ -10,12 +11,14 @@ import {
 } from "../../plantillas/api/plantillas.api";
 import { useVerificacionConexion } from "../hooks";
 import { CampoCredencial } from "./CampoCredencial";
+import type { TipoEstadoConexion } from "./EstadoConexionBadge";
 import { TarjetaConexionBase } from "./TarjetaConexionBase";
 
 interface TarjetaCarpetaDriveProps {
 	carpetaIdInicial?: string | null | undefined;
 	carpetaNombreInicial?: string | null | undefined;
 	onCarpetaActualizada?: (id: string, nombre: string | null) => void;
+	estadoCredencialesGoogle?: TipoEstadoConexion;
 }
 
 function normalizarId(entrada: string): string {
@@ -30,6 +33,7 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 	carpetaIdInicial,
 	carpetaNombreInicial,
 	onCarpetaActualizada,
+	estadoCredencialesGoogle = "no_configurado",
 }) => {
 	const [carpetaId, setCarpetaId] = useState<string | null>(
 		carpetaIdInicial ?? null,
@@ -50,6 +54,8 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 	}, [carpetaIdInicial, carpetaNombreInicial]);
 
 	const idActual = useMemo(() => normalizarId(inputUrl), [inputUrl]);
+	const credencialesGoogleVerificadas =
+		estadoCredencialesGoogle === "conectado";
 	const camposCompletos = Boolean(inputUrl.trim());
 	const [tocado, setTocado] = useState(false);
 	const [errorDescartado, setErrorDescartado] = useState(false);
@@ -108,6 +114,12 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 	const onProbarConexion = async () => {
 		setTocado(true);
 		setErrorDescartado(false);
+		if (!credencialesGoogleVerificadas) {
+			conexion.setMensajeError(
+				"Primero verifica las credenciales de Google Cloud. Sin credenciales verificadas no se puede usar Google Drive.",
+			);
+			return;
+		}
 		if (errorValidacion) {
 			return;
 		}
@@ -118,6 +130,12 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 		e.preventDefault();
 		setTocado(true);
 		setErrorDescartado(false);
+		if (!credencialesGoogleVerificadas) {
+			conexion.setMensajeError(
+				"Primero verifica las credenciales de Google Cloud. Sin credenciales verificadas no se puede guardar ni validar la carpeta de Drive.",
+			);
+			return;
+		}
 		if (errorValidacion) {
 			return;
 		}
@@ -131,10 +149,15 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 		carpetaId,
 		carpetaNombre,
 	});
-	const estadoConexionCarpeta =
-		conexion.estadoVisual === "conectado" && vistaCarpeta.estaPendiente
-			? "guardado_pendiente"
-			: conexion.estadoVisual;
+	const estadoConexionCarpeta = (() => {
+		if (!credencialesGoogleVerificadas) {
+			return "guardado_pendiente";
+		}
+		if (conexion.estadoVisual === "conectado" && vistaCarpeta.estaPendiente) {
+			return "guardado_pendiente";
+		}
+		return conexion.estadoVisual;
+	})();
 
 	const onLimpiarError = () => {
 		if (conexion.mensajeError) {
@@ -148,7 +171,9 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 			nombre={vistaCarpeta.nombreVisible}
 			carpetaId={carpetaId}
 			textoBoton="Abrir en Drive"
-			estado={vistaCarpeta.estado}
+			estado={
+				!credencialesGoogleVerificadas ? "pendiente" : vistaCarpeta.estado
+			}
 		/>
 	) : null;
 
@@ -165,14 +190,36 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 			onLimpiarError={onLimpiarError}
 			verificando={conexion.verificando}
 			guardando={conexion.guardando}
-			deshabilitarVerificar={conexion.deshabilitarVerificar}
-			deshabilitarGuardar={conexion.deshabilitarGuardar}
-			tooltipVerificar={conexion.tooltipVerificar}
-			tooltipGuardar={conexion.tooltipGuardar}
+			deshabilitarVerificar={
+				!credencialesGoogleVerificadas || conexion.deshabilitarVerificar
+			}
+			deshabilitarGuardar={
+				!credencialesGoogleVerificadas || conexion.deshabilitarGuardar
+			}
+			tooltipVerificar={
+				!credencialesGoogleVerificadas
+					? "Primero verifica las credenciales de Google Cloud"
+					: conexion.tooltipVerificar
+			}
+			tooltipGuardar={
+				!credencialesGoogleVerificadas
+					? "Primero verifica las credenciales de Google Cloud"
+					: conexion.tooltipGuardar
+			}
 			onVerificar={onProbarConexion}
 			esFormulario={true}
 			onSubmit={onGuardarFormulario}
-			cabeceraExtra={cabeceraVinculada}
+			cabeceraExtra={
+				<>
+					{!credencialesGoogleVerificadas && (
+						<Alert
+							variant="warning"
+							message="Google Cloud está guardado, pero no verificado. Verifica esa conexión antes de usar Drive o plantillas."
+						/>
+					)}
+					{cabeceraVinculada}
+				</>
+			}
 		>
 			<CampoCredencial
 				id="carpetaUrlOId"
@@ -181,7 +228,7 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 						? "Cambiar carpeta vinculada"
 						: "Enlace o ID de la carpeta de Google Drive"
 				}
-				obligatorio={!carpetaId}
+				obligatorio
 				descripcion={
 					<span>
 						Indica el enlace web o el identificador de la carpeta donde se
@@ -212,7 +259,11 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 					setTocado(true);
 					setErrorDescartado(false);
 				}}
-				disabled={conexion.verificando || conexion.guardando}
+				disabled={
+					!credencialesGoogleVerificadas ||
+					conexion.verificando ||
+					conexion.guardando
+				}
 				error={Boolean(mensajeErrorCampo)}
 				errorMessage={mensajeErrorCampo}
 			/>

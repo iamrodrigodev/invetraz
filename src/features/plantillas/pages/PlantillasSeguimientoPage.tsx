@@ -11,6 +11,7 @@ import {
 	CardContent,
 	PlantillasSkeleton,
 } from "../../../components/ui";
+import { useConfiguracionStore } from "../../configuracion/store/useConfiguracionStore";
 import { obtenerPlantillas } from "../api/plantillas.api";
 import { PiePaginacionPlantillas } from "../components/PiePaginacionPlantillas";
 import { TarjetaPlantilla } from "../components/TarjetaPlantilla";
@@ -20,6 +21,11 @@ const ITEMS_POR_PAGINA = 12;
 
 export const PlantillasSeguimientoPage: React.FC = () => {
 	const navigate = useNavigate();
+	const {
+		cargado: configuracionCargada,
+		estadoConexion: estadoCredencialesGoogle,
+		cargarConfiguracion,
+	} = useConfiguracionStore();
 	const [datos, setDatos] = useState<CarpetaPlantillasRespuesta | null>(null);
 	const [cargando, setCargando] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
@@ -47,6 +53,12 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 		cargar();
 	}, [cargar]);
 
+	useEffect(() => {
+		if (!configuracionCargada) {
+			cargarConfiguracion().catch(() => undefined);
+		}
+	}, [configuracionCargada, cargarConfiguracion]);
+
 	const totalPlantillas = datos?.plantillas?.length ?? 0;
 	const totalPaginas = Math.max(
 		1,
@@ -70,6 +82,17 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 		carpetaId: datos?.carpetaId,
 		carpetaNombre: datos?.carpetaNombre,
 	});
+	const credencialesGoogleVerificadas =
+		estadoCredencialesGoogle === "conectado";
+	const estadoVisualCarpeta = credencialesGoogleVerificadas
+		? vistaCarpeta.estado
+		: "pendiente";
+	const tituloVacioPlantillas = credencialesGoogleVerificadas
+		? vistaCarpeta.tituloVacio
+		: "Google Cloud pendiente de verificación";
+	const descripcionVaciaPlantillas = credencialesGoogleVerificadas
+		? vistaCarpeta.descripcionVacia
+		: "Verifica las credenciales de Google Cloud antes de sincronizar Drive o consultar plantillas.";
 
 	if (cargando && !datos) {
 		return <PlantillasSkeleton />;
@@ -155,7 +178,7 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 								nombre={vistaCarpeta.nombreVisible}
 								carpetaId={datos.carpetaId}
 								textoBoton="Abrir en Drive"
-								estado={vistaCarpeta.estado}
+								estado={estadoVisualCarpeta}
 							/>
 						)}
 
@@ -165,10 +188,10 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 									<FileSpreadsheet size={28} className="text-primary" />
 									<div className="space-y-1">
 										<h4 className="font-semibold text-slate-800 text-sm">
-											{vistaCarpeta.tituloVacio}
+											{tituloVacioPlantillas}
 										</h4>
 										<p className="text-xs text-slate-500">
-											{vistaCarpeta.descripcionVacia}
+											{descripcionVaciaPlantillas}
 										</p>
 									</div>
 								</CardContent>

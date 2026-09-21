@@ -130,9 +130,11 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 
 			set({
 				credenciales: nuevasCredenciales,
-				credencialesVerificadas: tieneCredenciales ? nuevasCredenciales : null,
+				credencialesVerificadas: null,
 				credencialesFallidas: null,
-				estadoConexion: tieneCredenciales ? "conectado" : "no_configurado",
+				estadoConexion: tieneCredenciales
+					? "guardado_pendiente"
+					: "no_configurado",
 				cargado: true,
 				cargando: false,
 			});
@@ -161,13 +163,22 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 
 			return resVerificacion;
 		} catch (error) {
+			await actualizarConfiguracion(datos);
 			set({
+				credenciales: datos,
 				credencialesVerificadas: null,
-				credencialesFallidas: datos,
-				estadoConexion: "error",
+				credencialesFallidas: null,
+				estadoConexion: "guardado_pendiente",
+				cargado: true,
 				cargando: false,
 			});
-			throw error;
+			return {
+				valido: false,
+				mensaje:
+					error instanceof Error
+						? `Credenciales guardadas, pero no verificadas: ${error.message}`
+						: "Credenciales guardadas, pero no verificadas. Revisa los datos y vuelve a verificar la conexión.",
+			};
 		}
 	},
 

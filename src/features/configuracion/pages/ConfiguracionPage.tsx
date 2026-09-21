@@ -6,8 +6,13 @@ import { TarjetaCarpetaDrive, TarjetaCredencialesGoogle } from "../components";
 import { useConfiguracionStore } from "../store/useConfiguracionStore";
 
 export const ConfiguracionPage: React.FC = () => {
-	const { credenciales, cargado, cargarConfiguracion, actualizarCarpetaDrive } =
-		useConfiguracionStore();
+	const {
+		credenciales,
+		estadoConexion,
+		cargado,
+		cargarConfiguracion,
+		actualizarCarpetaDrive,
+	} = useConfiguracionStore();
 
 	const [mensajeError, setMensajeError] = useState<string | null>(null);
 	const inicializadoRef = useRef(false);
@@ -70,6 +75,7 @@ export const ConfiguracionPage: React.FC = () => {
 				<TarjetaCarpetaDrive
 					carpetaIdInicial={credenciales.googleDriveFolderId}
 					carpetaNombreInicial={credenciales.googleDriveFolderName}
+					estadoCredencialesGoogle={estadoConexion}
 					onCarpetaActualizada={(id, nombre) => {
 						actualizarCarpetaDrive(id, nombre);
 					}}

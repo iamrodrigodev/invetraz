@@ -1,18 +1,38 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { TipoEstadoConexion } from "../components/EstadoConexionBadge";
 
+export interface ResultadoAccionConexion {
+	mensaje?: string;
+	verificado?: boolean;
+}
+
+type RespuestaAccionConexion = string | ResultadoAccionConexion | undefined;
+
+function normalizarRespuesta(res: RespuestaAccionConexion) {
+	if (typeof res === "string") {
+		return { mensaje: res, verificado: true };
+	}
+	return {
+		mensaje: res?.mensaje,
+		verificado: res?.verificado ?? true,
+	};
+}
+
 export interface OpcionesVerificacionConexion<T> {
 	valorActual: T;
 	valorGuardado: T | null;
 	sonIguales: (a: T | null | undefined, b: T | null | undefined) => boolean;
 	esValido: boolean;
 	tieneValorGuardado?: boolean;
-	onVerificar: (valor: T) => Promise<string | undefined>;
-	onGuardar: (valor: T) => Promise<string | undefined>;
+	valorGuardadoVerificado?: boolean;
+	estadoGuardadoSinVerificar?: TipoEstadoConexion;
+	onVerificar: (valor: T) => Promise<RespuestaAccionConexion>;
+	onGuardar: (valor: T) => Promise<RespuestaAccionConexion>;
 	mensajeValidacionIncompleta?: string;
 	mensajeFalloPrevio?: string;
 	mensajeSinCambios?: string;
 	permitirGuardarConFallo?: boolean;
+	permitirGuardarSinCambios?: boolean;
 }
 
 export function useVerificacionConexion<T>({
@@ -21,12 +41,15 @@ export function useVerificacionConexion<T>({
 	sonIguales,
 	esValido,
 	tieneValorGuardado,
+	valorGuardadoVerificado = true,
+	estadoGuardadoSinVerificar,
 	onVerificar,
 	onGuardar,
 	mensajeValidacionIncompleta = "Completa todos los campos requeridos antes de continuar",
 	mensajeFalloPrevio = "Estos datos fallaron la validación previa. Modifícalos para intentar de nuevo.",
 	mensajeSinCambios = "Modifica los campos para guardar cambios",
 	permitirGuardarConFallo = false,
+	permitirGuardarSinCambios = false,
 }: OpcionesVerificacionConexion<T>) {
 	const [verificando, setVerificando] = useState(false);
 	const [guardando, setGuardando] = useState(false);
@@ -36,7 +59,7 @@ export function useVerificacionConexion<T>({
 		valorGuardado,
 	);
 	const [verificadoEnSesion, setVerificadoEnSesion] = useState<T | null>(
-		tieneValorGuardado ? valorGuardado : null,
+		tieneValorGuardado && valorGuardadoVerificado ? valorGuardado : null,
 	);
 	const [falloEnSesion, setFalloEnSesion] = useState<T | null>(null);
 
@@ -45,11 +68,11 @@ export function useVerificacionConexion<T>({
 		if (valorGuardado && !sonIguales(valorGuardadoRef.current, valorGuardado)) {
 			valorGuardadoRef.current = valorGuardado;
 			setUltimoIntentoGuardado(valorGuardado);
-			if (tieneValorGuardado) {
+			if (tieneValorGuardado && valorGuardadoVerificado) {
 				setVerificadoEnSesion(valorGuardado);
 			}
 		}
-	}, [valorGuardado, tieneValorGuardado, sonIguales]);
+	}, [valorGuardado, tieneValorGuardado, valorGuardadoVerificado, sonIguales]);
 
 	const esIgualAFallidas = useMemo(
 		() => Boolean(falloEnSesion && sonIguales(falloEnSesion, valorActual)),
@@ -75,8 +98,9 @@ export function useVerificacionConexion<T>({
 		guardando ||
 		verificando ||
 		(!permitirGuardarConFallo && esIgualAFallidas) ||
-		(esIgualAGuardadas && !ultimoIntentoGuardado) ||
-		esIgualAUltimoIntento;
+		(!permitirGuardarSinCambios &&
+			((esIgualAGuardadas && !ultimoIntentoGuardado) ||
+				esIgualAUltimoIntento));
 
 	const tooltipVerificar = useMemo(() => {
 		if (!esValido) {
@@ -93,8 +117,9 @@ export function useVerificacionConexion<T>({
 			return mensajeFalloPrevio;
 		}
 		if (
-			esIgualAUltimoIntento ||
-			(esIgualAGuardadas && !ultimoIntentoGuardado)
+			!permitirGuardarSinCambios &&
+			(esIgualAUltimoIntento ||
+				(esIgualAGuardadas && !ultimoIntentoGuardado))
 		) {
 			return mensajeSinCambios;
 		}
@@ -109,6 +134,7 @@ export function useVerificacionConexion<T>({
 		mensajeFalloPrevio,
 		mensajeSinCambios,
 		permitirGuardarConFallo,
+		permitirGuardarSinCambios,
 	]);
 
 	const estadoVisual: TipoEstadoConexion = useMemo(() => {
@@ -123,9 +149,12 @@ export function useVerificacionConexion<T>({
 		}
 		if (
 			(verificadoEnSesion && sonIguales(verificadoEnSesion, valorActual)) ||
-			esIgualAGuardadas
+			(esIgualAGuardadas && valorGuardadoVerificado)
 		) {
 			return "conectado";
+		}
+		if (esIgualAGuardadas && estadoGuardadoSinVerificar) {
+			return estadoGuardadoSinVerificar;
 		}
 		return "no_configurado";
 	}, [
@@ -138,6 +167,8 @@ export function useVerificacionConexion<T>({
 		sonIguales,
 		valorActual,
 		esIgualAGuardadas,
+		valorGuardadoVerificado,
+		estadoGuardadoSinVerificar,
 	]);
 
 	const ejecutarVerificar = useCallback(async () => {
@@ -151,11 +182,11 @@ export function useVerificacionConexion<T>({
 		setMensajeExito(null);
 
 		try {
-			const res = await onVerificar(valorActual);
+			const res = normalizarRespuesta(await onVerificar(valorActual));
 			setVerificadoEnSesion(valorActual);
 			setFalloEnSesion(null);
-			if (typeof res === "string" && res) {
-				setMensajeExito(res);
+			if (res.mensaje) {
+				setMensajeExito(res.mensaje);
 			}
 			return true;
 		} catch (err) {
@@ -182,12 +213,16 @@ export function useVerificacionConexion<T>({
 		setUltimoIntentoGuardado(valorActual);
 
 		try {
-			const res = await onGuardar(valorActual);
-			setVerificadoEnSesion(valorActual);
+			const res = normalizarRespuesta(await onGuardar(valorActual));
+			if (res.verificado) {
+				setVerificadoEnSesion(valorActual);
+			} else {
+				setVerificadoEnSesion(null);
+			}
 			setFalloEnSesion(null);
 			setUltimoIntentoGuardado(valorActual);
-			if (typeof res === "string" && res) {
-				setMensajeExito(res);
+			if (res.mensaje) {
+				setMensajeExito(res.mensaje);
 			}
 			return true;
 		} catch (err) {
