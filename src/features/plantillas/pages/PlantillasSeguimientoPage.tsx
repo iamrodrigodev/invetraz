@@ -1,9 +1,7 @@
 import {
 	ChevronLeft,
 	ChevronRight,
-	ExternalLink,
 	FileSpreadsheet,
-	FolderCheck,
 	FolderGit2,
 	RefreshCw,
 	Settings,
@@ -11,9 +9,9 @@ import {
 import type React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { TarjetaCarpetaVinculada } from "../../../components/drive/TarjetaCarpetaVinculada";
 import {
 	Alert,
-	Badge,
 	Button,
 	Card,
 	CardContent,
@@ -74,14 +72,14 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 		return datos.plantillas.slice(indiceInicio, indiceFin);
 	}, [datos?.plantillas, indiceInicio, indiceFin]);
 
-	if (cargando) {
+	if (cargando && !datos) {
 		return <PlantillasSkeleton />;
 	}
 
 	return (
-		<div className="space-y-6 pb-12 w-full">
-			<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-				<div>
+		<div className="w-full space-y-6 pb-12">
+			<div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+				<div className="min-w-0">
 					<h1 className="font-extrabold font-heading text-2xl text-slate-900 tracking-tight sm:text-3xl">
 						Plantillas de Seguimiento
 					</h1>
@@ -91,10 +89,11 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 					</p>
 				</div>
 
-				<div className="flex flex-wrap items-center gap-3">
+				<div className="flex w-full shrink-0 flex-col-reverse gap-3 sm:w-auto sm:flex-row sm:items-center lg:pt-1">
 					<Button
 						type="button"
 						variant="outline"
+						size="default"
 						onClick={cargar}
 						disabled={cargando}
 						className="w-full sm:w-auto"
@@ -106,23 +105,6 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 						/>
 						{cargando ? "Sincronizando..." : "Sincronizar"}
 					</Button>
-					{datos?.carpetaConfigurada && datos.carpetaId && (
-						<Button
-							type="button"
-							variant="default"
-							onClick={() =>
-								window.open(
-									`https://drive.google.com/drive/folders/${datos.carpetaId}`,
-									"_blank",
-									"noopener,noreferrer",
-								)
-							}
-							className="w-full sm:w-auto"
-						>
-							<ExternalLink size={16} className="mr-2" />
-							Abrir carpeta en Drive
-						</Button>
-					)}
 				</div>
 			</div>
 
@@ -165,47 +147,14 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 			)}
 
 			{datos?.carpetaConfigurada && (
-				<div className="space-y-6">
-					<Card className="border-slate-200/90 bg-white shadow-xs w-full">
-						<CardContent className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-							<div className="flex items-center gap-3 min-w-0">
-								<FolderCheck
-									size={24}
-									className="text-primary stroke-[2.2] shrink-0"
-								/>
-								<div className="min-w-0">
-									<div className="flex items-center gap-2 flex-wrap">
-										<span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-											Carpeta vinculada:
-										</span>
-										<Badge
-											variant="primary"
-											className="font-semibold text-xs py-0.5 px-2.5"
-										>
-											{datos.carpetaNombre || "Carpeta de Google Drive"}
-										</Badge>
-									</div>
-									<p className="text-xs text-slate-600 mt-0.5">
-										{totalPlantillas}{" "}
-										{totalPlantillas === 1
-											? "plantilla disponible"
-											: "plantillas disponibles"}{" "}
-										en Google Drive
-									</p>
-								</div>
-							</div>
-							{datos.carpetaId && (
-								<div className="flex items-center gap-2 text-xs text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200/60 self-start sm:self-auto shrink-0">
-									<span className="font-medium text-slate-400">
-										ID Carpeta:
-									</span>
-									<code className="font-mono text-xs text-slate-700 select-all">
-										{datos.carpetaId}
-									</code>
-								</div>
-							)}
-						</CardContent>
-					</Card>
+				<div className="space-y-5">
+					{datos.carpetaId && (
+						<TarjetaCarpetaVinculada
+							nombre={datos.carpetaNombre}
+							carpetaId={datos.carpetaId}
+							textoBoton="Abrir en Drive"
+						/>
+					)}
 
 					{totalPlantillas === 0 ? (
 						<Card className="border-dashed border-2 border-slate-200 bg-slate-50/50 py-12 text-center w-full">
@@ -223,78 +172,83 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 							</CardContent>
 						</Card>
 					) : (
-						<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full">
-							{plantillasPaginadas.map((plantilla) => (
-								<TarjetaPlantilla key={plantilla.id} plantilla={plantilla} />
-							))}
-						</div>
-					)}
-				</div>
-			)}
-
-			{datos?.carpetaConfigurada && totalPlantillas > 0 && (
-				<div className="pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full">
-					<p className="text-xs text-slate-600">
-						Mostrando{" "}
-						<span className="font-semibold text-slate-900">
-							{indiceInicio + 1}
-						</span>{" "}
-						a{" "}
-						<span className="font-semibold text-slate-900">
-							{Math.min(indiceFin, totalPlantillas)}
-						</span>{" "}
-						de{" "}
-						<span className="font-semibold text-slate-900">
-							{totalPlantillas}
-						</span>{" "}
-						{totalPlantillas === 1 ? "plantilla" : "plantillas"}
-					</p>
-
-					{totalPaginas > 1 && (
-						<div className="flex items-center gap-1.5 self-center sm:self-auto">
-							<Button
-								type="button"
-								variant="outline"
-								size="sm"
-								onClick={() => setPaginaActual((prev) => Math.max(1, prev - 1))}
-								disabled={paginaActual === 1}
-								className="h-8 px-2.5 text-xs font-medium"
-							>
-								<ChevronLeft size={14} className="mr-1" />
-								Anterior
-							</Button>
-
-							<div className="flex items-center gap-1">
-								{Array.from({ length: totalPaginas }, (_, i) => i + 1).map(
-									(num) => (
-										<Button
-											key={num}
-											type="button"
-											variant={paginaActual === num ? "default" : "outline"}
-											size="sm"
-											onClick={() => setPaginaActual(num)}
-											className="h-8 w-8 p-0 text-xs font-medium"
-										>
-											{num}
-										</Button>
-									),
-								)}
+						<>
+							<div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+								{plantillasPaginadas.map((plantilla) => (
+									<TarjetaPlantilla key={plantilla.id} plantilla={plantilla} />
+								))}
 							</div>
 
-							<Button
-								type="button"
-								variant="outline"
-								size="sm"
-								onClick={() =>
-									setPaginaActual((prev) => Math.min(totalPaginas, prev + 1))
-								}
-								disabled={paginaActual === totalPaginas}
-								className="h-8 px-2.5 text-xs font-medium"
-							>
-								Siguiente
-								<ChevronRight size={14} className="ml-1" />
-							</Button>
-						</div>
+							<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-slate-200/80 w-full">
+								<p className="text-xs text-slate-600">
+									Mostrando{" "}
+									<span className="font-semibold text-slate-900">
+										{indiceInicio + 1}
+									</span>{" "}
+									a{" "}
+									<span className="font-semibold text-slate-900">
+										{Math.min(indiceFin, totalPlantillas)}
+									</span>{" "}
+									de{" "}
+									<span className="font-semibold text-slate-900">
+										{totalPlantillas}
+									</span>{" "}
+									{totalPlantillas === 1 ? "plantilla" : "plantillas"}
+								</p>
+
+								{totalPaginas > 1 && (
+									<div className="flex items-center gap-1.5 self-center sm:self-auto">
+										<Button
+											type="button"
+											variant="outline"
+											size="sm"
+											onClick={() =>
+												setPaginaActual((prev) => Math.max(1, prev - 1))
+											}
+											disabled={paginaActual === 1}
+											className="h-8 px-2.5 text-xs font-medium"
+										>
+											<ChevronLeft size={14} className="mr-1" />
+											Anterior
+										</Button>
+
+										<div className="flex items-center gap-1">
+											{Array.from(
+												{ length: totalPaginas },
+												(_, i) => i + 1,
+											).map((num) => (
+												<Button
+													key={num}
+													type="button"
+													variant={paginaActual === num ? "default" : "outline"}
+													size="sm"
+													onClick={() => setPaginaActual(num)}
+													className="h-8 w-8 p-0 text-xs font-medium"
+												>
+													{num}
+												</Button>
+											))}
+										</div>
+
+										<Button
+											type="button"
+											variant="outline"
+											size="sm"
+											onClick={() =>
+												setPaginaActual((prev) =>
+													Math.min(totalPaginas, prev + 1),
+												)
+											}
+											disabled={paginaActual === totalPaginas}
+											className="h-8 px-2.5 text-xs font-medium"
+										>
+											Siguiente
+											<ChevronRight size={14} className="ml-1" />
+										</Button>
+									</div>
+								)}
+							</div>
+						</>
 					)}
 				</div>
 			)}

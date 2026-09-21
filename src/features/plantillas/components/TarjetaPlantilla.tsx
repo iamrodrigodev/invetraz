@@ -43,46 +43,46 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 		plantilla.tipoMime === "application/vnd.google-apps.spreadsheet";
 
 	return (
-		<Card className="flex flex-col justify-between border-slate-200/90 bg-white shadow-xs h-full">
-			<CardContent className="p-5 flex flex-col justify-between h-full space-y-4">
+		<Card className="border-slate-200/90 bg-white shadow-xs">
+			<CardContent className="space-y-4 p-5">
 				<div className="space-y-3">
-					<div className="flex items-center justify-between gap-3">
-						<FileSpreadsheet
-							size={24}
-							className="text-primary stroke-[2.2] shrink-0"
-						/>
+					<div className="flex items-start justify-between gap-3">
+						<div className="flex h-7 w-7 shrink-0 items-center justify-center">
+							<FileSpreadsheet
+								size={23}
+								className="text-primary stroke-[2.2]"
+							/>
+						</div>
 						<Badge
-							variant="primary"
-							className="text-[10.5px] font-medium uppercase tracking-wider"
+							variant={esGoogleSheet ? "success" : "primary"}
+							className="shrink-0 text-[10.5px] font-semibold uppercase tracking-wider"
 						>
 							{esGoogleSheet ? "Google Sheets" : "XLSX"}
 						</Badge>
 					</div>
 
-					<div>
-						<h3
-							className="font-semibold text-slate-800 text-sm leading-snug line-clamp-2"
-							title={plantilla.nombre}
-						>
-							{plantilla.nombre}
-						</h3>
-					</div>
+					<h3
+						className="line-clamp-2 font-bold text-sm text-slate-900 leading-snug"
+						title={plantilla.nombre}
+					>
+						{plantilla.nombre}
+					</h3>
 				</div>
 
-				<div className="space-y-3 pt-3 border-t border-slate-100 text-xs text-slate-500">
-					<div className="flex items-center justify-between">
-						<span>Tamaño</span>
-						<span className="font-medium text-slate-700">
+				<div className="space-y-3 border-t border-slate-100 pt-3 text-xs text-slate-500">
+					<div className="flex items-center justify-between gap-3">
+						<span className="text-slate-500">Tamaño</span>
+						<span className="truncate text-right font-semibold text-slate-700">
 							{formatearTamano(plantilla.tamanoBytes)}
 						</span>
 					</div>
 
-					<div className="flex items-center justify-between gap-2">
+					<div className="flex items-center justify-between gap-3">
 						<span className="inline-flex items-center gap-1.5">
 							<Calendar size={13} className="text-slate-400 shrink-0" />
 							Modificado
 						</span>
-						<span className="font-medium text-slate-700 text-[11px]">
+						<span className="truncate text-right font-medium text-[11px] text-slate-700">
 							{formatearFecha(plantilla.ultimaModificacion)}
 						</span>
 					</div>
@@ -92,6 +92,7 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 							<Button
 								type="button"
 								variant="default"
+								size="default"
 								onClick={() => {
 									if (plantilla.enlaceWeb) {
 										window.open(
@@ -101,7 +102,7 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 										);
 									}
 								}}
-								className="flex-1"
+								className="w-full"
 							>
 								<ExternalLink size={16} className="mr-2" />
 								Abrir en Drive
@@ -119,6 +120,7 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 								<Button
 									type="button"
 									variant="outline"
+									size="default"
 									className="px-3 text-slate-700 hover:text-primary hover:border-primary-300"
 								>
 									<Download size={16} />

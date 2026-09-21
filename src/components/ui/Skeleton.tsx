@@ -307,8 +307,8 @@ export function PlantillasSkeleton() {
 				</div>
 			</div>
 
-			<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full">
-				{[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+			<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 w-full">
+				{[1, 2, 3, 4, 5, 6].map((i) => (
 					<div
 						key={i}
 						className="rounded-2xl border border-slate-200/90 bg-white p-5 space-y-4 shadow-xs"

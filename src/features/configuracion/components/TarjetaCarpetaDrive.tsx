@@ -1,7 +1,7 @@
-import { ExternalLink, FolderCheck, FolderGit2 } from "lucide-react";
+import { ExternalLink, FolderGit2 } from "lucide-react";
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { Badge, Button } from "../../../components/ui";
+import { TarjetaCarpetaVinculada } from "../../../components/drive/TarjetaCarpetaVinculada";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
 import {
 	verificarCarpetaDrive,
@@ -131,46 +131,11 @@ export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = ({
 	};
 
 	const cabeceraVinculada = carpetaId ? (
-		<div className="rounded-xl border border-slate-200/80 p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3.5 transition-all">
-			<div className="flex items-center gap-3 min-w-0">
-				<FolderCheck size={24} className="text-primary stroke-[2.2] shrink-0" />
-				<div className="space-y-1 min-w-0">
-					<div className="flex items-center gap-2 flex-wrap">
-						<span className="text-sm font-medium text-slate-800 truncate">
-							{carpetaNombre || "Carpeta de Google Drive"}
-						</span>
-						<Badge
-							variant="primary"
-							className="text-[10px] font-normal py-0.5 px-2"
-						>
-							Carpeta vinculada
-						</Badge>
-					</div>
-					<div className="flex items-center gap-1.5 text-xs">
-						<span className="text-slate-500">ID:</span>
-						<code className="font-mono text-xs text-slate-700 select-all break-all">
-							{carpetaId}
-						</code>
-					</div>
-				</div>
-			</div>
-			<a
-				href={`https://drive.google.com/drive/folders/${carpetaId}`}
-				target="_blank"
-				rel="noreferrer"
-				className="shrink-0 self-end sm:self-auto"
-			>
-				<Button
-					type="button"
-					variant="default"
-					size="sm"
-					className="h-8 px-3 text-xs font-medium w-full sm:w-auto shadow-xs"
-				>
-					<ExternalLink size={13} className="mr-1.5" />
-					Abrir en Drive
-				</Button>
-			</a>
-		</div>
+		<TarjetaCarpetaVinculada
+			nombre={carpetaNombre}
+			carpetaId={carpetaId}
+			textoBoton="Abrir en Drive"
+		/>
 	) : null;
 
 	return (
