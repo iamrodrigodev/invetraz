@@ -16,9 +16,10 @@ export function sonCredencialesIguales(
 ): boolean {
 	if (!a || !b) return false;
 	return (
-		a.googleClientId.trim() === b.googleClientId.trim() &&
-		a.googleClientSecret.trim() === b.googleClientSecret.trim() &&
-		a.googleRefreshToken.trim() === b.googleRefreshToken.trim()
+		(a.googleClientId ?? "").trim() === (b.googleClientId ?? "").trim() &&
+		(a.googleClientSecret ?? "").trim() ===
+			(b.googleClientSecret ?? "").trim() &&
+		(a.googleRefreshToken ?? "").trim() === (b.googleRefreshToken ?? "").trim()
 	);
 }
 
@@ -27,9 +28,9 @@ export function tieneCredencialesCompletas(
 ): boolean {
 	if (!c) return false;
 	return Boolean(
-		c.googleClientId?.trim() &&
-			c.googleClientSecret?.trim() &&
-			c.googleRefreshToken?.trim(),
+		(c.googleClientId ?? "").trim() &&
+			(c.googleClientSecret ?? "").trim() &&
+			(c.googleRefreshToken ?? "").trim(),
 	);
 }
 

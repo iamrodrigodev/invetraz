@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ExternalLink, Key, RefreshCw, Save } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
 	Alert,
@@ -88,10 +88,9 @@ export function ConfiguracionPage() {
 	);
 
 	const configuracionCompleta = camposCompletos && !tieneErrores;
-	const yaIntentado = sonCredencialesIguales(
-		ultimoIntentoGuardado,
-		valoresActuales,
-	);
+	const yaIntentado =
+		sonCredencialesIguales(ultimoIntentoGuardado, valoresActuales) ||
+		sonCredencialesIguales(credencialesFallidas, valoresActuales);
 	const deshabilitarVerificar =
 		!configuracionCompleta || verificando || isSubmitting;
 	const deshabilitarGuardar =
@@ -119,24 +118,39 @@ export function ConfiguracionPage() {
 		valoresActuales,
 	]);
 
+	const inicializadoRef = useRef(false);
+
 	useEffect(() => {
+		if (inicializadoRef.current) {
+			return;
+		}
+		let montado = true;
 		if (!cargado) {
 			cargarConfiguracion()
 				.then((datos) => {
-					reset(datos);
-					setUltimoIntentoGuardado(datos);
+					if (montado) {
+						inicializadoRef.current = true;
+						reset(datos);
+						setUltimoIntentoGuardado(datos);
+					}
 				})
 				.catch((error) => {
-					setMensajeError(
-						error instanceof Error
-							? error.message
-							: "Error al cargar la configuración",
-					);
+					if (montado) {
+						setMensajeError(
+							error instanceof Error
+								? error.message
+								: "Error al cargar la configuración",
+						);
+					}
 				});
 		} else {
+			inicializadoRef.current = true;
 			reset(credenciales);
 			setUltimoIntentoGuardado(credenciales);
 		}
+		return () => {
+			montado = false;
+		};
 	}, [cargado, cargarConfiguracion, credenciales, reset]);
 
 	const onGuardar = async (data: ActualizarCredencialesPeticion) => {
@@ -174,7 +188,11 @@ export function ConfiguracionPage() {
 			}
 
 			setVerificando(true);
-			const valores = getValues();
+			const valores: ActualizarCredencialesPeticion = {
+				googleClientId: getValues("googleClientId")?.trim() || "",
+				googleClientSecret: getValues("googleClientSecret")?.trim() || "",
+				googleRefreshToken: getValues("googleRefreshToken")?.trim() || "",
+			};
 			const res = await verificarConexion(valores);
 			setMensajeExito(
 				res.mensaje ||
