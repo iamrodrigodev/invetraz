@@ -1,12 +1,13 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import App from "./App";
 import { AuthGuard } from "./components/guards/AuthGuard";
 import { AuthCardSkeleton, DashboardSkeleton } from "./components/ui";
 import { LoginPage } from "./features/auth/pages/LoginPage";
 import { SetupPage } from "./features/setup/pages/SetupPage";
 import { useAppStore } from "./store/useAppStore";
 import { esSesionValida } from "./utils/sesion";
+
+const App = lazy(() => import("./App"));
 
 export function AppRouter() {
 	const configurado = useAppStore((state) => state.configurado);
@@ -94,7 +95,15 @@ export function AppRouter() {
 				<Route element={<AuthGuard />}>
 					<Route
 						path="/*"
-						element={!configurado ? <Navigate to="/setup" replace /> : <App />}
+						element={
+							!configurado ? (
+								<Navigate to="/setup" replace />
+							) : (
+								<Suspense fallback={<DashboardSkeleton />}>
+									<App />
+								</Suspense>
+							)
+						}
 					/>
 				</Route>
 			</Routes>

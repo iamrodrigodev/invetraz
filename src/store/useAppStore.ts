@@ -34,8 +34,11 @@ const usuarioEmailCacheado =
 	typeof window !== "undefined" && sesionPreviaActiva
 		? localStorage.getItem("usuario_email")
 		: null;
+let verificacionEnCurso: Promise<void> | null = null;
+let revisionSesion = 0;
 
 function manejarExpiracionProactiva() {
+	revisionSesion += 1;
 	limpiarSesion("sesion_expirada");
 	useAppStore.setState({ autenticado: false, usuarioEmail: null });
 	useConfiguracionStore.getState().limpiar();
@@ -54,47 +57,50 @@ export const useAppStore = create<AppState>((set) => ({
 	usuarioEmail: usuarioEmailCacheado,
 	estadoVerificado: Boolean(sesionPreviaActiva || configuradoCacheado),
 	errorVerificacion: null,
-	verificarEstadoGlobal: async () => {
-		try {
-			const [esConfigurado, resAuth] = await Promise.all([
-				verificarEstadoSistema(),
-				verificarAutenticacion(),
-			]);
-			if (resAuth.autenticado) {
-				guardarSesion(undefined, resAuth.email);
-			} else {
-				const sesionEstabaActiva =
-					typeof window !== "undefined" &&
-					localStorage.getItem("sesion_activa") === "true";
-				if (sesionEstabaActiva) {
-					limpiarSesion("sesion_expirada");
+	verificarEstadoGlobal: () => {
+		if (verificacionEnCurso) return verificacionEnCurso;
+		const revisionInicial = revisionSesion;
+		verificacionEnCurso = (async () => {
+			try {
+				const habiaSesion = esSesionValida();
+				const resAuth = habiaSesion
+					? await verificarAutenticacion()
+					: { autenticado: false, email: null };
+				const esConfigurado = resAuth.autenticado
+					? true
+					: await verificarEstadoSistema();
+				if (revisionInicial !== revisionSesion) return;
+				if (resAuth.autenticado) {
+					guardarSesion(undefined, resAuth.email);
+					localStorage.setItem("sistema_configurado", "true");
 				} else {
-					limpiarSesion();
+					limpiarSesion(habiaSesion ? "sesion_expirada" : undefined);
 				}
+				set({
+					configurado: esConfigurado,
+					autenticado: resAuth.autenticado,
+					usuarioEmail: resAuth.autenticado ? (resAuth.email ?? null) : null,
+					estadoVerificado: true,
+					errorVerificacion: null,
+				});
+			} catch (error) {
+				if (revisionInicial !== revisionSesion) return;
+				set({
+					configurado: null,
+					estadoVerificado: true,
+					errorVerificacion:
+						error instanceof Error
+							? error.message
+							: "No se pudo verificar el estado del sistema",
+				});
+			} finally {
+				verificacionEnCurso = null;
 			}
-			set({
-				configurado: esConfigurado,
-				autenticado: resAuth.autenticado,
-				usuarioEmail:
-					resAuth.email ||
-					(typeof window !== "undefined"
-						? localStorage.getItem("usuario_email")
-						: null),
-				estadoVerificado: true,
-				errorVerificacion: null,
-			});
-		} catch (error) {
-			set({
-				configurado: null,
-				estadoVerificado: true,
-				errorVerificacion:
-					error instanceof Error
-						? error.message
-						: "No se pudo verificar el estado del sistema",
-			});
-		}
+		})();
+		return verificacionEnCurso;
 	},
 	setConfigurado: (valor: boolean) => {
+		revisionSesion += 1;
 		if (valor && typeof window !== "undefined") {
 			localStorage.setItem("sistema_configurado", "true");
 		}
@@ -105,6 +111,7 @@ export const useAppStore = create<AppState>((set) => ({
 		email?: string | null,
 		tokenAcceso?: string,
 	) => {
+		revisionSesion += 1;
 		if (valor) {
 			guardarSesion(tokenAcceso, email);
 			programarExpiracionAutomatica(manejarExpiracionProactiva);
@@ -117,6 +124,7 @@ export const useAppStore = create<AppState>((set) => ({
 		}));
 	},
 	cerrarSesion: async () => {
+		revisionSesion += 1;
 		try {
 			await logout();
 		} catch (_error) {}
