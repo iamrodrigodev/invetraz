@@ -50,7 +50,7 @@ public class ServicioDrivePlantillas {
         return limpia;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public CarpetaPlantillasRespuestaDto verificarCarpeta(String urlOId) {
         String folderId = extraerIdCarpeta(urlOId);
         if (folderId.isBlank()) {
@@ -94,6 +94,15 @@ public class ServicioDrivePlantillas {
         if (!"application/vnd.google-apps.folder".equals(carpetaGoogle.getMimeType())) {
             throw new ExcepcionDeNegocio(
                     "El enlace proporcionado no pertenece a una carpeta, sino a un archivo.");
+        }
+
+        var configOpt = configuracionRepository.findFirstByOrderByIdAsc();
+        if (configOpt.isPresent()) {
+            ConfiguracionSistema config = configOpt.get();
+            config.setGoogleDriveFolderId(folderId);
+            config.setGoogleDriveFolderName(carpetaGoogle.getName());
+            config.setDriveVerificado(true);
+            configuracionRepository.save(config);
         }
 
         return obtenerPlantillas(folderId, carpetaGoogle.getName());
@@ -150,7 +159,7 @@ public class ServicioDrivePlantillas {
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public CarpetaPlantillasRespuestaDto obtenerPlantillasConfiguradas() {
         var configOpt = configuracionRepository.findFirstByOrderByIdAsc();
         if (configOpt.isEmpty()
@@ -167,8 +176,14 @@ public class ServicioDrivePlantillas {
 
         ConfiguracionSistema config = configOpt.get();
         try {
-            return obtenerPlantillas(
-                    config.getGoogleDriveFolderId(), config.getGoogleDriveFolderName());
+            CarpetaPlantillasRespuestaDto res =
+                    obtenerPlantillas(
+                            config.getGoogleDriveFolderId(), config.getGoogleDriveFolderName());
+            if (!Boolean.TRUE.equals(config.getDriveVerificado())) {
+                config.setDriveVerificado(true);
+                configuracionRepository.save(config);
+            }
+            return res;
         } catch (ExcepcionDeNegocio e) {
             log.warn(
                     "La carpeta Drive configurada {} no pudo consultarse: {}",
