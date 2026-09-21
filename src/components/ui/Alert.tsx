@@ -23,21 +23,19 @@ export const Alert: React.FC<AlertProps> = ({
 }) => {
 	const config = {
 		error: {
-			estilos: "bg-red-50/90 border border-red-200 text-red-900 shadow-2xs",
+			estilos: "bg-red-50 border border-red-200 text-red-700",
 			icono: <AlertCircle size={18} className="shrink-0 text-red-600" />,
 		},
 		success: {
-			estilos:
-				"bg-emerald-50/90 border border-emerald-200 text-emerald-900 shadow-2xs",
+			estilos: "bg-emerald-50 border border-emerald-200 text-emerald-700",
 			icono: <CheckCircle2 size={18} className="shrink-0 text-emerald-600" />,
 		},
 		warning: {
-			estilos:
-				"bg-amber-50/90 border border-amber-200 text-amber-900 shadow-2xs",
+			estilos: "bg-amber-50 border border-amber-200 text-amber-800",
 			icono: <AlertTriangle size={18} className="shrink-0 text-amber-600" />,
 		},
 		info: {
-			estilos: "bg-blue-50/90 border border-blue-200 text-blue-900 shadow-2xs",
+			estilos: "bg-blue-50 border border-blue-200 text-blue-700",
 			icono: <Info size={18} className="shrink-0 text-blue-600" />,
 		},
 	}[variant];
