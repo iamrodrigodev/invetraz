@@ -4,7 +4,6 @@ import type React from "react";
 import { useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-	Alert,
 	Button,
 	DatePicker,
 	Input,
@@ -128,13 +127,6 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 				Complete la información necesaria para generar una actividad de
 				seguimiento.
 			</p>
-
-			{!configuracionValida && (
-				<Alert
-					variant="error"
-					message="No es posible generar actividades de seguimiento porque la configuración de Google Cloud o Google Drive no está completa o no ha sido verificada."
-				/>
-			)}
 
 			<TarjetaCarpetaVinculada
 				carpetaId={carpetaDrive.id}
@@ -340,30 +332,32 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 					</div>
 				</div>
 
-				<div className="flex items-center justify-end gap-3 pt-2">
-					<Button
-						type="button"
-						variant="ghost"
-						onClick={alCancelar}
-						className="font-medium text-slate-600 hover:text-slate-800"
-					>
-						<X size={16} className="mr-1.5" />
-						Cancelar
-					</Button>
-					<Button
-						type="submit"
-						variant="default"
-						disabled={!isValid || !esPlantillaValida || !configuracionValida}
-						title={
-							!configuracionValida
-								? "Debe completar y verificar la configuración antes de generar una actividad"
-								: undefined
-						}
-						className="font-semibold shadow-sm"
-					>
-						<Plus size={16} className="mr-1.5" />
-						Generar
-					</Button>
+				<div className="flex flex-col items-end gap-1.5 pt-2">
+					<div className="flex items-center justify-end gap-3">
+						<Button
+							type="button"
+							variant="ghost"
+							onClick={alCancelar}
+							className="font-medium text-slate-600 hover:text-slate-800"
+						>
+							<X size={16} className="mr-1.5" />
+							Cancelar
+						</Button>
+						<Button
+							type="submit"
+							variant="default"
+							disabled={!isValid || !esPlantillaValida || !configuracionValida}
+							className="font-semibold shadow-sm"
+						>
+							<Plus size={16} className="mr-1.5" />
+							Generar
+						</Button>
+					</div>
+					{!configuracionValida && (
+						<p className="text-xs text-red-600 font-medium text-right">
+							La configuración no está lista para generar actividades
+						</p>
+					)}
 				</div>
 			</form>
 		</div>
