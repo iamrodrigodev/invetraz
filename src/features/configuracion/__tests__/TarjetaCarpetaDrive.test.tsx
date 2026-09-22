@@ -17,11 +17,9 @@ describe("TarjetaCarpetaDrive", () => {
 			screen.queryByText(/tampoco lo estarán en las plantillas/i),
 		).toBeNull();
 
-		// No debe decir 'Conexión activa con Google' prematuramente mientras Google Cloud verifica
 		expect(screen.queryByText("Conexión activa con Google")).toBeNull();
 		expect(screen.getByText("Verificando conexión...")).toBeDefined();
 
-		// El botón de verificación debe indicar que espera a Google Cloud
 		const botonVerificar = screen.getByRole("button", {
 			name: /Verificar Conexión/i,
 		});
@@ -44,7 +42,6 @@ describe("TarjetaCarpetaDrive", () => {
 			screen.getByText(/tampoco lo estarán en las plantillas/i),
 		).toBeDefined();
 
-		// Preserva el nombre de la carpeta y muestra el badge 'No se puede usar'
 		expect(screen.getByText("Mis Plantillas")).toBeDefined();
 		const badgesNoDisponible = screen.getAllByText("No se puede usar");
 		expect(badgesNoDisponible.length).toBeGreaterThan(0);

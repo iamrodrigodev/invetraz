@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { logout, verificarAutenticacion } from "../features/auth/api/auth.api";
-import { useConfiguracionStore } from "../features/configuracion/store/useConfiguracionStore";
 import { verificarEstadoSistema } from "../features/setup/api/setup.api";
+import { ejecutarLimpiezaSesion } from "../utils/eventosSesion";
 import { alExpirarSesion } from "../utils/fetch";
 import {
 	esSesionValida,
@@ -41,7 +41,7 @@ function manejarExpiracionProactiva() {
 	revisionSesion += 1;
 	limpiarSesion("sesion_expirada");
 	useAppStore.setState({ autenticado: false, usuarioEmail: null });
-	useConfiguracionStore.getState().limpiar();
+	ejecutarLimpiezaSesion();
 	if (typeof window !== "undefined" && window.location.pathname !== "/login") {
 		window.location.replace("/login");
 	}
@@ -129,7 +129,7 @@ export const useAppStore = create<AppState>((set) => ({
 			await logout();
 		} catch (_error) {}
 		limpiarSesion();
-		useConfiguracionStore.getState().limpiar();
+		ejecutarLimpiezaSesion();
 		set({ autenticado: false, usuarioEmail: null });
 	},
 }));

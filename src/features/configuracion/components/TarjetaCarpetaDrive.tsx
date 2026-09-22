@@ -1,9 +1,8 @@
 import { ExternalLink, FolderGit2 } from "lucide-react";
 import type React from "react";
-import type { EstadoCarpetaDrive } from "../../../components/drive/estadoCarpetaDrive";
-import { TarjetaCarpetaVinculada } from "../../../components/drive/TarjetaCarpetaVinculada";
 import { Alert } from "../../../components/ui";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
+import { type EstadoCarpetaDrive, TarjetaCarpetaVinculada } from "../../drive";
 import { useCarpetaDriveConfig } from "../hooks/useCarpetaDriveConfig";
 import { CampoCredencial } from "./CampoCredencial";
 import type { TipoEstadoConexion } from "./EstadoConexionBadge";

@@ -1,12 +1,4 @@
-import { BarChart3 } from "lucide-react";
-import { ModuloEnConstruccion } from "../components/ui";
-
-export function ReportesPage() {
-	return (
-		<div className="flex h-full w-full flex-1 flex-col">
-			<ModuloEnConstruccion titulo="Reportes" icono={BarChart3} />
-		</div>
-	);
-}
-
-export default ReportesPage;
+export {
+	default,
+	ReportesPage,
+} from "../features/reportes/pages/ReportesPage";

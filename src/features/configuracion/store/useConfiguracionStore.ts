@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { registrarLimpiadorSesion } from "../../../utils/eventosSesion";
 import {
 	actualizarConfiguracion,
 	obtenerConfiguracion,
@@ -201,3 +202,7 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 		});
 	},
 }));
+
+registrarLimpiadorSesion(() => {
+	useConfiguracionStore.getState().limpiar();
+});

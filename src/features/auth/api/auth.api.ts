@@ -4,18 +4,25 @@ import {
 	LoginRespuestaSchema,
 	VerificarAutenticacionRespuestaSchema,
 } from "../../../schemas/api.schemas";
-import { leerDatos } from "../../../utils/api";
-import { extraerMensajeError, fetchSeguro } from "../../../utils/fetch";
+import {
+	ejecutarAccion,
+	ejecutarPeticion,
+	leerDatos,
+} from "../../../utils/api";
+import { fetchSeguro } from "../../../utils/fetch";
 import type { LoginPeticion } from "../types/LoginPeticion";
 
 export async function login(peticion: LoginPeticion): Promise<LoginRespuesta> {
-	const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/auth/login`, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify(peticion),
-	});
-
-	return leerDatos(res, LoginRespuestaSchema, "Credenciales inválidas");
+	return ejecutarPeticion(
+		`${entorno.VITE_API_BASE_URL}/auth/login`,
+		{
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(peticion),
+		},
+		LoginRespuestaSchema,
+		"Credenciales inválidas",
+	);
 }
 
 export interface ResultadoAutenticacion {
@@ -28,10 +35,6 @@ export async function verificarAutenticacion(): Promise<ResultadoAutenticacion> 
 		method: "GET",
 	});
 	if (res.status === 401) return { autenticado: false };
-	if (!res.ok)
-		throw new Error(
-			await extraerMensajeError(res, "No se pudo verificar la sesión"),
-		);
 
 	const datos = await leerDatos(
 		res,
@@ -45,48 +48,36 @@ export async function verificarAutenticacion(): Promise<ResultadoAutenticacion> 
 }
 
 export async function logout(): Promise<void> {
-	await fetchSeguro(`${entorno.VITE_API_BASE_URL}/auth/logout`, {
-		method: "POST",
-	});
+	return ejecutarAccion(
+		`${entorno.VITE_API_BASE_URL}/auth/logout`,
+		{ method: "POST" },
+		"Error al cerrar sesión",
+	);
 }
 
 export async function verificarPasswordActual(password: string): Promise<void> {
-	const res = await fetchSeguro(
+	return ejecutarAccion(
 		`${entorno.VITE_API_BASE_URL}/auth/verificar-password`,
 		{
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ password }),
 		},
+		"La contraseña actual es incorrecta",
 	);
-
-	if (!res.ok) {
-		const msj = await extraerMensajeError(
-			res,
-			"La contraseña actual es incorrecta",
-		);
-		throw new Error(msj);
-	}
 }
 
 export async function cambiarPassword(
 	passwordActual: string,
 	passwordNueva: string,
 ): Promise<void> {
-	const res = await fetchSeguro(
+	return ejecutarAccion(
 		`${entorno.VITE_API_BASE_URL}/auth/cambiar-password`,
 		{
 			method: "PUT",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ passwordActual, passwordNueva }),
 		},
+		"Hubo un error al actualizar la contraseña",
 	);
-
-	if (!res.ok) {
-		const msj = await extraerMensajeError(
-			res,
-			"Hubo un error al actualizar la contraseña",
-		);
-		throw new Error(msj);
-	}
 }

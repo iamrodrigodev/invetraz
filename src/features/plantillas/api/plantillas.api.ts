@@ -1,6 +1,5 @@
 import { entorno } from "../../../config/entorno";
-import { leerDatos } from "../../../utils/api";
-import { fetchSeguro } from "../../../utils/fetch";
+import { ejecutarPeticion } from "../../../utils/api";
 import {
 	type CarpetaPlantillasRespuesta,
 	CarpetaPlantillasRespuestaSchema,
@@ -8,12 +7,9 @@ import {
 } from "../types/plantillas.types";
 
 export async function obtenerPlantillas(): Promise<CarpetaPlantillasRespuesta> {
-	const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/plantillas`, {
-		method: "GET",
-	});
-
-	return leerDatos(
-		res,
+	return ejecutarPeticion(
+		`${entorno.VITE_API_BASE_URL}/plantillas`,
+		{ method: "GET" },
 		CarpetaPlantillasRespuestaSchema,
 		"Error al consultar las plantillas de seguimiento",
 	);
@@ -22,19 +18,13 @@ export async function obtenerPlantillas(): Promise<CarpetaPlantillasRespuesta> {
 export async function verificarCarpetaDrive(
 	peticion: VincularCarpetaPeticion,
 ): Promise<CarpetaPlantillasRespuesta> {
-	const res = await fetchSeguro(
+	return ejecutarPeticion(
 		`${entorno.VITE_API_BASE_URL}/plantillas/verificar`,
 		{
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
+			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(peticion),
 		},
-	);
-
-	return leerDatos(
-		res,
 		CarpetaPlantillasRespuestaSchema,
 		"Error al verificar la carpeta de Google Drive",
 	);
@@ -43,19 +33,13 @@ export async function verificarCarpetaDrive(
 export async function vincularCarpetaDrive(
 	peticion: VincularCarpetaPeticion,
 ): Promise<CarpetaPlantillasRespuesta> {
-	const res = await fetchSeguro(
+	return ejecutarPeticion(
 		`${entorno.VITE_API_BASE_URL}/plantillas/carpeta`,
 		{
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
+			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(peticion),
 		},
-	);
-
-	return leerDatos(
-		res,
 		CarpetaPlantillasRespuestaSchema,
 		"Error al vincular la carpeta de Google Drive",
 	);

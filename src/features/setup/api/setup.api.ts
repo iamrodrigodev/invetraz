@@ -1,13 +1,12 @@
 import { entorno } from "../../../config/entorno";
 import { EstadoSetupRespuestaSchema } from "../../../schemas/api.schemas";
-import { leerDatos } from "../../../utils/api";
-import { extraerMensajeError, fetchSeguro } from "../../../utils/fetch";
+import { ejecutarAccion, ejecutarPeticion } from "../../../utils/api";
 import type { CrearAdminPeticion } from "../types/CrearAdminPeticion";
 
 export async function verificarEstadoSistema(): Promise<boolean> {
-	const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/setup/estado`);
-	const datos = await leerDatos(
-		res,
+	const datos = await ejecutarPeticion(
+		`${entorno.VITE_API_BASE_URL}/setup/estado`,
+		{ method: "GET" },
 		EstadoSetupRespuestaSchema,
 		"No se pudo consultar el estado del sistema",
 	);
@@ -21,20 +20,13 @@ export async function verificarEstadoSistema(): Promise<boolean> {
 export async function crearAdmin(
 	peticion: Omit<CrearAdminPeticion, "confirmPassword">,
 ): Promise<void> {
-	const res = await fetchSeguro(
+	return ejecutarAccion(
 		`${entorno.VITE_API_BASE_URL}/setup/crear-admin`,
 		{
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(peticion),
 		},
+		"Error al crear la cuenta de administrador",
 	);
-
-	if (!res.ok) {
-		const msj = await extraerMensajeError(
-			res,
-			"Error al crear la cuenta de administrador",
-		);
-		throw new Error(msj);
-	}
 }

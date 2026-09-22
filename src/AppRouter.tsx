@@ -7,7 +7,26 @@ import { SetupPage } from "./features/setup/pages/SetupPage";
 import { useAppStore } from "./store/useAppStore";
 import { esSesionValida } from "./utils/sesion";
 
-const App = lazy(() => import("./App"));
+const DashboardLayout = lazy(() =>
+	import("./layouts/DashboardLayout").then((m) => ({
+		default: m.DashboardLayout,
+	})),
+);
+const ActividadesSeguimientoPage = lazy(
+	() => import("./features/actividades/pages/ActividadesSeguimientoPage"),
+);
+const PlantillasSeguimientoPage = lazy(
+	() => import("./features/plantillas/pages/PlantillasSeguimientoPage"),
+);
+const ConfiguracionPage = lazy(
+	() => import("./features/configuracion/pages/ConfiguracionPage"),
+);
+const ReportesPage = lazy(
+	() => import("./features/reportes/pages/ReportesPage"),
+);
+const DocumentacionPage = lazy(
+	() => import("./features/documentacion/pages/DocumentacionPage"),
+);
 
 export function AppRouter() {
 	const configurado = useAppStore((state) => state.configurado);
@@ -26,18 +45,29 @@ export function AppRouter() {
 		return (
 			<div
 				role="alert"
-				className="flex min-h-screen flex-col items-center justify-center gap-4 p-6 text-center"
+				className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-50 p-6 text-center text-slate-800"
 			>
-				<p>
+				<p className="max-w-md text-slate-600 text-sm">
 					{errorVerificacion || "No se pudo verificar el estado del sistema."}
 				</p>
-				<button
-					type="button"
-					className="rounded-lg bg-primary px-4 py-2 text-white"
-					onClick={verificarEstadoGlobal}
-				>
-					Reintentar
-				</button>
+				<div className="flex flex-wrap items-center justify-center gap-3">
+					<button
+						type="button"
+						className="cursor-pointer rounded-lg bg-primary px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-primary-700"
+						onClick={verificarEstadoGlobal}
+					>
+						Reintentar
+					</button>
+					<button
+						type="button"
+						className="cursor-pointer rounded-lg border border-slate-300 bg-white px-4 py-2 font-medium text-slate-700 text-sm transition-colors hover:bg-slate-100"
+						onClick={() => {
+							useAppStore.setState({ configurado: true });
+						}}
+					>
+						Continuar en Modo Offline (Demo)
+					</button>
+				</div>
 			</div>
 		);
 	}
@@ -94,17 +124,59 @@ export function AppRouter() {
 
 				<Route element={<AuthGuard />}>
 					<Route
-						path="/*"
 						element={
 							!configurado ? (
 								<Navigate to="/setup" replace />
 							) : (
 								<Suspense fallback={<DashboardSkeleton />}>
-									<App />
+									<DashboardLayout />
 								</Suspense>
 							)
 						}
-					/>
+					>
+						<Route index element={<Navigate to="/actividades" replace />} />
+						<Route
+							path="actividades"
+							element={
+								<Suspense fallback={<DashboardSkeleton />}>
+									<ActividadesSeguimientoPage />
+								</Suspense>
+							}
+						/>
+						<Route
+							path="plantillas"
+							element={
+								<Suspense fallback={<DashboardSkeleton />}>
+									<PlantillasSeguimientoPage />
+								</Suspense>
+							}
+						/>
+						<Route
+							path="configuracion"
+							element={
+								<Suspense fallback={<DashboardSkeleton />}>
+									<ConfiguracionPage />
+								</Suspense>
+							}
+						/>
+						<Route
+							path="reportes"
+							element={
+								<Suspense fallback={<DashboardSkeleton />}>
+									<ReportesPage />
+								</Suspense>
+							}
+						/>
+						<Route
+							path="documentacion"
+							element={
+								<Suspense fallback={<DashboardSkeleton />}>
+									<DocumentacionPage />
+								</Suspense>
+							}
+						/>
+						<Route path="*" element={<Navigate to="/actividades" replace />} />
+					</Route>
 				</Route>
 			</Routes>
 		</BrowserRouter>

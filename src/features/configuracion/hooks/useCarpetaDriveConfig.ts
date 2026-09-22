@@ -1,7 +1,7 @@
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { resolverVistaCarpetaDrive } from "../../../components/drive/estadoCarpetaDrive";
 import { VALIDATION_LIMITS } from "../../../constants/validations";
+import { resolverVistaCarpetaDrive } from "../../drive";
 import {
 	verificarCarpetaDrive,
 	vincularCarpetaDrive,

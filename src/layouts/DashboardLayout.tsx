@@ -1,23 +1,24 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Sidebar, TopBar } from "../components/navigation";
-import type { ModuloId } from "../components/navigation/types";
+import { type ModuloId, ModuloIdSchema } from "../components/navigation/types";
 import { ModalConfirmacion } from "../components/ui";
 import { useAppStore } from "../store/useAppStore";
 import { cn } from "../utils/cn";
 
 export interface DashboardLayoutProps {
-	moduloActivo: ModuloId;
-	alCambiarModulo: (modulo: ModuloId) => void;
-	children: React.ReactNode;
+	moduloActivo?: ModuloId;
+	alCambiarModulo?: (modulo: ModuloId) => void;
+	children?: React.ReactNode;
 }
 
 export function DashboardLayout({
 	moduloActivo,
 	alCambiarModulo,
 	children,
-}: DashboardLayoutProps) {
+}: DashboardLayoutProps = {}) {
 	const navigate = useNavigate();
+	const { pathname } = useLocation();
 	const cerrarSesionStore = useAppStore((state) => state.cerrarSesion);
 	const [menuLateralAbierto, setMenuLateralAbierto] = useState(false);
 	const [estaColapsado, setEstaColapsado] = useState(() => {
@@ -27,12 +28,24 @@ export function DashboardLayout({
 		useState(false);
 	const [cerrandoSesion, setCerrandoSesion] = useState(false);
 
+	const moduloRuta = pathname.replace(/^\//, "").split("/")[0];
+	const moduloActivoCalculado = ModuloIdSchema.catch("actividades").parse(
+		moduloRuta || "actividades",
+	);
+	const moduloActual = moduloActivo ?? moduloActivoCalculado;
+
 	useEffect(() => {
 		localStorage.setItem("sidebar_colapsado", String(estaColapsado));
 	}, [estaColapsado]);
 
 	const manejarSeleccion = (id: ModuloId) => {
-		if (id !== moduloActivo) alCambiarModulo(id);
+		if (id !== moduloActual) {
+			if (alCambiarModulo) {
+				alCambiarModulo(id);
+			} else {
+				navigate(`/${id}`);
+			}
+		}
 		setMenuLateralAbierto(false);
 	};
 
@@ -66,7 +79,7 @@ export function DashboardLayout({
 				)}
 			>
 				<Sidebar
-					moduloActivo={moduloActivo}
+					moduloActivo={moduloActual}
 					alSeleccionarModulo={manejarSeleccion}
 					estaColapsado={estaColapsado}
 					alAlternarColapso={() => setEstaColapsado((prev) => !prev)}
@@ -77,13 +90,15 @@ export function DashboardLayout({
 
 			<div className="flex min-w-0 flex-1 flex-col overflow-hidden">
 				<TopBar
-					moduloActivo={moduloActivo}
+					moduloActivo={moduloActual}
 					alAbrirMenuMovil={() => setMenuLateralAbierto(true)}
 					alSolicitarCerrarSesion={() => setModalCerrarSesionAbierto(true)}
 				/>
 
 				<main className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto p-4 sm:p-6 pb-12">
-					<div className="flex min-h-0 w-full flex-1 flex-col">{children}</div>
+					<div className="flex min-h-0 w-full flex-1 flex-col">
+						{children ?? <Outlet />}
+					</div>
 				</main>
 			</div>
 

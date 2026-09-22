@@ -2,13 +2,13 @@ import { FileSpreadsheet, FolderGit2, RefreshCw, Settings } from "lucide-react";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Alert, Button, Card, CardContent } from "../../../components/ui";
+import { useConfiguracionStore } from "../../configuracion/store/useConfiguracionStore";
 import {
 	type EstadoCarpetaDrive,
 	resolverVistaCarpetaDrive,
-} from "../../../components/drive/estadoCarpetaDrive";
-import { TarjetaCarpetaVinculada } from "../../../components/drive/TarjetaCarpetaVinculada";
-import { Alert, Button, Card, CardContent } from "../../../components/ui";
-import { useConfiguracionStore } from "../../configuracion/store/useConfiguracionStore";
+	TarjetaCarpetaVinculada,
+} from "../../drive";
 import { obtenerPlantillas } from "../api/plantillas.api";
 import { PiePaginacionPlantillas } from "../components/PiePaginacionPlantillas";
 import { PlantillasSkeleton } from "../components/PlantillasSkeleton";
