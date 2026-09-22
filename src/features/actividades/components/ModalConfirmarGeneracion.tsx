@@ -63,13 +63,11 @@ export const ModalConfirmarGeneracion: React.FC<
 					Revisa la información antes de generar la actividad de seguimiento.
 				</p>
 
-				<div className="rounded-2xl border border-slate-200/90 bg-white p-4 space-y-3.5 shadow-xs">
+				<div className="space-y-3.5 pt-1">
 					<div className="flex items-start gap-3">
-						<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary">
-							<GraduationCap size={16} />
-						</div>
+						<GraduationCap size={18} className="shrink-0 text-primary mt-0.5" />
 						<div className="min-w-0 flex-1">
-							<span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+							<span className="block text-xs font-medium text-slate-500">
 								Clase
 							</span>
 							<span className="text-sm font-semibold text-slate-900 break-words leading-snug">
@@ -79,11 +77,9 @@ export const ModalConfirmarGeneracion: React.FC<
 					</div>
 
 					<div className="flex items-start gap-3 pt-3 border-t border-slate-100">
-						<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary">
-							<BookOpen size={16} />
-						</div>
+						<BookOpen size={18} className="shrink-0 text-primary mt-0.5" />
 						<div className="min-w-0 flex-1">
-							<span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+							<span className="block text-xs font-medium text-slate-500">
 								Título
 							</span>
 							<span className="text-sm font-semibold text-slate-900 break-words leading-snug">
@@ -93,11 +89,12 @@ export const ModalConfirmarGeneracion: React.FC<
 					</div>
 
 					<div className="flex items-start gap-3 pt-3 border-t border-slate-100">
-						<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
-							<FileSpreadsheet size={16} />
-						</div>
+						<FileSpreadsheet
+							size={18}
+							className="shrink-0 text-emerald-600 mt-0.5"
+						/>
 						<div className="min-w-0 flex-1 space-y-1">
-							<span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+							<span className="block text-xs font-medium text-slate-500">
 								Plantilla de seguimiento
 							</span>
 							<div className="flex flex-wrap items-center gap-2">
@@ -116,11 +113,9 @@ export const ModalConfirmarGeneracion: React.FC<
 					</div>
 
 					<div className="flex items-start gap-3 pt-3 border-t border-slate-100">
-						<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-primary">
-							<Calendar size={16} />
-						</div>
+						<Calendar size={18} className="shrink-0 text-primary mt-0.5" />
 						<div className="min-w-0 flex-1">
-							<span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+							<span className="block text-xs font-medium text-slate-500">
 								Fecha de vencimiento
 							</span>
 							<div className="flex items-center gap-1.5 text-sm font-semibold text-slate-900">
@@ -134,11 +129,9 @@ export const ModalConfirmarGeneracion: React.FC<
 
 					{resumen.nombreTema && (
 						<div className="flex items-start gap-3 pt-3 border-t border-slate-100">
-							<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
-								<Tag size={16} />
-							</div>
+							<Tag size={18} className="shrink-0 text-slate-500 mt-0.5" />
 							<div className="min-w-0 flex-1">
-								<span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+								<span className="block text-xs font-medium text-slate-500">
 									Tema
 								</span>
 								<span className="text-sm font-medium text-slate-800">
@@ -149,20 +142,18 @@ export const ModalConfirmarGeneracion: React.FC<
 					)}
 
 					{resumen.descripcion && (
-						<div className="pt-3 border-t border-slate-100">
-							<div className="rounded-xl border border-slate-200/70 bg-slate-50/70 p-3 space-y-1">
-								<span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-									Descripción
-								</span>
-								<p className="text-xs text-slate-700 leading-relaxed whitespace-pre-wrap max-h-24 overflow-y-auto">
-									{resumen.descripcion}
-								</p>
-							</div>
+						<div className="pt-3 border-t border-slate-100 space-y-1">
+							<span className="block text-xs font-medium text-slate-500">
+								Descripción
+							</span>
+							<p className="text-xs text-slate-700 leading-relaxed whitespace-pre-wrap max-h-24 overflow-y-auto bg-slate-50 p-2.5 rounded-lg border border-slate-200/60 font-sans">
+								{resumen.descripcion}
+							</p>
 						</div>
 					)}
 				</div>
 
-				<div className="flex items-center justify-end gap-3 pt-2">
+				<div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
 					<Button
 						type="button"
 						variant="ghost"
