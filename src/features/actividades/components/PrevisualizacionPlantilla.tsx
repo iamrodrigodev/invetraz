@@ -40,11 +40,12 @@ export const PrevisualizacionPlantilla: React.FC<
 	}
 
 	return (
-		<div className="rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-3 space-y-2.5">
+		<div className="rounded-xl border border-slate-200/80 bg-white p-3 space-y-2.5">
 			<div className="flex items-start gap-2.5">
-				<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100/80 text-emerald-700 mt-0.5">
-					<FileSpreadsheet size={16} />
-				</div>
+				<FileSpreadsheet
+					size={18}
+					className="shrink-0 text-emerald-600 mt-0.5"
+				/>
 				<div className="min-w-0 flex-1 space-y-1">
 					<div className="flex flex-wrap items-center gap-1.5">
 						<span
