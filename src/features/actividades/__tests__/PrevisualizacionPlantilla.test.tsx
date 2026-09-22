@@ -25,7 +25,7 @@ describe("PrevisualizacionPlantilla", () => {
 
 		expect(screen.getByText("Formato A.xlsx")).toBeDefined();
 		expect(screen.getByText("Estructura válida")).toBeDefined();
-		expect(screen.getByText("Ver plantilla en Google Sheets")).toBeDefined();
+		expect(screen.getByText("Ver plantilla")).toBeDefined();
 		expect(screen.getByText(/3 veces/i)).toBeDefined();
 	});
 
@@ -58,7 +58,7 @@ describe("PrevisualizacionPlantilla", () => {
 		expect(
 			screen.getByText("Falta la hoja principal Matriz de Seguimiento."),
 		).toBeDefined();
-		expect(screen.getByText("Ver archivo en Sheets")).toBeDefined();
+		expect(screen.getByText("Ver plantilla")).toBeDefined();
 		expect(screen.getByRole("alert")).toBeDefined();
 	});
 });
