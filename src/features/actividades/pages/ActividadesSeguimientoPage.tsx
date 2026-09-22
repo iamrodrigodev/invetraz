@@ -7,6 +7,7 @@ import {
 	useConfiguracionStore,
 } from "../../configuracion/store/useConfiguracionStore";
 import { ModalGenerarActividad } from "../components/ModalGenerarActividad";
+import { usePlantillasSeguimientoStore } from "../store/usePlantillasSeguimientoStore";
 
 export function ActividadesSeguimientoPage() {
 	const {
@@ -15,20 +16,20 @@ export function ActividadesSeguimientoPage() {
 		cargado: configuracionCargada,
 		cargarConfiguracion,
 	} = useConfiguracionStore();
+	const { cargarPlantillas } = usePlantillasSeguimientoStore();
 	const [cargando, setCargando] = useState(!configuracionCargada);
 	const [modalGenerarAbierto, setModalGenerarAbierto] = useState(false);
 
 	useEffect(() => {
 		let montado = true;
 		const iniciar = async () => {
-			if (!configuracionCargada) {
-				try {
-					await Promise.all([
-						cargarConfiguracion(),
-						new Promise((resolve) => setTimeout(resolve, 200)),
-					]);
-				} catch {}
-			}
+			try {
+				await Promise.all([
+					!configuracionCargada ? cargarConfiguracion() : Promise.resolve(),
+					cargarPlantillas().catch(() => []),
+					new Promise((resolve) => setTimeout(resolve, 200)),
+				]);
+			} catch {}
 			if (montado) {
 				setCargando(false);
 			}
@@ -37,7 +38,7 @@ export function ActividadesSeguimientoPage() {
 		return () => {
 			montado = false;
 		};
-	}, [configuracionCargada, cargarConfiguracion]);
+	}, [configuracionCargada, cargarConfiguracion, cargarPlantillas]);
 
 	if (cargando) {
 		return <ActividadesSeguimientoSkeleton />;

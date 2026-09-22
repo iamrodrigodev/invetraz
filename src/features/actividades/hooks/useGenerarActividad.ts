@@ -3,16 +3,15 @@ import {
 	esConfiguracionListaParaActividades,
 	useConfiguracionStore,
 } from "../../configuracion/store/useConfiguracionStore";
-import { obtenerPlantillasParaFormulario } from "../api/actividades.api";
 import {
 	DATOS_PRUEBA_CLASES,
 	DATOS_PRUEBA_TEMAS,
 	simularGeneracionActividad,
 } from "../mocks/actividadesCascaron.mock";
+import { usePlantillasSeguimientoStore } from "../store/usePlantillasSeguimientoStore";
 import type {
 	ClaseDocente,
 	FormGenerarActividadValores,
-	PlantillaSeguimientoOpcion,
 	TemaClase,
 } from "../types/actividades.types";
 
@@ -30,27 +29,18 @@ export function useGenerarActividad(activo = false) {
 		cargarConfiguracion,
 	} = useConfiguracionStore();
 
+	const {
+		plantillas,
+		cargando: cargandoPlantillas,
+		cargado: plantillasCargadas,
+		cargarPlantillas,
+	} = usePlantillasSeguimientoStore();
+
 	const [clases] = useState<ClaseDocente[]>(DATOS_PRUEBA_CLASES);
-	const [plantillas, setPlantillas] = useState<PlantillaSeguimientoOpcion[]>(
-		[],
-	);
 	const [temas, setTemas] = useState<TemaClase[]>([]);
 	const [cargandoClases] = useState(false);
-	const [cargandoPlantillas, setCargandoPlantillas] = useState(false);
 	const [cargandoTemas, setCargandoTemas] = useState(false);
 	const [generando, setGenerando] = useState(false);
-
-	const cargarPlantillas = useCallback(async () => {
-		setCargandoPlantillas(true);
-		try {
-			const res = await obtenerPlantillasParaFormulario();
-			setPlantillas(res);
-		} catch {
-			setPlantillas([]);
-		} finally {
-			setCargandoPlantillas(false);
-		}
-	}, []);
 
 	useEffect(() => {
 		if (!activo) return;
@@ -59,12 +49,16 @@ export function useGenerarActividad(activo = false) {
 			cargarConfiguracion().catch(() => {});
 		}
 
-		cargarPlantillas().catch(() => {});
+		if (!plantillasCargadas && !cargandoPlantillas) {
+			cargarPlantillas().catch(() => {});
+		}
 	}, [
 		activo,
 		configuracionCargada,
 		configuracionCargando,
 		cargarConfiguracion,
+		plantillasCargadas,
+		cargandoPlantillas,
 		cargarPlantillas,
 	]);
 
