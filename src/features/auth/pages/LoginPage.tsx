@@ -40,7 +40,7 @@ export function LoginPage() {
 				data.email.trim().toLowerCase(),
 				respuesta.tokenAcceso,
 			);
-			navigate("/", { replace: true });
+			navigate("/actividades", { replace: true });
 		} catch (error) {
 			setErrorApi(
 				error instanceof Error ? error.message : "Credenciales inválidas",

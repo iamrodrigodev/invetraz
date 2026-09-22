@@ -1,8 +1,7 @@
 import type { ModuloId } from "./types";
 
 const CARGADORES_MODULOS: Record<ModuloId, () => Promise<unknown>> = {
-	actividades: () =>
-		import("../../features/actividades/pages/ActividadesSeguimientoPage"),
+	actividades: async () => {},
 	plantillas: () =>
 		import("../../features/plantillas/pages/PlantillasSeguimientoPage"),
 	configuracion: () =>

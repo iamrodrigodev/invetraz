@@ -1,20 +1,14 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthGuard } from "./components/guards/AuthGuard";
 import { AuthCardSkeleton, DashboardSkeleton } from "./components/ui";
+import { ActividadesSeguimientoPage } from "./features/actividades/pages/ActividadesSeguimientoPage";
 import { LoginPage } from "./features/auth/pages/LoginPage";
 import { SetupPage } from "./features/setup/pages/SetupPage";
+import { DashboardLayout } from "./layouts/DashboardLayout";
 import { useAppStore } from "./store/useAppStore";
 import { esSesionValida } from "./utils/sesion";
 
-const DashboardLayout = lazy(() =>
-	import("./layouts/DashboardLayout").then((m) => ({
-		default: m.DashboardLayout,
-	})),
-);
-const ActividadesSeguimientoPage = lazy(
-	() => import("./features/actividades/pages/ActividadesSeguimientoPage"),
-);
 const PlantillasSeguimientoPage = lazy(
 	() => import("./features/plantillas/pages/PlantillasSeguimientoPage"),
 );
@@ -103,7 +97,7 @@ export function AppRouter() {
 					path="/setup"
 					element={
 						configurado ? (
-							<Navigate to={autenticado ? "/" : "/login"} replace />
+							<Navigate to={autenticado ? "/actividades" : "/login"} replace />
 						) : (
 							<SetupPage />
 						)
@@ -113,7 +107,7 @@ export function AppRouter() {
 					path="/login"
 					element={
 						autenticado ? (
-							<Navigate to="/" replace />
+							<Navigate to="/actividades" replace />
 						) : !configurado ? (
 							<Navigate to="/setup" replace />
 						) : (
@@ -128,13 +122,11 @@ export function AppRouter() {
 							!configurado ? (
 								<Navigate to="/setup" replace />
 							) : (
-								<Suspense fallback={<DashboardSkeleton />}>
-									<DashboardLayout />
-								</Suspense>
+								<DashboardLayout />
 							)
 						}
 					>
-						<Route index element={<Navigate to="/actividades" replace />} />
+						<Route index element={<ActividadesSeguimientoPage />} />
 						<Route
 							path="actividades"
 							element={<ActividadesSeguimientoPage />}
