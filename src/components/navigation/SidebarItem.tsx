@@ -1,4 +1,5 @@
 import { cn } from "../../utils/cn";
+import { precargarModulo } from "./precargaModulos";
 import type { ItemNavegacion } from "./types";
 
 export interface SidebarItemProps {
@@ -24,6 +25,7 @@ export function SidebarItem({
 			<button
 				type="button"
 				onClick={alHacerClic}
+				onMouseEnter={() => precargarModulo(item.id)}
 				aria-label={item.titulo}
 				aria-current={esActivo ? "page" : undefined}
 				className={cn(

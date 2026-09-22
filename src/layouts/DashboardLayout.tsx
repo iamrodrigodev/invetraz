@@ -1,6 +1,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Sidebar, TopBar } from "../components/navigation";
+import { precargarTodosLosModulos } from "../components/navigation/precargaModulos";
 import { type ModuloId, ModuloIdSchema } from "../components/navigation/types";
 import { ModalConfirmacion, ModuloContenidoSkeleton } from "../components/ui";
 import { useAppStore } from "../store/useAppStore";
@@ -37,6 +38,13 @@ export function DashboardLayout({
 	useEffect(() => {
 		localStorage.setItem("sidebar_colapsado", String(estaColapsado));
 	}, [estaColapsado]);
+
+	useEffect(() => {
+		const temporizador = setTimeout(() => {
+			precargarTodosLosModulos();
+		}, 100);
+		return () => clearTimeout(temporizador);
+	}, []);
 
 	const manejarSeleccion = (id: ModuloId) => {
 		if (id !== moduloActual) {
