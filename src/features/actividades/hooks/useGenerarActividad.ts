@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { useConfiguracionStore } from "../../configuracion/store/useConfiguracionStore";
+import {
+	esConfiguracionListaParaActividades,
+	useConfiguracionStore,
+} from "../../configuracion/store/useConfiguracionStore";
 import {
 	DATOS_PRUEBA_CLASES,
 	DATOS_PRUEBA_PLANTILLAS,
@@ -21,6 +24,7 @@ export interface CarpetaDriveInfo {
 export function useGenerarActividad(activo = false) {
 	const {
 		credenciales,
+		estadoConexion,
 		cargado: configuracionCargada,
 		cargando: configuracionCargando,
 		cargarConfiguracion,
@@ -81,8 +85,16 @@ export function useGenerarActividad(activo = false) {
 		return () => clearTimeout(timerTemas);
 	}, []);
 
+	const configuracionValida = esConfiguracionListaParaActividades(
+		credenciales,
+		estadoConexion,
+	);
+
 	const ejecutarGeneracion = useCallback(
 		async (datos: FormGenerarActividadValores): Promise<boolean> => {
+			if (!configuracionValida) {
+				return false;
+			}
 			setGenerando(true);
 			try {
 				return await simularGeneracionActividad(datos);
@@ -90,7 +102,7 @@ export function useGenerarActividad(activo = false) {
 				setGenerando(false);
 			}
 		},
-		[],
+		[configuracionValida],
 	);
 
 	const carpetaDrive: CarpetaDriveInfo = {
@@ -105,6 +117,7 @@ export function useGenerarActividad(activo = false) {
 		plantillas,
 		temas,
 		carpetaDrive,
+		configuracionValida,
 		cargandoClases,
 		cargandoPlantillas,
 		cargandoTemas,

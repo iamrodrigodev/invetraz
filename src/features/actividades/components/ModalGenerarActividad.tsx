@@ -24,6 +24,7 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 		plantillas,
 		temas,
 		carpetaDrive,
+		configuracionValida,
 		cargandoClases,
 		cargandoPlantillas,
 		cargandoTemas,
@@ -49,6 +50,7 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 	};
 
 	const abrirConfirmacion = (datos: GenerarActividadSchemaTipo) => {
+		if (!configuracionValida) return;
 		setValoresActuales(datos);
 		const claseObj = clases.find((c) => c.idClassroom === datos.idClase);
 		const plantillaObj = plantillas.find((p) => p.id === datos.idPlantilla);
@@ -100,6 +102,7 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 					plantillas={plantillas}
 					temas={temas}
 					carpetaDrive={carpetaDrive}
+					configuracionValida={configuracionValida}
 					cargandoClases={cargandoClases}
 					cargandoPlantillas={cargandoPlantillas}
 					cargandoTemas={cargandoTemas}

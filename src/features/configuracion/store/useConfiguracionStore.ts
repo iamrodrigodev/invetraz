@@ -24,6 +24,19 @@ export function sonCredencialesIguales(
 	);
 }
 
+export function esConfiguracionListaParaActividades(
+	credenciales: ActualizarCredencialesPeticion | null | undefined,
+	estadoConexion: TipoEstadoConexion,
+): boolean {
+	if (!credenciales) return false;
+	const googleValido =
+		estadoConexion === "conectado" && Boolean(credenciales.googleVerificado);
+	const driveValido = Boolean(
+		credenciales.googleDriveFolderId && credenciales.driveVerificado,
+	);
+	return googleValido && driveValido;
+}
+
 interface ConfiguracionState {
 	credenciales: ActualizarCredencialesPeticion;
 	estadoConexion: TipoEstadoConexion;

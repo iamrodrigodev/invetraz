@@ -4,6 +4,7 @@ import type React from "react";
 import { useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
+	Alert,
 	Button,
 	DatePicker,
 	Input,
@@ -29,6 +30,7 @@ export interface FormGenerarActividadProps {
 	plantillas: PlantillaSeguimientoOpcion[];
 	temas: TemaClase[];
 	carpetaDrive: CarpetaDriveInfo;
+	configuracionValida?: boolean | undefined;
 	cargandoClases?: boolean | undefined;
 	cargandoPlantillas?: boolean | undefined;
 	cargandoTemas?: boolean | undefined;
@@ -42,6 +44,7 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 	plantillas,
 	temas,
 	carpetaDrive,
+	configuracionValida = true,
 	cargandoClases = false,
 	cargandoPlantillas = false,
 	cargandoTemas = false,
@@ -126,11 +129,22 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 				seguimiento.
 			</p>
 
+			{!configuracionValida && (
+				<Alert
+					variant="error"
+					message="No es posible generar actividades de seguimiento porque la configuración de Google Cloud o Google Drive no está completa o no ha sido verificada."
+				/>
+			)}
+
 			<TarjetaCarpetaVinculada
 				carpetaId={carpetaDrive.id}
 				nombre={carpetaDrive.nombre}
 				textoBoton="Abrir en Drive"
-				estado={carpetaDrive.id ? "verificada" : "no_disponible"}
+				estado={
+					configuracionValida && carpetaDrive.id
+						? "verificada"
+						: "no_disponible"
+				}
 			/>
 
 			<form
@@ -339,7 +353,12 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 					<Button
 						type="submit"
 						variant="default"
-						disabled={!isValid || !esPlantillaValida}
+						disabled={!isValid || !esPlantillaValida || !configuracionValida}
+						title={
+							!configuracionValida
+								? "Debe completar y verificar la configuración antes de generar una actividad"
+								: undefined
+						}
 						className="font-semibold shadow-sm"
 					>
 						<Plus size={16} className="mr-1.5" />
