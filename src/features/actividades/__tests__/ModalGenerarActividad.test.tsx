@@ -2,6 +2,34 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { ModalGenerarActividad } from "../components/ModalGenerarActividad";
 
+vi.mock("../api/actividades.api", () => ({
+	obtenerPlantillasParaFormulario: vi.fn().mockResolvedValue([
+		{
+			id: "plan-1",
+			nombre: "Plantilla 1.xlsx",
+			enlaceWeb: "https://docs.google.com/test",
+			frecuenciaUso: 0,
+			estructuraValida: true,
+		},
+	]),
+}));
+
+vi.mock("../../configuracion/store/useConfiguracionStore", () => ({
+	useConfiguracionStore: () => ({
+		credenciales: {
+			googleCloudClientId: "client-id",
+			googleCloudClientSecret: "client-secret",
+			googleDriveFolderId: "folder-123",
+			googleDriveFolderName: "Carpeta de Prueba",
+		},
+		estadoConexion: "conectado",
+		cargado: true,
+		cargando: false,
+		cargarConfiguracion: vi.fn(),
+	}),
+	esConfiguracionListaParaActividades: () => true,
+}));
+
 describe("ModalGenerarActividad", () => {
 	it("no renderiza cuando abierto es false", () => {
 		const { container } = render(

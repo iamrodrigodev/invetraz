@@ -99,7 +99,10 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 		return plantillas.map((p) => ({
 			value: p.id,
 			label: p.nombre,
-			badge: `Usada ${p.frecuenciaUso} ${p.frecuenciaUso === 1 ? "vez" : "veces"}`,
+			badge:
+				p.frecuenciaUso > 0
+					? `Usada ${p.frecuenciaUso} ${p.frecuenciaUso === 1 ? "vez" : "veces"}`
+					: undefined,
 			badgeVariant: "blue" as const,
 		}));
 	}, [plantillas]);
@@ -296,11 +299,13 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 										value={field.value}
 										onChange={field.onChange}
 										onBlur={field.onBlur}
-										disabled={cargandoPlantillas}
+										disabled={cargandoPlantillas || plantillas.length === 0}
 										placeholder={
 											cargandoPlantillas
 												? "Cargando plantillas..."
-												: "Selecciona una plantilla de seguimiento..."
+												: plantillas.length === 0
+													? "No se encontraron plantillas en Drive"
+													: "Selecciona una plantilla de seguimiento..."
 										}
 										options={opcionesPlantillas}
 										errorMessage={errors.idPlantilla?.message}

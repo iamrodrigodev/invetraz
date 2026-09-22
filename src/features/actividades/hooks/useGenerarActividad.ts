@@ -3,9 +3,9 @@ import {
 	esConfiguracionListaParaActividades,
 	useConfiguracionStore,
 } from "../../configuracion/store/useConfiguracionStore";
+import { obtenerPlantillasParaFormulario } from "../api/actividades.api";
 import {
 	DATOS_PRUEBA_CLASES,
-	DATOS_PRUEBA_PLANTILLAS,
 	DATOS_PRUEBA_TEMAS,
 	simularGeneracionActividad,
 } from "../mocks/actividadesCascaron.mock";
@@ -31,14 +31,26 @@ export function useGenerarActividad(activo = false) {
 	} = useConfiguracionStore();
 
 	const [clases] = useState<ClaseDocente[]>(DATOS_PRUEBA_CLASES);
-	const [plantillas] = useState<PlantillaSeguimientoOpcion[]>(
-		DATOS_PRUEBA_PLANTILLAS,
+	const [plantillas, setPlantillas] = useState<PlantillaSeguimientoOpcion[]>(
+		[],
 	);
 	const [temas, setTemas] = useState<TemaClase[]>([]);
 	const [cargandoClases] = useState(false);
-	const [cargandoPlantillas] = useState(false);
+	const [cargandoPlantillas, setCargandoPlantillas] = useState(false);
 	const [cargandoTemas, setCargandoTemas] = useState(false);
 	const [generando, setGenerando] = useState(false);
+
+	const cargarPlantillas = useCallback(async () => {
+		setCargandoPlantillas(true);
+		try {
+			const res = await obtenerPlantillasParaFormulario();
+			setPlantillas(res);
+		} catch {
+			setPlantillas([]);
+		} finally {
+			setCargandoPlantillas(false);
+		}
+	}, []);
 
 	useEffect(() => {
 		if (!activo) return;
@@ -46,11 +58,14 @@ export function useGenerarActividad(activo = false) {
 		if (!configuracionCargada && !configuracionCargando) {
 			cargarConfiguracion().catch(() => {});
 		}
+
+		cargarPlantillas().catch(() => {});
 	}, [
 		activo,
 		configuracionCargada,
 		configuracionCargando,
 		cargarConfiguracion,
+		cargarPlantillas,
 	]);
 
 	const cargarTemasDeClase = useCallback((idClase: string) => {
@@ -106,6 +121,7 @@ export function useGenerarActividad(activo = false) {
 		cargandoTemas,
 		generando,
 		cargarTemasDeClase,
+		cargarPlantillas,
 		ejecutarGeneracion,
 	};
 }

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { entorno } from "../../../config/entorno";
 import { ejecutarPeticion } from "../../../utils/api";
-import { CarpetaPlantillasRespuestaSchema } from "../../plantillas/types/plantillas.types";
+import { obtenerPlantillas } from "../../plantillas/api/plantillas.api";
 import type {
 	ClaseDocente,
 	FormGenerarActividadValores,
@@ -48,18 +48,13 @@ export async function obtenerClasesDocente(): Promise<ClaseDocente[]> {
 export async function obtenerPlantillasParaFormulario(): Promise<
 	PlantillaSeguimientoOpcion[]
 > {
-	const res = await ejecutarPeticion(
-		`${entorno.VITE_API_BASE_URL}/plantillas`,
-		{ method: "GET" },
-		CarpetaPlantillasRespuestaSchema,
-		"Error al consultar las plantillas",
-	);
+	const res = await obtenerPlantillas();
 
-	return res.plantillas.map((p, idx) => ({
+	return res.plantillas.map((p) => ({
 		id: p.id,
 		nombre: p.nombre,
 		enlaceWeb: p.enlaceWeb ?? null,
-		frecuenciaUso: idx + 1,
+		frecuenciaUso: 0,
 		estructuraValida: !p.nombre.toLowerCase().includes("invalida"),
 		mensajeErrorEstructura: p.nombre.toLowerCase().includes("invalida")
 			? "El archivo no contiene la hoja o las columnas obligatorias para la matriz de seguimiento."
