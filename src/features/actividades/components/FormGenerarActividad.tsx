@@ -123,7 +123,7 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 				carpetaId={carpetaDrive.id}
 				nombre={carpetaDrive.nombre}
 				textoBoton="Abrir en Drive"
-				estado="verificada"
+				estado={carpetaDrive.id ? "verificada" : "no_disponible"}
 			/>
 
 			<form

@@ -2,18 +2,35 @@ import { ClipboardCheck, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button, Card, CardContent } from "../../../components/ui";
 import { ActividadesSeguimientoSkeleton } from "../../../pages/skeletons/ActividadesSeguimientoSkeleton";
+import { useConfiguracionStore } from "../../configuracion/store/useConfiguracionStore";
 import { ModalGenerarActividad } from "../components/ModalGenerarActividad";
 
 export function ActividadesSeguimientoPage() {
-	const [cargando, setCargando] = useState(true);
+	const { cargado: configuracionCargada, cargarConfiguracion } =
+		useConfiguracionStore();
+	const [cargando, setCargando] = useState(!configuracionCargada);
 	const [modalGenerarAbierto, setModalGenerarAbierto] = useState(false);
 
 	useEffect(() => {
-		const temporizador = setTimeout(() => {
-			setCargando(false);
-		}, 300);
-		return () => clearTimeout(temporizador);
-	}, []);
+		let montado = true;
+		const iniciar = async () => {
+			if (!configuracionCargada) {
+				try {
+					await Promise.all([
+						cargarConfiguracion(),
+						new Promise((resolve) => setTimeout(resolve, 200)),
+					]);
+				} catch {}
+			}
+			if (montado) {
+				setCargando(false);
+			}
+		};
+		iniciar();
+		return () => {
+			montado = false;
+		};
+	}, [configuracionCargada, cargarConfiguracion]);
 
 	if (cargando) {
 		return <ActividadesSeguimientoSkeleton />;

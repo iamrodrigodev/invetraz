@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useConfiguracionStore } from "../../configuracion/store/useConfiguracionStore";
 import {
-	DATOS_PRUEBA_CARPETA,
 	DATOS_PRUEBA_CLASES,
 	DATOS_PRUEBA_PLANTILLAS,
 	DATOS_PRUEBA_TEMAS,
@@ -20,7 +19,12 @@ export interface CarpetaDriveInfo {
 }
 
 export function useGenerarActividad(activo = false) {
-	const { credenciales, cargarConfiguracion } = useConfiguracionStore();
+	const {
+		credenciales,
+		cargado: configuracionCargada,
+		cargando: configuracionCargando,
+		cargarConfiguracion,
+	} = useConfiguracionStore();
 
 	const [clases, setClases] = useState<ClaseDocente[]>([]);
 	const [plantillas, setPlantillas] = useState<PlantillaSeguimientoOpcion[]>(
@@ -35,7 +39,9 @@ export function useGenerarActividad(activo = false) {
 	useEffect(() => {
 		if (!activo) return;
 
-		cargarConfiguracion().catch(() => {});
+		if (!configuracionCargada && !configuracionCargando) {
+			cargarConfiguracion().catch(() => {});
+		}
 
 		setCargandoClases(true);
 		const timerClases = setTimeout(() => {
@@ -53,7 +59,12 @@ export function useGenerarActividad(activo = false) {
 			clearTimeout(timerClases);
 			clearTimeout(timerPlantillas);
 		};
-	}, [activo, cargarConfiguracion]);
+	}, [
+		activo,
+		configuracionCargada,
+		configuracionCargando,
+		cargarConfiguracion,
+	]);
 
 	const cargarTemasDeClase = useCallback((idClase: string) => {
 		if (!idClase) {
@@ -83,8 +94,10 @@ export function useGenerarActividad(activo = false) {
 	);
 
 	const carpetaDrive: CarpetaDriveInfo = {
-		id: credenciales.googleDriveFolderId || DATOS_PRUEBA_CARPETA.id,
-		nombre: credenciales.googleDriveFolderName || DATOS_PRUEBA_CARPETA.nombre,
+		id: credenciales.googleDriveFolderId || "",
+		nombre:
+			credenciales.googleDriveFolderName ||
+			(credenciales.googleDriveFolderId ? "Carpeta de Investigación" : ""),
 	};
 
 	return {
