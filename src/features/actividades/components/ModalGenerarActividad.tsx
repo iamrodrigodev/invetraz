@@ -93,7 +93,7 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 				abierto={abierto && !modalConfirmarAbierto && !modalExitoAbierto}
 				alCerrar={manejarCancelar}
 				titulo="Generar actividades de seguimiento"
-				className="max-w-3xl"
+				className="max-w-4xl"
 			>
 				<FormGenerarActividad
 					clases={clases}

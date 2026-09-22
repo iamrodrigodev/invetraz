@@ -115,7 +115,10 @@ export const Select: React.FC<SelectProps> = ({
 			>
 				<div className="flex min-w-0 items-center gap-2 pr-2">
 					{opcionSeleccionada ? (
-						<span className="truncate font-medium text-slate-900">
+						<span
+							className="truncate font-medium text-slate-900"
+							title={opcionSeleccionada.label}
+						>
 							{opcionSeleccionada.label}
 						</span>
 					) : (
