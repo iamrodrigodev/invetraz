@@ -4,6 +4,7 @@ import {
 	Check,
 	CheckCircle2,
 	Clock,
+	ExternalLink,
 	FileSpreadsheet,
 	GraduationCap,
 	RefreshCw,
@@ -88,28 +89,49 @@ export const ModalConfirmarGeneracion: React.FC<
 						</div>
 					</div>
 
-					<div className="flex items-start gap-3 pt-3 border-t border-slate-100">
-						<FileSpreadsheet
-							size={18}
-							className="shrink-0 text-emerald-600 mt-0.5"
-						/>
-						<div className="min-w-0 flex-1 space-y-1">
-							<span className="block text-xs font-medium text-slate-500">
-								Plantilla de seguimiento
-							</span>
-							<div className="flex flex-wrap items-center gap-2">
-								<span className="text-sm font-semibold text-slate-900 break-words leading-snug">
-									{resumen.nombrePlantilla}
+					<div className="flex items-start justify-between gap-3 pt-3 border-t border-slate-100">
+						<div className="flex items-start gap-3 min-w-0 flex-1">
+							<FileSpreadsheet
+								size={18}
+								className="shrink-0 text-emerald-600 mt-0.5"
+							/>
+							<div className="min-w-0 flex-1 space-y-1">
+								<span className="block text-xs font-medium text-slate-500">
+									Plantilla de seguimiento
 								</span>
-								<Badge
-									variant="success"
-									className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0 shrink-0 font-medium"
-								>
-									<CheckCircle2 size={10} />
-									Estructura válida
-								</Badge>
+								<div className="flex flex-wrap items-center gap-2">
+									<span className="text-sm font-semibold text-slate-900 break-words leading-snug">
+										{resumen.nombrePlantilla}
+									</span>
+									<Badge
+										variant="success"
+										className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0 shrink-0 font-medium"
+									>
+										<CheckCircle2 size={10} />
+										Estructura válida
+									</Badge>
+								</div>
 							</div>
 						</div>
+
+						{resumen.enlacePlantillaWeb && (
+							<a
+								href={resumen.enlacePlantillaWeb}
+								target="_blank"
+								rel="noreferrer"
+								className="shrink-0 self-center"
+							>
+								<Button
+									type="button"
+									variant="outline"
+									size="sm"
+									className="h-7 text-xs font-semibold border-slate-200 text-slate-700 hover:text-primary hover:border-primary/40 bg-white"
+								>
+									<ExternalLink size={12} className="mr-1.5" />
+									Abrir Sheet
+								</Button>
+							</a>
+						)}
 					</div>
 
 					<div className="flex items-start gap-3 pt-3 border-t border-slate-100">

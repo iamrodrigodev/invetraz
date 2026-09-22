@@ -64,7 +64,11 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 			horaVencimiento: datos.horaVencimiento || undefined,
 			nombreTema: temaObj ? temaObj.nombre : undefined,
 			descripcion: datos.descripcion || undefined,
-			enlacePlantillaWeb: plantillaObj?.enlaceWeb,
+			enlacePlantillaWeb:
+				plantillaObj?.enlaceWeb ||
+				(datos.idPlantilla
+					? `https://drive.google.com/open?id=${datos.idPlantilla}`
+					: undefined),
 		});
 
 		setModalConfirmarAbierto(true);
