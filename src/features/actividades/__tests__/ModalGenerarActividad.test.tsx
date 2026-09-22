@@ -21,7 +21,7 @@ describe("ModalGenerarActividad", () => {
 				"Complete la información necesaria para generar una actividad de seguimiento.",
 			),
 		).toBeDefined();
-		expect(screen.getByText("Abrir carpeta en Google Drive")).toBeDefined();
+		expect(screen.getByText("Abrir en Drive")).toBeDefined();
 		expect(screen.getByText("Clase")).toBeDefined();
 		expect(screen.getByText("Título")).toBeDefined();
 		expect(screen.getByText("Fecha de vencimiento")).toBeDefined();

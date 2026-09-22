@@ -122,9 +122,8 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 			<TarjetaCarpetaVinculada
 				carpetaId={carpetaDrive.id}
 				nombre={carpetaDrive.nombre}
-				textoBoton="Abrir carpeta en Google Drive"
+				textoBoton="Abrir en Drive"
 				estado="verificada"
-				compacto={true}
 			/>
 
 			<form
