@@ -33,34 +33,31 @@ export function ActividadesSeguimientoPage() {
 				</div>
 			</div>
 
-			<div className="mt-6 flex flex-1 flex-col">
-				<Card className="border-dashed border-2 border-slate-200 bg-slate-50/50 py-16 text-center w-full">
-					<CardContent className="flex flex-col items-center justify-center space-y-4 max-w-md mx-auto">
-						<div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary">
-							<ClipboardCheck size={28} />
-						</div>
-						<div className="space-y-1">
-							<h3 className="font-bold text-slate-900 text-lg">
-								No hay actividades de seguimiento registradas
-							</h3>
-							<p className="text-xs text-slate-600 leading-relaxed">
-								Comienza haciendo clic en el botón “Generar” para crear una
-								actividad vinculada a Google Classroom con su plantilla de
-								seguimiento correspondiente.
-							</p>
-						</div>
-						<Button
-							type="button"
-							variant="default"
-							onClick={() => setModalGenerarAbierto(true)}
-							className="mt-2 text-xs font-semibold"
-						>
-							<Plus size={14} className="mr-1.5" />
-							Generar actividad ahora
-						</Button>
-					</CardContent>
-				</Card>
-			</div>
+			<Card className="mt-5 border-dashed border-2 border-slate-200 bg-slate-50/50 py-12 text-center w-full">
+				<CardContent className="flex flex-col items-center justify-center space-y-3 max-w-sm mx-auto">
+					<ClipboardCheck size={28} className="text-primary" />
+					<div className="space-y-1">
+						<h4 className="font-semibold text-slate-800 text-sm">
+							No hay actividades de seguimiento registradas
+						</h4>
+						<p className="text-xs text-slate-500">
+							Comienza haciendo clic en el botón “Generar” para crear una
+							actividad vinculada a Google Classroom con su plantilla de
+							seguimiento correspondiente.
+						</p>
+					</div>
+					<Button
+						type="button"
+						variant="default"
+						size="default"
+						onClick={() => setModalGenerarAbierto(true)}
+						className="mt-2"
+					>
+						<Plus size={16} className="mr-1.5" />
+						Generar actividad
+					</Button>
+				</CardContent>
+			</Card>
 
 			<ModalGenerarActividad
 				abierto={modalGenerarAbierto}
