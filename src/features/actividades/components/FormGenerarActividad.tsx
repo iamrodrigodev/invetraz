@@ -100,7 +100,7 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 			value: p.id,
 			label: p.nombre,
 			badge: `Usada ${p.frecuenciaUso} ${p.frecuenciaUso === 1 ? "vez" : "veces"}`,
-			badgeVariant: "slate" as const,
+			badgeVariant: "blue" as const,
 		}));
 	}, [plantillas]);
 

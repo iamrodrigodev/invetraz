@@ -10,7 +10,7 @@ export interface SelectOption {
 	label: string;
 	badge?: string | undefined;
 	badgeVariant?:
-		| ("primary" | "success" | "warning" | "destructive" | "slate")
+		| ("primary" | "success" | "warning" | "destructive" | "slate" | "blue")
 		| undefined;
 	disabled?: boolean | undefined;
 	sublabel?: string | undefined;
@@ -169,8 +169,8 @@ export const Select: React.FC<SelectProps> = ({
 				<div className="flex items-center gap-1.5 shrink-0 text-slate-400">
 					{opcionSeleccionada?.badge && (
 						<Badge
-							variant={opcionSeleccionada.badgeVariant || "slate"}
-							className="hidden sm:inline-flex text-[10px] px-1.5 py-0 font-normal"
+							variant={opcionSeleccionada.badgeVariant || "blue"}
+							className="hidden sm:inline-flex text-[10px] px-2 py-0.5 font-medium"
 						>
 							{opcionSeleccionada.badge}
 						</Badge>
@@ -235,9 +235,9 @@ export const Select: React.FC<SelectProps> = ({
 									<div className="flex items-center gap-2 shrink-0">
 										{opt.badge && (
 											<Badge
-												variant={opt.badgeVariant || "slate"}
+												variant={opt.badgeVariant || "blue"}
 												className={cn(
-													"text-[11px] font-normal",
+													"text-[11px] font-medium px-2 py-0.5",
 													estaSeleccionada &&
 														"bg-white/20 text-white border-transparent",
 												)}

@@ -2,7 +2,13 @@ import type React from "react";
 import { cn } from "../../utils/cn";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-	variant?: "primary" | "success" | "warning" | "destructive" | "slate";
+	variant?:
+		| "primary"
+		| "success"
+		| "warning"
+		| "destructive"
+		| "slate"
+		| "blue";
 }
 
 export function Badge({
@@ -13,6 +19,7 @@ export function Badge({
 }: BadgeProps) {
 	const variantStyles = {
 		primary: "bg-primary-50 text-primary border-primary-200",
+		blue: "bg-primary text-white border-transparent",
 		success: "bg-emerald-50 text-emerald-700 border-emerald-200",
 		warning: "bg-amber-50 text-amber-700 border-amber-200",
 		destructive: "bg-red-50 text-red-700 border-red-200",
