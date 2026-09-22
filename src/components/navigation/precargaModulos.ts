@@ -15,9 +15,7 @@ const CARGADORES_MODULOS: Record<ModuloId, () => Promise<unknown>> = {
 export function precargarModulo(id: ModuloId): void {
 	try {
 		CARGADORES_MODULOS[id]?.();
-	} catch {
-		// Si falla la precarga silenciosa, cargará normalmente en el evento de clic
-	}
+	} catch {}
 }
 
 export function precargarTodosLosModulos(): void {
