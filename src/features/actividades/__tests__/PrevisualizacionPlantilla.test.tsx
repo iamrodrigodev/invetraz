@@ -29,7 +29,7 @@ describe("PrevisualizacionPlantilla", () => {
 		expect(screen.getByText(/3 veces/i)).toBeDefined();
 	});
 
-	it("muestra alerta cuando la estructura no es válida", () => {
+	it("muestra el estado inválido con errores de estructura", () => {
 		render(
 			<PrevisualizacionPlantilla
 				plantilla={{
@@ -38,11 +38,27 @@ describe("PrevisualizacionPlantilla", () => {
 					frecuenciaUso: 0,
 					estructuraValida: false,
 					mensajeErrorEstructura: "Faltan columnas requeridas",
+					erroresEstructura: [
+						"No se encontraron los marcadores obligatorios {{ESTUDIANTE}} y {{CRITERIO}}.",
+						"Falta la hoja principal Matriz de Seguimiento.",
+					],
+					enlaceWeb: "https://docs.google.com/test-invalido",
 				}}
 			/>,
 		);
 
+		expect(screen.getByText("Formato Invalido.xlsx")).toBeDefined();
+		expect(screen.getByText("Estructura inválida")).toBeDefined();
 		expect(screen.getByText("Faltan columnas requeridas")).toBeDefined();
+		expect(
+			screen.getByText(
+				"No se encontraron los marcadores obligatorios {{ESTUDIANTE}} y {{CRITERIO}}.",
+			),
+		).toBeDefined();
+		expect(
+			screen.getByText("Falta la hoja principal Matriz de Seguimiento."),
+		).toBeDefined();
+		expect(screen.getByText("Ver archivo en Sheets")).toBeDefined();
 		expect(screen.getByRole("alert")).toBeDefined();
 	});
 });

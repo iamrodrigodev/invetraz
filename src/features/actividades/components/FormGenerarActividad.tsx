@@ -380,6 +380,11 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 							La configuración no está lista para generar actividades
 						</p>
 					)}
+					{!esPlantillaValida && (
+						<p className="text-xs text-red-600 font-medium text-right">
+							La plantilla seleccionada tiene una estructura inválida
+						</p>
+					)}
 				</div>
 			</form>
 		</div>

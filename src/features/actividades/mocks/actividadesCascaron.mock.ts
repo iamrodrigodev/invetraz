@@ -54,6 +54,10 @@ export const DATOS_PRUEBA_PLANTILLAS: PlantillaSeguimientoOpcion[] = [
 		estructuraValida: false,
 		mensajeErrorEstructura:
 			"El archivo no contiene la hoja o las columnas obligatorias para la matriz de seguimiento.",
+		erroresEstructura: [
+			"No se encontraron los marcadores obligatorios {{ESTUDIANTE}} y {{CRITERIO}}.",
+			"Faltan columnas obligatorias para registrar la ponderación y retroalimentación.",
+		],
 		enlaceWeb: null,
 	},
 ];

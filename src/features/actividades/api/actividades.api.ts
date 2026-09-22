@@ -31,6 +31,21 @@ const ListarTemasRespuestaSchema = z.object({
 	datos: z.array(TemaClassroomDtoSchema),
 });
 
+const PLANTILLA_MOCK_INVALIDA: PlantillaSeguimientoOpcion = {
+	id: "mock-plantilla-seguimiento-invalida",
+	nombre: "Plantilla de prueba - estructura inválida.xlsx",
+	enlaceWeb: "https://docs.google.com/spreadsheets/d/mock-plantilla-invalida",
+	frecuenciaUso: 0,
+	estructuraValida: false,
+	mensajeErrorEstructura:
+		"No se puede usar esta plantilla porque no cumple con la estructura mínima de seguimiento.",
+	erroresEstructura: [
+		"No se encontraron los marcadores obligatorios {{ESTUDIANTE}} y {{CRITERIO}}.",
+		"Falta la hoja principal Matriz de Seguimiento.",
+		"No existen las columnas mínimas de evaluación: Ponderación, Evidencia y Retroalimentación.",
+	],
+};
+
 export async function obtenerClasesDocente(): Promise<ClaseDocente[]> {
 	const res = await ejecutarPeticion(
 		`${entorno.VITE_API_BASE_URL}/clases/como-docente`,
@@ -50,16 +65,28 @@ export async function obtenerPlantillasParaFormulario(): Promise<
 > {
 	const res = await obtenerPlantillas();
 
-	return res.plantillas.map((p) => ({
-		id: p.id,
-		nombre: p.nombre,
-		enlaceWeb: p.enlaceWeb ?? null,
-		frecuenciaUso: 0,
-		estructuraValida: !p.nombre.toLowerCase().includes("invalida"),
-		mensajeErrorEstructura: p.nombre.toLowerCase().includes("invalida")
-			? "El archivo no contiene la hoja o las columnas obligatorias para la matriz de seguimiento."
-			: undefined,
-	}));
+	const plantillasDrive = res.plantillas.map((p) => {
+		const estructuraValida = !p.nombre.toLowerCase().includes("invalida");
+
+		return {
+			id: p.id,
+			nombre: p.nombre,
+			enlaceWeb: p.enlaceWeb ?? null,
+			frecuenciaUso: 0,
+			estructuraValida,
+			mensajeErrorEstructura: estructuraValida
+				? undefined
+				: "El archivo no contiene la hoja o las columnas obligatorias para la matriz de seguimiento.",
+			erroresEstructura: estructuraValida
+				? undefined
+				: [
+						"No se encontró la hoja principal Matriz de Seguimiento.",
+						"Faltan columnas obligatorias para registrar la evaluación.",
+					],
+		};
+	});
+
+	return [...plantillasDrive, PLANTILLA_MOCK_INVALIDA];
 }
 
 export async function obtenerTemasClase(idClase: string): Promise<TemaClase[]> {

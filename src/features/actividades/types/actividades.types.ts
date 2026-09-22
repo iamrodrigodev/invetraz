@@ -17,6 +17,7 @@ export interface PlantillaSeguimientoOpcion {
 	frecuenciaUso: number;
 	estructuraValida: boolean;
 	mensajeErrorEstructura?: string | undefined;
+	erroresEstructura?: string[] | undefined;
 }
 
 export interface FormGenerarActividadValores {
