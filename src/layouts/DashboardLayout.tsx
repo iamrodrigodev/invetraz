@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Sidebar, TopBar } from "../components/navigation";
 import { type ModuloId, ModuloIdSchema } from "../components/navigation/types";
-import { ModalConfirmacion } from "../components/ui";
+import { ModalConfirmacion, ModuloContenidoSkeleton } from "../components/ui";
 import { useAppStore } from "../store/useAppStore";
 import { cn } from "../utils/cn";
 
@@ -97,7 +97,13 @@ export function DashboardLayout({
 
 				<main className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto p-4 sm:p-6 pb-12">
 					<div className="flex min-h-0 w-full flex-1 flex-col">
-						{children ?? <Outlet />}
+						{children ?? (
+							<Suspense
+								fallback={<ModuloContenidoSkeleton modulo={moduloActual} />}
+							>
+								<Outlet />
+							</Suspense>
+						)}
 					</div>
 				</main>
 			</div>

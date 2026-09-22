@@ -6,6 +6,21 @@ import { ReportesSkeleton } from "../../../pages/skeletons/ReportesSkeleton";
 import { cn } from "../../../utils/cn";
 import { Skeleton } from "../Skeleton";
 
+export function ModuloContenidoSkeleton({ modulo }: { modulo: string }) {
+	switch (modulo) {
+		case "configuracion":
+			return <ConfiguracionSkeleton />;
+		case "documentacion":
+			return <DocumentacionSkeleton />;
+		case "plantillas":
+			return <PlantillasSkeleton />;
+		case "reportes":
+			return <ReportesSkeleton />;
+		default:
+			return <ActividadesSeguimientoSkeleton />;
+	}
+}
+
 export function DashboardSkeleton() {
 	const estaColapsado =
 		typeof window !== "undefined" &&
@@ -77,17 +92,7 @@ export function DashboardSkeleton() {
 
 				<main className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto p-4 sm:p-6 pb-12">
 					<div className="flex h-full min-h-0 w-full flex-1 flex-col">
-						{moduloActivo === "configuracion" ? (
-							<ConfiguracionSkeleton />
-						) : moduloActivo === "documentacion" ? (
-							<DocumentacionSkeleton />
-						) : moduloActivo === "plantillas" ? (
-							<PlantillasSkeleton />
-						) : moduloActivo === "reportes" ? (
-							<ReportesSkeleton />
-						) : (
-							<ActividadesSeguimientoSkeleton />
-						)}
+						<ModuloContenidoSkeleton modulo={moduloActivo} />
 					</div>
 				</main>
 			</div>

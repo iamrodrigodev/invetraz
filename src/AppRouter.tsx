@@ -137,44 +137,12 @@ export function AppRouter() {
 						<Route index element={<Navigate to="/actividades" replace />} />
 						<Route
 							path="actividades"
-							element={
-								<Suspense fallback={<DashboardSkeleton />}>
-									<ActividadesSeguimientoPage />
-								</Suspense>
-							}
+							element={<ActividadesSeguimientoPage />}
 						/>
-						<Route
-							path="plantillas"
-							element={
-								<Suspense fallback={<DashboardSkeleton />}>
-									<PlantillasSeguimientoPage />
-								</Suspense>
-							}
-						/>
-						<Route
-							path="configuracion"
-							element={
-								<Suspense fallback={<DashboardSkeleton />}>
-									<ConfiguracionPage />
-								</Suspense>
-							}
-						/>
-						<Route
-							path="reportes"
-							element={
-								<Suspense fallback={<DashboardSkeleton />}>
-									<ReportesPage />
-								</Suspense>
-							}
-						/>
-						<Route
-							path="documentacion"
-							element={
-								<Suspense fallback={<DashboardSkeleton />}>
-									<DocumentacionPage />
-								</Suspense>
-							}
-						/>
+						<Route path="plantillas" element={<PlantillasSeguimientoPage />} />
+						<Route path="configuracion" element={<ConfiguracionPage />} />
+						<Route path="reportes" element={<ReportesPage />} />
+						<Route path="documentacion" element={<DocumentacionPage />} />
 						<Route path="*" element={<Navigate to="/actividades" replace />} />
 					</Route>
 				</Route>
