@@ -3,7 +3,14 @@ import { Plus, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Button, Input, Select, Textarea } from "../../../components/ui";
+import {
+	Button,
+	DatePicker,
+	Input,
+	Select,
+	Textarea,
+	TimePicker,
+} from "../../../components/ui";
 import { TarjetaCarpetaVinculada } from "../../drive";
 import type { CarpetaDriveInfo } from "../hooks/useGenerarActividad";
 import {
@@ -192,12 +199,20 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 									<span>Fecha de vencimiento</span>
 									<span className="text-red-500">*</span>
 								</label>
-								<Input
-									id="fechaVencimiento"
-									type="date"
-									min={hoy}
-									errorMessage={errors.fechaVencimiento?.message}
-									{...register("fechaVencimiento")}
+								<Controller
+									name="fechaVencimiento"
+									control={control}
+									render={({ field }) => (
+										<DatePicker
+											id="fechaVencimiento"
+											value={field.value}
+											onChange={field.onChange}
+											onBlur={field.onBlur}
+											min={hoy}
+											placeholder="dd/mm/aaaa"
+											errorMessage={errors.fechaVencimiento?.message}
+										/>
+									)}
 								/>
 							</div>
 
@@ -208,11 +223,19 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 								>
 									Hora de vencimiento
 								</label>
-								<Input
-									id="horaVencimiento"
-									type="time"
-									errorMessage={errors.horaVencimiento?.message}
-									{...register("horaVencimiento")}
+								<Controller
+									name="horaVencimiento"
+									control={control}
+									render={({ field }) => (
+										<TimePicker
+											id="horaVencimiento"
+											value={field.value}
+											onChange={field.onChange}
+											onBlur={field.onBlur}
+											placeholder="--:--"
+											errorMessage={errors.horaVencimiento?.message}
+										/>
+									)}
 								/>
 							</div>
 						</div>
