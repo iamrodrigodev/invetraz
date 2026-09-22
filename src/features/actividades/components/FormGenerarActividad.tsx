@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Button, Input, Select, Textarea } from "../../../components/ui";
 import { TarjetaCarpetaVinculada } from "../../drive";
 import type { CarpetaDriveInfo } from "../hooks/useGenerarActividad";
@@ -52,6 +52,7 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 
 	const {
 		register,
+		control,
 		handleSubmit,
 		watch,
 		formState: { errors, isValid },
@@ -77,6 +78,32 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 			onCambioClase(idClaseSeleccionada);
 		}
 	}, [idClaseSeleccionada, onCambioClase]);
+
+	const opcionesClases = useMemo(() => {
+		return clases.map((c) => ({
+			value: c.idClassroom,
+			label: c.nombre,
+		}));
+	}, [clases]);
+
+	const opcionesPlantillas = useMemo(() => {
+		return plantillas.map((p) => ({
+			value: p.id,
+			label: p.nombre,
+			badge: `Usada ${p.frecuenciaUso} ${p.frecuenciaUso === 1 ? "vez" : "veces"}`,
+			badgeVariant: "slate" as const,
+		}));
+	}, [plantillas]);
+
+	const opcionesTemas = useMemo(() => {
+		return [
+			{ value: "", label: "Sin tema asignado" },
+			...temas.map((t) => ({
+				value: t.idTema,
+				label: t.nombre,
+			})),
+		];
+	}, [temas]);
 
 	const plantillaActual = useMemo(() => {
 		return plantillas.find((p) => p.id === idPlantillaSeleccionada) || null;
@@ -111,26 +138,29 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 					>
 						Clase <span className="text-red-500">*</span>
 					</label>
-					<Select
-						id="idClase"
-						disabled={cargandoClases}
-						placeholder={
-							cargandoClases ? "Cargando clases..." : "Selecciona una clase..."
-						}
-						errorMessage={errors.idClase?.message}
-						{...register("idClase")}
-					>
-						<option value="" disabled>
-							{cargandoClases
-								? "Cargando clases..."
-								: "Selecciona una clase..."}
-						</option>
-						{clases.map((c) => (
-							<option key={c.idClassroom} value={c.idClassroom}>
-								{c.nombre}
-							</option>
-						))}
-					</Select>
+					<Controller
+						name="idClase"
+						control={control}
+						render={({ field }) => (
+							<Select
+								id="idClase"
+								value={field.value}
+								onChange={(val) => {
+									field.onChange(val);
+									if (onCambioClase) onCambioClase(val);
+								}}
+								onBlur={field.onBlur}
+								disabled={cargandoClases}
+								placeholder={
+									cargandoClases
+										? "Cargando clases..."
+										: "Selecciona una clase..."
+								}
+								options={opcionesClases}
+								errorMessage={errors.idClase?.message}
+							/>
+						)}
+					/>
 				</div>
 
 				<div>
@@ -191,29 +221,26 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 					>
 						Plantilla de seguimiento <span className="text-red-500">*</span>
 					</label>
-					<Select
-						id="idPlantilla"
-						disabled={cargandoPlantillas}
-						placeholder={
-							cargandoPlantillas
-								? "Cargando plantillas..."
-								: "Selecciona una plantilla de seguimiento..."
-						}
-						errorMessage={errors.idPlantilla?.message}
-						{...register("idPlantilla")}
-					>
-						<option value="" disabled>
-							{cargandoPlantillas
-								? "Cargando plantillas..."
-								: "Selecciona una plantilla de seguimiento..."}
-						</option>
-						{plantillas.map((p) => (
-							<option key={p.id} value={p.id}>
-								{p.nombre} (Usada {p.frecuenciaUso}{" "}
-								{p.frecuenciaUso === 1 ? "vez" : "veces"})
-							</option>
-						))}
-					</Select>
+					<Controller
+						name="idPlantilla"
+						control={control}
+						render={({ field }) => (
+							<Select
+								id="idPlantilla"
+								value={field.value}
+								onChange={field.onChange}
+								onBlur={field.onBlur}
+								disabled={cargandoPlantillas}
+								placeholder={
+									cargandoPlantillas
+										? "Cargando plantillas..."
+										: "Selecciona una plantilla de seguimiento..."
+								}
+								options={opcionesPlantillas}
+								errorMessage={errors.idPlantilla?.message}
+							/>
+						)}
+					/>
 				</div>
 
 				<PrevisualizacionPlantilla plantilla={plantillaActual} />
@@ -225,30 +252,28 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 					>
 						Tema
 					</label>
-					<Select
-						id="idTema"
-						disabled={!idClaseSeleccionada || cargandoTemas}
-						placeholder={
-							!idClaseSeleccionada
-								? "Selecciona primero una clase..."
-								: cargandoTemas
-									? "Cargando temas de la clase..."
-									: "Selecciona un tema opcional..."
-						}
-						errorMessage={errors.idTema?.message}
-						{...register("idTema")}
-					>
-						<option value="">
-							{!idClaseSeleccionada
-								? "Selecciona primero una clase..."
-								: "Sin tema asignado"}
-						</option>
-						{temas.map((t) => (
-							<option key={t.idTema} value={t.idTema}>
-								{t.nombre}
-							</option>
-						))}
-					</Select>
+					<Controller
+						name="idTema"
+						control={control}
+						render={({ field }) => (
+							<Select
+								id="idTema"
+								value={field.value}
+								onChange={field.onChange}
+								onBlur={field.onBlur}
+								disabled={!idClaseSeleccionada || cargandoTemas}
+								placeholder={
+									!idClaseSeleccionada
+										? "Selecciona primero una clase..."
+										: cargandoTemas
+											? "Cargando temas de la clase..."
+											: "Selecciona un tema opcional..."
+								}
+								options={opcionesTemas}
+								errorMessage={errors.idTema?.message}
+							/>
+						)}
+					/>
 				</div>
 
 				<div>

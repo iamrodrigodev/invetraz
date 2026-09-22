@@ -62,7 +62,10 @@ export const TarjetaCarpetaVinculada: React.FC<
 					</div>
 					<div className="flex items-center gap-1.5 text-xs">
 						<span className="text-slate-500">ID:</span>
-						<code className="break-all font-mono text-xs text-slate-700 select-all">
+						<code
+							className="truncate max-w-[180px] sm:max-w-xs font-mono text-xs text-slate-700 select-all"
+							title={carpetaId}
+						>
 							{carpetaId}
 						</code>
 					</div>
