@@ -113,8 +113,8 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 		!plantillaActual || plantillaActual.estructuraValida;
 
 	return (
-		<div className="space-y-3">
-			<p className="-mt-2 text-xs text-slate-600">
+		<div className="space-y-3.5">
+			<p className="-mt-2 text-sm text-slate-600">
 				Complete la información necesaria para generar una actividad de
 				seguimiento.
 			</p>
@@ -127,13 +127,17 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 				compacto={true}
 			/>
 
-			<form onSubmit={handleSubmit(alEnviar)} noValidate className="space-y-4">
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-3">
-					<div className="space-y-3">
+			<form
+				onSubmit={handleSubmit(alEnviar)}
+				noValidate
+				className="space-y-4 pt-1"
+			>
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3.5">
+					<div className="space-y-3.5">
 						<div>
 							<label
 								htmlFor="idClase"
-								className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+								className="mb-1.5 block text-sm font-medium text-slate-800"
 							>
 								Clase <span className="text-red-500">*</span>
 							</label>
@@ -165,7 +169,7 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 						<div>
 							<label
 								htmlFor="titulo"
-								className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+								className="mb-1.5 block text-sm font-medium text-slate-800"
 							>
 								Título <span className="text-red-500">*</span>
 							</label>
@@ -184,9 +188,10 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 							<div>
 								<label
 									htmlFor="fechaVencimiento"
-									className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+									className="mb-1.5 flex items-center gap-1 text-sm font-medium text-slate-800"
 								>
-									Fecha de vencimiento <span className="text-red-500">*</span>
+									<span>Fecha de vencimiento</span>
+									<span className="text-red-500">*</span>
 								</label>
 								<Input
 									id="fechaVencimiento"
@@ -200,7 +205,7 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 							<div>
 								<label
 									htmlFor="horaVencimiento"
-									className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+									className="mb-1.5 block text-sm font-medium text-slate-800"
 								>
 									Hora de vencimiento
 								</label>
@@ -216,7 +221,7 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 						<div>
 							<label
 								htmlFor="idTema"
-								className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+								className="mb-1.5 block text-sm font-medium text-slate-800"
 							>
 								Tema
 							</label>
@@ -245,11 +250,11 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 						</div>
 					</div>
 
-					<div className="space-y-3 flex flex-col">
+					<div className="space-y-3.5 flex flex-col">
 						<div>
 							<label
 								htmlFor="idPlantilla"
-								className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+								className="mb-1.5 block text-sm font-medium text-slate-800"
 							>
 								Plantilla de seguimiento <span className="text-red-500">*</span>
 							</label>
@@ -280,7 +285,7 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 						<div className="flex-1 flex flex-col">
 							<label
 								htmlFor="descripcion"
-								className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+								className="mb-1.5 block text-sm font-medium text-slate-800"
 							>
 								Descripción
 							</label>
@@ -289,7 +294,7 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 								rows={plantillaActual ? 3 : 5}
 								maxLength={2000}
 								showCount
-								placeholder="Instrucciones o detalles de la actividad para los estudiantes..."
+								placeholder="Instrucciones o detalles de la actividad para los investigadores..."
 								errorMessage={errors.descripcion?.message}
 								className="flex-1"
 								{...register("descripcion")}

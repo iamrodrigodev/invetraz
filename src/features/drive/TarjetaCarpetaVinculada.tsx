@@ -48,7 +48,7 @@ export const TarjetaCarpetaVinculada: React.FC<
 						className="shrink-0 text-primary stroke-[2.2]"
 					/>
 					<div className="flex flex-wrap items-center gap-2 min-w-0">
-						<span className="truncate text-xs font-semibold uppercase text-slate-800">
+						<span className="truncate text-xs font-semibold text-slate-800">
 							{vista.nombreVisible}
 						</span>
 						<Badge
@@ -85,7 +85,7 @@ export const TarjetaCarpetaVinculada: React.FC<
 				<FolderCheck size={24} className="shrink-0 text-primary stroke-[2.2]" />
 				<div className="min-w-0 space-y-1">
 					<div className="flex flex-wrap items-center gap-2">
-						<span className="truncate text-sm font-medium uppercase text-slate-900">
+						<span className="truncate text-sm font-medium text-slate-900">
 							{vista.nombreVisible}
 						</span>
 						<Badge
