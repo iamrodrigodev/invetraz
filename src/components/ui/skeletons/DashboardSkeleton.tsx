@@ -26,12 +26,14 @@ export function DashboardSkeleton() {
 		typeof window !== "undefined" &&
 		localStorage.getItem("sidebar_colapsado") === "true";
 
-	const moduloActivo =
-		typeof window !== "undefined"
-			? (window.location.pathname === "/"
-					? localStorage.getItem("moduloActivo")
-					: window.location.pathname.slice(1)) || "actividades"
-			: "actividades";
+	const moduloActivo = (() => {
+		if (typeof window === "undefined") return "actividades";
+		const ruta = window.location.pathname.replace(/^\//, "").split("/")[0];
+		if (!ruta || ruta === "") {
+			return localStorage.getItem("moduloActivo") || "actividades";
+		}
+		return ruta;
+	})();
 
 	return (
 		<div className="flex h-screen w-full overflow-hidden bg-slate-50 font-sans text-slate-800">

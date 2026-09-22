@@ -1,10 +1,23 @@
 import { ClipboardCheck, Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Card, CardContent } from "../../../components/ui";
+import { ActividadesSeguimientoSkeleton } from "../../../pages/skeletons/ActividadesSeguimientoSkeleton";
 import { ModalGenerarActividad } from "../components/ModalGenerarActividad";
 
 export function ActividadesSeguimientoPage() {
+	const [cargando, setCargando] = useState(true);
 	const [modalGenerarAbierto, setModalGenerarAbierto] = useState(false);
+
+	useEffect(() => {
+		const temporizador = setTimeout(() => {
+			setCargando(false);
+		}, 300);
+		return () => clearTimeout(temporizador);
+	}, []);
+
+	if (cargando) {
+		return <ActividadesSeguimientoSkeleton />;
+	}
 
 	return (
 		<div className="flex min-h-full w-full flex-1 flex-col">
