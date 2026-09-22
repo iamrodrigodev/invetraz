@@ -7,16 +7,11 @@ import {
 	resolverVistaCarpetaDrive,
 } from "../../../components/drive/estadoCarpetaDrive";
 import { TarjetaCarpetaVinculada } from "../../../components/drive/TarjetaCarpetaVinculada";
-import {
-	Alert,
-	Button,
-	Card,
-	CardContent,
-	PlantillasSkeleton,
-} from "../../../components/ui";
+import { Alert, Button, Card, CardContent } from "../../../components/ui";
 import { useConfiguracionStore } from "../../configuracion/store/useConfiguracionStore";
 import { obtenerPlantillas } from "../api/plantillas.api";
 import { PiePaginacionPlantillas } from "../components/PiePaginacionPlantillas";
+import { PlantillasSkeleton } from "../components/PlantillasSkeleton";
 import { TarjetaPlantilla } from "../components/TarjetaPlantilla";
 import type { CarpetaPlantillasRespuesta } from "../types/plantillas.types";
 

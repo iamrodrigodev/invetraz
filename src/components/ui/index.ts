@@ -8,3 +8,5 @@ export * from "./ModalConfirmacion";
 export * from "./ModuloEnConstruccion";
 export * from "./Skeleton";
 export * from "./Spinner";
+export * from "./skeletons/AuthCardSkeleton";
+export * from "./skeletons/DashboardSkeleton";

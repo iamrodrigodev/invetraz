@@ -1,8 +1,9 @@
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { Alert, ConfiguracionSkeleton } from "../../../components/ui";
+import { Alert } from "../../../components/ui";
 import { useAppStore } from "../../../store/useAppStore";
 import { TarjetaCarpetaDrive, TarjetaCredencialesGoogle } from "../components";
+import { ConfiguracionSkeleton } from "../components/ConfiguracionSkeleton";
 import { useConfiguracionStore } from "../store/useConfiguracionStore";
 
 export const ConfiguracionPage: React.FC = () => {
