@@ -202,7 +202,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 			>
 				<span
 					className={cn(
-						"truncate font-mono text-sm",
+						"truncate font-sans text-sm",
 						valorActual
 							? "font-medium text-slate-900"
 							: "font-normal text-slate-400",
@@ -249,7 +249,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 									type="button"
 									onClick={() => seleccionarPreajuste(preset.valor)}
 									className={cn(
-										"px-2 py-1 text-xs font-mono rounded-md border transition-all",
+										"px-2 py-1 text-xs font-sans rounded-md border transition-all",
 										valorActual === preset.valor
 											? "border-primary bg-primary text-white font-semibold"
 											: "border-slate-200 bg-slate-50 text-slate-700 hover:border-primary/40 hover:bg-primary/5 hover:text-primary",
@@ -272,7 +272,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 											type="button"
 											onClick={() => seleccionarHora(h)}
 											className={cn(
-												"w-full py-1 text-center font-mono rounded text-xs transition-colors",
+												"w-full py-1 text-center font-sans rounded text-xs transition-colors",
 												horaActual === h
 													? "bg-primary text-white font-bold"
 													: "text-slate-700 hover:bg-slate-200/70",
@@ -295,7 +295,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 											type="button"
 											onClick={() => seleccionarMinuto(m)}
 											className={cn(
-												"w-full py-1 text-center font-mono rounded text-xs transition-colors",
+												"w-full py-1 text-center font-sans rounded text-xs transition-colors",
 												minutoActual === m
 													? "bg-primary text-white font-bold"
 													: "text-slate-700 hover:bg-slate-200/70",
