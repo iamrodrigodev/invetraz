@@ -25,13 +25,13 @@ describe("TimePicker component", () => {
 		expect(screen.getByText("14:30")).toBeDefined();
 	});
 
-	it("llama a onChange al hacer clic en un preajuste", () => {
+	it("llama a onChange al hacer clic en fin del día", () => {
 		const manejarCambio = vi.fn();
 		render(<TimePicker onChange={manejarCambio} />);
 
 		fireEvent.click(screen.getByRole("button"));
-		const botonPreajuste = screen.getByText("23:59");
-		fireEvent.click(botonPreajuste);
+		const botonFinDia = screen.getByText("Fin del día (23:59)");
+		fireEvent.click(botonFinDia);
 
 		expect(manejarCambio).toHaveBeenCalledWith("23:59");
 	});

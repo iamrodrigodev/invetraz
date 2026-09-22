@@ -19,13 +19,6 @@ export interface TimePickerProps {
 	posicionDropdown?: "auto" | "abajo" | "arriba" | undefined;
 }
 
-const PREAJUSTES_HORA = [
-	{ etiqueta: "08:00", valor: "08:00" },
-	{ etiqueta: "12:00", valor: "12:00" },
-	{ etiqueta: "18:00", valor: "18:00" },
-	{ etiqueta: "23:59", valor: "23:59" },
-];
-
 const HORAS_OPCIONES = Array.from({ length: 24 }, (_, i) =>
 	String(i).padStart(2, "0"),
 );
@@ -242,24 +235,6 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 					)}
 				>
 					<div className="space-y-2">
-						<div className="flex items-center justify-between gap-1 pb-2 border-b border-slate-100">
-							{PREAJUSTES_HORA.map((preset) => (
-								<button
-									key={preset.valor}
-									type="button"
-									onClick={() => seleccionarPreajuste(preset.valor)}
-									className={cn(
-										"px-2 py-1 text-xs font-sans rounded-md border transition-all",
-										valorActual === preset.valor
-											? "border-primary bg-primary text-white font-semibold"
-											: "border-slate-200 bg-slate-50 text-slate-700 hover:border-primary/40 hover:bg-primary/5 hover:text-primary",
-									)}
-								>
-									{preset.etiqueta}
-								</button>
-							))}
-						</div>
-
 						<div className="grid grid-cols-2 gap-2 text-xs">
 							<div>
 								<span className="block mb-1 text-center font-semibold text-slate-500 uppercase tracking-wider text-[10px]">
