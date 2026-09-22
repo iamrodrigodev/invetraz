@@ -20,9 +20,6 @@ import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoLogin;
 @Service
 public class LoginImpl implements CasoUsoLogin {
 
-    private static final String HASH_FICTICIO =
-            "$2a$10$wT8PZtqgGgQjYyQ0X6g7OuM8oQZl5W6J1G5S2Y7N8B9V0C1D2E3F4";
-
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final ServicioJwt servicioJwt;
@@ -55,18 +52,13 @@ public class LoginImpl implements CasoUsoLogin {
         long tDb = System.currentTimeMillis() - t0;
 
         if (usuarioOpt.isEmpty()) {
-            long tHash0 = System.currentTimeMillis();
-            passwordEncoder.matches(peticion.password(), HASH_FICTICIO);
-            long dHash = System.currentTimeMillis() - tHash0;
             servicioLimitadorIntentos.registrarFallo(
                     claveRateLimit, 5, 60_000L, MensajesDeError.DEMASIADOS_INTENTOS_LOGIN);
             log.warn(
-                    "Login fallido (usuario no encontrado): [{}] en {} ms (DB: {} ms, FicticioHash:"
-                            + " {} ms)",
+                    "Login fallido (usuario no encontrado): [{}] en {} ms (DB: {} ms)",
                     emailNormalizado,
                     System.currentTimeMillis() - tInicio,
-                    tDb,
-                    dHash);
+                    tDb);
             throw new ExcepcionDeNegocio(MensajesDeError.CREDENCIALES_INVALIDAS);
         }
 

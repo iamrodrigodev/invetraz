@@ -77,7 +77,7 @@ class LoginImplTest {
     }
 
     @Test
-    void ejecutar_usuarioNoExiste_ejecutaDummyHashYLanzaExcepcion() {
+    void ejecutar_usuarioNoExiste_lanzaExcepcionInmediatamente() {
         when(usuarioRepository.findByEmailIgnoreCase("noexiste@ulasalle.edu.pe"))
                 .thenReturn(Optional.empty());
 
@@ -87,7 +87,7 @@ class LoginImplTest {
                 assertThrows(ExcepcionDeNegocio.class, () -> loginService.ejecutar(peticion));
 
         assertEquals(MensajesDeError.CREDENCIALES_INVALIDAS.getMensaje(), excepcion.getMessage());
-        verify(passwordEncoder).matches(eq("ClaveInvalida123"), anyString());
+        verify(passwordEncoder, never()).matches(anyString(), anyString());
         verify(servicioJwt, never()).generarTokenAcceso(any(), anyString());
     }
 
