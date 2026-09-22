@@ -25,6 +25,7 @@ import type {
 import { PrevisualizacionPlantilla } from "./PrevisualizacionPlantilla";
 
 export interface FormGenerarActividadProps {
+	valoresIniciales?: Partial<GenerarActividadSchemaTipo> | null | undefined;
 	clases: ClaseDocente[];
 	plantillas: PlantillaSeguimientoOpcion[];
 	temas: TemaClase[];
@@ -39,6 +40,7 @@ export interface FormGenerarActividadProps {
 }
 
 export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
+	valoresIniciales,
 	clases,
 	plantillas,
 	temas,
@@ -64,20 +66,35 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 		control,
 		handleSubmit,
 		watch,
+		reset,
 		formState: { errors, isValid },
 	} = useForm<GenerarActividadSchemaTipo>({
 		resolver: zodResolver(GenerarActividadSchema),
 		mode: "onChange",
 		defaultValues: {
-			idClase: "",
-			titulo: "",
-			fechaVencimiento: "",
-			idPlantilla: "",
-			descripcion: "",
-			horaVencimiento: "",
-			idTema: "",
+			idClase: valoresIniciales?.idClase || "",
+			titulo: valoresIniciales?.titulo || "",
+			fechaVencimiento: valoresIniciales?.fechaVencimiento || "",
+			idPlantilla: valoresIniciales?.idPlantilla || "",
+			descripcion: valoresIniciales?.descripcion || "",
+			horaVencimiento: valoresIniciales?.horaVencimiento || "",
+			idTema: valoresIniciales?.idTema || "",
 		},
 	});
+
+	useEffect(() => {
+		if (valoresIniciales) {
+			reset({
+				idClase: valoresIniciales.idClase || "",
+				titulo: valoresIniciales.titulo || "",
+				fechaVencimiento: valoresIniciales.fechaVencimiento || "",
+				idPlantilla: valoresIniciales.idPlantilla || "",
+				descripcion: valoresIniciales.descripcion || "",
+				horaVencimiento: valoresIniciales.horaVencimiento || "",
+				idTema: valoresIniciales.idTema || "",
+			});
+		}
+	}, [valoresIniciales, reset]);
 
 	const idClaseSeleccionada = watch("idClase");
 	const idPlantillaSeleccionada = watch("idPlantilla");
