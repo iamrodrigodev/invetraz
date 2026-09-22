@@ -22,10 +22,10 @@ export interface FormGenerarActividadProps {
 	plantillas: PlantillaSeguimientoOpcion[];
 	temas: TemaClase[];
 	carpetaDrive: CarpetaDriveInfo;
-	cargandoClases?: boolean;
-	cargandoPlantillas?: boolean;
-	cargandoTemas?: boolean;
-	onCambioClase?: (idClase: string) => void;
+	cargandoClases?: boolean | undefined;
+	cargandoPlantillas?: boolean | undefined;
+	cargandoTemas?: boolean | undefined;
+	onCambioClase?: ((idClase: string) => void) | undefined;
 	alEnviar: (datos: GenerarActividadSchemaTipo) => void;
 	alCancelar: () => void;
 }
@@ -113,8 +113,8 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 		!plantillaActual || plantillaActual.estructuraValida;
 
 	return (
-		<div className="space-y-5">
-			<p className="text-sm text-slate-600 leading-relaxed">
+		<div className="space-y-3">
+			<p className="-mt-2 text-xs text-slate-600">
 				Complete la información necesaria para generar una actividad de
 				seguimiento.
 			</p>
@@ -124,177 +124,181 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 				nombre={carpetaDrive.nombre}
 				textoBoton="Abrir carpeta en Google Drive"
 				estado="verificada"
+				compacto={true}
 			/>
 
-			<form
-				onSubmit={handleSubmit(alEnviar)}
-				noValidate
-				className="space-y-4 pt-1"
-			>
-				<div>
-					<label
-						htmlFor="idClase"
-						className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-700"
-					>
-						Clase <span className="text-red-500">*</span>
-					</label>
-					<Controller
-						name="idClase"
-						control={control}
-						render={({ field }) => (
-							<Select
-								id="idClase"
-								value={field.value}
-								onChange={(val) => {
-									field.onChange(val);
-									if (onCambioClase) onCambioClase(val);
-								}}
-								onBlur={field.onBlur}
-								disabled={cargandoClases}
-								placeholder={
-									cargandoClases
-										? "Cargando clases..."
-										: "Selecciona una clase..."
-								}
-								options={opcionesClases}
-								errorMessage={errors.idClase?.message}
+			<form onSubmit={handleSubmit(alEnviar)} noValidate className="space-y-4">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-3">
+					<div className="space-y-3">
+						<div>
+							<label
+								htmlFor="idClase"
+								className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+							>
+								Clase <span className="text-red-500">*</span>
+							</label>
+							<Controller
+								name="idClase"
+								control={control}
+								render={({ field }) => (
+									<Select
+										id="idClase"
+										value={field.value}
+										onChange={(val) => {
+											field.onChange(val);
+											if (onCambioClase) onCambioClase(val);
+										}}
+										onBlur={field.onBlur}
+										disabled={cargandoClases}
+										placeholder={
+											cargandoClases
+												? "Cargando clases..."
+												: "Selecciona una clase..."
+										}
+										options={opcionesClases}
+										errorMessage={errors.idClase?.message}
+									/>
+								)}
 							/>
-						)}
-					/>
-				</div>
+						</div>
 
-				<div>
-					<label
-						htmlFor="titulo"
-						className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-700"
-					>
-						Título <span className="text-red-500">*</span>
-					</label>
-					<Input
-						id="titulo"
-						type="text"
-						placeholder="Ingresa el título de la actividad de seguimiento"
-						maxLength={255}
-						showCount
-						errorMessage={errors.titulo?.message}
-						{...register("titulo")}
-					/>
-				</div>
+						<div>
+							<label
+								htmlFor="titulo"
+								className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+							>
+								Título <span className="text-red-500">*</span>
+							</label>
+							<Input
+								id="titulo"
+								type="text"
+								placeholder="Ingresa el título de la actividad de seguimiento"
+								maxLength={255}
+								showCount
+								errorMessage={errors.titulo?.message}
+								{...register("titulo")}
+							/>
+						</div>
 
-				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-					<div>
-						<label
-							htmlFor="fechaVencimiento"
-							className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-700"
-						>
-							Fecha de vencimiento <span className="text-red-500">*</span>
-						</label>
-						<Input
-							id="fechaVencimiento"
-							type="date"
-							min={hoy}
-							errorMessage={errors.fechaVencimiento?.message}
-							{...register("fechaVencimiento")}
-						/>
+						<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+							<div>
+								<label
+									htmlFor="fechaVencimiento"
+									className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+								>
+									Fecha de vencimiento <span className="text-red-500">*</span>
+								</label>
+								<Input
+									id="fechaVencimiento"
+									type="date"
+									min={hoy}
+									errorMessage={errors.fechaVencimiento?.message}
+									{...register("fechaVencimiento")}
+								/>
+							</div>
+
+							<div>
+								<label
+									htmlFor="horaVencimiento"
+									className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+								>
+									Hora de vencimiento
+								</label>
+								<Input
+									id="horaVencimiento"
+									type="time"
+									errorMessage={errors.horaVencimiento?.message}
+									{...register("horaVencimiento")}
+								/>
+							</div>
+						</div>
+
+						<div>
+							<label
+								htmlFor="idTema"
+								className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+							>
+								Tema
+							</label>
+							<Controller
+								name="idTema"
+								control={control}
+								render={({ field }) => (
+									<Select
+										id="idTema"
+										value={field.value}
+										onChange={field.onChange}
+										onBlur={field.onBlur}
+										disabled={!idClaseSeleccionada || cargandoTemas}
+										placeholder={
+											!idClaseSeleccionada
+												? "Selecciona primero una clase..."
+												: cargandoTemas
+													? "Cargando temas de la clase..."
+													: "Selecciona un tema opcional..."
+										}
+										options={opcionesTemas}
+										errorMessage={errors.idTema?.message}
+									/>
+								)}
+							/>
+						</div>
 					</div>
 
-					<div>
-						<label
-							htmlFor="horaVencimiento"
-							className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-700"
-						>
-							Hora de vencimiento
-						</label>
-						<Input
-							id="horaVencimiento"
-							type="time"
-							errorMessage={errors.horaVencimiento?.message}
-							{...register("horaVencimiento")}
-						/>
+					<div className="space-y-3 flex flex-col">
+						<div>
+							<label
+								htmlFor="idPlantilla"
+								className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+							>
+								Plantilla de seguimiento <span className="text-red-500">*</span>
+							</label>
+							<Controller
+								name="idPlantilla"
+								control={control}
+								render={({ field }) => (
+									<Select
+										id="idPlantilla"
+										value={field.value}
+										onChange={field.onChange}
+										onBlur={field.onBlur}
+										disabled={cargandoPlantillas}
+										placeholder={
+											cargandoPlantillas
+												? "Cargando plantillas..."
+												: "Selecciona una plantilla de seguimiento..."
+										}
+										options={opcionesPlantillas}
+										errorMessage={errors.idPlantilla?.message}
+									/>
+								)}
+							/>
+						</div>
+
+						<PrevisualizacionPlantilla plantilla={plantillaActual} />
+
+						<div className="flex-1 flex flex-col">
+							<label
+								htmlFor="descripcion"
+								className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+							>
+								Descripción
+							</label>
+							<Textarea
+								id="descripcion"
+								rows={plantillaActual ? 3 : 5}
+								maxLength={2000}
+								showCount
+								placeholder="Instrucciones o detalles de la actividad para los estudiantes..."
+								errorMessage={errors.descripcion?.message}
+								className="flex-1"
+								{...register("descripcion")}
+							/>
+						</div>
 					</div>
 				</div>
 
-				<div>
-					<label
-						htmlFor="idPlantilla"
-						className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-700"
-					>
-						Plantilla de seguimiento <span className="text-red-500">*</span>
-					</label>
-					<Controller
-						name="idPlantilla"
-						control={control}
-						render={({ field }) => (
-							<Select
-								id="idPlantilla"
-								value={field.value}
-								onChange={field.onChange}
-								onBlur={field.onBlur}
-								disabled={cargandoPlantillas}
-								placeholder={
-									cargandoPlantillas
-										? "Cargando plantillas..."
-										: "Selecciona una plantilla de seguimiento..."
-								}
-								options={opcionesPlantillas}
-								errorMessage={errors.idPlantilla?.message}
-							/>
-						)}
-					/>
-				</div>
-
-				<PrevisualizacionPlantilla plantilla={plantillaActual} />
-
-				<div>
-					<label
-						htmlFor="idTema"
-						className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-700"
-					>
-						Tema
-					</label>
-					<Controller
-						name="idTema"
-						control={control}
-						render={({ field }) => (
-							<Select
-								id="idTema"
-								value={field.value}
-								onChange={field.onChange}
-								onBlur={field.onBlur}
-								disabled={!idClaseSeleccionada || cargandoTemas}
-								placeholder={
-									!idClaseSeleccionada
-										? "Selecciona primero una clase..."
-										: cargandoTemas
-											? "Cargando temas de la clase..."
-											: "Selecciona un tema opcional..."
-								}
-								options={opcionesTemas}
-								errorMessage={errors.idTema?.message}
-							/>
-						)}
-					/>
-				</div>
-
-				<div>
-					<label
-						htmlFor="descripcion"
-						className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-700"
-					>
-						Descripción
-					</label>
-					<Textarea
-						id="descripcion"
-						rows={3}
-						maxLength={2000}
-						showCount
-						placeholder="Instrucciones o detalles de la actividad para los estudiantes..."
-						errorMessage={errors.descripcion?.message}
-						{...register("descripcion")}
-					/>
-				</div>
-
-				<div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+				<div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
 					<Button
 						type="button"
 						variant="ghost"
