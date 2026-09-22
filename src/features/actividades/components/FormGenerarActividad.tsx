@@ -183,7 +183,7 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 								id="titulo"
 								type="text"
 								placeholder="Ingresa el título de la actividad de seguimiento"
-								maxLength={255}
+								maxLength={3000}
 								showCount
 								errorMessage={errors.titulo?.message}
 								{...register("titulo")}

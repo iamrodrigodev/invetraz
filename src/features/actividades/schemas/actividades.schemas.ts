@@ -5,8 +5,8 @@ export const GenerarActividadSchema = z.object({
 	titulo: z
 		.string()
 		.trim()
-		.min(3, "El título debe contener al menos 3 caracteres")
-		.max(255, "El título no puede exceder 255 caracteres"),
+		.min(1, "El título debe contener al menos 1 carácter")
+		.max(3000, "El título no puede exceder 3000 caracteres"),
 	fechaVencimiento: z
 		.string()
 		.min(1, "Debe seleccionar una fecha de vencimiento")
