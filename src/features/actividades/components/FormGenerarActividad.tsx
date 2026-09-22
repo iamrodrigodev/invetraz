@@ -243,6 +243,7 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 										}
 										options={opcionesTemas}
 										errorMessage={errors.idTema?.message}
+										posicionDropdown="arriba"
 									/>
 								)}
 							/>

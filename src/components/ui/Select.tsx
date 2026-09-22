@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, ChevronDown } from "lucide-react";
 import type React from "react";
-import { useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { cn } from "../../utils/cn";
 import { Badge } from "./Badge";
@@ -30,6 +30,7 @@ export interface SelectProps {
 	error?: boolean | undefined;
 	errorMessage?: React.ReactNode | undefined;
 	className?: string | undefined;
+	posicionDropdown?: "auto" | "abajo" | "arriba" | undefined;
 }
 
 export const Select: React.FC<SelectProps> = ({
@@ -45,6 +46,7 @@ export const Select: React.FC<SelectProps> = ({
 	error = false,
 	errorMessage,
 	className,
+	posicionDropdown = "auto",
 }) => {
 	const generatedId = useId();
 	const selectId = id || generatedId;
@@ -54,8 +56,45 @@ export const Select: React.FC<SelectProps> = ({
 	const [uncontrolledValue, setUncontrolledValue] = useState(
 		defaultValue || "",
 	);
+	const [abrirHaciaArriba, setAbrirHaciaArriba] = useState(
+		posicionDropdown === "arriba",
+	);
 
 	const contenedorRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (posicionDropdown === "arriba") {
+			setAbrirHaciaArriba(true);
+			return;
+		}
+		if (posicionDropdown === "abajo") {
+			setAbrirHaciaArriba(false);
+			return;
+		}
+
+		if (abierto && contenedorRef.current) {
+			const rect = contenedorRef.current.getBoundingClientRect();
+			const contenedorDialog =
+				contenedorRef.current.closest('[role="dialog"]') ||
+				contenedorRef.current.closest(".overflow-y-auto");
+
+			const limiteInferior = contenedorDialog
+				? contenedorDialog.getBoundingClientRect().bottom
+				: window.innerHeight;
+			const limiteSuperior = contenedorDialog
+				? contenedorDialog.getBoundingClientRect().top
+				: 0;
+
+			const espacioAbajo = limiteInferior - rect.bottom;
+			const espacioArriba = rect.top - limiteSuperior;
+
+			if (espacioAbajo < 220 && espacioArriba > espacioAbajo) {
+				setAbrirHaciaArriba(true);
+			} else {
+				setAbrirHaciaArriba(false);
+			}
+		}
+	}, [abierto, posicionDropdown]);
 
 	const valorActual =
 		controlledValue !== undefined ? controlledValue : uncontrolledValue;
@@ -150,13 +189,24 @@ export const Select: React.FC<SelectProps> = ({
 			<AnimatePresence>
 				{abierto && (
 					<motion.div
-						initial={{ opacity: 0, y: 4, scale: 0.98 }}
+						initial={{
+							opacity: 0,
+							y: abrirHaciaArriba ? -4 : 4,
+							scale: 0.98,
+						}}
 						animate={{ opacity: 1, y: 0, scale: 1 }}
-						exit={{ opacity: 0, y: 4, scale: 0.98 }}
+						exit={{
+							opacity: 0,
+							y: abrirHaciaArriba ? -4 : 4,
+							scale: 0.98,
+						}}
 						transition={{ duration: 0.14, ease: "easeOut" }}
 						role="listbox"
 						aria-labelledby={selectId}
-						className="absolute left-0 right-0 top-full mt-1.5 z-50 max-h-60 overflow-y-auto rounded-xl border border-slate-200/90 bg-white p-1.5 shadow-xl shadow-slate-900/10 font-sans"
+						className={cn(
+							"absolute left-0 right-0 z-50 max-h-60 overflow-y-auto rounded-xl border border-slate-200/90 bg-white p-1.5 shadow-xl shadow-slate-900/10 font-sans",
+							abrirHaciaArriba ? "bottom-full mb-1.5" : "top-full mt-1.5",
+						)}
 					>
 						{options.length === 0 ? (
 							<div className="px-3 py-4 text-center text-xs text-slate-500">

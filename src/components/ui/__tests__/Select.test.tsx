@@ -50,4 +50,19 @@ describe("Select component", () => {
 		expect(screen.getByText("Este campo es obligatorio")).toBeDefined();
 		expect(screen.getByRole("alert")).toBeDefined();
 	});
+
+	it("posiciona el menú hacia arriba cuando posicionDropdown es arriba", () => {
+		render(
+			<Select
+				placeholder="Selecciona una opción"
+				options={opciones}
+				posicionDropdown="arriba"
+			/>,
+		);
+
+		fireEvent.click(screen.getByRole("button"));
+
+		const listbox = screen.getByRole("listbox");
+		expect(listbox.className).toContain("bottom-full");
+	});
 });
