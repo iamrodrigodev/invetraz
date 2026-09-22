@@ -1,4 +1,3 @@
-import { AnimatePresence, motion } from "framer-motion";
 import { Clock as ClockIcon, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
@@ -191,7 +190,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 					}
 				}}
 				className={cn(
-					"flex h-10 w-full items-center justify-between rounded-lg bg-white px-3.5 py-2 text-sm text-left outline-none transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 font-sans",
+					"flex h-10 w-full items-center justify-between rounded-lg bg-white px-3.5 py-2 text-sm text-left outline-none transition-colors duration-150 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 font-sans",
 					hasError
 						? "ring-1 ring-inset ring-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500"
 						: abierto
@@ -233,121 +232,107 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 				/>
 			</div>
 
-			<AnimatePresence>
-				{abierto && (
-					<motion.div
-						initial={{
-							opacity: 0,
-							y: abrirHaciaArriba ? -4 : 4,
-							scale: 0.98,
-						}}
-						animate={{ opacity: 1, y: 0, scale: 1 }}
-						exit={{
-							opacity: 0,
-							y: abrirHaciaArriba ? -4 : 4,
-							scale: 0.98,
-						}}
-						transition={{ duration: 0.14, ease: "easeOut" }}
-						role="dialog"
-						aria-label="Selector de hora"
-						className={cn(
-							"absolute left-0 z-50 w-64 rounded-xl border border-slate-200/90 bg-white p-3 shadow-xl shadow-slate-900/10 font-sans",
-							abrirHaciaArriba ? "bottom-full mb-1.5" : "top-full mt-1.5",
-						)}
-					>
-						<div className="space-y-2">
-							<div className="flex items-center justify-between gap-1 pb-2 border-b border-slate-100">
-								{PREAJUSTES_HORA.map((preset) => (
-									<button
-										key={preset.valor}
-										type="button"
-										onClick={() => seleccionarPreajuste(preset.valor)}
-										className={cn(
-											"px-2 py-1 text-xs font-mono rounded-md border transition-all",
-											valorActual === preset.valor
-												? "border-primary bg-primary text-white font-semibold"
-												: "border-slate-200 bg-slate-50 text-slate-700 hover:border-primary/40 hover:bg-primary/5 hover:text-primary",
-										)}
-									>
-										{preset.etiqueta}
-									</button>
-								))}
-							</div>
-
-							<div className="grid grid-cols-2 gap-2 text-xs">
-								<div>
-									<span className="block mb-1 text-center font-semibold text-slate-500 uppercase tracking-wider text-[10px]">
-										Hora
-									</span>
-									<div className="max-h-36 overflow-y-auto space-y-0.5 rounded-lg border border-slate-100 bg-slate-50/50 p-1">
-										{HORAS_OPCIONES.map((h) => (
-											<button
-												key={h}
-												type="button"
-												onClick={() => seleccionarHora(h)}
-												className={cn(
-													"w-full py-1 text-center font-mono rounded text-xs transition-colors",
-													horaActual === h
-														? "bg-primary text-white font-bold"
-														: "text-slate-700 hover:bg-slate-200/70",
-												)}
-											>
-												{h}
-											</button>
-										))}
-									</div>
-								</div>
-
-								<div>
-									<span className="block mb-1 text-center font-semibold text-slate-500 uppercase tracking-wider text-[10px]">
-										Minuto
-									</span>
-									<div className="max-h-36 overflow-y-auto space-y-0.5 rounded-lg border border-slate-100 bg-slate-50/50 p-1">
-										{MINUTOS_OPCIONES.map((m) => (
-											<button
-												key={m}
-												type="button"
-												onClick={() => seleccionarMinuto(m)}
-												className={cn(
-													"w-full py-1 text-center font-mono rounded text-xs transition-colors",
-													minutoActual === m
-														? "bg-primary text-white font-bold"
-														: "text-slate-700 hover:bg-slate-200/70",
-												)}
-											>
-												{m}
-											</button>
-										))}
-									</div>
-								</div>
-							</div>
-
-							<div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+			{abierto && (
+				<div
+					role="dialog"
+					aria-label="Selector de hora"
+					className={cn(
+						"absolute left-0 z-50 w-64 rounded-xl border border-slate-200/90 bg-white p-3 shadow-xl shadow-slate-900/10 font-sans",
+						abrirHaciaArriba ? "bottom-full mb-1.5" : "top-full mt-1.5",
+					)}
+				>
+					<div className="space-y-2">
+						<div className="flex items-center justify-between gap-1 pb-2 border-b border-slate-100">
+							{PREAJUSTES_HORA.map((preset) => (
 								<button
+									key={preset.valor}
 									type="button"
-									onClick={() => seleccionarPreajuste("23:59")}
-									className="font-medium text-primary hover:underline"
+									onClick={() => seleccionarPreajuste(preset.valor)}
+									className={cn(
+										"px-2 py-1 text-xs font-mono rounded-md border transition-all",
+										valorActual === preset.valor
+											? "border-primary bg-primary text-white font-semibold"
+											: "border-slate-200 bg-slate-50 text-slate-700 hover:border-primary/40 hover:bg-primary/5 hover:text-primary",
+									)}
 								>
-									Fin del día (23:59)
+									{preset.etiqueta}
 								</button>
+							))}
+						</div>
 
-								{valorActual && (
-									<button
-										type="button"
-										onClick={(e) => {
-											limpiarHora(e);
-											setAbierto(false);
-										}}
-										className="text-slate-500 hover:text-slate-800"
-									>
-										Limpiar
-									</button>
-								)}
+						<div className="grid grid-cols-2 gap-2 text-xs">
+							<div>
+								<span className="block mb-1 text-center font-semibold text-slate-500 uppercase tracking-wider text-[10px]">
+									Hora
+								</span>
+								<div className="max-h-36 overflow-y-auto space-y-0.5 rounded-lg border border-slate-100 bg-slate-50/50 p-1">
+									{HORAS_OPCIONES.map((h) => (
+										<button
+											key={h}
+											type="button"
+											onClick={() => seleccionarHora(h)}
+											className={cn(
+												"w-full py-1 text-center font-mono rounded text-xs transition-colors",
+												horaActual === h
+													? "bg-primary text-white font-bold"
+													: "text-slate-700 hover:bg-slate-200/70",
+											)}
+										>
+											{h}
+										</button>
+									))}
+								</div>
+							</div>
+
+							<div>
+								<span className="block mb-1 text-center font-semibold text-slate-500 uppercase tracking-wider text-[10px]">
+									Minuto
+								</span>
+								<div className="max-h-36 overflow-y-auto space-y-0.5 rounded-lg border border-slate-100 bg-slate-50/50 p-1">
+									{MINUTOS_OPCIONES.map((m) => (
+										<button
+											key={m}
+											type="button"
+											onClick={() => seleccionarMinuto(m)}
+											className={cn(
+												"w-full py-1 text-center font-mono rounded text-xs transition-colors",
+												minutoActual === m
+													? "bg-primary text-white font-bold"
+													: "text-slate-700 hover:bg-slate-200/70",
+											)}
+										>
+											{m}
+										</button>
+									))}
+								</div>
 							</div>
 						</div>
-					</motion.div>
-				)}
-			</AnimatePresence>
+
+						<div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+							<button
+								type="button"
+								onClick={() => seleccionarPreajuste("23:59")}
+								className="font-medium text-primary hover:underline"
+							>
+								Fin del día (23:59)
+							</button>
+
+							{valorActual && (
+								<button
+									type="button"
+									onClick={(e) => {
+										limpiarHora(e);
+										setAbierto(false);
+									}}
+									className="text-slate-500 hover:text-slate-800"
+								>
+									Limpiar
+								</button>
+							)}
+						</div>
+					</div>
+				</div>
+			)}
 
 			{errorMessage && (
 				<p

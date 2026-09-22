@@ -1,4 +1,3 @@
-import { AnimatePresence, motion } from "framer-motion";
 import { Check, ChevronDown } from "lucide-react";
 import type React from "react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
@@ -143,7 +142,7 @@ export const Select: React.FC<SelectProps> = ({
 					}
 				}}
 				className={cn(
-					"flex h-10 w-full items-center justify-between rounded-lg bg-white px-3.5 py-2 text-sm text-left outline-none transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50",
+					"flex h-10 w-full items-center justify-between rounded-lg bg-white px-3.5 py-2 text-sm text-left outline-none transition-colors duration-150 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50",
 					hasError
 						? "ring-1 ring-inset ring-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500"
 						: abierto
@@ -186,92 +185,76 @@ export const Select: React.FC<SelectProps> = ({
 				</div>
 			</button>
 
-			<AnimatePresence>
-				{abierto && (
-					<motion.div
-						initial={{
-							opacity: 0,
-							y: abrirHaciaArriba ? -4 : 4,
-							scale: 0.98,
-						}}
-						animate={{ opacity: 1, y: 0, scale: 1 }}
-						exit={{
-							opacity: 0,
-							y: abrirHaciaArriba ? -4 : 4,
-							scale: 0.98,
-						}}
-						transition={{ duration: 0.14, ease: "easeOut" }}
-						role="listbox"
-						aria-labelledby={selectId}
-						className={cn(
-							"absolute left-0 right-0 z-50 max-h-60 overflow-y-auto rounded-xl border border-slate-200/90 bg-white p-1.5 shadow-xl shadow-slate-900/10 font-sans",
-							abrirHaciaArriba ? "bottom-full mb-1.5" : "top-full mt-1.5",
-						)}
-					>
-						{options.length === 0 ? (
-							<div className="px-3 py-4 text-center text-xs text-slate-500">
-								No hay opciones disponibles
-							</div>
-						) : (
-							options.map((opt) => {
-								const estaSeleccionada = opt.value === valorActual;
-								return (
-									<button
-										key={opt.value}
-										type="button"
-										role="option"
-										aria-selected={estaSeleccionada}
-										disabled={opt.disabled}
-										onClick={() => seleccionarOpcion(opt)}
-										className={cn(
-											"flex w-full items-center justify-between gap-2.5 rounded-lg px-3 py-2.5 text-sm transition-colors cursor-pointer select-none text-left",
-											opt.disabled
-												? "opacity-40 cursor-not-allowed pointer-events-none"
-												: estaSeleccionada
-													? "bg-primary text-white font-semibold shadow-xs"
-													: "text-slate-800 hover:bg-slate-50 hover:text-primary",
+			{abierto && (
+				<div
+					role="listbox"
+					aria-labelledby={selectId}
+					className={cn(
+						"absolute left-0 right-0 z-50 max-h-60 overflow-y-auto rounded-xl border border-slate-200/90 bg-white p-1.5 shadow-xl shadow-slate-900/10 font-sans",
+						abrirHaciaArriba ? "bottom-full mb-1.5" : "top-full mt-1.5",
+					)}
+				>
+					{options.length === 0 ? (
+						<div className="px-3 py-4 text-center text-xs text-slate-500">
+							No hay opciones disponibles
+						</div>
+					) : (
+						options.map((opt) => {
+							const estaSeleccionada = opt.value === valorActual;
+							return (
+								<button
+									key={opt.value}
+									type="button"
+									role="option"
+									aria-selected={estaSeleccionada}
+									disabled={opt.disabled}
+									onClick={() => seleccionarOpcion(opt)}
+									className={cn(
+										"flex w-full items-center justify-between gap-2.5 rounded-lg px-3 py-2.5 text-sm transition-colors cursor-pointer select-none text-left",
+										opt.disabled
+											? "opacity-40 cursor-not-allowed pointer-events-none"
+											: estaSeleccionada
+												? "bg-primary text-white font-semibold shadow-xs"
+												: "text-slate-800 hover:bg-slate-50 hover:text-primary",
+									)}
+								>
+									<div className="min-w-0 flex-1">
+										<div className="truncate">{opt.label}</div>
+										{opt.sublabel && (
+											<div
+												className={cn(
+													"text-xs font-normal truncate mt-0.5",
+													estaSeleccionada ? "text-white/80" : "text-slate-500",
+												)}
+											>
+												{opt.sublabel}
+											</div>
 										)}
-									>
-										<div className="min-w-0 flex-1">
-											<div className="truncate">{opt.label}</div>
-											{opt.sublabel && (
-												<div
-													className={cn(
-														"text-xs font-normal truncate mt-0.5",
-														estaSeleccionada
-															? "text-white/80"
-															: "text-slate-500",
-													)}
-												>
-													{opt.sublabel}
-												</div>
-											)}
-										</div>
+									</div>
 
-										<div className="flex items-center gap-2 shrink-0">
-											{opt.badge && (
-												<Badge
-													variant={opt.badgeVariant || "slate"}
-													className={cn(
-														"text-[11px] font-normal",
-														estaSeleccionada &&
-															"bg-white/20 text-white border-transparent",
-													)}
-												>
-													{opt.badge}
-												</Badge>
-											)}
-											{estaSeleccionada && (
-												<Check size={16} className="text-white shrink-0" />
-											)}
-										</div>
-									</button>
-								);
-							})
-						)}
-					</motion.div>
-				)}
-			</AnimatePresence>
+									<div className="flex items-center gap-2 shrink-0">
+										{opt.badge && (
+											<Badge
+												variant={opt.badgeVariant || "slate"}
+												className={cn(
+													"text-[11px] font-normal",
+													estaSeleccionada &&
+														"bg-white/20 text-white border-transparent",
+												)}
+											>
+												{opt.badge}
+											</Badge>
+										)}
+										{estaSeleccionada && (
+											<Check size={16} className="text-white shrink-0" />
+										)}
+									</div>
+								</button>
+							);
+						})
+					)}
+				</div>
+			)}
 
 			{errorMessage && (
 				<div className="mt-1.5 min-w-0 text-xs">

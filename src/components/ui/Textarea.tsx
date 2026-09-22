@@ -76,7 +76,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 						aria-invalid={hasError}
 						aria-describedby={hasError && errorMessage ? errorId : undefined}
 						className={cn(
-							"flex w-full resize-y rounded-lg bg-white px-3.5 py-2.5 text-sm placeholder:text-slate-400 outline-none focus:outline-none border-0 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200",
+							"flex w-full resize-y rounded-lg bg-white px-3.5 py-2.5 text-sm placeholder:text-slate-400 outline-none focus:outline-none border-0 disabled:cursor-not-allowed disabled:opacity-50 transition-colors duration-150",
 							hasError
 								? "ring-1 ring-inset ring-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500"
 								: "ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-primary",

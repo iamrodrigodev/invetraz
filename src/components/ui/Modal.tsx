@@ -90,10 +90,10 @@ export function Modal({
 					<motion.div
 						ref={dialogoRef}
 						tabIndex={-1}
-						initial={{ opacity: 0, scale: 0.96, y: 12 }}
-						animate={{ opacity: 1, scale: 1, y: 0 }}
-						exit={{ opacity: 0, scale: 0.96, y: 12 }}
-						transition={{ duration: 0.18, ease: "easeOut" }}
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 0.15, ease: "easeOut" }}
 						className={cn(
 							"relative z-10 w-full overflow-hidden rounded-2xl bg-white p-6 align-middle shadow-2xl max-h-[90vh] overflow-y-auto",
 							!className?.includes("max-w-") && "max-w-md",

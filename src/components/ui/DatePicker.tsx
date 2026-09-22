@@ -1,4 +1,3 @@
-import { AnimatePresence, motion } from "framer-motion";
 import {
 	Calendar as CalendarIcon,
 	ChevronLeft,
@@ -313,7 +312,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 					}
 				}}
 				className={cn(
-					"flex h-10 w-full items-center justify-between rounded-lg bg-white px-3.5 py-2 text-sm text-left outline-none transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 font-sans",
+					"flex h-10 w-full items-center justify-between rounded-lg bg-white px-3.5 py-2 text-sm text-left outline-none transition-colors duration-150 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 font-sans",
 					hasError
 						? "ring-1 ring-inset ring-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500"
 						: abierto
@@ -355,118 +354,104 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 				/>
 			</div>
 
-			<AnimatePresence>
-				{abierto && (
-					<motion.div
-						initial={{
-							opacity: 0,
-							y: abrirHaciaArriba ? -4 : 4,
-							scale: 0.98,
-						}}
-						animate={{ opacity: 1, y: 0, scale: 1 }}
-						exit={{
-							opacity: 0,
-							y: abrirHaciaArriba ? -4 : 4,
-							scale: 0.98,
-						}}
-						transition={{ duration: 0.14, ease: "easeOut" }}
-						role="dialog"
-						aria-label="Selector de fecha"
-						className={cn(
-							"absolute left-0 z-50 w-72 rounded-xl border border-slate-200/90 bg-white p-3 shadow-xl shadow-slate-900/10 font-sans sm:w-80",
-							abrirHaciaArriba ? "bottom-full mb-1.5" : "top-full mt-1.5",
-						)}
-					>
-						<div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
+			{abierto && (
+				<div
+					role="dialog"
+					aria-label="Selector de fecha"
+					className={cn(
+						"absolute left-0 z-50 w-72 rounded-xl border border-slate-200/90 bg-white p-3 shadow-xl shadow-slate-900/10 font-sans sm:w-80",
+						abrirHaciaArriba ? "bottom-full mb-1.5" : "top-full mt-1.5",
+					)}
+				>
+					<div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
+						<button
+							type="button"
+							onClick={irMesAnterior}
+							className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
+							title="Mes anterior"
+						>
+							<ChevronLeft size={16} />
+						</button>
+
+						<span className="text-xs font-bold uppercase tracking-wider text-slate-800">
+							{NOMBRES_MESES[mesVisual]} {anioVisual}
+						</span>
+
+						<button
+							type="button"
+							onClick={irMesSiguiente}
+							className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
+							title="Mes siguiente"
+						>
+							<ChevronRight size={16} />
+						</button>
+					</div>
+
+					<div className="grid grid-cols-7 gap-1 text-center text-[11px] font-semibold text-slate-400 mb-1.5">
+						{DIAS_SEMANA.map((dia) => (
+							<div key={dia} className="py-0.5">
+								{dia}
+							</div>
+						))}
+					</div>
+
+					<div className="grid grid-cols-7 gap-1">
+						{diasCalendario.map((celda) => (
 							<button
+								key={celda.fechaStr}
 								type="button"
-								onClick={irMesAnterior}
-								className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
-								title="Mes anterior"
-							>
-								<ChevronLeft size={16} />
-							</button>
-
-							<span className="text-xs font-bold uppercase tracking-wider text-slate-800">
-								{NOMBRES_MESES[mesVisual]} {anioVisual}
-							</span>
-
-							<button
-								type="button"
-								onClick={irMesSiguiente}
-								className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
-								title="Mes siguiente"
-							>
-								<ChevronRight size={16} />
-							</button>
-						</div>
-
-						<div className="grid grid-cols-7 gap-1 text-center text-[11px] font-semibold text-slate-400 mb-1.5">
-							{DIAS_SEMANA.map((dia) => (
-								<div key={dia} className="py-0.5">
-									{dia}
-								</div>
-							))}
-						</div>
-
-						<div className="grid grid-cols-7 gap-1">
-							{diasCalendario.map((celda) => (
-								<button
-									key={celda.fechaStr}
-									type="button"
-									disabled={celda.deshabilitado}
-									onClick={() =>
-										seleccionarFecha(celda.fechaStr, celda.deshabilitado)
-									}
-									className={cn(
-										"flex h-8 w-full items-center justify-center rounded-lg text-xs font-medium transition-all",
-										!celda.esMesActual && "text-slate-300",
-										celda.esMesActual &&
-											!celda.estaSeleccionado &&
-											!celda.deshabilitado &&
-											"text-slate-700 hover:bg-slate-100 hover:text-slate-900",
-										celda.esHoy &&
-											!celda.estaSeleccionado &&
-											"ring-1 ring-inset ring-primary text-primary font-bold hover:bg-primary/5",
-										celda.estaSeleccionado &&
-											"bg-primary text-white font-bold shadow-xs hover:bg-primary/95",
-										celda.deshabilitado &&
-											"opacity-25 cursor-not-allowed text-slate-400 hover:bg-transparent",
-									)}
-								>
-									{celda.dia}
-								</button>
-							))}
-						</div>
-
-						<div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
-							<button
-								type="button"
-								onClick={seleccionarHoy}
-								disabled={Boolean(
-									(min && fechaHoyStr < min) || (max && fechaHoyStr > max),
+								disabled={celda.deshabilitado}
+								onClick={() =>
+									seleccionarFecha(celda.fechaStr, celda.deshabilitado)
+								}
+								className={cn(
+									"flex h-8 w-full items-center justify-center rounded-lg text-xs font-medium transition-all",
+									!celda.esMesActual && "text-slate-300",
+									celda.esMesActual &&
+										!celda.estaSeleccionado &&
+										!celda.deshabilitado &&
+										"text-slate-700 hover:bg-slate-100 hover:text-slate-900",
+									celda.esHoy &&
+										!celda.estaSeleccionado &&
+										"ring-1 ring-inset ring-primary text-primary font-bold hover:bg-primary/5",
+									celda.estaSeleccionado &&
+										"bg-primary text-white font-bold shadow-xs hover:bg-primary/95",
+									celda.deshabilitado &&
+										"opacity-25 cursor-not-allowed text-slate-400 hover:bg-transparent",
 								)}
-								className="font-semibold text-primary hover:underline disabled:opacity-40 disabled:no-underline"
 							>
-								Hoy
+								{celda.dia}
 							</button>
+						))}
+					</div>
 
-							{valorActual && (
-								<button
-									type="button"
-									onClick={(e) => {
-										limpiarFecha(e);
-										setAbierto(false);
-									}}
-									className="text-slate-500 hover:text-slate-800"
-								>
-									Limpiar
-								</button>
+					<div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+						<button
+							type="button"
+							onClick={seleccionarHoy}
+							disabled={Boolean(
+								(min && fechaHoyStr < min) || (max && fechaHoyStr > max),
 							)}
-						</div>
-					</motion.div>
-				)}
-			</AnimatePresence>
+							className="font-semibold text-primary hover:underline disabled:opacity-40 disabled:no-underline"
+						>
+							Hoy
+						</button>
+
+						{valorActual && (
+							<button
+								type="button"
+								onClick={(e) => {
+									limpiarFecha(e);
+									setAbierto(false);
+								}}
+								className="text-slate-500 hover:text-slate-800"
+							>
+								Limpiar
+							</button>
+						)}
+					</div>
+				</div>
+			)}
 
 			{errorMessage && (
 				<p

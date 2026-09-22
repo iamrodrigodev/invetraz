@@ -30,13 +30,13 @@ export function useGenerarActividad(activo = false) {
 		cargarConfiguracion,
 	} = useConfiguracionStore();
 
-	const [clases, setClases] = useState<ClaseDocente[]>([]);
-	const [plantillas, setPlantillas] = useState<PlantillaSeguimientoOpcion[]>(
-		[],
+	const [clases] = useState<ClaseDocente[]>(DATOS_PRUEBA_CLASES);
+	const [plantillas] = useState<PlantillaSeguimientoOpcion[]>(
+		DATOS_PRUEBA_PLANTILLAS,
 	);
 	const [temas, setTemas] = useState<TemaClase[]>([]);
-	const [cargandoClases, setCargandoClases] = useState(false);
-	const [cargandoPlantillas, setCargandoPlantillas] = useState(false);
+	const [cargandoClases] = useState(false);
+	const [cargandoPlantillas] = useState(false);
 	const [cargandoTemas, setCargandoTemas] = useState(false);
 	const [generando, setGenerando] = useState(false);
 
@@ -46,23 +46,6 @@ export function useGenerarActividad(activo = false) {
 		if (!configuracionCargada && !configuracionCargando) {
 			cargarConfiguracion().catch(() => {});
 		}
-
-		setCargandoClases(true);
-		const timerClases = setTimeout(() => {
-			setClases(DATOS_PRUEBA_CLASES);
-			setCargandoClases(false);
-		}, 100);
-
-		setCargandoPlantillas(true);
-		const timerPlantillas = setTimeout(() => {
-			setPlantillas(DATOS_PRUEBA_PLANTILLAS);
-			setCargandoPlantillas(false);
-		}, 100);
-
-		return () => {
-			clearTimeout(timerClases);
-			clearTimeout(timerPlantillas);
-		};
 	}, [
 		activo,
 		configuracionCargada,
