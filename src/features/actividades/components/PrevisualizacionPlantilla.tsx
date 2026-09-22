@@ -72,7 +72,7 @@ export const PrevisualizacionPlantilla: React.FC<
 			</div>
 
 			{plantilla.enlaceWeb && (
-				<div className="pt-2 border-t border-emerald-200/60 flex items-center justify-end">
+				<div className="flex items-center justify-end">
 					<a
 						href={plantilla.enlaceWeb}
 						target="_blank"
@@ -81,9 +81,9 @@ export const PrevisualizacionPlantilla: React.FC<
 					>
 						<Button
 							type="button"
-							variant="outline"
+							variant="default"
 							size="sm"
-							className="h-7 border-emerald-300 bg-white text-emerald-800 hover:bg-emerald-50 hover:text-emerald-900 shadow-none text-xs font-semibold"
+							className="h-8 text-xs font-semibold shadow-xs"
 						>
 							<ExternalLink size={12} className="mr-1.5" />
 							Ver plantilla en Google Sheets

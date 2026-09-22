@@ -228,14 +228,21 @@ export const Select: React.FC<SelectProps> = ({
 											opt.disabled
 												? "opacity-40 cursor-not-allowed pointer-events-none"
 												: estaSeleccionada
-													? "bg-primary-50/90 text-primary font-semibold"
+													? "bg-primary text-white font-semibold shadow-xs"
 													: "text-slate-800 hover:bg-slate-50 hover:text-primary",
 										)}
 									>
 										<div className="min-w-0 flex-1">
 											<div className="truncate">{opt.label}</div>
 											{opt.sublabel && (
-												<div className="text-xs text-slate-500 font-normal truncate mt-0.5">
+												<div
+													className={cn(
+														"text-xs font-normal truncate mt-0.5",
+														estaSeleccionada
+															? "text-white/80"
+															: "text-slate-500",
+													)}
+												>
 													{opt.sublabel}
 												</div>
 											)}
@@ -245,13 +252,17 @@ export const Select: React.FC<SelectProps> = ({
 											{opt.badge && (
 												<Badge
 													variant={opt.badgeVariant || "slate"}
-													className="text-[11px] font-normal"
+													className={cn(
+														"text-[11px] font-normal",
+														estaSeleccionada &&
+															"bg-white/20 text-white border-transparent",
+													)}
 												>
 													{opt.badge}
 												</Badge>
 											)}
 											{estaSeleccionada && (
-												<Check size={16} className="text-primary shrink-0" />
+												<Check size={16} className="text-white shrink-0" />
 											)}
 										</div>
 									</button>
