@@ -1,4 +1,5 @@
 import {
+	AlignLeft,
 	BookOpen,
 	Calendar,
 	Check,
@@ -151,7 +152,7 @@ export const ModalConfirmarGeneracion: React.FC<
 
 					{resumen.nombreTema && (
 						<div className="flex items-start gap-3 pt-3 border-t border-slate-100">
-							<Tag size={18} className="shrink-0 text-slate-500 mt-0.5" />
+							<Tag size={18} className="shrink-0 text-primary mt-0.5" />
 							<div className="min-w-0 flex-1">
 								<span className="block text-xs font-medium text-slate-500">
 									Tema
@@ -164,13 +165,16 @@ export const ModalConfirmarGeneracion: React.FC<
 					)}
 
 					{resumen.descripcion && (
-						<div className="pt-3 border-t border-slate-100 space-y-1">
-							<span className="block text-xs font-medium text-slate-500">
-								Descripción
-							</span>
-							<p className="text-xs text-slate-700 leading-relaxed whitespace-pre-wrap max-h-24 overflow-y-auto bg-slate-50 p-2.5 rounded-lg border border-slate-200/60 font-sans">
-								{resumen.descripcion}
-							</p>
+						<div className="flex items-start gap-3 pt-3 border-t border-slate-100">
+							<AlignLeft size={18} className="shrink-0 text-primary mt-0.5" />
+							<div className="min-w-0 flex-1">
+								<span className="block text-xs font-medium text-slate-500">
+									Descripción
+								</span>
+								<p className="text-sm font-normal text-slate-800 leading-relaxed whitespace-pre-wrap max-h-24 overflow-y-auto">
+									{resumen.descripcion}
+								</p>
+							</div>
 						</div>
 					)}
 				</div>
