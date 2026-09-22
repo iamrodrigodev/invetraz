@@ -303,7 +303,7 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 					</div>
 				</div>
 
-				<div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+				<div className="flex items-center justify-end gap-3 pt-2">
 					<Button
 						type="button"
 						variant="ghost"
