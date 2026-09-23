@@ -33,7 +33,7 @@ const ListarTemasRespuestaSchema = z.object({
 
 const PLANTILLA_MOCK_INVALIDA: PlantillaSeguimientoOpcion = {
 	id: "mock-plantilla-seguimiento-invalida",
-	nombre: "Plantilla de prueba - estructura inválida.xlsx",
+	nombre: "Plantilla de prueba - estructura inválida",
 	enlaceWeb: "https://docs.google.com/spreadsheets/d/mock-plantilla-invalida",
 	frecuenciaUso: 0,
 	estructuraValida: false,
@@ -70,7 +70,7 @@ export async function obtenerPlantillasParaFormulario(): Promise<
 
 		return {
 			id: p.id,
-			nombre: p.nombre,
+			nombre: p.nombre.replace(/\.(xlsx|xls|gsheet)$/i, ""),
 			enlaceWeb: p.enlaceWeb ?? null,
 			frecuenciaUso: 0,
 			estructuraValida,
