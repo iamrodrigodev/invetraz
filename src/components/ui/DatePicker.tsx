@@ -8,6 +8,7 @@ import type React from "react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { cn } from "../../utils/cn";
+import { Button } from "./Button";
 
 export interface DatePickerProps {
 	id?: string | undefined;
@@ -364,27 +365,29 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 					)}
 				>
 					<div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
-						<button
+						<Button
 							type="button"
+							variant="ghost"
+							size="icon-sm"
 							onClick={irMesAnterior}
-							className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
 							title="Mes anterior"
 						>
 							<ChevronLeft size={16} />
-						</button>
+						</Button>
 
 						<span className="text-xs font-bold uppercase tracking-wider text-slate-800">
 							{NOMBRES_MESES[mesVisual]} {anioVisual}
 						</span>
 
-						<button
+						<Button
 							type="button"
+							variant="ghost"
+							size="icon-sm"
 							onClick={irMesSiguiente}
-							className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
 							title="Mes siguiente"
 						>
 							<ChevronRight size={16} />
-						</button>
+						</Button>
 					</div>
 
 					<div className="grid grid-cols-7 gap-1 text-center text-[11px] font-semibold text-slate-400 mb-1.5">
@@ -427,28 +430,32 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 					</div>
 
 					<div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
-						<button
+						<Button
 							type="button"
+							variant="link"
+							size="sm"
 							onClick={seleccionarHoy}
 							disabled={Boolean(
 								(min && fechaHoyStr < min) || (max && fechaHoyStr > max),
 							)}
-							className="font-semibold text-primary hover:underline cursor-pointer select-none disabled:cursor-not-allowed disabled:opacity-40 disabled:no-underline"
+							className="h-auto p-0 text-xs font-semibold"
 						>
 							Hoy
-						</button>
+						</Button>
 
 						{valorActual && (
-							<button
+							<Button
 								type="button"
+								variant="ghost"
+								size="sm"
 								onClick={(e) => {
 									limpiarFecha(e);
 									setAbierto(false);
 								}}
-								className="text-slate-500 hover:text-slate-800 cursor-pointer select-none"
+								className="h-auto px-1.5 py-0.5 text-xs text-slate-500 hover:text-slate-800"
 							>
 								Limpiar
-							</button>
+							</Button>
 						)}
 					</div>
 				</div>

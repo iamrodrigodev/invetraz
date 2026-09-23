@@ -3,6 +3,7 @@ import type React from "react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { cn } from "../../utils/cn";
+import { Button } from "./Button";
 
 export interface TimePickerProps {
 	id?: string | undefined;
@@ -284,25 +285,29 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 						</div>
 
 						<div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-							<button
+							<Button
 								type="button"
+								variant="link"
+								size="sm"
 								onClick={() => seleccionarPreajuste("23:59")}
-								className="font-medium text-primary hover:underline cursor-pointer select-none"
+								className="h-auto p-0 text-xs font-medium"
 							>
 								Fin del día (23:59)
-							</button>
+							</Button>
 
 							{valorActual && (
-								<button
+								<Button
 									type="button"
+									variant="ghost"
+									size="sm"
 									onClick={(e) => {
 										limpiarHora(e);
 										setAbierto(false);
 									}}
-									className="text-slate-500 hover:text-slate-800 cursor-pointer select-none"
+									className="h-auto px-1.5 py-0.5 text-xs text-slate-500 hover:text-slate-800"
 								>
 									Limpiar
-								</button>
+								</Button>
 							)}
 						</div>
 					</div>
