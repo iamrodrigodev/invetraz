@@ -185,7 +185,7 @@ export const Select: React.FC<SelectProps> = ({
 					role="listbox"
 					aria-labelledby={selectId}
 					className={cn(
-						"absolute right-0 left-0 z-50 max-h-60 overflow-y-auto rounded-xl border border-slate-200/90 bg-white p-1.5 font-sans shadow-slate-900/10 shadow-xl",
+						"absolute right-0 left-0 z-50 max-h-60 overflow-y-auto rounded-xl border border-slate-200/90 bg-white p-2 font-sans shadow-slate-900/10 shadow-xl",
 						abrirHaciaArriba ? "bottom-full mb-1.5" : "top-full mt-1.5",
 					)}
 				>
@@ -205,7 +205,7 @@ export const Select: React.FC<SelectProps> = ({
 									disabled={opt.disabled}
 									onClick={() => seleccionarOpcion(opt)}
 									className={cn(
-										"flex w-full cursor-pointer select-none items-center justify-between gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm transition-colors",
+										"flex w-full cursor-pointer select-none items-center justify-between gap-3.5 rounded-lg px-3.5 py-3 text-left text-sm transition-colors",
 										opt.disabled
 											? "pointer-events-none cursor-not-allowed opacity-40"
 											: estaSeleccionada
@@ -227,7 +227,7 @@ export const Select: React.FC<SelectProps> = ({
 										)}
 									</div>
 
-									<div className="flex shrink-0 items-center gap-2">
+									<div className="flex min-w-5 shrink-0 items-center justify-end gap-2">
 										{opt.badge && (
 											<Badge
 												variant={opt.badgeVariant || "blue"}
