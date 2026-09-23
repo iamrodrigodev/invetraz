@@ -55,7 +55,7 @@ export function SidebarItem({
 			</button>
 
 			{estaColapsado && (
-				<div className="pointer-events-none absolute top-1/2 left-full z-50 ml-2.5 -translate-y-1/2 whitespace-nowrap rounded-lg bg-primary px-3 py-1.5 font-semibold text-white text-xs opacity-0 shadow-md transition-opacity duration-150 group-hover/item:opacity-100">
+				<div className="pointer-events-none absolute top-1/2 left-full z-50 ml-2.5 hidden -translate-y-1/2 whitespace-nowrap rounded-lg bg-primary px-3 py-1.5 font-semibold text-white text-xs opacity-0 shadow-md transition-opacity duration-150 md:block group-hover/item:opacity-100">
 					{item.titulo}
 					<div className="absolute top-1/2 -left-1 -translate-y-1/2 border-4 border-transparent border-r-primary" />
 				</div>

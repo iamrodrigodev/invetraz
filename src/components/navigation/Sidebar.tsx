@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { BotonCerrarSesion } from "@/components/navigation/BotonCerrarSesion.tsx";
 import { Logo } from "@/components/navigation/Logo.tsx";
@@ -18,6 +18,7 @@ export interface SidebarProps {
 	permiteColapsoManual?: boolean;
 	className?: string;
 	alSolicitarCerrarSesion?: () => void;
+	alCerrarMenuMovil?: () => void;
 }
 
 export function Sidebar({
@@ -28,6 +29,7 @@ export function Sidebar({
 	permiteColapsoManual = true,
 	className,
 	alSolicitarCerrarSesion,
+	alCerrarMenuMovil,
 }: SidebarProps) {
 	const navigate = useNavigate();
 	const cerrarSesionStore = useAppStore((state) => state.cerrarSesion);
@@ -59,8 +61,18 @@ export function Sidebar({
 				</button>
 			)}
 
-			<div className="flex h-16 shrink-0 items-center border-slate-200 border-b px-4.5">
+			<div className="flex h-16 shrink-0 items-center justify-between border-slate-200 border-b px-4.5">
 				<Logo estaColapsado={estaColapsado} />
+				{alCerrarMenuMovil && (
+					<button
+						type="button"
+						onClick={alCerrarMenuMovil}
+						aria-label="Cerrar menú"
+						className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 md:hidden"
+					>
+						<X className="h-5 w-5" strokeWidth={2.2} />
+					</button>
+				)}
 			</div>
 
 			<nav

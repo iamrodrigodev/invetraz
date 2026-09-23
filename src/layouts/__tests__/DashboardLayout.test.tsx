@@ -110,6 +110,27 @@ describe("DashboardLayout", () => {
 		expect(screen.queryByLabelText("Cerrar menú lateral")).toBeNull();
 	});
 
+	it("en móvil nunca está colapsado y permite cerrarse con el botón X", () => {
+		localStorage.setItem("sidebar_colapsado", "true");
+		window.innerWidth = 390;
+		render(
+			<MemoryRouter initialEntries={["/actividades"]}>
+				<DashboardLayout />
+			</MemoryRouter>,
+		);
+
+		const btnHamburguesa = screen.getByLabelText("Abrir menú de navegación");
+		fireEvent.click(btnHamburguesa);
+
+		expect(screen.getByText("Investigación")).toBeDefined();
+		expect(screen.getByText("Actividades")).toBeDefined();
+		expect(screen.getByText("Reportes")).toBeDefined();
+
+		const btnCerrar = screen.getByLabelText("Cerrar menú");
+		fireEvent.click(btnCerrar);
+		expect(screen.queryByLabelText("Cerrar menú lateral")).toBeNull();
+	});
+
 	it("en tablet muestra sidebar colapsado sin boton hamburguesa", () => {
 		window.innerWidth = 820;
 		render(

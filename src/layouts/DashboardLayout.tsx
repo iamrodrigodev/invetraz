@@ -36,7 +36,7 @@ export function DashboardLayout({
 
 	const esTablet = anchoVentana >= BREAKPOINT_TABLET && anchoVentana < BREAKPOINT_DESKTOP;
 	const esDesktop = anchoVentana >= BREAKPOINT_DESKTOP;
-	const sidebarColapsadoVisual = esTablet || estaColapsado;
+	const sidebarColapsadoVisual = esTablet || (esDesktop && estaColapsado);
 
 	const moduloRuta = pathname.replace(/^\//u, "").split("/")[0];
 	const moduloActivoCalculado = ModuloIdSchema.catch("actividades").parse(
@@ -114,6 +114,7 @@ export function DashboardLayout({
 					alAlternarColapso={() => setEstaColapsado((prev) => !prev)}
 					permiteColapsoManual={esDesktop}
 					alSolicitarCerrarSesion={() => setModalCerrarSesionAbierto(true)}
+					alCerrarMenuMovil={() => setMenuLateralAbierto(false)}
 					className="h-full w-full"
 				/>
 			</div>
