@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import pe.edu.ulasalle.sistemainvestigacion.models.ClaseClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.models.TareaClassroom;
+import pe.edu.ulasalle.sistemainvestigacion.models.TemaClassroom;
 
 @Slf4j
 @Component
@@ -25,6 +26,8 @@ public class CacheClassroom {
     private final Map<String, EntradaCache<List<ClaseClassroom>>> cacheClases =
             new ConcurrentHashMap<>();
     private final Map<String, EntradaCache<List<TareaClassroom>>> cacheTareas =
+            new ConcurrentHashMap<>();
+    private final Map<String, EntradaCache<List<TemaClassroom>>> cacheTemas =
             new ConcurrentHashMap<>();
 
     public List<ClaseClassroom> obtenerClases(
@@ -50,8 +53,8 @@ public class CacheClassroom {
                             List<ClaseClassroom> datos = cargador.get();
                             List<ClaseClassroom> inmutable =
                                     datos != null
-                                            ? Collections.unmodifiableList(datos)
-                                            : Collections.emptyList();
+                                             ? Collections.unmodifiableList(datos)
+                                             : Collections.emptyList();
                             return new EntradaCache<>(inmutable, tiempo + TTL_MILLIS);
                         });
 
@@ -82,8 +85,40 @@ public class CacheClassroom {
                             List<TareaClassroom> datos = cargador.get();
                             List<TareaClassroom> inmutable =
                                     datos != null
-                                            ? Collections.unmodifiableList(datos)
-                                            : Collections.emptyList();
+                                             ? Collections.unmodifiableList(datos)
+                                             : Collections.emptyList();
+                            return new EntradaCache<>(inmutable, tiempo + TTL_MILLIS);
+                        });
+
+        return calculada != null ? calculada.datos() : Collections.emptyList();
+    }
+
+    public List<TemaClassroom> obtenerTemas(
+            String idClase, Supplier<List<TemaClassroom>> cargador) {
+        long ahora = System.currentTimeMillis();
+        EntradaCache<List<TemaClassroom>> existente = cacheTemas.get(idClase);
+        if (existente != null && existente.estaVigente(ahora)) {
+            log.debug("Cache hit para temas de la clase '{}'", idClase);
+            return existente.datos();
+        }
+
+        EntradaCache<List<TemaClassroom>> calculada =
+                cacheTemas.compute(
+                        idClase,
+                        (k, actual) -> {
+                            long tiempo = System.currentTimeMillis();
+                            if (actual != null && actual.estaVigente(tiempo)) {
+                                return actual;
+                            }
+                            log.debug(
+                                    "Cache miss para temas de la clase '{}', cargando desde"
+                                            + " Google",
+                                    idClase);
+                            List<TemaClassroom> datos = cargador.get();
+                            List<TemaClassroom> inmutable =
+                                    datos != null
+                                             ? Collections.unmodifiableList(datos)
+                                             : Collections.emptyList();
                             return new EntradaCache<>(inmutable, tiempo + TTL_MILLIS);
                         });
 
@@ -100,9 +135,15 @@ public class CacheClassroom {
         cacheTareas.remove(idClase);
     }
 
+    public void invalidarTemas(String idClase) {
+        log.debug("Invalidando cache de temas para clase '{}'", idClase);
+        cacheTemas.remove(idClase);
+    }
+
     public void invalidarTodo() {
         log.debug("Invalidando toda la cache de Google Classroom");
         cacheClases.clear();
         cacheTareas.clear();
+        cacheTemas.clear();
     }
 }
