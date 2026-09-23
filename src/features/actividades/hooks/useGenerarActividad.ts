@@ -1,8 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
-import {
-	DATOS_PRUEBA_TEMAS,
-	simularGeneracionActividad,
-} from "@/features/actividades/mocks/actividadesCascaron.mock.ts";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { obtenerTemasClase } from "@/features/actividades/api/actividades.api.ts";
+import { simularGeneracionActividad } from "@/features/actividades/mocks/actividadesCascaron.mock.ts";
 import { useClasesDocenteStore } from "@/features/actividades/store/useClasesDocenteStore.ts";
 import { usePlantillasSeguimientoStore } from "@/features/actividades/store/usePlantillasSeguimientoStore.ts";
 import type {
@@ -75,19 +73,35 @@ export function useGenerarActividad(activo = false) {
 		cargarClases,
 	]);
 
+	const ultimaClaseTemasRef = useRef<string>("");
+
 	const cargarTemasDeClase = useCallback((idClase: string) => {
 		if (!idClase) {
+			ultimaClaseTemasRef.current = "";
 			setTemas([]);
+			setCargandoTemas(false);
 			return;
 		}
-		setCargandoTemas(true);
-		const timerTemas = setTimeout(() => {
-			const temasEncontrados = DATOS_PRUEBA_TEMAS[idClase] || [];
-			setTemas(temasEncontrados);
-			setCargandoTemas(false);
-		}, 100);
 
-		return () => clearTimeout(timerTemas);
+		ultimaClaseTemasRef.current = idClase;
+		setCargandoTemas(true);
+
+		obtenerTemasClase(idClase)
+			.then((temasObtenidos) => {
+				if (ultimaClaseTemasRef.current === idClase) {
+					setTemas(temasObtenidos);
+				}
+			})
+			.catch(() => {
+				if (ultimaClaseTemasRef.current === idClase) {
+					setTemas([]);
+				}
+			})
+			.finally(() => {
+				if (ultimaClaseTemasRef.current === idClase) {
+					setCargandoTemas(false);
+				}
+			});
 	}, []);
 
 	const configuracionValida = esConfiguracionListaParaActividades(credenciales, estadoConexion);

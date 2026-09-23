@@ -1,5 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import * as actividadesApi from "@/features/actividades/api/actividades.api.ts";
 import { useGenerarActividad } from "@/features/actividades/hooks/useGenerarActividad.ts";
 import { useClasesDocenteStore } from "@/features/actividades/store/useClasesDocenteStore.ts";
 import { usePlantillasSeguimientoStore } from "@/features/actividades/store/usePlantillasSeguimientoStore.ts";
@@ -44,40 +45,32 @@ describe("useGenerarActividad", () => {
 	});
 
 	it("carga temas dinamicamente segun la clase seleccionada", async () => {
+		const spyObtenerTemas = vi
+			.spyOn(actividadesApi, "obtenerTemasClase")
+			.mockResolvedValueOnce([
+				{ idTema: "t-1", nombre: "Tema 1" },
+				{ idTema: "t-2", nombre: "Tema 2" },
+			])
+			.mockResolvedValueOnce([]);
+
 		const { result } = renderHook(() => useGenerarActividad());
 
-		act(() => {
+		await act(async () => {
 			result.current.cargarTemasDeClase("c-101");
 		});
 
-		expect(result.current.cargandoTemas).toBe(true);
-
-		act(() => {
-			vi.advanceTimersByTime(100);
-		});
-
+		expect(spyObtenerTemas).toHaveBeenCalledWith("c-101");
 		expect(result.current.cargandoTemas).toBe(false);
-		expect(result.current.temas.length).toBeGreaterThan(0);
+		expect(result.current.temas).toHaveLength(2);
+		expect(result.current.temas[0]?.nombre).toBe("Tema 1");
 
 		act(() => {
 			result.current.cargarTemasDeClase("");
 		});
 		expect(result.current.temas).toEqual([]);
 
-		let cleanup: (() => void) | undefined;
-		act(() => {
-			cleanup = result.current.cargarTemasDeClase("c-101");
-		});
-		expect(cleanup).toBeDefined();
-		act(() => {
-			cleanup?.();
-		});
-
-		act(() => {
+		await act(async () => {
 			result.current.cargarTemasDeClase("clase-sin-temas");
-		});
-		act(() => {
-			vi.advanceTimersByTime(100);
 		});
 		expect(result.current.temas).toEqual([]);
 	});
