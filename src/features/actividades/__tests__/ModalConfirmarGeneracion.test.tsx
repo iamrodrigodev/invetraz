@@ -46,6 +46,7 @@ describe("ModalConfirmarGeneracion", () => {
 		expect(screen.getByText("Entrega de Avance Metodológico")).toBeDefined();
 		expect(screen.getByText("Matriz_Seguimiento_2026.xlsx")).toBeDefined();
 		expect(screen.getByText("Estructura válida")).toBeDefined();
+		expect(screen.getByText(/11:59 pm/i)).toBeDefined();
 		expect(screen.getByText("Abrir plantilla")).toBeDefined();
 
 		const enlaceSheet = screen.getByText("Abrir plantilla").closest("a");

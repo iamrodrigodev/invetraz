@@ -4,7 +4,6 @@ import {
 	Calendar,
 	Check,
 	CheckCircle2,
-	Clock,
 	ExternalLink,
 	FileSpreadsheet,
 	GraduationCap,
@@ -24,8 +23,31 @@ export interface ModalConfirmarGeneracionProps {
 	alCerrar: () => void;
 }
 
+function formatearHora12(horaStr: string): string {
+	if (!horaStr) return "";
+	try {
+		const partes = horaStr.split(":").map(Number);
+		const horasRaw = partes[0];
+		const minutosRaw = partes[1];
+		if (
+			horasRaw !== undefined &&
+			minutosRaw !== undefined &&
+			!Number.isNaN(horasRaw) &&
+			!Number.isNaN(minutosRaw)
+		) {
+			const horas24 = horasRaw;
+			const minutos = String(minutosRaw).padStart(2, "0");
+			const periodo = horas24 >= 12 ? "pm" : "am";
+			const horas12 = horas24 % 12 === 0 ? 12 : horas24 % 12;
+			return `${horas12}:${minutos} ${periodo}`;
+		}
+	} catch {}
+	return horaStr;
+}
+
 function formatearFechaVencimiento(fechaStr: string, horaStr?: string): string {
 	if (!fechaStr) return "-";
+	const horaFormateada = horaStr ? formatearHora12(horaStr) : "";
 	try {
 		const partes = fechaStr.split("-").map(Number);
 		if (partes.length === 3 && partes[0] && partes[1] && partes[2]) {
@@ -35,10 +57,12 @@ function formatearFechaVencimiento(fechaStr: string, horaStr?: string): string {
 				month: "long",
 				year: "numeric",
 			}).format(fecha);
-			return horaStr ? `${textoFecha} a las ${horaStr}` : textoFecha;
+			return horaFormateada
+				? `${textoFecha} a las ${horaFormateada}`
+				: textoFecha;
 		}
 	} catch {}
-	return horaStr ? `${fechaStr} a las ${horaStr}` : fechaStr;
+	return horaFormateada ? `${fechaStr} a las ${horaFormateada}` : fechaStr;
 }
 
 export const ModalConfirmarGeneracion: React.FC<
@@ -141,11 +165,8 @@ export const ModalConfirmarGeneracion: React.FC<
 							<span className="block text-xs font-medium text-slate-500">
 								Fecha de vencimiento
 							</span>
-							<div className="flex items-center gap-1.5 text-sm font-semibold text-slate-900">
-								<span>{fechaHoraTexto}</span>
-								{resumen.horaVencimiento && (
-									<Clock size={13} className="text-slate-400 shrink-0" />
-								)}
+							<div className="text-sm font-semibold text-slate-900">
+								{fechaHoraTexto}
 							</div>
 						</div>
 					</div>
