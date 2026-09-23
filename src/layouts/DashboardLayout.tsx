@@ -118,7 +118,7 @@ export function DashboardLayout({
 							animate={{ x: 0 }}
 							exit={{ x: "-100%" }}
 							transition={{ type: "spring", damping: 28, stiffness: 280 }}
-							className="fixed inset-y-0 left-0 z-50 h-full w-72 max-w-[85vw] shadow-2xl"
+							className="fixed inset-y-0 left-0 z-50 h-full w-80 max-w-[85vw] shadow-2xl"
 						>
 							<Sidebar
 								moduloActivo={moduloActual}

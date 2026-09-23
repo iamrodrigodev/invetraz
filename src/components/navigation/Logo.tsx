@@ -10,12 +10,12 @@ export function Logo({ estaColapsado = false, className }: LogoProps) {
 	return (
 		<div
 			className={cn(
-				"flex min-w-0 select-none items-center font-bold text-base text-slate-900 tracking-tight",
+				"flex min-w-0 select-none items-center font-bold text-sm tracking-tight text-slate-900 sm:text-[15px]",
 				className,
 			)}
 		>
-			<div className="flex h-11 w-11 shrink-0 items-center justify-center">
-				<Microscope className="h-6 w-6 text-primary" strokeWidth={2.2} />
+			<div className="flex h-9 w-9 shrink-0 items-center justify-center">
+				<Microscope className="h-5 w-5 text-primary" strokeWidth={2.2} />
 			</div>
 			<div
 				className={cn(
