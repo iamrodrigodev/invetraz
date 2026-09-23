@@ -136,6 +136,16 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 		[clases],
 	);
 
+	const placeholderClases = useMemo(() => {
+		if (cargandoClases) {
+			return "Cargando clases...";
+		}
+		if (opcionesClases.length === 0) {
+			return "No hay clases disponibles en Classroom";
+		}
+		return "Selecciona una clase...";
+	}, [cargandoClases, opcionesClases.length]);
+
 	const opcionesPlantillas = useMemo(
 		() =>
 			plantillas.map((p) => ({
@@ -206,13 +216,7 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 										}}
 										onBlur={field.onBlur}
 										disabled={cargandoClases || opcionesClases.length === 0}
-										placeholder={
-											cargandoClases
-												? "Cargando clases..."
-												: opcionesClases.length === 0
-													? "No hay clases disponibles en Classroom"
-													: "Selecciona una clase..."
-										}
+										placeholder={placeholderClases}
 										options={opcionesClases}
 										errorMessage={errors.idClase?.message}
 									/>
