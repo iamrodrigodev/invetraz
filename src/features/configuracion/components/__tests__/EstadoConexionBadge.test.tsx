@@ -11,7 +11,7 @@ describe("EstadoConexionBadge", () => {
 			["conectado", "Conexión activa con Google"],
 			["guardado_pendiente", "Guardada, no verificada"],
 			["no_disponible", "No se puede usar"],
-			["verificando", "Verificando conexión..."],
+			["verificando", "Verificando conexión"],
 			["error", "Error de conexión"],
 			["no_configurado", "Pendiente de configuración"],
 		];

@@ -42,7 +42,7 @@ export const EstadoConexionBadge: React.FC<EstadoConexionBadgeProps> = ({ estado
 			return (
 				<Badge variant="primary" className={className}>
 					<RefreshCw size={13} className="shrink-0 animate-spin text-primary" />
-					<span>Verificando conexión...</span>
+					<span>Verificando conexión</span>
 				</Badge>
 			);
 		case "error":

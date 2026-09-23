@@ -20,7 +20,7 @@ describe("TarjetaCarpetaDrive", () => {
 
 		expect(screen.queryByText(/tampoco lo estarán en las plantillas/iu)).toBeNull();
 		expect(screen.queryByText("Conexión activa con Google")).toBeNull();
-		expect(screen.getByText("Verificando conexión...")).toBeDefined();
+		expect(screen.getByText("Verificando conexión")).toBeDefined();
 
 		const botonVerificar = screen.getByRole("button", {
 			name: /Verificar Conexión/iu,
