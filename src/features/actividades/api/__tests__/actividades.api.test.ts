@@ -19,16 +19,14 @@ describe("actividades.api", () => {
 				status: 200,
 				headers: new Headers({ "content-type": "application/json" }),
 				json: async () => ({
-					datos: {
-						datos: [
-							{
-								idClassroom: "c-1",
-								nombre: "Investigacion I",
-								estado: "ACTIVE",
-								enlaceClase: "https://classroom.google.com/c-1",
-							},
-						],
-					},
+					datos: [
+						{
+							idClassroom: "c-1",
+							nombre: "Investigacion I",
+							estado: "ACTIVE",
+							enlaceClase: "https://classroom.google.com/c-1",
+						},
+					],
 				}),
 			}),
 		);
@@ -106,9 +104,7 @@ describe("actividades.api", () => {
 				status: 200,
 				headers: new Headers({ "content-type": "application/json" }),
 				json: async () => ({
-					datos: {
-						datos: [{ idTema: "t-1", nombre: "Semana 1" }],
-					},
+					datos: [{ idTema: "t-1", nombre: "Semana 1" }],
 				}),
 			}),
 		);

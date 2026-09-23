@@ -117,6 +117,7 @@ describe("ModalGenerarActividad", () => {
 			generando: false,
 			cargarTemasDeClase,
 			cargarPlantillas: vi.fn(),
+			cargarClases: vi.fn(),
 			ejecutarGeneracion,
 		});
 
@@ -179,6 +180,7 @@ describe("ModalGenerarActividad", () => {
 			generando: false,
 			cargarTemasDeClase: vi.fn(),
 			cargarPlantillas: vi.fn(),
+			cargarClases: vi.fn(),
 			ejecutarGeneracion: vi.fn(),
 		});
 
@@ -206,6 +208,7 @@ describe("ModalGenerarActividad", () => {
 			generando: false,
 			cargarTemasDeClase: vi.fn(),
 			cargarPlantillas: vi.fn(),
+			cargarClases: vi.fn(),
 			ejecutarGeneracion,
 		});
 
@@ -237,6 +240,7 @@ describe("ModalGenerarActividad", () => {
 			generando: false,
 			cargarTemasDeClase: vi.fn(),
 			cargarPlantillas: vi.fn(),
+			cargarClases: vi.fn(),
 			ejecutarGeneracion,
 		});
 
@@ -270,6 +274,7 @@ describe("ModalGenerarActividad", () => {
 			generando: false,
 			cargarTemasDeClase: vi.fn(),
 			cargarPlantillas: vi.fn(),
+			cargarClases: vi.fn(),
 			ejecutarGeneracion: vi.fn(),
 		});
 

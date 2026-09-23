@@ -205,8 +205,14 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 											}
 										}}
 										onBlur={field.onBlur}
-										disabled={cargandoClases}
-										placeholder={cargandoClases ? "Cargando clases..." : "Selecciona una clase..."}
+										disabled={cargandoClases || opcionesClases.length === 0}
+										placeholder={
+											cargandoClases
+												? "Cargando clases..."
+												: opcionesClases.length === 0
+													? "No hay clases disponibles en Classroom"
+													: "Selecciona una clase..."
+										}
 										options={opcionesClases}
 										errorMessage={errors.idClase?.message}
 									/>

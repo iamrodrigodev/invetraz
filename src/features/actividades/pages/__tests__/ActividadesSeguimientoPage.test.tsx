@@ -1,6 +1,7 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ActividadesSeguimientoPage } from "@/features/actividades/pages/ActividadesSeguimientoPage.tsx";
+import { useClasesDocenteStore } from "@/features/actividades/store/useClasesDocenteStore.ts";
 import { usePlantillasSeguimientoStore } from "@/features/actividades/store/usePlantillasSeguimientoStore.ts";
 import { useConfiguracionStore } from "@/features/configuracion/store/useConfiguracionStore.ts";
 
@@ -21,11 +22,13 @@ describe("ActividadesSeguimientoPage", () => {
 		vi.clearAllMocks();
 		useConfiguracionStore.getState().limpiar();
 		usePlantillasSeguimientoStore.getState().limpiar();
+		useClasesDocenteStore.getState().limpiar();
 	});
 
 	it("muestra skeleton mientras carga la configuracion inicial y luego el estado vacio", async () => {
 		const cargarConfiguracion = vi.fn().mockResolvedValue(undefined);
 		const cargarPlantillas = vi.fn().mockResolvedValue([]);
+		const cargarClases = vi.fn().mockResolvedValue([]);
 
 		useConfiguracionStore.setState({
 			cargado: false,
@@ -33,6 +36,9 @@ describe("ActividadesSeguimientoPage", () => {
 		});
 		usePlantillasSeguimientoStore.setState({
 			cargarPlantillas,
+		});
+		useClasesDocenteStore.setState({
+			cargarClases,
 		});
 
 		render(<ActividadesSeguimientoPage />);
@@ -43,6 +49,7 @@ describe("ActividadesSeguimientoPage", () => {
 
 		expect(cargarConfiguracion).toHaveBeenCalled();
 		expect(cargarPlantillas).toHaveBeenCalled();
+		expect(cargarClases).toHaveBeenCalled();
 		expect(screen.getByText("Actividades de seguimiento")).toBeDefined();
 		expect(screen.getByText("No hay actividades de seguimiento registradas")).toBeDefined();
 	});

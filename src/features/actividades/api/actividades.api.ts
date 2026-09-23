@@ -9,26 +9,16 @@ import type {
 import { obtenerPlantillas } from "@/features/plantillas/api/plantillas.api.ts";
 import { ejecutarPeticion } from "@/utils/api.ts";
 
-const ClaseClassroomDtoSchema = z.object({
+export const ClaseClassroomDtoSchema = z.object({
 	idClassroom: z.string(),
 	nombre: z.string(),
 	estado: z.string().optional(),
 	enlaceClase: z.string().optional(),
 });
 
-const ListarClasesRespuestaSchema = z.object({
-	mensaje: z.string().optional(),
-	datos: z.array(ClaseClassroomDtoSchema),
-});
-
-const TemaClassroomDtoSchema = z.object({
+export const TemaClassroomDtoSchema = z.object({
 	idTema: z.string(),
 	nombre: z.string(),
-});
-
-const ListarTemasRespuestaSchema = z.object({
-	mensaje: z.string().optional(),
-	datos: z.array(TemaClassroomDtoSchema),
 });
 
 const PLANTILLA_MOCK_INVALIDA: PlantillaSeguimientoOpcion = {
@@ -47,13 +37,13 @@ const PLANTILLA_MOCK_INVALIDA: PlantillaSeguimientoOpcion = {
 };
 
 export async function obtenerClasesDocente(): Promise<ClaseDocente[]> {
-	const res = await ejecutarPeticion(
+	const clases = await ejecutarPeticion(
 		`${entorno.VITE_API_BASE_URL}/clases/como-docente`,
 		{ method: "GET" },
-		ListarClasesRespuestaSchema,
+		z.array(ClaseClassroomDtoSchema),
 		"Error al consultar las clases del docente",
 	);
-	return res.datos.map((c) => ({
+	return clases.map((c) => ({
 		idClassroom: c.idClassroom,
 		nombre: c.nombre,
 		estado: c.estado,
@@ -88,13 +78,12 @@ export async function obtenerPlantillasParaFormulario(): Promise<PlantillaSeguim
 }
 
 export async function obtenerTemasClase(idClase: string): Promise<TemaClase[]> {
-	const res = await ejecutarPeticion(
+	return ejecutarPeticion(
 		`${entorno.VITE_API_BASE_URL}/clases/${idClase}/temas`,
 		{ method: "GET" },
-		ListarTemasRespuestaSchema,
+		z.array(TemaClassroomDtoSchema),
 		"Error al consultar los temas de la clase",
 	);
-	return res.datos;
 }
 
 export async function generarActividadSeguimientoApi(

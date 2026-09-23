@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import {
-	DATOS_PRUEBA_CLASES,
 	DATOS_PRUEBA_TEMAS,
 	simularGeneracionActividad,
 } from "@/features/actividades/mocks/actividadesCascaron.mock.ts";
+import { useClasesDocenteStore } from "@/features/actividades/store/useClasesDocenteStore.ts";
 import { usePlantillasSeguimientoStore } from "@/features/actividades/store/usePlantillasSeguimientoStore.ts";
 import type {
-	ClaseDocente,
 	FormGenerarActividadValores,
 	TemaClase,
 } from "@/features/actividades/types/actividades.types.ts";
@@ -36,9 +35,14 @@ export function useGenerarActividad(activo = false) {
 		cargarPlantillas,
 	} = usePlantillasSeguimientoStore();
 
-	const [clases] = useState<ClaseDocente[]>(DATOS_PRUEBA_CLASES);
+	const {
+		clases,
+		cargando: cargandoClases,
+		cargado: clasesCargadas,
+		cargarClases,
+	} = useClasesDocenteStore();
+
 	const [temas, setTemas] = useState<TemaClase[]>([]);
-	const [cargandoClases] = useState(false);
 	const [cargandoTemas, setCargandoTemas] = useState(false);
 	const [generando, setGenerando] = useState(false);
 
@@ -54,6 +58,10 @@ export function useGenerarActividad(activo = false) {
 		if (!(plantillasCargadas || cargandoPlantillas)) {
 			cargarPlantillas().catch(() => {});
 		}
+
+		if (!(clasesCargadas || cargandoClases)) {
+			cargarClases().catch(() => {});
+		}
 	}, [
 		activo,
 		configuracionCargada,
@@ -62,6 +70,9 @@ export function useGenerarActividad(activo = false) {
 		plantillasCargadas,
 		cargandoPlantillas,
 		cargarPlantillas,
+		clasesCargadas,
+		cargandoClases,
+		cargarClases,
 	]);
 
 	const cargarTemasDeClase = useCallback((idClase: string) => {
@@ -115,6 +126,7 @@ export function useGenerarActividad(activo = false) {
 		generando,
 		cargarTemasDeClase,
 		cargarPlantillas,
+		cargarClases,
 		ejecutarGeneracion,
 	};
 }

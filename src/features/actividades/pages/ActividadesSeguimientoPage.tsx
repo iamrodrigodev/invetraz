@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button.tsx";
 import { Card, CardContent } from "@/components/ui/Card.tsx";
 import { ModalGenerarActividad } from "@/features/actividades/components/ModalGenerarActividad.tsx";
+import { useClasesDocenteStore } from "@/features/actividades/store/useClasesDocenteStore.ts";
 import { usePlantillasSeguimientoStore } from "@/features/actividades/store/usePlantillasSeguimientoStore.ts";
 import {
 	esConfiguracionListaParaActividades,
@@ -19,6 +20,7 @@ export function ActividadesSeguimientoPage() {
 		cargarConfiguracion,
 	} = useConfiguracionStore();
 	const { cargarPlantillas } = usePlantillasSeguimientoStore();
+	const { cargarClases } = useClasesDocenteStore();
 	const [cargando, setCargando] = useState(!configuracionCargada);
 	const [modalGenerarAbierto, setModalGenerarAbierto] = useState(false);
 
@@ -29,6 +31,7 @@ export function ActividadesSeguimientoPage() {
 				await Promise.all([
 					configuracionCargada ? Promise.resolve() : cargarConfiguracion(),
 					cargarPlantillas().catch(() => []),
+					cargarClases().catch(() => []),
 					new Promise((resolve) => setTimeout(resolve, 200)),
 				]);
 			} catch {}
@@ -40,7 +43,7 @@ export function ActividadesSeguimientoPage() {
 		return () => {
 			montado = false;
 		};
-	}, [configuracionCargada, cargarConfiguracion, cargarPlantillas]);
+	}, [configuracionCargada, cargarConfiguracion, cargarPlantillas, cargarClases]);
 
 	if (cargando) {
 		return <ActividadesSeguimientoSkeleton />;

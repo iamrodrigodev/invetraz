@@ -1,6 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useGenerarActividad } from "@/features/actividades/hooks/useGenerarActividad.ts";
+import { useClasesDocenteStore } from "@/features/actividades/store/useClasesDocenteStore.ts";
 import { usePlantillasSeguimientoStore } from "@/features/actividades/store/usePlantillasSeguimientoStore.ts";
 import { useConfiguracionStore } from "@/features/configuracion/store/useConfiguracionStore.ts";
 
@@ -10,16 +11,19 @@ describe("useGenerarActividad", () => {
 		vi.restoreAllMocks();
 		useConfiguracionStore.getState().limpiar();
 		usePlantillasSeguimientoStore.getState().limpiar();
+		useClasesDocenteStore.getState().limpiar();
 	});
 
 	it("no ejecuta cargas automaticas si activo es false", () => {
 		const spyConfig = vi.spyOn(useConfiguracionStore.getState(), "cargarConfiguracion");
 		const spyPlantillas = vi.spyOn(usePlantillasSeguimientoStore.getState(), "cargarPlantillas");
+		const spyClases = vi.spyOn(useClasesDocenteStore.getState(), "cargarClases");
 
 		const { result } = renderHook(() => useGenerarActividad(false));
 		expect(spyConfig).not.toHaveBeenCalled();
 		expect(spyPlantillas).not.toHaveBeenCalled();
-		expect(result.current.clases.length).toBeGreaterThan(0);
+		expect(spyClases).not.toHaveBeenCalled();
+		expect(result.current.clases).toEqual([]);
 	});
 
 	it("dispara cargas iniciales si activo es true", () => {
@@ -29,10 +33,14 @@ describe("useGenerarActividad", () => {
 		const spyPlantillas = vi
 			.spyOn(usePlantillasSeguimientoStore.getState(), "cargarPlantillas")
 			.mockResolvedValue([] as never);
+		const spyClases = vi
+			.spyOn(useClasesDocenteStore.getState(), "cargarClases")
+			.mockResolvedValue([] as never);
 
 		renderHook(() => useGenerarActividad(true));
 		expect(spyConfig).toHaveBeenCalled();
 		expect(spyPlantillas).toHaveBeenCalled();
+		expect(spyClases).toHaveBeenCalled();
 	});
 
 	it("carga temas dinamicamente segun la clase seleccionada", async () => {
