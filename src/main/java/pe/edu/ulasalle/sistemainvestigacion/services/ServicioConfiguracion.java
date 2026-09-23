@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionDeNegocio;
+import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorDrive;
 import pe.edu.ulasalle.sistemainvestigacion.dto.peticion.ActualizarCredencialesPeticion;
@@ -120,8 +121,7 @@ public class ServicioConfiguracion {
         if (clientId == null || clientSecret == null || refreshToken == null) {
             var configOpt = configuracionRepository.findFirstByOrderByIdAsc();
             if (configOpt.isEmpty()) {
-                throw new ExcepcionDeNegocio(
-                        "No hay credenciales de Google configuradas para verificar");
+                throw new ExcepcionDeNegocio(MensajesDeError.NO_HAY_CREDENCIALES_GOOGLE);
             }
             ConfiguracionSistema config = configOpt.get();
             clientId = config.getGoogleClientId();
@@ -135,9 +135,7 @@ public class ServicioConfiguracion {
                 || clientSecret.isBlank()
                 || refreshToken == null
                 || refreshToken.isBlank()) {
-            throw new ExcepcionDeNegocio(
-                    "Las credenciales de Google están incompletas. Debes ingresar Client ID, Client"
-                            + " Secret y Refresh Token.");
+            throw new ExcepcionDeNegocio(MensajesDeError.CREDENCIALES_GOOGLE_INCOMPLETAS);
         }
 
         try {
@@ -151,8 +149,7 @@ public class ServicioConfiguracion {
             credentials.refresh();
             AccessToken token = credentials.getAccessToken();
             if (token == null || token.getTokenValue() == null || token.getTokenValue().isBlank()) {
-                throw new ExcepcionDeNegocio(
-                        "Google no devolvió un token de acceso válido. Revisa el Refresh Token.");
+                throw new ExcepcionDeNegocio(MensajesDeError.GOOGLE_TOKEN_ACCESO_INVALIDO);
             }
 
             ConfiguracionSistema config =
@@ -181,20 +178,19 @@ public class ServicioConfiguracion {
         } catch (ExcepcionDeNegocio e) {
             throw e;
         } catch (Exception e) {
-            String mensajeDetalle = resolverMensajeDetalle(e);
-            throw new ExcepcionDeNegocio("Error al conectar con Google: " + mensajeDetalle);
+            throw new ExcepcionDeNegocio(resolverMensajeErrorGoogle(e));
         }
     }
 
-    private String resolverMensajeDetalle(Exception e) {
-        String mensajeDetalle = e.getMessage() != null ? e.getMessage() : "Error desconocido";
+    private MensajesDeError resolverMensajeErrorGoogle(Exception e) {
+        String mensajeDetalle = e.getMessage() != null ? e.getMessage() : "";
         if (mensajeDetalle.contains("invalid_grant")) {
-            return "El Refresh Token es inválido, ha expirado o fue revocado en Google Cloud.";
+            return MensajesDeError.GOOGLE_REFRESH_TOKEN_INVALIDO;
         }
         if (mensajeDetalle.contains("invalid_client")
                 || mensajeDetalle.contains("unauthorized_client")) {
-            return "El Client ID o Client Secret son incorrectos.";
+            return MensajesDeError.GOOGLE_CLIENT_ID_O_SECRET_INVALIDO;
         }
-        return mensajeDetalle;
+        return MensajesDeError.ERROR_CONEXION_GOOGLE;
     }
 }

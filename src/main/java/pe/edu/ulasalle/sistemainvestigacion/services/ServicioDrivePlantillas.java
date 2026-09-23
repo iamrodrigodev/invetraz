@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionDeNegocio;
+import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorDrive;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.CarpetaPlantillasRespuestaDto;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.PlantillaXlsxDto;
@@ -51,14 +52,12 @@ public class ServicioDrivePlantillas {
     public CarpetaPlantillasRespuestaDto verificarCarpeta(String urlOId) {
         String folderId = extraerIdCarpeta(urlOId);
         if (folderId.isBlank()) {
-            throw new ExcepcionDeNegocio(
-                    "Por favor, ingresa un enlace o ID válido de la carpeta de Google Drive.");
+            throw new ExcepcionDeNegocio(MensajesDeError.CARPETA_DRIVE_ID_INVALIDO);
         }
 
         var configOpt = configuracionRepository.findFirstByOrderByIdAsc();
         if (configOpt.isEmpty()) {
-            throw new ExcepcionDeNegocio(
-                    "Primero debes configurar las credenciales maestras de Google.");
+            throw new ExcepcionDeNegocio(MensajesDeError.CREDENCIALES_GOOGLE_NO_CONFIGURADAS);
         }
 
         ConfiguracionSistema config = configOpt.get();
@@ -67,10 +66,7 @@ public class ServicioDrivePlantillas {
                 config.setDriveVerificado(false);
                 configuracionRepository.save(config);
             }
-            throw new ExcepcionDeNegocio(
-                    "Como las credenciales de Google Cloud no están verificadas, tampoco lo estarán"
-                        + " en las plantillas de seguimiento. Verifica esa conexión antes de usar"
-                        + " Drive o plantillas.");
+            throw new ExcepcionDeNegocio(MensajesDeError.CREDENCIALES_GOOGLE_NO_VERIFICADAS);
         }
 
         File carpetaGoogle;
@@ -84,31 +80,22 @@ public class ServicioDrivePlantillas {
                     e.getStatusCode(),
                     e.getMessage());
             if (e.getStatusCode() == 404) {
-                throw new ExcepcionDeNegocio(
-                        "No se encontró la carpeta en Google Drive. Verifica el enlace o los"
-                                + " permisos de acceso.");
+                throw new ExcepcionDeNegocio(MensajesDeError.CARPETA_DRIVE_NO_ENCONTRADA);
             } else if (e.getStatusCode() == 403) {
-                throw new ExcepcionDeNegocio(
-                        "Acceso denegado a la carpeta de Google Drive. Asegúrate de que tu cuenta"
-                                + " tenga permisos de lectura y que el scope de Drive esté"
-                                + " habilitado.");
+                throw new ExcepcionDeNegocio(MensajesDeError.ACCESO_DENEGADO_DRIVE);
             }
-            throw new ExcepcionDeNegocio("Error al consultar Google Drive: " + e.getMessage());
+            throw new ExcepcionDeNegocio(MensajesDeError.ERROR_CONSULTA_DRIVE);
         } catch (Exception e) {
             log.error("Fallo inesperado al consultar carpeta Drive", e);
-            throw new ExcepcionDeNegocio(
-                    "No se pudo conectar con Google Drive. Revisa tu conexión o credenciales.");
+            throw new ExcepcionDeNegocio(MensajesDeError.ERROR_CONEXION_DRIVE);
         }
 
         if (Boolean.TRUE.equals(carpetaGoogle.getTrashed())) {
-            throw new ExcepcionDeNegocio(
-                    "La carpeta seleccionada se encuentra en la papelera de reciclaje de Google"
-                            + " Drive.");
+            throw new ExcepcionDeNegocio(MensajesDeError.CARPETA_DRIVE_EN_PAPELERA);
         }
 
         if (!"application/vnd.google-apps.folder".equals(carpetaGoogle.getMimeType())) {
-            throw new ExcepcionDeNegocio(
-                    "El enlace proporcionado no pertenece a una carpeta, sino a un archivo.");
+            throw new ExcepcionDeNegocio(MensajesDeError.ENLACE_DRIVE_NO_ES_CARPETA);
         }
 
         config.setGoogleDriveFolderId(folderId);
@@ -123,8 +110,7 @@ public class ServicioDrivePlantillas {
     public CarpetaPlantillasRespuestaDto vincularCarpeta(String urlOId) {
         String folderId = extraerIdCarpeta(urlOId);
         if (folderId.isBlank()) {
-            throw new ExcepcionDeNegocio(
-                    "Por favor, ingresa un enlace o ID válido de la carpeta de Google Drive.");
+            throw new ExcepcionDeNegocio(MensajesDeError.CARPETA_DRIVE_ID_INVALIDO);
         }
 
         ConfiguracionSistema config =
@@ -133,8 +119,8 @@ public class ServicioDrivePlantillas {
                         .orElseThrow(
                                 () ->
                                         new ExcepcionDeNegocio(
-                                                "Primero debes configurar las credenciales maestras"
-                                                        + " de Google."));
+                                                MensajesDeError
+                                                        .CREDENCIALES_GOOGLE_NO_CONFIGURADAS));
 
         if (!Boolean.TRUE.equals(config.getGoogleVerificado())) {
             log.warn(
@@ -286,8 +272,7 @@ public class ServicioDrivePlantillas {
                     "Error al listar archivos xlsx de la carpeta Drive {}: {}",
                     folderId,
                     e.getMessage());
-            throw new ExcepcionDeNegocio(
-                    "Error al consultar archivos en la carpeta de Google Drive: " + e.getMessage());
+            throw new ExcepcionDeNegocio(MensajesDeError.ERROR_LISTAR_ARCHIVOS_DRIVE);
         }
 
         return CarpetaPlantillasRespuestaDto.builder()
