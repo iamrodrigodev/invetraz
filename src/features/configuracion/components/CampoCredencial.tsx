@@ -32,7 +32,7 @@ export const CampoCredencial = ({
 			type="button"
 			onClick={() => setMostrarTexto((prev) => !prev)}
 			aria-label={mostrarTexto ? "Ocultar contenido" : "Mostrar contenido"}
-			className="cursor-pointer text-primary/70 transition-colors hover:text-primary focus:outline-none"
+			className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-primary/70 transition-colors hover:bg-slate-100 hover:text-primary focus:outline-none"
 		>
 			{mostrarTexto ? <EyeOff size={18} /> : <Eye size={18} />}
 		</button>

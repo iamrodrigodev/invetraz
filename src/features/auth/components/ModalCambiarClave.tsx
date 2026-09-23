@@ -146,7 +146,7 @@ export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps)
 								<button
 									type="button"
 									onClick={() => setShowActual(!showActual)}
-									className="cursor-pointer text-primary/70 transition-colors hover:text-primary focus:outline-none"
+									className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-primary/70 transition-colors hover:bg-slate-100 hover:text-primary focus:outline-none"
 									aria-label={showActual ? "Ocultar contraseña" : "Ver contraseña"}
 								>
 									{showActual ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -203,7 +203,7 @@ export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps)
 								<button
 									type="button"
 									onClick={() => setShowNueva(!showNueva)}
-									className="cursor-pointer text-primary/70 transition-colors hover:text-primary focus:outline-none"
+									className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-primary/70 transition-colors hover:bg-slate-100 hover:text-primary focus:outline-none"
 									aria-label={showNueva ? "Ocultar contraseña" : "Ver contraseña"}
 								>
 									{showNueva ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -234,7 +234,7 @@ export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps)
 								<button
 									type="button"
 									onClick={() => setShowConfirmar(!showConfirmar)}
-									className="cursor-pointer text-primary/70 transition-colors hover:text-primary focus:outline-none"
+									className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-primary/70 transition-colors hover:bg-slate-100 hover:text-primary focus:outline-none"
 									aria-label={showConfirmar ? "Ocultar contraseña" : "Ver contraseña"}
 								>
 									{showConfirmar ? <EyeOff size={18} /> : <Eye size={18} />}
