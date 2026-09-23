@@ -317,12 +317,12 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 				</span>
 			</button>
 
-			<div className="pointer-events-none absolute top-2.5 right-3 flex items-center gap-1.5 text-slate-400">
+			<div className="pointer-events-none absolute top-2.5 right-3 flex items-center gap-1.5 text-primary">
 				{valorActual && !disabled && (
 					<button
 						type="button"
 						onClick={limpiarFecha}
-						className="pointer-events-auto cursor-pointer rounded-full p-0.5 transition-colors hover:bg-slate-100 hover:text-slate-600"
+						className="pointer-events-auto cursor-pointer rounded-full p-0.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
 						title="Limpiar fecha"
 					>
 						<X size={14} />
@@ -330,7 +330,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 				)}
 				<CalendarIcon
 					size={16}
-					className={cn("transition-colors", abierto ? "text-primary" : "text-slate-400")}
+					className={cn("transition-colors", disabled ? "text-slate-300" : "text-primary")}
 				/>
 			</div>
 
