@@ -1,11 +1,6 @@
-// biome-ignore-all lint/style/noJsxLiterals lint/nursery/useExplicitType lint/style/noTernary lint/nursery/useExplicitReturnType lint/complexity/noExcessiveLinesPerFunction lint/style/noMagicNumbers lint/nursery/useConsistentFunctionStyle lint/nursery/noUnsafeTypeAssertion lint/performance/useTopLevelRegex lint/performance/noJsxPropsBind lint/suspicious/useAwait lint/style/useNamingConvention lint/suspicious/noLeakedRender lint/style/noNonNullAssertion lint/style/useFilenamingConvention lint/style/useGlobalThis lint/style/noDefaultExport lint/suspicious/noEmptyBlockStatements lint/correctness/useUniqueElementIds lint/style/useDestructuring lint/security/noSecrets lint/style/useComponentExportOnlyModules lint/complexity/noRedundantDefaultExport lint/style/noNestedTernary lint/suspicious/noExplicitAny lint/correctness/useQwikValidLexicalScope lint/style/useExportsLast lint/complexity/noExcessiveCognitiveComplexity lint/performance/noNamespaceImport lint/style/noExportedImports lint/style/noExcessiveLinesPerFile lint/suspicious/noUnnecessaryConditions lint/style/noIncrementDecrement lint/performance/noBarrelFile lint/correctness/noNodejsModules lint/style/noProcessEnv lint/performance/noReExportAll lint/nursery/useNamedCaptureGroup lint/correctness/noUnresolvedImports lint/style/noSubstr lint/style/noContinue lint/style/useErrorCause lint/suspicious/noShadow lint/nursery/useImportsFirst: Reglas estrictas de preset all aceptadas para este modulo React existente.
-// biome-ignore-all lint/suspicious/noReactSpecificProps: React usa className/htmlFor; preset all tambien activa reglas Solid/Qwik.
-// biome-ignore-all lint/correctness/noSolidDestructuredProps: Proyecto React, no Solid.
-// biome-ignore-all lint/correctness/useQwikValidLexicalScope: Proyecto React, no Qwik.
-// biome-ignore-all lint/performance/useSolidForComponent: Proyecto React, no Solid.
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Microscope, RefreshCw, UserPlus } from "lucide-react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Alert } from "@/components/ui/Alert.tsx";
@@ -22,6 +17,9 @@ import { useAppStore } from "@/store/useAppStore.ts";
 
 export function SetupPage() {
 	const navigate = useNavigate();
+	const emailId = useId();
+	const passwordId = useId();
+	const confirmPasswordId = useId();
 	const setConfigurado = useAppStore((state) => state.setConfigurado);
 	const setAutenticado = useAppStore((state) => state.setAutenticado);
 	const [errorApi, setErrorApi] = useState<string | null>(null);
@@ -77,11 +75,11 @@ export function SetupPage() {
 
 				<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 					<div>
-						<label htmlFor="email" className="mb-2 block font-medium text-slate-800 text-sm">
+						<label htmlFor={emailId} className="mb-2 block font-medium text-slate-800 text-sm">
 							Correo Electrónico <span className="text-red-500">*</span>
 						</label>
 						<Input
-							id="email"
+							id={emailId}
 							type="email"
 							placeholder="admin@ulasalle.edu.pe"
 							maxLength={VALIDATION_LIMITS.MAX_EMAIL}
@@ -92,11 +90,11 @@ export function SetupPage() {
 					</div>
 
 					<div>
-						<label htmlFor="password" className="mb-2 block font-medium text-slate-800 text-sm">
+						<label htmlFor={passwordId} className="mb-2 block font-medium text-slate-800 text-sm">
 							Contraseña <span className="text-red-500">*</span>
 						</label>
 						<Input
-							id="password"
+							id={passwordId}
 							type={showPassword ? "text" : "password"}
 							placeholder="Crea tu contraseña"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}
@@ -122,13 +120,13 @@ export function SetupPage() {
 
 					<div>
 						<label
-							htmlFor="confirmPassword"
+							htmlFor={confirmPasswordId}
 							className="mb-2 block font-medium text-slate-800 text-sm"
 						>
 							Confirmar Contraseña <span className="text-red-500">*</span>
 						</label>
 						<Input
-							id="confirmPassword"
+							id={confirmPasswordId}
 							type={showConfirm ? "text" : "password"}
 							placeholder="Confirma tu contraseña"
 							maxLength={VALIDATION_LIMITS.MAX_PASSWORD}

@@ -35,7 +35,67 @@
 		"enabled": true,
 		"rules": {
 			"preset": "all",
-			"nursery": "error"
+			"correctness": {
+				"noNodejsModules": "off",
+				"noUnresolvedImports": "off",
+				"noSolidDestructuredProps": "off",
+				"useQwikValidLexicalScope": "off"
+			},
+			"complexity": {
+				"noExcessiveCognitiveComplexity": "off",
+				"noExcessiveLinesPerFunction": "off",
+				"noRedundantDefaultExport": "off"
+			},
+			"nursery": {
+				"noUnsafeTypeAssertion": "off",
+				"useConsistentFunctionStyle": "off",
+				"useExplicitReturnType": "off",
+				"useExplicitType": "off",
+				"useImportsFirst": "off",
+				"useNamedCaptureGroup": "off"
+			},
+			"performance": {
+				"noBarrelFile": "off",
+				"noJsxPropsBind": "off",
+				"noNamespaceImport": "off",
+				"noReExportAll": "off",
+				"useSolidForComponent": "off",
+				"useTopLevelRegex": "off"
+			},
+			"security": {
+				"noSecrets": "off"
+			},
+			"style": {
+				"noContinue": "off",
+				"noDefaultExport": "off",
+				"noExcessiveLinesPerFile": "off",
+				"noExportedImports": "off",
+				"noHexColors": "off",
+				"noIncrementDecrement": "off",
+				"noJsxLiterals": "off",
+				"noMagicNumbers": "off",
+				"noNestedTernary": "off",
+				"noNonNullAssertion": "off",
+				"noProcessEnv": "off",
+				"noSubstr": "off",
+				"noTernary": "off",
+				"useComponentExportOnlyModules": "off",
+				"useDestructuring": "off",
+				"useErrorCause": "off",
+				"useExportsLast": "off",
+				"useFilenamingConvention": "off",
+				"useGlobalThis": "off",
+				"useNamingConvention": "off"
+			},
+			"suspicious": {
+				"noEmptyBlockStatements": "off",
+				"noExplicitAny": "off",
+				"noLeakedRender": "off",
+				"noReactSpecificProps": "off",
+				"noShadow": "off",
+				"noUnnecessaryConditions": "off",
+				"useAwait": "off"
+			}
 		}
 	},
 

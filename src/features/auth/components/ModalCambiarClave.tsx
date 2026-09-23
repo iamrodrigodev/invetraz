@@ -1,9 +1,4 @@
 /* v8 ignore file -- ramas defensivas de UI cubiertas por pruebas de integracion del modulo. */
-// biome-ignore-all lint/style/noJsxLiterals lint/nursery/useExplicitType lint/style/noTernary lint/nursery/useExplicitReturnType lint/complexity/noExcessiveLinesPerFunction lint/style/noMagicNumbers lint/nursery/useConsistentFunctionStyle lint/nursery/noUnsafeTypeAssertion lint/performance/useTopLevelRegex lint/performance/noJsxPropsBind lint/suspicious/useAwait lint/style/useNamingConvention lint/suspicious/noLeakedRender lint/style/noNonNullAssertion lint/style/useFilenamingConvention lint/style/useGlobalThis lint/style/noDefaultExport lint/suspicious/noEmptyBlockStatements lint/correctness/useUniqueElementIds lint/style/useDestructuring lint/security/noSecrets lint/style/useComponentExportOnlyModules lint/complexity/noRedundantDefaultExport lint/style/noNestedTernary lint/suspicious/noExplicitAny lint/correctness/useQwikValidLexicalScope lint/style/useExportsLast lint/complexity/noExcessiveCognitiveComplexity lint/performance/noNamespaceImport lint/style/noExportedImports lint/style/noExcessiveLinesPerFile lint/suspicious/noUnnecessaryConditions lint/style/noIncrementDecrement lint/performance/noBarrelFile lint/correctness/noNodejsModules lint/style/noProcessEnv lint/performance/noReExportAll lint/nursery/useNamedCaptureGroup lint/correctness/noUnresolvedImports lint/style/noSubstr lint/style/noContinue lint/style/useErrorCause lint/suspicious/noShadow lint/nursery/useImportsFirst: Reglas estrictas de preset all aceptadas para este modulo React existente.
-// biome-ignore-all lint/suspicious/noReactSpecificProps: React usa className/htmlFor; preset all tambien activa reglas Solid/Qwik.
-// biome-ignore-all lint/correctness/noSolidDestructuredProps: Proyecto React, no Solid.
-// biome-ignore-all lint/correctness/useQwikValidLexicalScope: Proyecto React, no Qwik.
-// biome-ignore-all lint/performance/useSolidForComponent: Proyecto React, no Solid.
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	ArrowLeft,
@@ -15,7 +10,7 @@ import {
 	ShieldCheck,
 	X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Alert } from "@/components/ui/Alert.tsx";
 import { Button } from "@/components/ui/Button.tsx";
@@ -36,6 +31,9 @@ export interface ModalCambiarClaveProps {
 }
 
 export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps) {
+	const claveActualId = useId();
+	const nuevaClaveId = useId();
+	const confirmarClaveId = useId();
 	const {
 		paso,
 		setPaso,
@@ -128,13 +126,13 @@ export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps)
 
 					<div>
 						<label
-							htmlFor="claveActual"
+							htmlFor={claveActualId}
 							className="mb-1.5 block font-medium text-slate-800 text-sm"
 						>
 							Contraseña actual <span className="text-red-500">*</span>
 						</label>
 						<Input
-							id="claveActual"
+							id={claveActualId}
 							type={showActual ? "text" : "password"}
 							placeholder="Ingresa tu contraseña actual"
 							disabled={cargando}
@@ -184,11 +182,14 @@ export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps)
 					className="space-y-5"
 				>
 					<div>
-						<label htmlFor="nuevaClave" className="mb-1.5 block font-medium text-slate-800 text-sm">
+						<label
+							htmlFor={nuevaClaveId}
+							className="mb-1.5 block font-medium text-slate-800 text-sm"
+						>
 							Nueva contraseña <span className="text-red-500">*</span>
 						</label>
 						<Input
-							id="nuevaClave"
+							id={nuevaClaveId}
 							type={showNueva ? "text" : "password"}
 							placeholder="Crea tu nueva contraseña"
 							disabled={cargando}
@@ -213,13 +214,13 @@ export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps)
 
 					<div>
 						<label
-							htmlFor="confirmarClave"
+							htmlFor={confirmarClaveId}
 							className="mb-1.5 block font-medium text-slate-800 text-sm"
 						>
 							Confirmar contraseña <span className="text-red-500">*</span>
 						</label>
 						<Input
-							id="confirmarClave"
+							id={confirmarClaveId}
 							type={showConfirmar ? "text" : "password"}
 							placeholder="Confirma la nueva contraseña"
 							disabled={cargando}

@@ -1,8 +1,3 @@
-// biome-ignore-all lint/style/noJsxLiterals lint/nursery/useExplicitType lint/style/noTernary lint/nursery/useExplicitReturnType lint/complexity/noExcessiveLinesPerFunction lint/style/noMagicNumbers lint/nursery/useConsistentFunctionStyle lint/nursery/noUnsafeTypeAssertion lint/performance/useTopLevelRegex lint/performance/noJsxPropsBind lint/suspicious/useAwait lint/style/useNamingConvention lint/suspicious/noLeakedRender lint/style/noNonNullAssertion lint/style/useFilenamingConvention lint/style/useGlobalThis lint/style/noDefaultExport lint/suspicious/noEmptyBlockStatements lint/correctness/useUniqueElementIds lint/style/useDestructuring lint/security/noSecrets lint/style/useComponentExportOnlyModules lint/complexity/noRedundantDefaultExport lint/style/noNestedTernary lint/suspicious/noExplicitAny lint/correctness/useQwikValidLexicalScope lint/style/useExportsLast lint/complexity/noExcessiveCognitiveComplexity lint/performance/noNamespaceImport lint/style/noExportedImports lint/style/noExcessiveLinesPerFile lint/suspicious/noUnnecessaryConditions lint/style/noIncrementDecrement lint/performance/noBarrelFile lint/correctness/noNodejsModules lint/style/noProcessEnv lint/performance/noReExportAll lint/nursery/useNamedCaptureGroup lint/correctness/noUnresolvedImports lint/style/noSubstr lint/style/noContinue lint/style/useErrorCause lint/suspicious/noShadow lint/nursery/useImportsFirst: Reglas estrictas de preset all aceptadas para este modulo React existente.
-// biome-ignore-all lint/suspicious/noReactSpecificProps: React usa className/htmlFor; preset all tambien activa reglas Solid/Qwik.
-// biome-ignore-all lint/correctness/noSolidDestructuredProps: Proyecto React, no Solid.
-// biome-ignore-all lint/correctness/useQwikValidLexicalScope: Proyecto React, no Qwik.
-// biome-ignore-all lint/performance/useSolidForComponent: Proyecto React, no Solid.
 import { Skeleton } from "@/components/ui/Skeleton.tsx";
 import { ConfiguracionSkeleton } from "@/features/configuracion/components/ConfiguracionSkeleton.tsx";
 import { DocumentacionSkeleton } from "@/features/documentacion/components/DocumentacionSkeleton.tsx";
@@ -45,7 +40,7 @@ export function DashboardSkeleton() {
 					estaColapsado ? "w-20" : "w-72",
 				)}
 			>
-				<div className="flex h-16 shrink-0 items-center border-slate-200 border-b px-[18px]">
+				<div className="flex h-16 shrink-0 items-center border-slate-200 border-b px-4.5">
 					<div className="flex w-full items-center">
 						<div className="flex h-11 w-11 shrink-0 items-center justify-center">
 							<Skeleton className="h-6 w-6 rounded-lg" />
@@ -54,7 +49,7 @@ export function DashboardSkeleton() {
 					</div>
 				</div>
 
-				<div className="flex-1 space-y-1.5 px-[18px] py-5">
+				<div className="flex-1 space-y-1.5 px-4.5 py-5">
 					{[1, 2, 3, 4, 5].map((i) => (
 						<div key={i} className="flex h-11 w-full items-center rounded-xl">
 							<div className="flex h-11 w-11 shrink-0 items-center justify-center">
@@ -65,7 +60,7 @@ export function DashboardSkeleton() {
 					))}
 				</div>
 
-				<div className="border-slate-200/80 border-t px-[18px] py-4">
+				<div className="border-slate-200/80 border-t px-4.5 py-4">
 					<div className="flex h-11 w-full items-center rounded-xl">
 						<div className="flex h-11 w-11 shrink-0 items-center justify-center">
 							<Skeleton className="h-5 w-5 shrink-0 rounded-md" />
