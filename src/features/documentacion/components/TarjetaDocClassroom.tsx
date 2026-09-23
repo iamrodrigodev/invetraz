@@ -26,6 +26,11 @@ const SCOPES_CLASSROOM: ScopeInfo[] = [
 		nombre: "Estudiantes y Docentes",
 		scope: "https://www.googleapis.com/auth/classroom.rosters",
 	},
+	{
+		id: "topics",
+		nombre: "Temas de Clases",
+		scope: "https://www.googleapis.com/auth/classroom.topics.readonly",
+	},
 ];
 
 export const TarjetaDocClassroom: React.FC = () => {
