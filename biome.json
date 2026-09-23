@@ -1,41 +1,68 @@
 {
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+
 	"vcs": {
 		"enabled": true,
 		"clientKind": "git",
 		"useIgnoreFile": true
 	},
+
 	"files": {
 		"ignoreUnknown": false,
-		"includes": ["src/**/*", "*.ts", "*.json", "*.mjs"]
+		"includes": [
+			"src/**/*",
+			"*.ts",
+			"*.tsx",
+			"*.js",
+			"*.jsx",
+			"*.mjs",
+			"*.cjs",
+			"*.json",
+			"*.jsonc",
+			"*.css"
+		]
 	},
+
 	"formatter": {
 		"enabled": true,
-		"indentStyle": "tab"
+		"indentStyle": "tab",
+		"indentWidth": 2,
+		"lineWidth": 100,
+		"lineEnding": "lf"
 	},
+
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"preset": "recommended"
+			"preset": "all",
+			"nursery": "error"
 		}
 	},
-	"overrides": [
-		{
-			"includes": ["**/*.css"],
-			"linter": {
-				"rules": {
-					"suspicious": {
-						"noDuplicateCustomProperties": "off"
-					}
-				}
-			}
-		}
-	],
+
 	"javascript": {
 		"formatter": {
+			"enabled": true,
 			"quoteStyle": "double",
-			"semicolons": "always"
+			"jsxQuoteStyle": "double",
+			"quoteProperties": "asNeeded",
+			"trailingCommas": "all",
+			"semicolons": "always",
+			"arrowParentheses": "always",
+			"bracketSpacing": true,
+			"bracketSameLine": false
 		}
 	},
+
+	"json": {
+		"parser": {
+			"allowComments": false,
+			"allowTrailingCommas": false
+		},
+		"formatter": {
+			"enabled": true
+		}
+	},
+
 	"css": {
 		"parser": {
 			"cssModules": true,
@@ -45,6 +72,7 @@
 			"enabled": true
 		}
 	},
+
 	"assist": {
 		"enabled": true,
 		"actions": {

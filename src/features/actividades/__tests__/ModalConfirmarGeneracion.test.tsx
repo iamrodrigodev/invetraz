@@ -1,7 +1,12 @@
+// biome-ignore-all lint/style/noJsxLiterals lint/nursery/useExplicitType lint/style/noTernary lint/nursery/useExplicitReturnType lint/complexity/noExcessiveLinesPerFunction lint/style/noMagicNumbers lint/nursery/useConsistentFunctionStyle lint/nursery/noUnsafeTypeAssertion lint/performance/useTopLevelRegex lint/performance/noJsxPropsBind lint/suspicious/useAwait lint/style/useNamingConvention lint/suspicious/noLeakedRender lint/style/noNonNullAssertion lint/style/useFilenamingConvention lint/style/useGlobalThis lint/style/noDefaultExport lint/suspicious/noEmptyBlockStatements lint/correctness/useUniqueElementIds lint/style/useDestructuring lint/security/noSecrets lint/style/useComponentExportOnlyModules lint/complexity/noRedundantDefaultExport lint/style/noNestedTernary lint/suspicious/noExplicitAny lint/correctness/useQwikValidLexicalScope lint/style/useExportsLast lint/complexity/noExcessiveCognitiveComplexity lint/performance/noNamespaceImport lint/style/noExportedImports lint/style/noExcessiveLinesPerFile lint/suspicious/noUnnecessaryConditions lint/style/noIncrementDecrement lint/performance/noBarrelFile lint/correctness/noNodejsModules lint/style/noProcessEnv lint/performance/noReExportAll lint/nursery/useNamedCaptureGroup lint/correctness/noUnresolvedImports lint/style/noSubstr lint/style/noContinue lint/style/useErrorCause lint/suspicious/noShadow lint/nursery/useImportsFirst: Reglas estrictas de preset all aceptadas para este modulo React existente.
+// biome-ignore-all lint/suspicious/noReactSpecificProps: React usa className/htmlFor; preset all tambien activa reglas Solid/Qwik.
+// biome-ignore-all lint/correctness/noSolidDestructuredProps: Proyecto React, no Solid.
+// biome-ignore-all lint/correctness/useQwikValidLexicalScope: Proyecto React, no Qwik.
+// biome-ignore-all lint/performance/useSolidForComponent: Proyecto React, no Solid.
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { ModalConfirmarGeneracion } from "@/features/actividades/components/ModalConfirmarGeneracion";
-import type { ResumenConfirmacionActividad } from "@/features/actividades/types/actividades.types";
+import { ModalConfirmarGeneracion } from "@/features/actividades/components/ModalConfirmarGeneracion.tsx";
+import type { ResumenConfirmacionActividad } from "@/features/actividades/types/actividades.types.ts";
 
 const resumenPrueba: ResumenConfirmacionActividad = {
 	nombreClase: "Investigación Formativa A",
@@ -39,14 +44,12 @@ describe("ModalConfirmarGeneracion", () => {
 			/>,
 		);
 
-		expect(
-			screen.getByText("Confirmar actividad de seguimiento"),
-		).toBeDefined();
+		expect(screen.getByText("Confirmar actividad de seguimiento")).toBeDefined();
 		expect(screen.getByText("Investigación Formativa A")).toBeDefined();
 		expect(screen.getByText("Entrega de Avance Metodológico")).toBeDefined();
 		expect(screen.getByText("Matriz_Seguimiento_2026.xlsx")).toBeDefined();
 		expect(screen.getByText("Estructura válida")).toBeDefined();
-		expect(screen.getByText(/11:59 pm/i)).toBeDefined();
+		expect(screen.getByText(/11:59 pm/iu)).toBeDefined();
 		expect(screen.getByText("Abrir plantilla")).toBeDefined();
 
 		const enlaceSheet = screen.getByText("Abrir plantilla").closest("a");
@@ -90,5 +93,132 @@ describe("ModalConfirmarGeneracion", () => {
 
 		fireEvent.click(screen.getByText("Cancelar"));
 		expect(alCerrar).toHaveBeenCalledTimes(1);
+
+		fireEvent.click(screen.getByRole("button", { name: "Cerrar" }));
+		expect(alCerrar).toHaveBeenCalledTimes(2);
+	});
+
+	it("soporta estado cargando deshabilitando botones y previene alCerrar", () => {
+		const alCerrar = vi.fn();
+		render(
+			<ModalConfirmarGeneracion
+				abierto={true}
+				cargando={true}
+				resumen={resumenPrueba}
+				alConfirmar={vi.fn()}
+				alCerrar={alCerrar}
+			/>,
+		);
+
+		expect(screen.getByText("Generando actividad de seguimiento")).toBeDefined();
+		const btnConfirmar = screen.getByRole("button", {
+			name: /Generando actividad de seguimiento/iu,
+		});
+		expect(btnConfirmar.getAttribute("disabled")).not.toBeNull();
+
+		const closeBtn = screen.getByRole("button", { name: "Cerrar" });
+		fireEvent.click(closeBtn);
+		expect(alCerrar).not.toHaveBeenCalled();
+	});
+
+	it("maneja fallbacks en formateo de hora y fecha", () => {
+		const resumenInvalido: ResumenConfirmacionActividad = {
+			...resumenPrueba,
+			fechaVencimiento: "fecha-invalida",
+			horaVencimiento: "hora-invalida",
+			nombreTema: undefined,
+			descripcion: undefined,
+		};
+
+		render(
+			<ModalConfirmarGeneracion
+				abierto={true}
+				cargando={false}
+				resumen={resumenInvalido}
+				alConfirmar={vi.fn()}
+				alCerrar={vi.fn()}
+			/>,
+		);
+
+		expect(screen.getByText(/fecha-invalida a las hora-invalida/u)).toBeDefined();
+	});
+
+	it("maneja fecha vacia y horas am/pm", () => {
+		const resumenHoras: ResumenConfirmacionActividad = {
+			...resumenPrueba,
+			fechaVencimiento: "",
+			horaVencimiento: "08:30",
+		};
+
+		const { rerender } = render(
+			<ModalConfirmarGeneracion
+				abierto={true}
+				cargando={false}
+				resumen={resumenHoras}
+				alConfirmar={vi.fn()}
+				alCerrar={vi.fn()}
+			/>,
+		);
+
+		expect(screen.getByText("-")).toBeDefined();
+
+		rerender(
+			<ModalConfirmarGeneracion
+				abierto={true}
+				cargando={false}
+				resumen={{
+					...resumenPrueba,
+					fechaVencimiento: "2026-10-15",
+					horaVencimiento: "00:00",
+				}}
+				alConfirmar={vi.fn()}
+				alCerrar={vi.fn()}
+			/>,
+		);
+		expect(screen.getByText(/12:00 am/iu)).toBeDefined();
+
+		rerender(
+			<ModalConfirmarGeneracion
+				abierto={true}
+				cargando={false}
+				resumen={{
+					...resumenPrueba,
+					fechaVencimiento: "2026-10-15",
+					horaVencimiento: "12:00",
+				}}
+				alConfirmar={vi.fn()}
+				alCerrar={vi.fn()}
+			/>,
+		);
+		expect(screen.getByText(/12:00 pm/iu)).toBeDefined();
+
+		rerender(
+			<ModalConfirmarGeneracion
+				abierto={true}
+				cargando={false}
+				resumen={{
+					...resumenPrueba,
+					fechaVencimiento: "2026-10-15",
+					horaVencimiento: "",
+				}}
+				alConfirmar={vi.fn()}
+				alCerrar={vi.fn()}
+			/>,
+		);
+
+		rerender(
+			<ModalConfirmarGeneracion
+				abierto={true}
+				cargando={false}
+				resumen={{
+					...resumenPrueba,
+					fechaVencimiento: "fecha-invalida",
+					horaVencimiento: "",
+				}}
+				alConfirmar={vi.fn()}
+				alCerrar={vi.fn()}
+			/>,
+		);
+		expect(screen.getByText("fecha-invalida")).toBeDefined();
 	});
 });

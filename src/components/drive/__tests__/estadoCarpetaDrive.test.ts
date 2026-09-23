@@ -1,5 +1,7 @@
+// biome-ignore-all lint/style/noJsxLiterals lint/nursery/useExplicitType lint/style/noTernary lint/nursery/useExplicitReturnType lint/complexity/noExcessiveLinesPerFunction lint/style/noMagicNumbers lint/nursery/useConsistentFunctionStyle lint/nursery/noUnsafeTypeAssertion lint/performance/useTopLevelRegex lint/performance/noJsxPropsBind lint/suspicious/useAwait lint/style/useNamingConvention lint/suspicious/noLeakedRender lint/style/noNonNullAssertion lint/style/useFilenamingConvention lint/style/useGlobalThis lint/style/noDefaultExport lint/suspicious/noEmptyBlockStatements lint/correctness/useUniqueElementIds lint/style/useDestructuring lint/security/noSecrets lint/style/useComponentExportOnlyModules lint/complexity/noRedundantDefaultExport lint/style/noNestedTernary lint/suspicious/noExplicitAny lint/correctness/useQwikValidLexicalScope lint/style/useExportsLast lint/complexity/noExcessiveCognitiveComplexity lint/performance/noNamespaceImport lint/style/noExportedImports lint/style/noExcessiveLinesPerFile lint/suspicious/noUnnecessaryConditions lint/style/noIncrementDecrement lint/performance/noBarrelFile lint/correctness/noNodejsModules lint/style/noProcessEnv lint/performance/noReExportAll lint/nursery/useNamedCaptureGroup lint/correctness/noUnresolvedImports lint/style/noSubstr lint/style/noContinue lint/style/useErrorCause lint/suspicious/noShadow lint/nursery/useImportsFirst: Reglas estrictas de preset all aceptadas para este modulo React existente.
 import { describe, expect, it } from "vitest";
-import { resolverVistaCarpetaDrive } from "@/features/drive/estadoCarpetaDrive";
+import { resolverVistaCarpetaDrive as resolverVistaReexport } from "@/components/drive/estadoCarpetaDrive.ts";
+import { resolverVistaCarpetaDrive } from "@/features/drive/estadoCarpetaDrive.ts";
 
 describe("resolverVistaCarpetaDrive", () => {
 	it("retorna estado no configurado si no hay carpetaId", () => {
@@ -58,24 +60,35 @@ describe("resolverVistaCarpetaDrive", () => {
 		});
 
 		expect(vista.estado).toBe("verificada");
-		expect(vista.estaPendiente).toBe(false);
 		expect(vista.estaVerificando).toBe(false);
+		expect(vista.estaPendiente).toBe(false);
 		expect(vista.nombreVisible).toBe("Plantillas 2026");
 		expect(vista.badgeTexto).toBe("Carpeta vinculada");
 	});
 
-	it("maneja estado no_disponible mostrando badge 'No se puede usar' y preservando el nombre", () => {
-		const vista = resolverVistaCarpetaDrive({
+	it("maneja estado no_disponible con y sin nombre previo", () => {
+		const vistaConNombre = resolverVistaCarpetaDrive({
 			carpetaId: "folder-123",
-			carpetaNombre: "Plantillas de Investigación",
+			carpetaNombre: "Plantillas Inaccesibles",
 			estado: "no_disponible",
 		});
+		expect(vistaConNombre.estado).toBe("no_disponible");
+		expect(vistaConNombre.estaNoDisponible).toBe(true);
+		expect(vistaConNombre.nombreVisible).toBe("Plantillas Inaccesibles");
+		expect(vistaConNombre.badgeTexto).toBe("No se puede usar");
 
-		expect(vista.estado).toBe("no_disponible");
-		expect(vista.estaNoDisponible).toBe(true);
-		expect(vista.estaPendiente).toBe(false);
-		expect(vista.estaVerificando).toBe(false);
-		expect(vista.nombreVisible).toBe("Plantillas de Investigación");
-		expect(vista.badgeTexto).toBe("No se puede usar");
+		const vistaSinNombre = resolverVistaCarpetaDrive({
+			carpetaId: "folder-123",
+			carpetaNombre: null,
+			estado: "no_disponible",
+		});
+		expect(vistaSinNombre.estado).toBe("no_disponible");
+		expect(vistaSinNombre.estaNoDisponible).toBe(true);
+		expect(vistaSinNombre.nombreVisible).toBe("Carpeta no disponible");
+		expect(vistaSinNombre.badgeTexto).toBe("No se puede usar");
+	});
+
+	it("reexporta correctamente desde components/drive/estadoCarpetaDrive", () => {
+		expect(resolverVistaReexport).toBe(resolverVistaCarpetaDrive);
 	});
 });

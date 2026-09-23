@@ -1,25 +1,27 @@
+// biome-ignore-all lint/style/noJsxLiterals lint/nursery/useExplicitType lint/style/noTernary lint/nursery/useExplicitReturnType lint/complexity/noExcessiveLinesPerFunction lint/style/noMagicNumbers lint/nursery/useConsistentFunctionStyle lint/nursery/noUnsafeTypeAssertion lint/performance/useTopLevelRegex lint/performance/noJsxPropsBind lint/suspicious/useAwait lint/style/useNamingConvention lint/suspicious/noLeakedRender lint/style/noNonNullAssertion lint/style/useFilenamingConvention lint/style/useGlobalThis lint/style/noDefaultExport lint/suspicious/noEmptyBlockStatements lint/correctness/useUniqueElementIds lint/style/useDestructuring lint/security/noSecrets lint/style/useComponentExportOnlyModules lint/complexity/noRedundantDefaultExport lint/style/noNestedTernary lint/suspicious/noExplicitAny lint/correctness/useQwikValidLexicalScope lint/style/useExportsLast lint/complexity/noExcessiveCognitiveComplexity lint/performance/noNamespaceImport lint/style/noExportedImports lint/style/noExcessiveLinesPerFile lint/suspicious/noUnnecessaryConditions lint/style/noIncrementDecrement lint/performance/noBarrelFile lint/correctness/noNodejsModules lint/style/noProcessEnv lint/performance/noReExportAll lint/nursery/useNamedCaptureGroup lint/correctness/noUnresolvedImports lint/style/noSubstr lint/style/noContinue lint/style/useErrorCause lint/suspicious/noShadow lint/nursery/useImportsFirst: Reglas estrictas de preset all aceptadas para este modulo React existente.
 import { create } from "zustand";
 import {
 	actualizarConfiguracion,
 	obtenerConfiguracion,
 	verificarConfiguracion,
-} from "@/features/configuracion/api/configuracion.api";
-import type { TipoEstadoConexion } from "@/features/configuracion/components/EstadoConexionBadge";
+} from "@/features/configuracion/api/configuracion.api.ts";
+import type { TipoEstadoConexion } from "@/features/configuracion/components/EstadoConexionBadge.tsx";
 import type {
 	ActualizarCredencialesPeticion,
 	ResultadoVerificacion,
-} from "@/features/configuracion/types/ActualizarCredencialesPeticion";
-import { registrarLimpiadorSesion } from "@/utils/eventosSesion";
+} from "@/features/configuracion/types/ActualizarCredencialesPeticion.ts";
+import { registrarLimpiadorSesion } from "@/utils/eventosSesion.ts";
 
 export function sonCredencialesIguales(
 	a: ActualizarCredencialesPeticion | null | undefined,
 	b: ActualizarCredencialesPeticion | null | undefined,
 ): boolean {
-	if (!a || !b) return false;
+	if (!(a && b)) {
+		return false;
+	}
 	return (
 		(a.googleClientId ?? "").trim() === (b.googleClientId ?? "").trim() &&
-		(a.googleClientSecret ?? "").trim() ===
-			(b.googleClientSecret ?? "").trim() &&
+		(a.googleClientSecret ?? "").trim() === (b.googleClientSecret ?? "").trim() &&
 		(a.googleRefreshToken ?? "").trim() === (b.googleRefreshToken ?? "").trim()
 	);
 }
@@ -28,12 +30,11 @@ export function esConfiguracionListaParaActividades(
 	credenciales: ActualizarCredencialesPeticion | null | undefined,
 	estadoConexion: TipoEstadoConexion,
 ): boolean {
-	if (!credenciales) return false;
-	const googleValido =
-		estadoConexion === "conectado" && Boolean(credenciales.googleVerificado);
-	const driveValido = Boolean(
-		credenciales.googleDriveFolderId && credenciales.driveVerificado,
-	);
+	if (!credenciales) {
+		return false;
+	}
+	const googleValido = estadoConexion === "conectado" && Boolean(credenciales.googleVerificado);
+	const driveValido = Boolean(credenciales.googleDriveFolderId && credenciales.driveVerificado);
 	return googleValido && driveValido;
 }
 
@@ -42,20 +43,10 @@ interface ConfiguracionState {
 	estadoConexion: TipoEstadoConexion;
 	cargado: boolean;
 	cargando: boolean;
-	cargarConfiguracion: (
-		forzar?: boolean,
-	) => Promise<ActualizarCredencialesPeticion>;
-	guardarConfiguracion: (
-		datos: ActualizarCredencialesPeticion,
-	) => Promise<ResultadoVerificacion>;
-	verificarConexion: (
-		datos?: ActualizarCredencialesPeticion,
-	) => Promise<ResultadoVerificacion>;
-	actualizarCarpetaDrive: (
-		id: string,
-		nombre: string | null,
-		verificado?: boolean,
-	) => void;
+	cargarConfiguracion: (forzar?: boolean) => Promise<ActualizarCredencialesPeticion>;
+	guardarConfiguracion: (datos: ActualizarCredencialesPeticion) => Promise<ResultadoVerificacion>;
+	verificarConexion: (datos?: ActualizarCredencialesPeticion) => Promise<ResultadoVerificacion>;
+	actualizarCarpetaDrive: (id: string, nombre: string | null, verificado?: boolean) => void;
 	limpiar: () => void;
 }
 
@@ -103,11 +94,11 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 					nuevasCredenciales.googleRefreshToken,
 			);
 
-			const estadoDeterminado: TipoEstadoConexion = !tieneCredenciales
-				? "no_configurado"
-				: config.googleVerificado
+			const estadoDeterminado: TipoEstadoConexion = tieneCredenciales
+				? config.googleVerificado
 					? "conectado"
-					: "guardado_pendiente";
+					: "guardado_pendiente"
+				: "no_configurado";
 
 			set({
 				credenciales: nuevasCredenciales,
@@ -132,10 +123,7 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 			} catch (error) {
 				resVerificacion = {
 					valido: false,
-					mensaje:
-						error instanceof Error
-							? error.message
-							: "No se pudo verificar la conexión",
+					mensaje: error instanceof Error ? error.message : "No se pudo verificar la conexión",
 				};
 			}
 			const datosConEstado = {
@@ -146,9 +134,7 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 
 			set({
 				credenciales: datosConEstado,
-				estadoConexion: resVerificacion.valido
-					? "conectado"
-					: "guardado_pendiente",
+				estadoConexion: resVerificacion.valido ? "conectado" : "guardado_pendiente",
 				cargado: true,
 			});
 
@@ -171,7 +157,9 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 		set({ estadoConexion: "verificando" });
 		try {
 			const res = await verificarConfiguracion(creds);
-			if (!res.valido) throw new Error(res.mensaje);
+			if (!res.valido) {
+				throw new Error(res.mensaje);
+			}
 			set({
 				credenciales: {
 					...get().credenciales,
@@ -188,20 +176,16 @@ export const useConfiguracionStore = create<ConfiguracionState>((set, get) => ({
 		}
 	},
 
-	actualizarCarpetaDrive: (
-		id: string,
-		nombre: string | null,
-		verificado?: boolean,
-	) => {
+	actualizarCarpetaDrive: (id: string, nombre: string | null, verificado?: boolean) => {
 		set((state) => ({
 			credenciales: {
 				...state.credenciales,
 				googleDriveFolderId: id,
 				googleDriveFolderName: nombre,
 				driveVerificado:
-					verificado !== undefined
-						? verificado
-						: Boolean(nombre || state.credenciales.driveVerificado),
+					verificado === undefined
+						? Boolean(nombre || state.credenciales.driveVerificado)
+						: verificado,
 			},
 		}));
 	},

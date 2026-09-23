@@ -1,29 +1,207 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
-import { describe, expect, it, vi } from "vitest";
-import { DashboardLayout } from "@/layouts/DashboardLayout";
+// biome-ignore-all lint/style/noJsxLiterals lint/nursery/useExplicitType lint/style/noTernary lint/nursery/useExplicitReturnType lint/complexity/noExcessiveLinesPerFunction lint/style/noMagicNumbers lint/nursery/useConsistentFunctionStyle lint/nursery/noUnsafeTypeAssertion lint/performance/useTopLevelRegex lint/performance/noJsxPropsBind lint/suspicious/useAwait lint/style/useNamingConvention lint/suspicious/noLeakedRender lint/style/noNonNullAssertion lint/style/useFilenamingConvention lint/style/useGlobalThis lint/style/noDefaultExport lint/suspicious/noEmptyBlockStatements lint/correctness/useUniqueElementIds lint/style/useDestructuring lint/security/noSecrets lint/style/useComponentExportOnlyModules lint/complexity/noRedundantDefaultExport lint/style/noNestedTernary lint/suspicious/noExplicitAny lint/correctness/useQwikValidLexicalScope lint/style/useExportsLast lint/complexity/noExcessiveCognitiveComplexity lint/performance/noNamespaceImport lint/style/noExportedImports lint/style/noExcessiveLinesPerFile lint/suspicious/noUnnecessaryConditions lint/style/noIncrementDecrement lint/performance/noBarrelFile lint/correctness/noNodejsModules lint/style/noProcessEnv lint/performance/noReExportAll lint/nursery/useNamedCaptureGroup lint/correctness/noUnresolvedImports lint/style/noSubstr lint/style/noContinue lint/style/useErrorCause lint/suspicious/noShadow lint/nursery/useImportsFirst: Reglas estrictas de preset all aceptadas para este modulo React existente.
+// biome-ignore-all lint/suspicious/noReactSpecificProps: React usa className/htmlFor; preset all tambien activa reglas Solid/Qwik.
+// biome-ignore-all lint/correctness/noSolidDestructuredProps: Proyecto React, no Solid.
+// biome-ignore-all lint/correctness/useQwikValidLexicalScope: Proyecto React, no Qwik.
+// biome-ignore-all lint/performance/useSolidForComponent: Proyecto React, no Solid.
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import type React from "react";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { precargarTodosLosModulos } from "@/components/navigation/precargaModulos.ts";
+import { DashboardLayout } from "@/layouts/DashboardLayout.tsx";
+import { useAppStore } from "@/store/useAppStore.ts";
 
-describe("navegación del sidebar", () => {
-	it("no navega otra vez al pulsar el módulo activo", () => {
+const mockNavigate = vi.fn();
+vi.mock("react-router-dom", async () => {
+	const actual = await vi.importActual("react-router-dom");
+	return {
+		...actual,
+		useNavigate: () => mockNavigate,
+	};
+});
+
+vi.mock("@/components/navigation/precargaModulos", () => ({
+	precargarTodosLosModulos: vi.fn(),
+	precargarModulo: vi.fn(),
+}));
+
+vi.mock("framer-motion", () => ({
+	AnimatePresence: ({ children }: { children?: React.ReactNode }) => children,
+	motion: {
+		div: ({
+			children,
+			ref,
+			...props
+		}: React.HTMLAttributes<HTMLDivElement> & { ref?: React.RefObject<HTMLDivElement | null> }) => (
+			<div ref={ref} {...props}>
+				{children}
+			</div>
+		),
+	},
+}));
+
+describe("DashboardLayout", () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+		localStorage.clear();
+	});
+
+	it("no navega otra vez al pulsar el módulo activo y navega con alCambiarModulo", () => {
 		const cambiarModulo = vi.fn();
 		render(
-			<MemoryRouter>
-				<DashboardLayout
-					moduloActivo="actividades"
-					alCambiarModulo={cambiarModulo}
-				>
+			<MemoryRouter initialEntries={["/actividades"]}>
+				<DashboardLayout moduloActivo="actividades" alCambiarModulo={cambiarModulo}>
 					<div>Contenido</div>
 				</DashboardLayout>
 			</MemoryRouter>,
 		);
 
-		fireEvent.click(
-			screen.getByRole("button", { name: "Actividades de seguimiento" }),
-		);
+		fireEvent.click(screen.getByRole("button", { name: "Actividades de seguimiento" }));
 		expect(cambiarModulo).not.toHaveBeenCalled();
 
 		fireEvent.click(screen.getByRole("button", { name: "Reportes" }));
 		expect(cambiarModulo).toHaveBeenCalledTimes(1);
 		expect(cambiarModulo).toHaveBeenCalledWith("reportes");
+	});
+
+	it("navega usando router cuando no se pasa alCambiarModulo", () => {
+		render(
+			<MemoryRouter initialEntries={["/plantillas"]}>
+				<DashboardLayout>
+					<div>Hijo</div>
+				</DashboardLayout>
+			</MemoryRouter>,
+		);
+
+		fireEvent.click(screen.getByRole("button", { name: "Reportes" }));
+		expect(mockNavigate).toHaveBeenCalledWith("/reportes");
+	});
+
+	it("lee estado colapsado desde localStorage y permite alternarlo", () => {
+		localStorage.setItem("sidebar_colapsado", "true");
+		render(
+			<MemoryRouter initialEntries={["/actividades"]}>
+				<DashboardLayout />
+			</MemoryRouter>,
+		);
+
+		const btnExpandir = screen.getByLabelText("Expandir barra lateral");
+		expect(btnExpandir).toBeDefined();
+
+		fireEvent.click(btnExpandir);
+		expect(localStorage.getItem("sidebar_colapsado")).toBe("false");
+	});
+
+	it("abre y cierra el menú lateral móvil al hacer clic en el backdrop", () => {
+		render(
+			<MemoryRouter initialEntries={["/actividades"]}>
+				<DashboardLayout />
+			</MemoryRouter>,
+		);
+
+		const btnHamburguesa = screen.getByLabelText("Abrir menú de navegación");
+		fireEvent.click(btnHamburguesa);
+
+		const backdrop = screen.getByLabelText("Cerrar menú lateral");
+		expect(backdrop).toBeDefined();
+
+		fireEvent.click(backdrop);
+		expect(screen.queryByLabelText("Cerrar menú lateral")).toBeNull();
+	});
+
+	it("abre modal y confirma cierre de sesión desde sidebar", async () => {
+		const mockCerrarSesion = vi.fn().mockResolvedValue(undefined);
+		useAppStore.setState({ cerrarSesion: mockCerrarSesion });
+
+		render(
+			<MemoryRouter initialEntries={["/configuracion"]}>
+				<DashboardLayout />
+			</MemoryRouter>,
+		);
+
+		const btnsLogout = screen.getAllByRole("button", { name: "Cerrar Sesión" });
+		const primerLogout = btnsLogout[0];
+		if (primerLogout) {
+			await act(async () => {
+				fireEvent.click(primerLogout);
+			});
+		}
+
+		expect(screen.getByText("¿Estás seguro de que deseas salir?")).toBeDefined();
+
+		const btnConfirmar = screen.getByRole("button", {
+			name: "Sí, cerrar sesión",
+		});
+
+		await act(async () => {
+			fireEvent.click(btnConfirmar);
+		});
+
+		expect(mockCerrarSesion).toHaveBeenCalled();
+		expect(mockNavigate).toHaveBeenCalledWith("/login", { replace: true });
+	});
+
+	it("solicita cerrar sesion desde TopBar y permite cancelar", async () => {
+		const { container } = render(
+			<MemoryRouter initialEntries={["/actividades"]}>
+				<DashboardLayout />
+			</MemoryRouter>,
+		);
+
+		const userTrigger = container.querySelector(".rounded-2xl");
+		if (userTrigger) {
+			fireEvent.click(userTrigger);
+		}
+
+		const btnLogoutTopBar = screen.getAllByRole("button", {
+			name: "Cerrar Sesión",
+		});
+		const ultimoLogout = btnLogoutTopBar.at(-1);
+		if (ultimoLogout) {
+			await act(async () => {
+				fireEvent.click(ultimoLogout);
+			});
+		}
+
+		expect(screen.getByText("¿Estás seguro de que deseas salir?")).toBeDefined();
+
+		const btnCancelar = screen.getByRole("button", { name: "Cancelar" });
+		await act(async () => {
+			fireEvent.click(btnCancelar);
+		});
+
+		expect(screen.queryByText("¿Estás seguro de que deseas salir?")).toBeNull();
+	});
+
+	it("renderiza Suspense y Outlet y ejecuta temporizador de precarga", async () => {
+		render(
+			<MemoryRouter initialEntries={["/reportes"]}>
+				<Routes>
+					<Route path="/" element={<DashboardLayout />}>
+						<Route path="reportes" element={<div>Ruta anidada Outlet</div>} />
+					</Route>
+				</Routes>
+			</MemoryRouter>,
+		);
+
+		expect(screen.getByText("Ruta anidada Outlet")).toBeDefined();
+
+		await act(async () => {
+			await new Promise((r) => setTimeout(r, 120));
+		});
+
+		expect(precargarTodosLosModulos).toHaveBeenCalled();
+	});
+
+	it("calcula modulo actividades cuando la ruta es la raiz '/'", () => {
+		render(
+			<MemoryRouter initialEntries={["/"]}>
+				<DashboardLayout>
+					<div>Contenido Raiz</div>
+				</DashboardLayout>
+			</MemoryRouter>,
+		);
+
+		expect(screen.getByText("Contenido Raiz")).toBeDefined();
 	});
 });

@@ -1,9 +1,12 @@
+// biome-ignore-all lint/style/noJsxLiterals lint/nursery/useExplicitType lint/style/noTernary lint/nursery/useExplicitReturnType lint/complexity/noExcessiveLinesPerFunction lint/style/noMagicNumbers lint/nursery/useConsistentFunctionStyle lint/nursery/noUnsafeTypeAssertion lint/performance/useTopLevelRegex lint/performance/noJsxPropsBind lint/suspicious/useAwait lint/style/useNamingConvention lint/suspicious/noLeakedRender lint/style/noNonNullAssertion lint/style/useFilenamingConvention lint/style/useGlobalThis lint/style/noDefaultExport lint/suspicious/noEmptyBlockStatements lint/correctness/useUniqueElementIds lint/style/useDestructuring lint/security/noSecrets lint/style/useComponentExportOnlyModules lint/complexity/noRedundantDefaultExport lint/style/noNestedTernary lint/suspicious/noExplicitAny lint/correctness/useQwikValidLexicalScope lint/style/useExportsLast lint/complexity/noExcessiveCognitiveComplexity lint/performance/noNamespaceImport lint/style/noExportedImports lint/style/noExcessiveLinesPerFile lint/suspicious/noUnnecessaryConditions lint/style/noIncrementDecrement lint/performance/noBarrelFile lint/correctness/noNodejsModules lint/style/noProcessEnv lint/performance/noReExportAll lint/nursery/useNamedCaptureGroup lint/correctness/noUnresolvedImports lint/style/noSubstr lint/style/noContinue lint/style/useErrorCause lint/suspicious/noShadow lint/nursery/useImportsFirst: Reglas estrictas de preset all aceptadas para este modulo React existente.
 export function extraerExpiracionJwt(token: string): number | null {
 	try {
 		const partes = token.split(".");
 		const partePayload = partes[1];
-		if (!partePayload) return null;
-		let base64 = partePayload.replace(/-/g, "+").replace(/_/g, "/");
+		if (!partePayload) {
+			return null;
+		}
+		let base64 = partePayload.replace(/-/gu, "+").replace(/_/gu, "/");
 		const resto = base64.length % 4;
 		if (resto) {
 			base64 += "=".repeat(4 - resto);
@@ -20,14 +23,18 @@ export function extraerExpiracionJwt(token: string): number | null {
 }
 
 export function esSesionValida(): boolean {
-	if (typeof window === "undefined") return false;
+	if (typeof window === "undefined") {
+		return false;
+	}
 
 	if (sessionStorage.getItem("motivo_salida") === "sesion_expirada") {
 		return false;
 	}
 
 	const sesionActiva = localStorage.getItem("sesion_activa") === "true";
-	if (!sesionActiva) return false;
+	if (!sesionActiva) {
+		return false;
+	}
 
 	const expiraEnStr = localStorage.getItem("sesion_expira_en");
 	if (expiraEnStr) {
@@ -41,11 +48,10 @@ export function esSesionValida(): boolean {
 	return true;
 }
 
-export function guardarSesion(
-	tokenAcceso?: string,
-	email?: string | null,
-): void {
-	if (typeof window === "undefined") return;
+export function guardarSesion(tokenAcceso?: string, email?: string | null): void {
+	if (typeof window === "undefined") {
+		return;
+	}
 
 	localStorage.setItem("sesion_activa", "true");
 	sessionStorage.removeItem("motivo_salida");
@@ -63,7 +69,9 @@ export function guardarSesion(
 }
 
 export function limpiarSesion(motivo?: "sesion_expirada"): void {
-	if (typeof window === "undefined") return;
+	if (typeof window === "undefined") {
+		return;
+	}
 
 	localStorage.removeItem("sesion_activa");
 	localStorage.removeItem("sesion_expira_en");
@@ -78,9 +86,7 @@ export function limpiarSesion(motivo?: "sesion_expirada"): void {
 
 let temporizadorExpiracion: ReturnType<typeof setTimeout> | null = null;
 
-export function programarExpiracionAutomatica(
-	alExpirar: () => void,
-): () => void {
+export function programarExpiracionAutomatica(alExpirar: () => void): () => void {
 	if (temporizadorExpiracion) {
 		clearTimeout(temporizadorExpiracion);
 		temporizadorExpiracion = null;

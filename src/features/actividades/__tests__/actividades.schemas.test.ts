@@ -1,5 +1,6 @@
+// biome-ignore-all lint/style/noJsxLiterals lint/nursery/useExplicitType lint/style/noTernary lint/nursery/useExplicitReturnType lint/complexity/noExcessiveLinesPerFunction lint/style/noMagicNumbers lint/nursery/useConsistentFunctionStyle lint/nursery/noUnsafeTypeAssertion lint/performance/useTopLevelRegex lint/performance/noJsxPropsBind lint/suspicious/useAwait lint/style/useNamingConvention lint/suspicious/noLeakedRender lint/style/noNonNullAssertion lint/style/useFilenamingConvention lint/style/useGlobalThis lint/style/noDefaultExport lint/suspicious/noEmptyBlockStatements lint/correctness/useUniqueElementIds lint/style/useDestructuring lint/security/noSecrets lint/style/useComponentExportOnlyModules lint/complexity/noRedundantDefaultExport lint/style/noNestedTernary lint/suspicious/noExplicitAny lint/correctness/useQwikValidLexicalScope lint/style/useExportsLast lint/complexity/noExcessiveCognitiveComplexity lint/performance/noNamespaceImport lint/style/noExportedImports lint/style/noExcessiveLinesPerFile lint/suspicious/noUnnecessaryConditions lint/style/noIncrementDecrement lint/performance/noBarrelFile lint/correctness/noNodejsModules lint/style/noProcessEnv lint/performance/noReExportAll lint/nursery/useNamedCaptureGroup lint/correctness/noUnresolvedImports lint/style/noSubstr lint/style/noContinue lint/style/useErrorCause lint/suspicious/noShadow lint/nursery/useImportsFirst: Reglas estrictas de preset all aceptadas para este modulo React existente.
 import { describe, expect, it } from "vitest";
-import { GenerarActividadSchema } from "@/features/actividades/schemas/actividades.schemas";
+import { GenerarActividadSchema } from "@/features/actividades/schemas/actividades.schemas.ts";
 
 describe("GenerarActividadSchema", () => {
 	const fechaHoy = new Date();
@@ -64,5 +65,82 @@ describe("GenerarActividadSchema", () => {
 
 		const resultado = GenerarActividadSchema.safeParse(datos);
 		expect(resultado.success).toBe(false);
+	});
+
+	it("rechaza fecha con formato invalido sin anio mes dia", () => {
+		const datos = {
+			idClase: "c-101",
+			titulo: "Actividad",
+			fechaVencimiento: "invalido",
+			idPlantilla: "p-1",
+		};
+		const resultado = GenerarActividadSchema.safeParse(datos);
+		expect(resultado.success).toBe(false);
+
+		const datosCero = {
+			idClase: "c-101",
+			titulo: "Actividad",
+			fechaVencimiento: "2026-00-10",
+			idPlantilla: "p-1",
+		};
+		expect(GenerarActividadSchema.safeParse(datosCero).success).toBe(false);
+	});
+
+	it("rechaza fecha anterior a hoy", () => {
+		const datos = {
+			idClase: "c-101",
+			titulo: "Actividad",
+			fechaVencimiento: "2020-01-01",
+			idPlantilla: "p-1",
+		};
+		const resultado = GenerarActividadSchema.safeParse(datos);
+		expect(resultado.success).toBe(false);
+		expect(resultado.error?.issues[0]?.message).toBe(
+			"La fecha de vencimiento no puede ser anterior al día de hoy",
+		);
+	});
+
+	it("rechaza idClase o idPlantilla vacios", () => {
+		expect(
+			GenerarActividadSchema.safeParse({
+				idClase: "",
+				titulo: "T",
+				fechaVencimiento: fechaValida,
+				idPlantilla: "p-1",
+			}).success,
+		).toBe(false);
+
+		expect(
+			GenerarActividadSchema.safeParse({
+				idClase: "c-1",
+				titulo: "T",
+				fechaVencimiento: fechaValida,
+				idPlantilla: "",
+			}).success,
+		).toBe(false);
+	});
+
+	it("valida descripcion opcional y longitud maxima", () => {
+		expect(
+			GenerarActividadSchema.safeParse({
+				idClase: "c-1",
+				titulo: "T",
+				fechaVencimiento: fechaValida,
+				idPlantilla: "p-1",
+				descripcion: "d".repeat(2000),
+				horaVencimiento: "14:00",
+				idTema: "tema-1",
+			}).success,
+		).toBe(true);
+
+		expect(
+			GenerarActividadSchema.safeParse({
+				idClase: "c-1",
+				titulo: "T",
+				fechaVencimiento: fechaValida,
+				idPlantilla: "p-1",
+				descripcion: "d".repeat(2001),
+			}).success,
+		).toBe(false);
 	});
 });

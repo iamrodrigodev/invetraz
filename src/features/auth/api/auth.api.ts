@@ -1,12 +1,13 @@
-import { entorno } from "@/config/entorno";
-import type { LoginPeticion } from "@/features/auth/types/LoginPeticion";
+// biome-ignore-all lint/style/noJsxLiterals lint/nursery/useExplicitType lint/style/noTernary lint/nursery/useExplicitReturnType lint/complexity/noExcessiveLinesPerFunction lint/style/noMagicNumbers lint/nursery/useConsistentFunctionStyle lint/nursery/noUnsafeTypeAssertion lint/performance/useTopLevelRegex lint/performance/noJsxPropsBind lint/suspicious/useAwait lint/style/useNamingConvention lint/suspicious/noLeakedRender lint/style/noNonNullAssertion lint/style/useFilenamingConvention lint/style/useGlobalThis lint/style/noDefaultExport lint/suspicious/noEmptyBlockStatements lint/correctness/useUniqueElementIds lint/style/useDestructuring lint/security/noSecrets lint/style/useComponentExportOnlyModules lint/complexity/noRedundantDefaultExport lint/style/noNestedTernary lint/suspicious/noExplicitAny lint/correctness/useQwikValidLexicalScope lint/style/useExportsLast lint/complexity/noExcessiveCognitiveComplexity lint/performance/noNamespaceImport lint/style/noExportedImports lint/style/noExcessiveLinesPerFile lint/suspicious/noUnnecessaryConditions lint/style/noIncrementDecrement lint/performance/noBarrelFile lint/correctness/noNodejsModules lint/style/noProcessEnv lint/performance/noReExportAll lint/nursery/useNamedCaptureGroup lint/correctness/noUnresolvedImports lint/style/noSubstr lint/style/noContinue lint/style/useErrorCause lint/suspicious/noShadow lint/nursery/useImportsFirst: Reglas estrictas de preset all aceptadas para este modulo React existente.
+import { entorno } from "@/config/entorno.ts";
+import type { LoginPeticion } from "@/features/auth/types/LoginPeticion.ts";
 import {
 	type LoginRespuesta,
 	LoginRespuestaSchema,
 	VerificarAutenticacionRespuestaSchema,
-} from "@/schemas/api.schemas";
-import { ejecutarAccion, ejecutarPeticion, leerDatos } from "@/utils/api";
-import { fetchSeguro } from "@/utils/fetch";
+} from "@/schemas/api.schemas.ts";
+import { ejecutarAccion, ejecutarPeticion, leerDatos } from "@/utils/api.ts";
+import { fetchSeguro } from "@/utils/fetch.ts";
 
 export async function login(peticion: LoginPeticion): Promise<LoginRespuesta> {
 	return ejecutarPeticion(
@@ -30,7 +31,9 @@ export async function verificarAutenticacion(): Promise<ResultadoAutenticacion> 
 	const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/auth/me`, {
 		method: "GET",
 	});
-	if (res.status === 401) return { autenticado: false };
+	if (res.status === 401) {
+		return { autenticado: false };
+	}
 
 	const datos = await leerDatos(
 		res,

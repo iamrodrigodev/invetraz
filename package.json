@@ -7,11 +7,12 @@
 		"dev": "vite",
 		"build": "tsc -b && vite build",
 		"preview": "vite preview",
-		"lint": "biome lint .",
-		"format": "biome format --write .",
-		"check": "biome check .",
+		"lint": "biome lint . --error-on-warnings",
+		"format": "biome format . --write",
+		"check": "biome check . --error-on-warnings",
 		"check:fix": "biome check --write .",
-		"test": "vitest run"
+		"test": "vitest run",
+		"test:coverage": "vitest run --coverage"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^5.9.1",

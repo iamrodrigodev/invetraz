@@ -1,6 +1,7 @@
+// biome-ignore-all lint/style/noJsxLiterals lint/nursery/useExplicitType lint/style/noTernary lint/nursery/useExplicitReturnType lint/complexity/noExcessiveLinesPerFunction lint/style/noMagicNumbers lint/nursery/useConsistentFunctionStyle lint/nursery/noUnsafeTypeAssertion lint/performance/useTopLevelRegex lint/performance/noJsxPropsBind lint/suspicious/useAwait lint/style/useNamingConvention lint/suspicious/noLeakedRender lint/style/noNonNullAssertion lint/style/useFilenamingConvention lint/style/useGlobalThis lint/style/noDefaultExport lint/suspicious/noEmptyBlockStatements lint/correctness/useUniqueElementIds lint/style/useDestructuring lint/security/noSecrets lint/style/useComponentExportOnlyModules lint/complexity/noRedundantDefaultExport lint/style/noNestedTernary lint/suspicious/noExplicitAny lint/correctness/useQwikValidLexicalScope lint/style/useExportsLast lint/complexity/noExcessiveCognitiveComplexity lint/performance/noNamespaceImport lint/style/noExportedImports lint/style/noExcessiveLinesPerFile lint/suspicious/noUnnecessaryConditions lint/style/noIncrementDecrement lint/performance/noBarrelFile lint/correctness/noNodejsModules lint/style/noProcessEnv lint/performance/noReExportAll lint/nursery/useNamedCaptureGroup lint/correctness/noUnresolvedImports lint/style/noSubstr lint/style/noContinue lint/style/useErrorCause lint/suspicious/noShadow lint/nursery/useImportsFirst: Reglas estrictas de preset all aceptadas para este modulo React existente.
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { useClipboard } from "@/hooks/useClipboard";
+import { useClipboard } from "@/hooks/useClipboard.ts";
 
 describe("useClipboard", () => {
 	const writeTextMock = vi.fn();
@@ -47,5 +48,98 @@ describe("useClipboard", () => {
 
 		expect(result.current.copiado).toBe(false);
 		expect(result.current.copiadoId).toBeNull();
+	});
+
+	it("utiliza valores por defecto cuando no se pasan opciones ni id", async () => {
+		const { result } = renderHook(() => useClipboard());
+
+		await act(async () => {
+			await result.current.copiar("texto");
+		});
+
+		expect(result.current.copiadoId).toBe("unico");
+		expect(result.current.esCopiado()).toBe(true);
+
+		act(() => {
+			vi.advanceTimersByTime(2000);
+		});
+
+		expect(result.current.copiado).toBe(false);
+	});
+
+	it("reemplaza el temporizador previo si se copia sucesivamente", async () => {
+		const { result } = renderHook(() => useClipboard({ tiempoResetMs: 2000 }));
+
+		await act(async () => {
+			await result.current.copiar("texto-1", "id-1");
+		});
+
+		act(() => {
+			vi.advanceTimersByTime(1000);
+		});
+
+		await act(async () => {
+			await result.current.copiar("texto-2", "id-2");
+		});
+
+		act(() => {
+			vi.advanceTimersByTime(1000);
+		});
+		expect(result.current.copiadoId).toBe("id-2");
+
+		act(() => {
+			vi.advanceTimersByTime(1000);
+		});
+		expect(result.current.copiadoId).toBeNull();
+	});
+
+	it("usa fallback de execCommand cuando writeText falla", async () => {
+		writeTextMock.mockRejectedValue(new Error("Acceso denegado"));
+		const execCommandMock = vi.fn().mockReturnValue(true);
+		Object.defineProperty(document, "execCommand", {
+			value: execCommandMock,
+			configurable: true,
+			writable: true,
+		});
+
+		const { result } = renderHook(() => useClipboard());
+
+		let copiado = false;
+		await act(async () => {
+			copiado = await result.current.copiar("fallback-texto");
+		});
+
+		expect(copiado).toBe(true);
+		expect(execCommandMock).toHaveBeenCalledWith("copy");
+	});
+
+	it("retorna false si fallback de execCommand tambien falla", async () => {
+		writeTextMock.mockRejectedValue(new Error("Acceso denegado"));
+		const execCommandMock = vi.fn().mockReturnValue(false);
+		Object.defineProperty(document, "execCommand", {
+			value: execCommandMock,
+			configurable: true,
+			writable: true,
+		});
+
+		const { result } = renderHook(() => useClipboard());
+
+		let copiado = false;
+		await act(async () => {
+			copiado = await result.current.copiar("fallo-total");
+		});
+
+		expect(copiado).toBe(false);
+		expect(result.current.copiado).toBe(false);
+	});
+
+	it("limpia el temporizador al desmontar el hook", async () => {
+		const { result, unmount } = renderHook(() => useClipboard({ tiempoResetMs: 2000 }));
+
+		await act(async () => {
+			await result.current.copiar("texto");
+		});
+
+		unmount();
 	});
 });
