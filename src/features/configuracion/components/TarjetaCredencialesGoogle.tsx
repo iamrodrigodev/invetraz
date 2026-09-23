@@ -1,9 +1,9 @@
 import { ExternalLink, Key } from "lucide-react";
 import type React from "react";
-import { VALIDATION_LIMITS } from "../../../constants/validations";
-import { useCredencialesGoogleConfig } from "../hooks/useCredencialesGoogleConfig";
-import { CampoCredencial } from "./CampoCredencial";
-import { TarjetaConexionBase } from "./TarjetaConexionBase";
+import { VALIDATION_LIMITS } from "@/constants/validations";
+import { CampoCredencial } from "@/features/configuracion/components/CampoCredencial";
+import { TarjetaConexionBase } from "@/features/configuracion/components/TarjetaConexionBase";
+import { useCredencialesGoogleConfig } from "@/features/configuracion/hooks/useCredencialesGoogleConfig";
 
 export const TarjetaCredencialesGoogle: React.FC = () => {
 	const {

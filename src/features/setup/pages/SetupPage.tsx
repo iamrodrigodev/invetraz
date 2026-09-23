@@ -3,15 +3,17 @@ import { Eye, EyeOff, Microscope, RefreshCw, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Alert, Button, Input } from "../../../components/ui";
-import { VALIDATION_LIMITS } from "../../../constants/validations";
-import { useAppStore } from "../../../store/useAppStore";
-import { login } from "../../auth/api/auth.api";
-import { crearAdmin } from "../api/setup.api";
+import { Alert } from "@/components/ui/Alert";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { VALIDATION_LIMITS } from "@/constants/validations";
+import { login } from "@/features/auth/api/auth.api";
+import { crearAdmin } from "@/features/setup/api/setup.api";
 import {
 	type CrearAdminPeticion,
 	CrearAdminPeticionSchema,
-} from "../types/CrearAdminPeticion";
+} from "@/features/setup/types/CrearAdminPeticion";
+import { useAppStore } from "@/store/useAppStore";
 
 export function SetupPage() {
 	const navigate = useNavigate();

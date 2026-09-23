@@ -1,4 +1,4 @@
 export {
 	ActividadesSeguimientoPage,
 	default,
-} from "../features/actividades/pages/ActividadesSeguimientoPage";
+} from "@/features/actividades/pages/ActividadesSeguimientoPage";

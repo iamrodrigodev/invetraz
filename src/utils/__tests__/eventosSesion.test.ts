@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
 	ejecutarLimpiezaSesion,
 	registrarLimpiadorSesion,
-} from "../eventosSesion";
+} from "@/utils/eventosSesion";
 
 describe("eventosSesion", () => {
 	it("ejecuta los limpiadores registrados al disparar la limpieza de sesión", () => {

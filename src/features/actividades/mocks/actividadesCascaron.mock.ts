@@ -3,7 +3,7 @@ import type {
 	FormGenerarActividadValores,
 	PlantillaSeguimientoOpcion,
 	TemaClase,
-} from "../types/actividades.types";
+} from "@/features/actividades/types/actividades.types";
 
 export const DATOS_PRUEBA_CARPETA = {
 	id: "1abc-investigacion-formatos",

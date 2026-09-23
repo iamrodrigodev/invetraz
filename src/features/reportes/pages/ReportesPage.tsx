@@ -1,5 +1,5 @@
 import { BarChart3 } from "lucide-react";
-import { ModuloEnConstruccion } from "../../../components/ui";
+import { ModuloEnConstruccion } from "@/components/ui/ModuloEnConstruccion";
 
 export function ReportesPage() {
 	return (

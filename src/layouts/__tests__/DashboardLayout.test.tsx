@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
-import { DashboardLayout } from "../DashboardLayout";
+import { DashboardLayout } from "@/layouts/DashboardLayout";
 
 describe("navegación del sidebar", () => {
 	it("no navega otra vez al pulsar el módulo activo", () => {

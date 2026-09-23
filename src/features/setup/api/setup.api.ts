@@ -1,7 +1,7 @@
-import { entorno } from "../../../config/entorno";
-import { EstadoSetupRespuestaSchema } from "../../../schemas/api.schemas";
-import { ejecutarAccion, ejecutarPeticion } from "../../../utils/api";
-import type { CrearAdminPeticion } from "../types/CrearAdminPeticion";
+import { entorno } from "@/config/entorno";
+import type { CrearAdminPeticion } from "@/features/setup/types/CrearAdminPeticion";
+import { EstadoSetupRespuestaSchema } from "@/schemas/api.schemas";
+import { ejecutarAccion, ejecutarPeticion } from "@/utils/api";
 
 export async function verificarEstadoSistema(): Promise<boolean> {
 	const datos = await ejecutarPeticion(

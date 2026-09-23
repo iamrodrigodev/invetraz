@@ -1,13 +1,8 @@
 import { Check, Copy, ExternalLink, KeyRound } from "lucide-react";
 import type React from "react";
-import {
-	Button,
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from "../../../components/ui";
-import { useCopiarTexto } from "../hooks/useCopiarTexto";
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { useCopiarTexto } from "@/features/documentacion/hooks/useCopiarTexto";
 
 const TODOS_LOS_SCOPES = [
 	"https://www.googleapis.com/auth/classroom.courses",

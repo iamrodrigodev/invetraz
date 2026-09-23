@@ -1,13 +1,13 @@
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { VALIDATION_LIMITS } from "../../../constants/validations";
-import { resolverVistaCarpetaDrive } from "../../drive";
+import { VALIDATION_LIMITS } from "@/constants/validations";
+import type { TipoEstadoConexion } from "@/features/configuracion/components/EstadoConexionBadge";
+import { useVerificacionConexion } from "@/features/configuracion/hooks/useVerificacionConexion";
+import { resolverVistaCarpetaDrive } from "@/features/drive/estadoCarpetaDrive";
 import {
 	verificarCarpetaDrive,
 	vincularCarpetaDrive,
-} from "../../plantillas/api/plantillas.api";
-import type { TipoEstadoConexion } from "../components/EstadoConexionBadge";
-import { useVerificacionConexion } from "./useVerificacionConexion";
+} from "@/features/plantillas/api/plantillas.api";
 
 export interface UseCarpetaDriveConfigOptions {
 	carpetaIdInicial?: string | null | undefined;

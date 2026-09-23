@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { GenerarActividadSchema } from "../schemas/actividades.schemas";
+import { GenerarActividadSchema } from "@/features/actividades/schemas/actividades.schemas";
 
 describe("GenerarActividadSchema", () => {
 	const fechaHoy = new Date();

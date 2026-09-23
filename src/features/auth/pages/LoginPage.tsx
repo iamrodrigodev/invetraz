@@ -3,14 +3,16 @@ import { Eye, EyeOff, LogIn, Microscope, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Alert, Button, Input } from "../../../components/ui";
-import { VALIDATION_LIMITS } from "../../../constants/validations";
-import { useAppStore } from "../../../store/useAppStore";
-import { login } from "../api/auth.api";
+import { Alert } from "@/components/ui/Alert";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { VALIDATION_LIMITS } from "@/constants/validations";
+import { login } from "@/features/auth/api/auth.api";
 import {
 	type LoginPeticion,
 	LoginPeticionSchema,
-} from "../types/LoginPeticion";
+} from "@/features/auth/types/LoginPeticion";
+import { useAppStore } from "@/store/useAppStore";
 
 export function LoginPage() {
 	const navigate = useNavigate();

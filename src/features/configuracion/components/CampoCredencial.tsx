@@ -1,7 +1,7 @@
 import { Eye, EyeOff } from "lucide-react";
 import type React from "react";
 import { forwardRef, useState } from "react";
-import { Input, type InputProps } from "../../../components/ui/Input";
+import { Input, type InputProps } from "@/components/ui/Input";
 
 export interface CampoCredencialProps extends Omit<InputProps, "rightElement"> {
 	label: string;

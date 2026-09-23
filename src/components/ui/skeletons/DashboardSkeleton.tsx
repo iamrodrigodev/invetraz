@@ -1,10 +1,10 @@
-import { ConfiguracionSkeleton } from "../../../features/configuracion/components/ConfiguracionSkeleton";
-import { DocumentacionSkeleton } from "../../../features/documentacion/components/DocumentacionSkeleton";
-import { PlantillasSkeleton } from "../../../features/plantillas/components/PlantillasSkeleton";
-import { ActividadesSeguimientoSkeleton } from "../../../pages/skeletons/ActividadesSeguimientoSkeleton";
-import { ReportesSkeleton } from "../../../pages/skeletons/ReportesSkeleton";
-import { cn } from "../../../utils/cn";
-import { Skeleton } from "../Skeleton";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { ConfiguracionSkeleton } from "@/features/configuracion/components/ConfiguracionSkeleton";
+import { DocumentacionSkeleton } from "@/features/documentacion/components/DocumentacionSkeleton";
+import { PlantillasSkeleton } from "@/features/plantillas/components/PlantillasSkeleton";
+import { ActividadesSeguimientoSkeleton } from "@/pages/skeletons/ActividadesSeguimientoSkeleton";
+import { ReportesSkeleton } from "@/pages/skeletons/ReportesSkeleton";
+import { cn } from "@/utils/cn";
 
 export function ModuloContenidoSkeleton({ modulo }: { modulo: string }) {
 	switch (modulo) {

@@ -6,9 +6,12 @@ import {
 	RefreshCw,
 } from "lucide-react";
 import type React from "react";
-import { Badge, Button } from "../../components/ui";
-import type { EstadoCarpetaDrive } from "./estadoCarpetaDrive";
-import { resolverVistaCarpetaDrive } from "./estadoCarpetaDrive";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import {
+	type EstadoCarpetaDrive,
+	resolverVistaCarpetaDrive,
+} from "@/features/drive/estadoCarpetaDrive";
 
 export interface TarjetaCarpetaVinculadaProps {
 	nombre?: string | null | undefined;

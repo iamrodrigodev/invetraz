@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { FormGenerarActividad } from "../components/FormGenerarActividad";
+import { FormGenerarActividad } from "@/features/actividades/components/FormGenerarActividad";
 
 describe("FormGenerarActividad (Cascarón Puro)", () => {
 	const clasesMock = [{ idClassroom: "c1", nombre: "Clase de Prueba" }];

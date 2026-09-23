@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { TimePicker } from "../TimePicker";
+import { TimePicker } from "@/components/ui/TimePicker";
 
 describe("TimePicker component", () => {
 	it("renderiza con placeholder inicial", () => {

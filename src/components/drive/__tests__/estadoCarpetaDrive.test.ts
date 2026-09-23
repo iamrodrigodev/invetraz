@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolverVistaCarpetaDrive } from "../estadoCarpetaDrive";
+import { resolverVistaCarpetaDrive } from "@/features/drive/estadoCarpetaDrive";
 
 describe("resolverVistaCarpetaDrive", () => {
 	it("retorna estado no configurado si no hay carpetaId", () => {

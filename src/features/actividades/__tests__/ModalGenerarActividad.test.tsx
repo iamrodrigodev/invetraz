@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { ModalGenerarActividad } from "../components/ModalGenerarActividad";
+import { ModalGenerarActividad } from "@/features/actividades/components/ModalGenerarActividad";
 
-vi.mock("../store/usePlantillasSeguimientoStore", () => ({
+vi.mock("@/features/actividades/store/usePlantillasSeguimientoStore", () => ({
 	usePlantillasSeguimientoStore: () => ({
 		plantillas: [
 			{
@@ -19,7 +19,7 @@ vi.mock("../store/usePlantillasSeguimientoStore", () => ({
 	}),
 }));
 
-vi.mock("../../configuracion/store/useConfiguracionStore", () => ({
+vi.mock("@/features/configuracion/store/useConfiguracionStore", () => ({
 	useConfiguracionStore: () => ({
 		credenciales: {
 			googleCloudClientId: "client-id",

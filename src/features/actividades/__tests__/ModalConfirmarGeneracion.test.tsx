@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { ModalConfirmarGeneracion } from "../components/ModalConfirmarGeneracion";
-import type { ResumenConfirmacionActividad } from "../types/actividades.types";
+import { ModalConfirmarGeneracion } from "@/features/actividades/components/ModalConfirmarGeneracion";
+import type { ResumenConfirmacionActividad } from "@/features/actividades/types/actividades.types";
 
 const resumenPrueba: ResumenConfirmacionActividad = {
 	nombreClase: "Investigación Formativa A",

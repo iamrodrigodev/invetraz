@@ -6,7 +6,7 @@ import {
 	X,
 } from "lucide-react";
 import type React from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@/utils/cn";
 
 export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
 	message: string;

@@ -1,10 +1,10 @@
-import { entorno } from "../../../config/entorno";
-import { ejecutarPeticion } from "../../../utils/api";
-import {
-	type CarpetaPlantillasRespuesta,
-	CarpetaPlantillasRespuestaSchema,
-	type VincularCarpetaPeticion,
-} from "../types/plantillas.types";
+import { entorno } from "@/config/entorno";
+import type {
+	CarpetaPlantillasRespuesta,
+	VincularCarpetaPeticion,
+} from "@/features/plantillas/types/plantillas.types";
+import { CarpetaPlantillasRespuestaSchema } from "@/features/plantillas/types/plantillas.types";
+import { ejecutarPeticion } from "@/utils/api";
 
 export async function obtenerPlantillas(): Promise<CarpetaPlantillasRespuesta> {
 	return ejecutarPeticion(

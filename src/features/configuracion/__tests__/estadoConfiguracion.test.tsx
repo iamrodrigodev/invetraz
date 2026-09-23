@@ -1,14 +1,14 @@
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useVerificacionConexion } from "../hooks/useVerificacionConexion";
-import { useConfiguracionStore } from "../store/useConfiguracionStore";
+import { useVerificacionConexion } from "@/features/configuracion/hooks/useVerificacionConexion";
+import { useConfiguracionStore } from "@/features/configuracion/store/useConfiguracionStore";
 
 const api = vi.hoisted(() => ({
 	actualizarConfiguracion: vi.fn(),
 	verificarConfiguracion: vi.fn(),
 	obtenerConfiguracion: vi.fn(),
 }));
-vi.mock("../api/configuracion.api", () => api);
+vi.mock("@/features/configuracion/api/configuracion.api", () => api);
 
 const datos = {
 	googleClientId: "id",

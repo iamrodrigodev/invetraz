@@ -6,21 +6,21 @@ const api = vi.hoisted(() => ({
 	esSesionValida: vi.fn(),
 }));
 
-vi.mock("../../features/auth/api/auth.api", () => ({
+vi.mock("@/features/auth/api/auth.api", () => ({
 	verificarAutenticacion: api.verificarAutenticacion,
 	logout: vi.fn(),
 }));
-vi.mock("../../features/setup/api/setup.api", () => ({
+vi.mock("@/features/setup/api/setup.api", () => ({
 	verificarEstadoSistema: api.verificarEstadoSistema,
 }));
-vi.mock("../../utils/sesion", () => ({
+vi.mock("@/utils/sesion", () => ({
 	esSesionValida: api.esSesionValida,
 	guardarSesion: vi.fn(),
 	limpiarSesion: vi.fn(),
 	programarExpiracionAutomatica: vi.fn(),
 }));
 
-import { useAppStore } from "../useAppStore";
+import { useAppStore } from "@/store/useAppStore";
 
 beforeEach(() => {
 	vi.clearAllMocks();

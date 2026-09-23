@@ -1,5 +1,5 @@
-import { cn } from "../../../utils/cn";
-import { Skeleton } from "../Skeleton";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { cn } from "@/utils/cn";
 
 export interface ModuloEnConstruccionSkeletonProps {
 	tituloAncho: string;

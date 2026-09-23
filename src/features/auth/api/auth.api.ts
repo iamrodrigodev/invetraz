@@ -1,16 +1,12 @@
-import { entorno } from "../../../config/entorno";
+import { entorno } from "@/config/entorno";
+import type { LoginPeticion } from "@/features/auth/types/LoginPeticion";
 import {
 	type LoginRespuesta,
 	LoginRespuestaSchema,
 	VerificarAutenticacionRespuestaSchema,
-} from "../../../schemas/api.schemas";
-import {
-	ejecutarAccion,
-	ejecutarPeticion,
-	leerDatos,
-} from "../../../utils/api";
-import { fetchSeguro } from "../../../utils/fetch";
-import type { LoginPeticion } from "../types/LoginPeticion";
+} from "@/schemas/api.schemas";
+import { ejecutarAccion, ejecutarPeticion, leerDatos } from "@/utils/api";
+import { fetchSeguro } from "@/utils/fetch";
 
 export async function login(peticion: LoginPeticion): Promise<LoginRespuesta> {
 	return ejecutarPeticion(

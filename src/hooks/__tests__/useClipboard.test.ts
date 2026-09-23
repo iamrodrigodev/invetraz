@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { useClipboard } from "../useClipboard";
+import { useClipboard } from "@/hooks/useClipboard";
 
 describe("useClipboard", () => {
 	const writeTextMock = vi.fn();

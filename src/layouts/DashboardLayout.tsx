@@ -1,11 +1,13 @@
 import { Suspense, useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Sidebar, TopBar } from "../components/navigation";
-import { precargarTodosLosModulos } from "../components/navigation/precargaModulos";
-import { type ModuloId, ModuloIdSchema } from "../components/navigation/types";
-import { ModalConfirmacion, ModuloContenidoSkeleton } from "../components/ui";
-import { useAppStore } from "../store/useAppStore";
-import { cn } from "../utils/cn";
+import { precargarTodosLosModulos } from "@/components/navigation/precargaModulos";
+import { Sidebar } from "@/components/navigation/Sidebar";
+import { TopBar } from "@/components/navigation/TopBar";
+import { type ModuloId, ModuloIdSchema } from "@/components/navigation/types";
+import { ModalConfirmacion } from "@/components/ui/ModalConfirmacion";
+import { ModuloContenidoSkeleton } from "@/components/ui/skeletons/DashboardSkeleton";
+import { useAppStore } from "@/store/useAppStore";
+import { cn } from "@/utils/cn";
 
 export interface DashboardLayoutProps {
 	moduloActivo?: ModuloId;

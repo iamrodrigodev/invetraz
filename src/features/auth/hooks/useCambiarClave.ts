@@ -1,9 +1,12 @@
 import { useState } from "react";
+import {
+	cambiarPassword,
+	verificarPasswordActual,
+} from "@/features/auth/api/auth.api";
 import type {
 	CambiarClavePaso1FormData,
 	CambiarClavePaso2FormData,
-} from "../../../schemas/auth.schemas";
-import { cambiarPassword, verificarPasswordActual } from "../api/auth.api";
+} from "@/schemas/auth.schemas";
 
 export type EstadoCambiarClave =
 	| { tipo: "inactivo" }

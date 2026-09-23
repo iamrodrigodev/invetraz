@@ -1,6 +1,7 @@
 import { CheckCircle2, X } from "lucide-react";
 import type React from "react";
-import { Button, Modal } from "../../../components/ui";
+import { Button } from "@/components/ui/Button";
+import { Modal } from "@/components/ui/Modal";
 
 export interface ModalExitoGeneracionProps {
 	abierto: boolean;

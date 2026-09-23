@@ -3,26 +3,24 @@ import { Plus, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import {
-	Button,
-	DatePicker,
-	Input,
-	Select,
-	Textarea,
-	TimePicker,
-} from "../../../components/ui";
-import { TarjetaCarpetaVinculada } from "../../drive";
-import type { CarpetaDriveInfo } from "../hooks/useGenerarActividad";
+import { Button } from "@/components/ui/Button";
+import { DatePicker } from "@/components/ui/DatePicker";
+import { Input } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
+import { Textarea } from "@/components/ui/Textarea";
+import { TimePicker } from "@/components/ui/TimePicker";
+import { PrevisualizacionPlantilla } from "@/features/actividades/components/PrevisualizacionPlantilla";
+import type { CarpetaDriveInfo } from "@/features/actividades/hooks/useGenerarActividad";
 import {
 	GenerarActividadSchema,
 	type GenerarActividadSchemaTipo,
-} from "../schemas/actividades.schemas";
+} from "@/features/actividades/schemas/actividades.schemas";
 import type {
 	ClaseDocente,
 	PlantillaSeguimientoOpcion,
 	TemaClase,
-} from "../types/actividades.types";
-import { PrevisualizacionPlantilla } from "./PrevisualizacionPlantilla";
+} from "@/features/actividades/types/actividades.types";
+import { TarjetaCarpetaVinculada } from "@/features/drive/TarjetaCarpetaVinculada";
 
 export interface FormGenerarActividadProps {
 	valoresIniciales?: Partial<GenerarActividadSchemaTipo> | null | undefined;

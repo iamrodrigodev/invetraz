@@ -1,13 +1,14 @@
 import { ClipboardCheck, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Button, Card, CardContent } from "../../../components/ui";
-import { ActividadesSeguimientoSkeleton } from "../../../pages/skeletons/ActividadesSeguimientoSkeleton";
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent } from "@/components/ui/Card";
+import { ModalGenerarActividad } from "@/features/actividades/components/ModalGenerarActividad";
+import { usePlantillasSeguimientoStore } from "@/features/actividades/store/usePlantillasSeguimientoStore";
 import {
 	esConfiguracionListaParaActividades,
 	useConfiguracionStore,
-} from "../../configuracion/store/useConfiguracionStore";
-import { ModalGenerarActividad } from "../components/ModalGenerarActividad";
-import { usePlantillasSeguimientoStore } from "../store/usePlantillasSeguimientoStore";
+} from "@/features/configuracion/store/useConfiguracionStore";
+import { ActividadesSeguimientoSkeleton } from "@/pages/skeletons/ActividadesSeguimientoSkeleton";
 
 export function ActividadesSeguimientoPage() {
 	const {

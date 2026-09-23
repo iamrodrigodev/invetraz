@@ -1,9 +1,9 @@
 import { Check, ChevronDown } from "lucide-react";
 import type React from "react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { useClickOutside } from "../../hooks/useClickOutside";
-import { cn } from "../../utils/cn";
-import { Badge } from "./Badge";
+import { Badge } from "@/components/ui/Badge";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import { cn } from "@/utils/cn";
 
 export interface SelectOption {
 	value: string;

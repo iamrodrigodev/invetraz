@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { emailInstitucionalSchema } from "../auth.schemas";
+import { emailInstitucionalSchema } from "@/schemas/auth.schemas";
 
 describe("emailInstitucionalSchema", () => {
 	it("conserva la validación y normalización del correo", () => {

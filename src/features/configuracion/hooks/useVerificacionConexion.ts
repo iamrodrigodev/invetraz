@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { TipoEstadoConexion } from "../components/EstadoConexionBadge";
+import type { TipoEstadoConexion } from "@/features/configuracion/components/EstadoConexionBadge";
 
 export interface ResultadoAccionConexion {
 	mensaje?: string;

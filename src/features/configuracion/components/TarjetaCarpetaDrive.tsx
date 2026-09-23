@@ -1,12 +1,13 @@
 import { ExternalLink, FolderGit2 } from "lucide-react";
 import type React from "react";
-import { Alert } from "../../../components/ui";
-import { VALIDATION_LIMITS } from "../../../constants/validations";
-import { type EstadoCarpetaDrive, TarjetaCarpetaVinculada } from "../../drive";
-import { useCarpetaDriveConfig } from "../hooks/useCarpetaDriveConfig";
-import { CampoCredencial } from "./CampoCredencial";
-import type { TipoEstadoConexion } from "./EstadoConexionBadge";
-import { TarjetaConexionBase } from "./TarjetaConexionBase";
+import { Alert } from "@/components/ui/Alert";
+import { VALIDATION_LIMITS } from "@/constants/validations";
+import { CampoCredencial } from "@/features/configuracion/components/CampoCredencial";
+import type { TipoEstadoConexion } from "@/features/configuracion/components/EstadoConexionBadge";
+import { TarjetaConexionBase } from "@/features/configuracion/components/TarjetaConexionBase";
+import { useCarpetaDriveConfig } from "@/features/configuracion/hooks/useCarpetaDriveConfig";
+import type { EstadoCarpetaDrive } from "@/features/drive/estadoCarpetaDrive";
+import { TarjetaCarpetaVinculada } from "@/features/drive/TarjetaCarpetaVinculada";
 
 interface TarjetaCarpetaDriveProps {
 	carpetaIdInicial?: string | null | undefined;

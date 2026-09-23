@@ -1,1 +1,1 @@
-export * from "../../features/drive/estadoCarpetaDrive";
+export * from "@/features/drive/estadoCarpetaDrive";

@@ -1,4 +1,4 @@
 export {
 	type EstadoSetupRespuesta,
 	EstadoSetupRespuestaSchema,
-} from "../../../schemas/api.schemas";
+} from "@/schemas/api.schemas";

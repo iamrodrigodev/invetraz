@@ -1,6 +1,6 @@
 import { AlertCircle, CheckCircle2, RefreshCw, XCircle } from "lucide-react";
 import type React from "react";
-import { Badge } from "../../../components/ui/Badge";
+import { Badge } from "@/components/ui/Badge";
 
 export type TipoEstadoConexion =
 	| "conectado"

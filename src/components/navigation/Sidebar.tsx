@@ -1,12 +1,12 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { ELEMENTOS_NAVEGACION } from "../../constants/navigation";
-import { useAppStore } from "../../store/useAppStore";
-import { cn } from "../../utils/cn";
-import { BotonCerrarSesion } from "./BotonCerrarSesion";
-import { Logo } from "./Logo";
-import { SidebarItem } from "./SidebarItem";
-import type { ModuloId } from "./types";
+import { BotonCerrarSesion } from "@/components/navigation/BotonCerrarSesion";
+import { Logo } from "@/components/navigation/Logo";
+import { SidebarItem } from "@/components/navigation/SidebarItem";
+import type { ModuloId } from "@/components/navigation/types";
+import { ELEMENTOS_NAVEGACION } from "@/constants/navigation";
+import { useAppStore } from "@/store/useAppStore";
+import { cn } from "@/utils/cn";
 
 export { ELEMENTOS_NAVEGACION };
 

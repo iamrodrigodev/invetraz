@@ -1,12 +1,12 @@
-import { entorno } from "../../../config/entorno";
-import { ejecutarAccion, ejecutarPeticion } from "../../../utils/api";
+import { entorno } from "@/config/entorno";
 import {
 	type ActualizarCredencialesPeticion,
 	type ConfiguracionRespuesta,
 	ConfiguracionRespuestaSchema,
 	type ResultadoVerificacion,
 	ResultadoVerificacionSchema,
-} from "../types/ActualizarCredencialesPeticion";
+} from "@/features/configuracion/types/ActualizarCredencialesPeticion";
+import { ejecutarAccion, ejecutarPeticion } from "@/utils/api";
 
 export async function obtenerConfiguracion(): Promise<ConfiguracionRespuesta> {
 	return ejecutarPeticion(

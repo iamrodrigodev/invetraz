@@ -1,13 +1,8 @@
 import { Check, Copy, ExternalLink, FolderGit2 } from "lucide-react";
 import type React from "react";
-import {
-	Button,
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from "../../../components/ui";
-import { useCopiarTexto } from "../hooks/useCopiarTexto";
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { useCopiarTexto } from "@/features/documentacion/hooks/useCopiarTexto";
 
 const SCOPE_DRIVE = "https://www.googleapis.com/auth/drive.readonly";
 

@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Textarea } from "../Textarea";
+import { Textarea } from "@/components/ui/Textarea";
 
 describe("Textarea component", () => {
 	it("renderiza con placeholder y contador de caracteres", () => {

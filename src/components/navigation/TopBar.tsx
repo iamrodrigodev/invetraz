@@ -2,13 +2,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, KeyRound, LogOut, Menu, ShieldCheck } from "lucide-react";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ELEMENTOS_NAVEGACION } from "../../constants/navigation";
-import { ModalCambiarClave } from "../../features/auth/components/ModalCambiarClave";
-import { useClickOutside } from "../../hooks/useClickOutside";
-import { useAppStore } from "../../store/useAppStore";
-import { cn } from "../../utils/cn";
-import { Badge } from "../ui/Badge";
-import type { ModuloId } from "./types";
+import type { ModuloId } from "@/components/navigation/types";
+import { Badge } from "@/components/ui/Badge";
+import { ELEMENTOS_NAVEGACION } from "@/constants/navigation";
+import { ModalCambiarClave } from "@/features/auth/components/ModalCambiarClave";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import { useAppStore } from "@/store/useAppStore";
+import { cn } from "@/utils/cn";
 
 export interface TopBarProps {
 	moduloActivo: ModuloId;

@@ -1,12 +1,12 @@
 import type React from "react";
 import { useState } from "react";
-import { Modal } from "../../../components/ui";
-import { useGenerarActividad } from "../hooks/useGenerarActividad";
-import type { GenerarActividadSchemaTipo } from "../schemas/actividades.schemas";
-import type { ResumenConfirmacionActividad } from "../types/actividades.types";
-import { FormGenerarActividad } from "./FormGenerarActividad";
-import { ModalConfirmarGeneracion } from "./ModalConfirmarGeneracion";
-import { ModalExitoGeneracion } from "./ModalExitoGeneracion";
+import { Modal } from "@/components/ui/Modal";
+import { FormGenerarActividad } from "@/features/actividades/components/FormGenerarActividad";
+import { ModalConfirmarGeneracion } from "@/features/actividades/components/ModalConfirmarGeneracion";
+import { ModalExitoGeneracion } from "@/features/actividades/components/ModalExitoGeneracion";
+import { useGenerarActividad } from "@/features/actividades/hooks/useGenerarActividad";
+import type { GenerarActividadSchemaTipo } from "@/features/actividades/schemas/actividades.schemas";
+import type { ResumenConfirmacionActividad } from "@/features/actividades/types/actividades.types";
 
 export interface ModalGenerarActividadProps {
 	abierto: boolean;

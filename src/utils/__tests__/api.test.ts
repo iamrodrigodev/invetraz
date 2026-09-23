@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
-import { ejecutarAccion, ejecutarPeticion } from "../api";
+import { ejecutarAccion, ejecutarPeticion } from "@/utils/api";
 
 describe("api helpers", () => {
 	const fetchMock = vi.fn();

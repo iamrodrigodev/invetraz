@@ -5,8 +5,10 @@ import {
 	FileSpreadsheet,
 } from "lucide-react";
 import type React from "react";
-import { Badge, Button, Card, CardContent } from "../../../components/ui";
-import type { PlantillaXlsx } from "../types/plantillas.types";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent } from "@/components/ui/Card";
+import type { PlantillaXlsx } from "@/features/plantillas/types/plantillas.types";
 
 export interface TarjetaPlantillaProps {
 	plantilla: PlantillaXlsx;

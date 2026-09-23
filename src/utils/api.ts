@@ -1,6 +1,10 @@
 import type { z } from "zod";
-import { crearApiRespuestaSchema } from "../schemas/api.schemas";
-import { extraerMensajeError, fetchSeguro, parsearConEsquema } from "./fetch";
+import { crearApiRespuestaSchema } from "@/schemas/api.schemas";
+import {
+	extraerMensajeError,
+	fetchSeguro,
+	parsearConEsquema,
+} from "@/utils/fetch";
 
 export async function leerDatos<T extends z.ZodType>(
 	respuesta: Response,

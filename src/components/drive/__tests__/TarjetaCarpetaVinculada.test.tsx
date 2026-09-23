@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { TarjetaCarpetaVinculada } from "../TarjetaCarpetaVinculada";
+import { TarjetaCarpetaVinculada } from "@/features/drive/TarjetaCarpetaVinculada";
 
 describe("TarjetaCarpetaVinculada", () => {
 	it("renderiza correctamente cuando el estado es verificando", () => {

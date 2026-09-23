@@ -1,14 +1,14 @@
-import type { ModuloId } from "./types";
+import type { ModuloId } from "@/components/navigation/types";
 
 const CARGADORES_MODULOS: Record<ModuloId, () => Promise<unknown>> = {
 	actividades: async () => {},
 	plantillas: () =>
-		import("../../features/plantillas/pages/PlantillasSeguimientoPage"),
+		import("@/features/plantillas/pages/PlantillasSeguimientoPage"),
 	configuracion: () =>
-		import("../../features/configuracion/pages/ConfiguracionPage"),
-	reportes: () => import("../../features/reportes/pages/ReportesPage"),
+		import("@/features/configuracion/pages/ConfiguracionPage"),
+	reportes: () => import("@/features/reportes/pages/ReportesPage"),
 	documentacion: () =>
-		import("../../features/documentacion/pages/DocumentacionPage"),
+		import("@/features/documentacion/pages/DocumentacionPage"),
 };
 
 export function precargarModulo(id: ModuloId): void {

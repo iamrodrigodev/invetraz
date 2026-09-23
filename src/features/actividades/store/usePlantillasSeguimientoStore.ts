@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { registrarLimpiadorSesion } from "../../../utils/eventosSesion";
-import { obtenerPlantillasParaFormulario } from "../api/actividades.api";
-import type { PlantillaSeguimientoOpcion } from "../types/actividades.types";
+import { obtenerPlantillasParaFormulario } from "@/features/actividades/api/actividades.api";
+import type { PlantillaSeguimientoOpcion } from "@/features/actividades/types/actividades.types";
+import { registrarLimpiadorSesion } from "@/utils/eventosSesion";
 
 interface PlantillasSeguimientoState {
 	plantillas: PlantillaSeguimientoOpcion[];

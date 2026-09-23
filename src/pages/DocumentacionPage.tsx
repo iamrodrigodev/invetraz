@@ -1,4 +1,4 @@
 export {
 	DocumentacionPage,
 	default,
-} from "../features/documentacion/pages/DocumentacionPage";
+} from "@/features/documentacion/pages/DocumentacionPage";

@@ -5,7 +5,7 @@ import {
 	LayoutTemplate,
 	Settings,
 } from "lucide-react";
-import type { ItemNavegacion } from "../components/navigation/types";
+import type { ItemNavegacion } from "@/components/navigation/types";
 
 export const ELEMENTOS_NAVEGACION: ItemNavegacion[] = [
 	{

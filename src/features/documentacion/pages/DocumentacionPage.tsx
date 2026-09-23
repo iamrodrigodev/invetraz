@@ -1,11 +1,9 @@
 import { BookOpen } from "lucide-react";
 import type React from "react";
-import {
-	TarjetaDocClassroom,
-	TarjetaDocDrive,
-	TarjetaDocGoogleCloud,
-	TarjetaDocOAuthPlayground,
-} from "../components";
+import { TarjetaDocClassroom } from "@/features/documentacion/components/TarjetaDocClassroom";
+import { TarjetaDocDrive } from "@/features/documentacion/components/TarjetaDocDrive";
+import { TarjetaDocGoogleCloud } from "@/features/documentacion/components/TarjetaDocGoogleCloud";
+import { TarjetaDocOAuthPlayground } from "@/features/documentacion/components/TarjetaDocOAuthPlayground";
 
 export const DocumentacionPage: React.FC = () => {
 	return (

@@ -11,15 +11,18 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Alert, Button, Input, Modal } from "../../../components/ui";
-import { VALIDATION_LIMITS } from "../../../constants/validations";
+import { Alert } from "@/components/ui/Alert";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Modal } from "@/components/ui/Modal";
+import { VALIDATION_LIMITS } from "@/constants/validations";
+import { useCambiarClave } from "@/features/auth/hooks/useCambiarClave";
 import {
 	type CambiarClavePaso1FormData,
 	CambiarClavePaso1Schema,
 	type CambiarClavePaso2FormData,
 	CambiarClavePaso2Schema,
-} from "../../../schemas/auth.schemas";
-import { useCambiarClave } from "../hooks/useCambiarClave";
+} from "@/schemas/auth.schemas";
 
 export interface ModalCambiarClaveProps {
 	abierto: boolean;

@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { TarjetaCarpetaDrive } from "../components/TarjetaCarpetaDrive";
+import { TarjetaCarpetaDrive } from "@/features/configuracion/components/TarjetaCarpetaDrive";
 
 describe("TarjetaCarpetaDrive", () => {
 	it("no muestra alerta de advertencia cuando Google Cloud está en estado 'verificando'", () => {

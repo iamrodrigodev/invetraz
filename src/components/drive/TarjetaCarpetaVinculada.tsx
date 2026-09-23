@@ -1,2 +1,2 @@
-export * from "../../features/drive/TarjetaCarpetaVinculada";
-export { default } from "../../features/drive/TarjetaCarpetaVinculada";
+export * from "@/features/drive/TarjetaCarpetaVinculada";
+export { default } from "@/features/drive/TarjetaCarpetaVinculada";

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { esConfiguracionListaParaActividades } from "../store/useConfiguracionStore";
-import type { ActualizarCredencialesPeticion } from "../types/ActualizarCredencialesPeticion";
+import { esConfiguracionListaParaActividades } from "@/features/configuracion/store/useConfiguracionStore";
+import type { ActualizarCredencialesPeticion } from "@/features/configuracion/types/ActualizarCredencialesPeticion";
 
 describe("esConfiguracionListaParaActividades", () => {
 	const credencialesCompletas: ActualizarCredencialesPeticion = {

@@ -6,8 +6,9 @@ import {
 	X,
 } from "lucide-react";
 import type React from "react";
-import { Badge, Button } from "../../../components/ui";
-import type { PlantillaSeguimientoOpcion } from "../types/actividades.types";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import type { PlantillaSeguimientoOpcion } from "@/features/actividades/types/actividades.types";
 
 export interface PrevisualizacionPlantillaProps {
 	plantilla?: PlantillaSeguimientoOpcion | null | undefined;

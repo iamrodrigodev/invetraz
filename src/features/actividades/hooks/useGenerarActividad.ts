@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 import {
-	esConfiguracionListaParaActividades,
-	useConfiguracionStore,
-} from "../../configuracion/store/useConfiguracionStore";
-import {
 	DATOS_PRUEBA_CLASES,
 	DATOS_PRUEBA_TEMAS,
 	simularGeneracionActividad,
-} from "../mocks/actividadesCascaron.mock";
-import { usePlantillasSeguimientoStore } from "../store/usePlantillasSeguimientoStore";
+} from "@/features/actividades/mocks/actividadesCascaron.mock";
+import { usePlantillasSeguimientoStore } from "@/features/actividades/store/usePlantillasSeguimientoStore";
 import type {
 	ClaseDocente,
 	FormGenerarActividadValores,
 	TemaClase,
-} from "../types/actividades.types";
+} from "@/features/actividades/types/actividades.types";
+import {
+	esConfiguracionListaParaActividades,
+	useConfiguracionStore,
+} from "@/features/configuracion/store/useConfiguracionStore";
 
 export interface CarpetaDriveInfo {
 	id: string;

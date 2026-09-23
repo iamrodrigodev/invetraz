@@ -1,18 +1,18 @@
 import { RefreshCw, Save } from "lucide-react";
 import type React from "react";
+import { Alert } from "@/components/ui/Alert";
+import { Button } from "@/components/ui/Button";
 import {
-	Alert,
-	Button,
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from "../../../components/ui";
+} from "@/components/ui/Card";
 import {
 	EstadoConexionBadge,
 	type TipoEstadoConexion,
-} from "./EstadoConexionBadge";
+} from "@/features/configuracion/components/EstadoConexionBadge";
 
 export interface TarjetaConexionBaseProps {
 	titulo: string;

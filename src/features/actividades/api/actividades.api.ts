@@ -1,13 +1,13 @@
 import { z } from "zod";
-import { entorno } from "../../../config/entorno";
-import { ejecutarPeticion } from "../../../utils/api";
-import { obtenerPlantillas } from "../../plantillas/api/plantillas.api";
+import { entorno } from "@/config/entorno";
 import type {
 	ClaseDocente,
 	FormGenerarActividadValores,
 	PlantillaSeguimientoOpcion,
 	TemaClase,
-} from "../types/actividades.types";
+} from "@/features/actividades/types/actividades.types";
+import { obtenerPlantillas } from "@/features/plantillas/api/plantillas.api";
+import { ejecutarPeticion } from "@/utils/api";
 
 const ClaseClassroomDtoSchema = z.object({
 	idClassroom: z.string(),

@@ -1,6 +1,6 @@
-import { cn } from "../../utils/cn";
-import { precargarModulo } from "./precargaModulos";
-import type { ItemNavegacion } from "./types";
+import { precargarModulo } from "@/components/navigation/precargaModulos";
+import type { ItemNavegacion } from "@/components/navigation/types";
+import { cn } from "@/utils/cn";
 
 export interface SidebarItemProps {
 	item: ItemNavegacion;

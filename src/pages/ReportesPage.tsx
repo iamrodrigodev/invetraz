@@ -1,4 +1,4 @@
 export {
 	default,
 	ReportesPage,
-} from "../features/reportes/pages/ReportesPage";
+} from "@/features/reportes/pages/ReportesPage";

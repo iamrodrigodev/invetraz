@@ -1,6 +1,6 @@
 import { AlertCircle, Check, LogOut, RefreshCw, X } from "lucide-react";
-import { Button } from "./Button";
-import { Modal } from "./Modal";
+import { Button } from "@/components/ui/Button";
+import { Modal } from "@/components/ui/Modal";
 
 export interface PropsModalConfirmacion {
 	abierto: boolean;

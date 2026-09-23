@@ -3,7 +3,7 @@ import { X } from "lucide-react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { cn } from "../../utils/cn";
+import { cn } from "@/utils/cn";
 
 let modalesAbiertos = 0;
 let overflowOriginal = "";

@@ -1,4 +1,4 @@
 export {
 	type LoginRespuesta,
 	LoginRespuestaSchema,
-} from "../../../schemas/api.schemas";
+} from "@/schemas/api.schemas";

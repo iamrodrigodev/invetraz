@@ -1,15 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useVerificacionConexion } from "@/features/configuracion/hooks/useVerificacionConexion";
 import {
 	sonCredencialesIguales,
 	useConfiguracionStore,
-} from "../store/useConfiguracionStore";
+} from "@/features/configuracion/store/useConfiguracionStore";
 import {
 	type ActualizarCredencialesPeticion,
 	ActualizarCredencialesPeticionSchema,
-} from "../types/ActualizarCredencialesPeticion";
-import { useVerificacionConexion } from "./useVerificacionConexion";
+} from "@/features/configuracion/types/ActualizarCredencialesPeticion";
 
 function resolverErrorValidacion(
 	errors: ReturnType<

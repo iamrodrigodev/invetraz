@@ -12,8 +12,10 @@ import {
 	X,
 } from "lucide-react";
 import type React from "react";
-import { Badge, Button, Modal } from "../../../components/ui";
-import type { ResumenConfirmacionActividad } from "../types/actividades.types";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { Modal } from "@/components/ui/Modal";
+import type { ResumenConfirmacionActividad } from "@/features/actividades/types/actividades.types";
 
 export interface ModalConfirmarGeneracionProps {
 	abierto: boolean;

@@ -1,5 +1,5 @@
 import { LogOut } from "lucide-react";
-import { cn } from "../../utils/cn";
+import { cn } from "@/utils/cn";
 
 export interface BotonCerrarSesionProps {
 	estaColapsado?: boolean;

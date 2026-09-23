@@ -1,5 +1,5 @@
 import { Microscope } from "lucide-react";
-import { cn } from "../../utils/cn";
+import { cn } from "@/utils/cn";
 
 export interface LogoProps {
 	estaColapsado?: boolean;

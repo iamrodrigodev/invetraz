@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type React from "react";
-import { Button } from "../../../components/ui";
-import { cn } from "../../../utils/cn";
+import { Button } from "@/components/ui/Button";
+import { cn } from "@/utils/cn";
 
 export interface PiePaginacionPlantillasProps {
 	indiceInicio: number;

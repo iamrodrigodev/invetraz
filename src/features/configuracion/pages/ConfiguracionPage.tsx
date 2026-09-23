@@ -1,10 +1,11 @@
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { Alert } from "../../../components/ui";
-import { useAppStore } from "../../../store/useAppStore";
-import { TarjetaCarpetaDrive, TarjetaCredencialesGoogle } from "../components";
-import { ConfiguracionSkeleton } from "../components/ConfiguracionSkeleton";
-import { useConfiguracionStore } from "../store/useConfiguracionStore";
+import { Alert } from "@/components/ui/Alert";
+import { ConfiguracionSkeleton } from "@/features/configuracion/components/ConfiguracionSkeleton";
+import { TarjetaCarpetaDrive } from "@/features/configuracion/components/TarjetaCarpetaDrive";
+import { TarjetaCredencialesGoogle } from "@/features/configuracion/components/TarjetaCredencialesGoogle";
+import { useConfiguracionStore } from "@/features/configuracion/store/useConfiguracionStore";
+import { useAppStore } from "@/store/useAppStore";
 
 export const ConfiguracionPage: React.FC = () => {
 	const {

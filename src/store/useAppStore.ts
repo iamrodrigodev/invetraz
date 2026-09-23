@@ -1,14 +1,14 @@
 import { create } from "zustand";
-import { logout, verificarAutenticacion } from "../features/auth/api/auth.api";
-import { verificarEstadoSistema } from "../features/setup/api/setup.api";
-import { ejecutarLimpiezaSesion } from "../utils/eventosSesion";
-import { alExpirarSesion } from "../utils/fetch";
+import { logout, verificarAutenticacion } from "@/features/auth/api/auth.api";
+import { verificarEstadoSistema } from "@/features/setup/api/setup.api";
+import { ejecutarLimpiezaSesion } from "@/utils/eventosSesion";
+import { alExpirarSesion } from "@/utils/fetch";
 import {
 	esSesionValida,
 	guardarSesion,
 	limpiarSesion,
 	programarExpiracionAutomatica,
-} from "../utils/sesion";
+} from "@/utils/sesion";
 
 interface AppState {
 	configurado: boolean | null;

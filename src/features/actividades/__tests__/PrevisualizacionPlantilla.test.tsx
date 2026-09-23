@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { PrevisualizacionPlantilla } from "../components/PrevisualizacionPlantilla";
+import { PrevisualizacionPlantilla } from "@/features/actividades/components/PrevisualizacionPlantilla";
 
 describe("PrevisualizacionPlantilla", () => {
 	it("no renderiza nada si no hay plantilla seleccionada", () => {

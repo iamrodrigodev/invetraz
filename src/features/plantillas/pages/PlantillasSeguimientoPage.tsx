@@ -2,18 +2,20 @@ import { FileSpreadsheet, FolderGit2, RefreshCw, Settings } from "lucide-react";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Alert, Button, Card, CardContent } from "../../../components/ui";
-import { useConfiguracionStore } from "../../configuracion/store/useConfiguracionStore";
+import { Alert } from "@/components/ui/Alert";
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent } from "@/components/ui/Card";
+import { useConfiguracionStore } from "@/features/configuracion/store/useConfiguracionStore";
 import {
 	type EstadoCarpetaDrive,
 	resolverVistaCarpetaDrive,
-	TarjetaCarpetaVinculada,
-} from "../../drive";
-import { obtenerPlantillas } from "../api/plantillas.api";
-import { PiePaginacionPlantillas } from "../components/PiePaginacionPlantillas";
-import { PlantillasSkeleton } from "../components/PlantillasSkeleton";
-import { TarjetaPlantilla } from "../components/TarjetaPlantilla";
-import type { CarpetaPlantillasRespuesta } from "../types/plantillas.types";
+} from "@/features/drive/estadoCarpetaDrive";
+import { TarjetaCarpetaVinculada } from "@/features/drive/TarjetaCarpetaVinculada";
+import { obtenerPlantillas } from "@/features/plantillas/api/plantillas.api";
+import { PiePaginacionPlantillas } from "@/features/plantillas/components/PiePaginacionPlantillas";
+import { PlantillasSkeleton } from "@/features/plantillas/components/PlantillasSkeleton";
+import { TarjetaPlantilla } from "@/features/plantillas/components/TarjetaPlantilla";
+import type { CarpetaPlantillasRespuesta } from "@/features/plantillas/types/plantillas.types";
 
 const ITEMS_POR_PAGINA = 12;
 

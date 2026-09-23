@@ -1,15 +1,15 @@
 import { create } from "zustand";
-import { registrarLimpiadorSesion } from "../../../utils/eventosSesion";
 import {
 	actualizarConfiguracion,
 	obtenerConfiguracion,
 	verificarConfiguracion,
-} from "../api/configuracion.api";
-import type { TipoEstadoConexion } from "../components";
+} from "@/features/configuracion/api/configuracion.api";
+import type { TipoEstadoConexion } from "@/features/configuracion/components/EstadoConexionBadge";
 import type {
 	ActualizarCredencialesPeticion,
 	ResultadoVerificacion,
-} from "../types/ActualizarCredencialesPeticion";
+} from "@/features/configuracion/types/ActualizarCredencialesPeticion";
+import { registrarLimpiadorSesion } from "@/utils/eventosSesion";
 
 export function sonCredencialesIguales(
 	a: ActualizarCredencialesPeticion | null | undefined,

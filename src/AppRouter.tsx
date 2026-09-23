@@ -1,25 +1,26 @@
 import { lazy, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { AuthGuard } from "./components/guards/AuthGuard";
-import { AuthCardSkeleton, DashboardSkeleton } from "./components/ui";
-import { ActividadesSeguimientoPage } from "./features/actividades/pages/ActividadesSeguimientoPage";
-import { LoginPage } from "./features/auth/pages/LoginPage";
-import { SetupPage } from "./features/setup/pages/SetupPage";
-import { DashboardLayout } from "./layouts/DashboardLayout";
-import { useAppStore } from "./store/useAppStore";
-import { esSesionValida } from "./utils/sesion";
+import { AuthGuard } from "@/components/guards/AuthGuard";
+import { AuthCardSkeleton } from "@/components/ui/skeletons/AuthCardSkeleton";
+import { DashboardSkeleton } from "@/components/ui/skeletons/DashboardSkeleton";
+import { ActividadesSeguimientoPage } from "@/features/actividades/pages/ActividadesSeguimientoPage";
+import { LoginPage } from "@/features/auth/pages/LoginPage";
+import { SetupPage } from "@/features/setup/pages/SetupPage";
+import { DashboardLayout } from "@/layouts/DashboardLayout";
+import { useAppStore } from "@/store/useAppStore";
+import { esSesionValida } from "@/utils/sesion";
 
 const PlantillasSeguimientoPage = lazy(
-	() => import("./features/plantillas/pages/PlantillasSeguimientoPage"),
+	() => import("@/features/plantillas/pages/PlantillasSeguimientoPage"),
 );
 const ConfiguracionPage = lazy(
-	() => import("./features/configuracion/pages/ConfiguracionPage"),
+	() => import("@/features/configuracion/pages/ConfiguracionPage"),
 );
 const ReportesPage = lazy(
-	() => import("./features/reportes/pages/ReportesPage"),
+	() => import("@/features/reportes/pages/ReportesPage"),
 );
 const DocumentacionPage = lazy(
-	() => import("./features/documentacion/pages/DocumentacionPage"),
+	() => import("@/features/documentacion/pages/DocumentacionPage"),
 );
 
 export function AppRouter() {
