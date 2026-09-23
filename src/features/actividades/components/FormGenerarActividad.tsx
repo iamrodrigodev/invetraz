@@ -109,23 +109,17 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 	const idPlantillaPreviaRef = useRef<string | undefined>(
 		valoresIniciales?.idPlantilla || undefined,
 	);
+	const temporizadorValidacionRef = useRef<ReturnType<
+		typeof setTimeout
+	> | null>(null);
 
 	useEffect(() => {
-		if (!idPlantillaSeleccionada) {
-			setValidandoPlantilla(false);
-			idPlantillaPreviaRef.current = idPlantillaSeleccionada;
-			return;
-		}
-
-		if (idPlantillaPreviaRef.current !== idPlantillaSeleccionada) {
-			idPlantillaPreviaRef.current = idPlantillaSeleccionada;
-			setValidandoPlantilla(true);
-			const temporizador = setTimeout(() => {
-				setValidandoPlantilla(false);
-			}, 600);
-			return () => clearTimeout(temporizador);
-		}
-	}, [idPlantillaSeleccionada]);
+		return () => {
+			if (temporizadorValidacionRef.current) {
+				clearTimeout(temporizadorValidacionRef.current);
+			}
+		};
+	}, []);
 
 	const opcionesClases = useMemo(() => {
 		return clases.map((c) => ({
@@ -336,7 +330,25 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 									<Select
 										id="idPlantilla"
 										value={field.value}
-										onChange={field.onChange}
+										onChange={(val) => {
+											field.onChange(val);
+											if (val && val !== idPlantillaPreviaRef.current) {
+												idPlantillaPreviaRef.current = val;
+												setValidandoPlantilla(true);
+												if (temporizadorValidacionRef.current) {
+													clearTimeout(temporizadorValidacionRef.current);
+												}
+												temporizadorValidacionRef.current = setTimeout(() => {
+													setValidandoPlantilla(false);
+												}, 600);
+											} else if (!val) {
+												idPlantillaPreviaRef.current = undefined;
+												setValidandoPlantilla(false);
+												if (temporizadorValidacionRef.current) {
+													clearTimeout(temporizadorValidacionRef.current);
+												}
+											}
+										}}
 										onBlur={field.onBlur}
 										disabled={cargandoPlantillas || plantillas.length === 0}
 										placeholder={

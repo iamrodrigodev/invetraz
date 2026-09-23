@@ -21,7 +21,7 @@ export const PrevisualizacionPlantilla: React.FC<
 
 	if (validando) {
 		return (
-			<div className="py-1">
+			<div className="py-1 animate-fadeIn">
 				<Badge
 					variant="primary"
 					className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold"
@@ -39,7 +39,7 @@ export const PrevisualizacionPlantilla: React.FC<
 		return (
 			<div
 				role="alert"
-				className="rounded-xl border border-red-200 bg-red-50/60 p-3 space-y-2.5"
+				className="rounded-xl border border-red-200 bg-red-50/60 p-3 space-y-2.5 animate-fadeIn"
 			>
 				<div className="flex items-start gap-2.5">
 					<FileSpreadsheet size={18} className="shrink-0 text-red-600 mt-0.5" />
@@ -98,7 +98,7 @@ export const PrevisualizacionPlantilla: React.FC<
 	}
 
 	return (
-		<div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3 space-y-2.5">
+		<div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3 space-y-2.5 animate-fadeIn">
 			<div className="flex items-start gap-2.5">
 				<FileSpreadsheet
 					size={18}
