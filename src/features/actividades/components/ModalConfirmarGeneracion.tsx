@@ -129,7 +129,7 @@ export const ModalConfirmarGeneracion: React.FC<
 									className="h-7 text-xs font-semibold border-slate-200 text-slate-700 hover:text-primary hover:border-primary/40 bg-white"
 								>
 									<ExternalLink size={12} className="mr-1.5" />
-									Abrir Sheet
+									Abrir plantilla
 								</Button>
 							</a>
 						)}

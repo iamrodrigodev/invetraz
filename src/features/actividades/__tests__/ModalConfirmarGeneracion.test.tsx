@@ -28,7 +28,7 @@ describe("ModalConfirmarGeneracion", () => {
 		expect(container.firstChild).toBeNull();
 	});
 
-	it("renderiza correctamente los datos del resumen y el botón Abrir Sheet", () => {
+	it("renderiza correctamente los datos del resumen y el botón Abrir plantilla", () => {
 		render(
 			<ModalConfirmarGeneracion
 				abierto={true}
@@ -46,9 +46,9 @@ describe("ModalConfirmarGeneracion", () => {
 		expect(screen.getByText("Entrega de Avance Metodológico")).toBeDefined();
 		expect(screen.getByText("Matriz_Seguimiento_2026.xlsx")).toBeDefined();
 		expect(screen.getByText("Estructura válida")).toBeDefined();
-		expect(screen.getByText("Abrir Sheet")).toBeDefined();
+		expect(screen.getByText("Abrir plantilla")).toBeDefined();
 
-		const enlaceSheet = screen.getByText("Abrir Sheet").closest("a");
+		const enlaceSheet = screen.getByText("Abrir plantilla").closest("a");
 		expect(enlaceSheet).not.toBeNull();
 		expect(enlaceSheet?.getAttribute("href")).toBe(
 			"https://docs.google.com/spreadsheets/d/test-sheet",
@@ -56,7 +56,7 @@ describe("ModalConfirmarGeneracion", () => {
 		expect(enlaceSheet?.getAttribute("target")).toBe("_blank");
 	});
 
-	it("no renderiza el botón Abrir Sheet si no hay enlace", () => {
+	it("no renderiza el botón Abrir plantilla si no hay enlace", () => {
 		render(
 			<ModalConfirmarGeneracion
 				abierto={true}
@@ -67,7 +67,7 @@ describe("ModalConfirmarGeneracion", () => {
 			/>,
 		);
 
-		expect(screen.queryByText("Abrir Sheet")).toBeNull();
+		expect(screen.queryByText("Abrir plantilla")).toBeNull();
 	});
 
 	it("ejecuta alConfirmar y alCerrar según las acciones", () => {

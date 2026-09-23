@@ -99,7 +99,7 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({
 								className="w-full"
 							>
 								<ExternalLink size={16} className="mr-2" />
-								Abrir Sheet
+								Abrir plantilla
 							</Button>
 						) : null}
 
