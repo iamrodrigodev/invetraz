@@ -124,9 +124,9 @@ export const ModalConfirmarGeneracion: React.FC<
 							>
 								<Button
 									type="button"
-									variant="outline"
+									variant="default"
 									size="sm"
-									className="h-7 text-xs font-semibold border-slate-200 text-slate-700 hover:text-primary hover:border-primary/40 bg-white"
+									className="h-7 text-xs font-semibold shadow-xs"
 								>
 									<ExternalLink size={12} className="mr-1.5" />
 									Abrir plantilla
