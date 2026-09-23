@@ -27,7 +27,7 @@ export const PrevisualizacionPlantilla: React.FC<
 					className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold"
 				>
 					<RefreshCw size={13} className="shrink-0 animate-spin text-primary" />
-					<span>Verificando estructura de la plantilla...</span>
+					<span>Verificando estructura de la plantilla</span>
 				</Badge>
 			</div>
 		);

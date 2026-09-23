@@ -43,7 +43,7 @@ describe("PrevisualizacionPlantilla", () => {
 		);
 
 		expect(
-			screen.getByText("Verificando estructura de la plantilla..."),
+			screen.getByText("Verificando estructura de la plantilla"),
 		).toBeDefined();
 	});
 
