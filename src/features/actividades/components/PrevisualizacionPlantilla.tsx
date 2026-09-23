@@ -3,7 +3,7 @@ import {
 	ExternalLink,
 	FileSpreadsheet,
 	RefreshCw,
-	XCircle,
+	X,
 } from "lucide-react";
 import type React from "react";
 import { Badge, Button } from "../../../components/ui";
@@ -21,9 +21,11 @@ export const PrevisualizacionPlantilla: React.FC<
 
 	if (validando) {
 		return (
-			<div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50/70 p-2.5 text-xs text-slate-600">
-				<RefreshCw size={13} className="animate-spin text-primary" />
-				<span>Validando estructura de la plantilla...</span>
+			<div className="flex items-center gap-2.5 rounded-xl border border-slate-200/90 bg-slate-50/80 p-3 text-xs text-slate-600 animate-pulse">
+				<RefreshCw size={14} className="shrink-0 animate-spin text-primary" />
+				<span className="font-medium text-slate-700">
+					Verificando estructura de la plantilla...
+				</span>
 			</div>
 		);
 	}
@@ -48,9 +50,9 @@ export const PrevisualizacionPlantilla: React.FC<
 							</span>
 							<Badge
 								variant="destructive"
-								className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0 shrink-0"
+								className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0 shrink-0 font-medium"
 							>
-								<XCircle size={10} />
+								<X size={11} strokeWidth={2.5} className="shrink-0" />
 								Estructura inválida
 							</Badge>
 						</div>
@@ -83,7 +85,7 @@ export const PrevisualizacionPlantilla: React.FC<
 								className="h-8 text-xs font-semibold shadow-xs"
 							>
 								<ExternalLink size={12} className="mr-1.5" />
-								Ver plantilla
+								Abrir plantilla
 							</Button>
 						</a>
 					</div>
@@ -140,7 +142,7 @@ export const PrevisualizacionPlantilla: React.FC<
 							className="h-8 text-xs font-semibold shadow-xs"
 						>
 							<ExternalLink size={12} className="mr-1.5" />
-							Ver plantilla
+							Abrir plantilla
 						</Button>
 					</a>
 				</div>

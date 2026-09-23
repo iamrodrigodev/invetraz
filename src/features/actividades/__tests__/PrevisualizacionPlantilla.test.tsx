@@ -25,8 +25,26 @@ describe("PrevisualizacionPlantilla", () => {
 
 		expect(screen.getByText("Formato A.xlsx")).toBeDefined();
 		expect(screen.getByText("Estructura válida")).toBeDefined();
-		expect(screen.getByText("Ver plantilla")).toBeDefined();
+		expect(screen.getByText("Abrir plantilla")).toBeDefined();
 		expect(screen.getByText(/3 veces/i)).toBeDefined();
+	});
+
+	it("muestra estado de validación cuando validando es true", () => {
+		render(
+			<PrevisualizacionPlantilla
+				plantilla={{
+					id: "p1",
+					nombre: "Formato A.xlsx",
+					frecuenciaUso: 1,
+					estructuraValida: true,
+				}}
+				validando={true}
+			/>,
+		);
+
+		expect(
+			screen.getByText("Verificando estructura de la plantilla..."),
+		).toBeDefined();
 	});
 
 	it("muestra el estado inválido con errores de estructura", () => {
@@ -58,7 +76,7 @@ describe("PrevisualizacionPlantilla", () => {
 		expect(
 			screen.getByText("Falta la hoja principal Matriz de Seguimiento."),
 		).toBeDefined();
-		expect(screen.getByText("Ver plantilla")).toBeDefined();
+		expect(screen.getByText("Abrir plantilla")).toBeDefined();
 		expect(screen.getByRole("alert")).toBeDefined();
 	});
 });

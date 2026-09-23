@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, X } from "lucide-react";
 import type React from "react";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
 	Button,
@@ -104,6 +104,28 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 			onCambioClase(idClaseSeleccionada);
 		}
 	}, [idClaseSeleccionada, onCambioClase]);
+
+	const [validandoPlantilla, setValidandoPlantilla] = useState(false);
+	const idPlantillaPreviaRef = useRef<string | undefined>(
+		valoresIniciales?.idPlantilla || undefined,
+	);
+
+	useEffect(() => {
+		if (!idPlantillaSeleccionada) {
+			setValidandoPlantilla(false);
+			idPlantillaPreviaRef.current = idPlantillaSeleccionada;
+			return;
+		}
+
+		if (idPlantillaPreviaRef.current !== idPlantillaSeleccionada) {
+			idPlantillaPreviaRef.current = idPlantillaSeleccionada;
+			setValidandoPlantilla(true);
+			const temporizador = setTimeout(() => {
+				setValidandoPlantilla(false);
+			}, 600);
+			return () => clearTimeout(temporizador);
+		}
+	}, [idPlantillaSeleccionada]);
 
 	const opcionesClases = useMemo(() => {
 		return clases.map((c) => ({
@@ -331,7 +353,10 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 							/>
 						</div>
 
-						<PrevisualizacionPlantilla plantilla={plantillaActual} />
+						<PrevisualizacionPlantilla
+							plantilla={plantillaActual}
+							validando={validandoPlantilla}
+						/>
 
 						<div className="flex-1 flex flex-col">
 							<label
@@ -368,7 +393,12 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 						<Button
 							type="submit"
 							variant="default"
-							disabled={!isValid || !esPlantillaValida || !configuracionValida}
+							disabled={
+								!isValid ||
+								!esPlantillaValida ||
+								!configuracionValida ||
+								validandoPlantilla
+							}
 							className="font-semibold shadow-sm"
 						>
 							<Plus size={16} className="mr-1.5" />
