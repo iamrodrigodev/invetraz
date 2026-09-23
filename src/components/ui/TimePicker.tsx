@@ -210,7 +210,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 					<button
 						type="button"
 						onClick={limpiarHora}
-						className="pointer-events-auto rounded-full p-0.5 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+						className="pointer-events-auto rounded-full p-0.5 hover:bg-slate-100 hover:text-slate-600 transition-colors cursor-pointer"
 						title="Limpiar hora"
 					>
 						<X size={14} />
@@ -247,7 +247,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 											type="button"
 											onClick={() => seleccionarHora(h)}
 											className={cn(
-												"w-full py-1 text-center font-sans rounded text-xs transition-colors cursor-pointer",
+												"w-full py-1 text-center font-sans rounded text-xs transition-colors cursor-pointer select-none",
 												horaActual === h
 													? "bg-primary text-white font-bold"
 													: "text-slate-700 hover:bg-slate-200/70",
@@ -270,7 +270,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 											type="button"
 											onClick={() => seleccionarMinuto(m)}
 											className={cn(
-												"w-full py-1 text-center font-sans rounded text-xs transition-colors cursor-pointer",
+												"w-full py-1 text-center font-sans rounded text-xs transition-colors cursor-pointer select-none",
 												minutoActual === m
 													? "bg-primary text-white font-bold"
 													: "text-slate-700 hover:bg-slate-200/70",
@@ -287,7 +287,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 							<button
 								type="button"
 								onClick={() => seleccionarPreajuste("23:59")}
-								className="font-medium text-primary hover:underline cursor-pointer"
+								className="font-medium text-primary hover:underline cursor-pointer select-none"
 							>
 								Fin del día (23:59)
 							</button>
@@ -299,7 +299,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 										limpiarHora(e);
 										setAbierto(false);
 									}}
-									className="text-slate-500 hover:text-slate-800 cursor-pointer"
+									className="text-slate-500 hover:text-slate-800 cursor-pointer select-none"
 								>
 									Limpiar
 								</button>

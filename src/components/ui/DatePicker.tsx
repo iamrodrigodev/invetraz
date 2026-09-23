@@ -405,7 +405,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 									seleccionarFecha(celda.fechaStr, celda.deshabilitado)
 								}
 								className={cn(
-									"flex h-8 w-full items-center justify-center rounded-lg text-xs font-medium transition-all",
+									"flex h-8 w-full items-center justify-center rounded-lg text-xs font-medium transition-all select-none",
 									celda.deshabilitado
 										? "opacity-25 cursor-not-allowed text-slate-400 hover:bg-transparent"
 										: "cursor-pointer",
@@ -433,7 +433,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 							disabled={Boolean(
 								(min && fechaHoyStr < min) || (max && fechaHoyStr > max),
 							)}
-							className="font-semibold text-primary hover:underline cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 disabled:no-underline"
+							className="font-semibold text-primary hover:underline cursor-pointer select-none disabled:cursor-not-allowed disabled:opacity-40 disabled:no-underline"
 						>
 							Hoy
 						</button>
@@ -445,7 +445,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 									limpiarFecha(e);
 									setAbierto(false);
 								}}
-								className="text-slate-500 hover:text-slate-800 cursor-pointer"
+								className="text-slate-500 hover:text-slate-800 cursor-pointer select-none"
 							>
 								Limpiar
 							</button>
