@@ -10,7 +10,7 @@ export function Logo({ estaColapsado = false, className }: LogoProps) {
 	return (
 		<div
 			className={cn(
-				"flex w-full select-none items-center font-bold text-base text-slate-900 tracking-tight",
+				"flex min-w-0 select-none items-center font-bold text-base text-slate-900 tracking-tight",
 				className,
 			)}
 		>

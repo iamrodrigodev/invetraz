@@ -61,16 +61,16 @@ export function Sidebar({
 				</button>
 			)}
 
-			<div className="flex h-16 shrink-0 items-center justify-between border-slate-200 border-b px-4.5">
+			<div className="flex h-16 shrink-0 items-center justify-between border-slate-200 border-b px-4">
 				<Logo estaColapsado={estaColapsado} />
 				{alCerrarMenuMovil && (
 					<button
 						type="button"
 						onClick={alCerrarMenuMovil}
 						aria-label="Cerrar menú"
-						className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 md:hidden"
+						className="ml-2 flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 shadow-2xs transition-all hover:bg-slate-100 hover:text-slate-800 active:scale-95 md:hidden"
 					>
-						<X className="h-5 w-5" strokeWidth={2.2} />
+						<X className="h-4 w-4" strokeWidth={2.2} />
 					</button>
 				)}
 			</div>

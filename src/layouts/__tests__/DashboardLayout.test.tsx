@@ -122,9 +122,9 @@ describe("DashboardLayout", () => {
 		const btnHamburguesa = screen.getByLabelText("Abrir menú de navegación");
 		fireEvent.click(btnHamburguesa);
 
-		expect(screen.getByText("Investigación")).toBeDefined();
-		expect(screen.getByText("Actividades")).toBeDefined();
-		expect(screen.getByText("Reportes")).toBeDefined();
+		expect(screen.getAllByText("Investigación").length).toBeGreaterThan(0);
+		expect(screen.getAllByText("Actividades").length).toBeGreaterThan(0);
+		expect(screen.getAllByText("Reportes").length).toBeGreaterThan(0);
 
 		const btnCerrar = screen.getByLabelText("Cerrar menú");
 		fireEvent.click(btnCerrar);

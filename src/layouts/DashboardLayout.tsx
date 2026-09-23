@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { Suspense, useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { precargarTodosLosModulos } from "@/components/navigation/precargaModulos.ts";
@@ -55,10 +56,10 @@ export function DashboardLayout({
 	}, []);
 
 	useEffect(() => {
-		if (esDesktop) {
+		if (anchoVentana >= BREAKPOINT_TABLET) {
 			setMenuLateralAbierto(false);
 		}
-	}, [esDesktop]);
+	}, [anchoVentana]);
 
 	useEffect(() => {
 		const temporizador = setTimeout(() => {
@@ -91,20 +92,57 @@ export function DashboardLayout({
 
 	return (
 		<div className="flex h-screen w-full overflow-hidden bg-slate-50 font-sans text-slate-800">
-			{menuLateralAbierto && (
-				<button
-					type="button"
-					aria-label="Cerrar menú lateral"
-					onClick={() => setMenuLateralAbierto(false)}
-					className="fixed inset-0 z-20 cursor-pointer bg-slate-900/40 backdrop-blur-xs transition-opacity duration-300 lg:hidden"
-				/>
-			)}
+			{/* Drawer móvil con animación Framer Motion */}
+			<AnimatePresence>
+				{menuLateralAbierto && (
+					<div className="fixed inset-0 z-40 md:hidden">
+						<motion.div
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							exit={{ opacity: 0 }}
+							transition={{ duration: 0.2 }}
+							aria-label="Cerrar menú lateral"
+							role="button"
+							tabIndex={0}
+							onClick={() => setMenuLateralAbierto(false)}
+							onKeyDown={(e) => {
+								if (e.key === "Escape" || e.key === "Enter") {
+									setMenuLateralAbierto(false);
+								}
+							}}
+							className="fixed inset-0 cursor-pointer bg-slate-900/40 backdrop-blur-xs"
+						/>
 
-			<div
+						<motion.div
+							initial={{ x: "-100%" }}
+							animate={{ x: 0 }}
+							exit={{ x: "-100%" }}
+							transition={{ type: "spring", damping: 28, stiffness: 280 }}
+							className="fixed inset-y-0 left-0 z-50 h-full w-72 max-w-[85vw] shadow-2xl"
+						>
+							<Sidebar
+								moduloActivo={moduloActual}
+								alSeleccionarModulo={manejarSeleccion}
+								estaColapsado={false}
+								alAlternarColapso={() => {}}
+								permiteColapsoManual={false}
+								alSolicitarCerrarSesion={() => {
+									setMenuLateralAbierto(false);
+									setModalCerrarSesionAbierto(true);
+								}}
+								alCerrarMenuMovil={() => setMenuLateralAbierto(false)}
+								className="h-full w-full"
+							/>
+						</motion.div>
+					</div>
+				)}
+			</AnimatePresence>
+
+			{/* Barra lateral para Tablet y Desktop */}
+			<aside
 				className={cn(
-					"fixed inset-y-0 left-0 z-30 w-72 transform transition-[width,transform] duration-300 ease-in-out md:static md:inset-0 md:translate-x-0",
-					menuLateralAbierto ? "translate-x-0" : "-translate-x-full",
-					sidebarColapsadoVisual ? "md:w-20" : "md:w-72",
+					"hidden h-full shrink-0 transition-[width] duration-300 ease-in-out md:flex",
+					sidebarColapsadoVisual ? "w-20" : "w-72",
 				)}
 			>
 				<Sidebar
@@ -114,10 +152,9 @@ export function DashboardLayout({
 					alAlternarColapso={() => setEstaColapsado((prev) => !prev)}
 					permiteColapsoManual={esDesktop}
 					alSolicitarCerrarSesion={() => setModalCerrarSesionAbierto(true)}
-					alCerrarMenuMovil={() => setMenuLateralAbierto(false)}
 					className="h-full w-full"
 				/>
-			</div>
+			</aside>
 
 			<div className="flex min-w-0 flex-1 flex-col overflow-hidden">
 				<TopBar
