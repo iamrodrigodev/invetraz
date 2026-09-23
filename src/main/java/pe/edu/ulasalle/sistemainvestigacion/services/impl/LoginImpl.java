@@ -48,13 +48,16 @@ public class LoginImpl implements CasoUsoLogin {
                 claveRateLimit, MensajesDeError.DEMASIADOS_INTENTOS_LOGIN);
 
         long t0 = System.currentTimeMillis();
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmailIgnoreCase(emailNormalizado);
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(emailNormalizado);
+        if (usuarioOpt.isEmpty()) {
+            usuarioOpt = usuarioRepository.findByEmailIgnoreCase(emailNormalizado);
+        }
         long tDb = System.currentTimeMillis() - t0;
 
         if (usuarioOpt.isEmpty()) {
             servicioLimitadorIntentos.registrarFallo(
                     claveRateLimit, 5, 60_000L, MensajesDeError.DEMASIADOS_INTENTOS_LOGIN);
-            log.warn(
+            log.debug(
                     "Login fallido (usuario no encontrado): [{}] en {} ms (DB: {} ms)",
                     emailNormalizado,
                     System.currentTimeMillis() - tInicio,
@@ -69,7 +72,7 @@ public class LoginImpl implements CasoUsoLogin {
             long dHash = System.currentTimeMillis() - t1;
             servicioLimitadorIntentos.registrarFallo(
                     claveRateLimit, 5, 60_000L, MensajesDeError.DEMASIADOS_INTENTOS_LOGIN);
-            log.warn(
+            log.debug(
                     "Login fallido (password incorrecto): [{}] en {} ms (DB: {} ms, Hash: {} ms)",
                     emailNormalizado,
                     System.currentTimeMillis() - tInicio,

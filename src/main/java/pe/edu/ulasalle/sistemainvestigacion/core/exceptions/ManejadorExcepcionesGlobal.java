@@ -19,14 +19,22 @@ import pe.edu.ulasalle.sistemainvestigacion.core.response.ApiRespuesta;
 @Slf4j
 @RestControllerAdvice
 public class ManejadorExcepcionesGlobal {
+    private static final String RUTA_LOGIN = "/api/v1/auth/login";
 
     @ExceptionHandler(ExcepcionDeNegocio.class)
     public ResponseEntity<ApiRespuesta<Void>> manejarErrorDeNegocio(
             ExcepcionDeNegocio excepcion, HttpServletRequest solicitud) {
-        log.warn(
-                "Excepcion de negocio en {}: {}",
-                solicitud.getRequestURI(),
-                excepcion.getMessage());
+        if (RUTA_LOGIN.equals(solicitud.getRequestURI())) {
+            log.debug(
+                    "Excepcion de negocio en {}: {}",
+                    solicitud.getRequestURI(),
+                    excepcion.getMessage());
+        } else {
+            log.warn(
+                    "Excepcion de negocio en {}: {}",
+                    solicitud.getRequestURI(),
+                    excepcion.getMessage());
+        }
         ApiRespuesta<Void> respuesta =
                 ApiRespuesta.error(400, excepcion.getMessage(), solicitud.getRequestURI(), null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);

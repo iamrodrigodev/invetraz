@@ -61,8 +61,7 @@ class LoginImplTest {
                         .password(encodedPassword)
                         .build();
 
-        when(usuarioRepository.findByEmailIgnoreCase("admin@ulasalle.edu.pe"))
-                .thenReturn(Optional.of(usuario));
+        when(usuarioRepository.findByEmail("admin@ulasalle.edu.pe")).thenReturn(Optional.of(usuario));
         when(passwordEncoder.matches(rawPassword, encodedPassword)).thenReturn(true);
         when(passwordEncoder.upgradeEncoding(encodedPassword)).thenReturn(false);
         when(servicioJwt.generarTokenAcceso(idUsuario, ConstantesSeguridad.ROL_ADMIN))
@@ -78,6 +77,7 @@ class LoginImplTest {
 
     @Test
     void ejecutar_usuarioNoExiste_lanzaExcepcionInmediatamente() {
+        when(usuarioRepository.findByEmail("noexiste@ulasalle.edu.pe")).thenReturn(Optional.empty());
         when(usuarioRepository.findByEmailIgnoreCase("noexiste@ulasalle.edu.pe"))
                 .thenReturn(Optional.empty());
 
@@ -102,8 +102,7 @@ class LoginImplTest {
                         .password(encodedPassword)
                         .build();
 
-        when(usuarioRepository.findByEmailIgnoreCase("admin@ulasalle.edu.pe"))
-                .thenReturn(Optional.of(usuario));
+        when(usuarioRepository.findByEmail("admin@ulasalle.edu.pe")).thenReturn(Optional.of(usuario));
         when(passwordEncoder.matches("ClaveErrada", encodedPassword)).thenReturn(false);
 
         LoginPeticion peticion = new LoginPeticion("admin@ulasalle.edu.pe", "ClaveErrada");
@@ -129,8 +128,7 @@ class LoginImplTest {
                         .password(legacyHash)
                         .build();
 
-        when(usuarioRepository.findByEmailIgnoreCase("admin@ulasalle.edu.pe"))
-                .thenReturn(Optional.of(usuario));
+        when(usuarioRepository.findByEmail("admin@ulasalle.edu.pe")).thenReturn(Optional.of(usuario));
         when(passwordEncoder.matches(rawPassword, legacyHash)).thenReturn(true);
         when(passwordEncoder.upgradeEncoding(legacyHash)).thenReturn(true);
         when(passwordEncoder.encode(rawPassword)).thenReturn(nuevoBcrypt);
@@ -148,6 +146,7 @@ class LoginImplTest {
 
     @Test
     void ejecutar_superaLimiteIntentos_lanzaExcepcion429() {
+        when(usuarioRepository.findByEmail("bloqueado@ulasalle.edu.pe")).thenReturn(Optional.empty());
         when(usuarioRepository.findByEmailIgnoreCase("bloqueado@ulasalle.edu.pe"))
                 .thenReturn(Optional.empty());
 
@@ -172,5 +171,33 @@ class LoginImplTest {
         assertThrows(
                 pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada.class,
                 () -> loginService.ejecutar(peticion));
+    }
+
+    @Test
+    void ejecutar_usuarioAntiguoConEmailMixto_usaFallbackIgnoreCase() {
+        UUID idUsuario = UUID.randomUUID();
+        String rawPassword = "Password123";
+        String encodedPassword = "$2a$10$hashedpassword";
+        Usuario usuario =
+                Usuario.builder()
+                        .id(idUsuario)
+                        .email("Admin@ulasalle.edu.pe")
+                        .password(encodedPassword)
+                        .build();
+
+        when(usuarioRepository.findByEmail("admin@ulasalle.edu.pe")).thenReturn(Optional.empty());
+        when(usuarioRepository.findByEmailIgnoreCase("admin@ulasalle.edu.pe"))
+                .thenReturn(Optional.of(usuario));
+        when(passwordEncoder.matches(rawPassword, encodedPassword)).thenReturn(true);
+        when(passwordEncoder.upgradeEncoding(encodedPassword)).thenReturn(false);
+        when(servicioJwt.generarTokenAcceso(idUsuario, ConstantesSeguridad.ROL_ADMIN))
+                .thenReturn("token-fallback");
+
+        LoginPeticion peticion = new LoginPeticion("Admin@ulasalle.edu.pe", rawPassword);
+        LoginRespuesta respuesta = loginService.ejecutar(peticion);
+
+        assertEquals("token-fallback", respuesta.tokenAcceso());
+        verify(usuarioRepository).findByEmail("admin@ulasalle.edu.pe");
+        verify(usuarioRepository).findByEmailIgnoreCase("admin@ulasalle.edu.pe");
     }
 }

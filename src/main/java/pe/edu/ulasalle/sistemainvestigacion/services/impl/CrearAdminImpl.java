@@ -1,5 +1,6 @@
 package pe.edu.ulasalle.sistemainvestigacion.services.impl;
 
+import java.util.Locale;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionDeNegocio;
@@ -40,7 +41,7 @@ public class CrearAdminImpl implements CasoUsoCrearAdmin {
 
         Usuario nuevoAdmin =
                 Usuario.builder()
-                        .email(peticion.email())
+                        .email(peticion.email().trim().toLowerCase(Locale.ROOT))
                         .password(passwordEncoder.encode(peticion.password()))
                         .build();
 
