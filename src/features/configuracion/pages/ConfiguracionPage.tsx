@@ -68,7 +68,7 @@ export const ConfiguracionPage: React.FC = () => {
 	}
 
 	return (
-		<div className="w-full space-y-6 pb-12">
+		<div className="w-full space-y-5 pb-12 sm:space-y-6">
 			<div>
 				<h1 className="font-extrabold font-heading text-2xl text-slate-900 tracking-tight sm:text-3xl">
 					Configuración del Sistema
@@ -83,7 +83,7 @@ export const ConfiguracionPage: React.FC = () => {
 				<Alert variant="error" message={mensajeError} onClose={() => setMensajeError(null)} />
 			)}
 
-			<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+			<div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
 				<TarjetaCredencialesGoogle />
 				<TarjetaCarpetaDrive
 					carpetaIdInicial={credenciales.googleDriveFolderId}

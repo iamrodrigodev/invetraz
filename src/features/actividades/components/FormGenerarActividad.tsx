@@ -388,13 +388,13 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 					</div>
 				</div>
 
-				<div className="flex flex-col items-end gap-1.5 pt-2">
-					<div className="flex items-center justify-end gap-3">
+				<div className="flex flex-col items-stretch gap-1.5 pt-2 sm:items-end">
+					<div className="flex flex-col-reverse items-stretch justify-end gap-2.5 sm:flex-row sm:items-center sm:gap-3">
 						<Button
 							type="button"
 							variant="ghost"
 							onClick={alCancelar}
-							className="font-medium text-slate-600 hover:text-slate-800"
+							className="min-h-11 font-medium text-slate-600 hover:text-slate-800"
 						>
 							<X size={16} className="mr-1.5" />
 							Cancelar
@@ -405,7 +405,7 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 							disabled={
 								!(isValid && esPlantillaValida && configuracionValida) || validandoPlantilla
 							}
-							className="font-semibold shadow-sm"
+							className="min-h-11 font-semibold shadow-sm"
 						>
 							<Plus size={16} className="mr-1.5" />
 							Generar

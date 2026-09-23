@@ -50,7 +50,7 @@ export function ActividadesSeguimientoPage() {
 
 	return (
 		<div className="flex min-h-full w-full flex-1 flex-col">
-			<div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+			<div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
 				<div className="min-w-0">
 					<h1 className="font-extrabold font-heading text-2xl text-slate-900 tracking-tight sm:text-3xl">
 						Actividades de seguimiento
@@ -61,7 +61,7 @@ export function ActividadesSeguimientoPage() {
 					</p>
 				</div>
 
-				<div className="flex shrink-0 flex-col items-start gap-1.5 sm:items-end lg:pt-1">
+				<div className="flex shrink-0 flex-col items-stretch gap-1.5 sm:items-end md:pt-1">
 					<Button
 						type="button"
 						variant="default"
@@ -72,7 +72,7 @@ export function ActividadesSeguimientoPage() {
 								setModalGenerarAbierto(true);
 							}
 						}}
-						className="w-full font-semibold shadow-xs sm:w-auto"
+						className="min-h-11 w-full font-semibold shadow-xs sm:w-auto"
 					>
 						<Plus size={16} className="mr-2" />
 						Generar
@@ -85,8 +85,8 @@ export function ActividadesSeguimientoPage() {
 				</div>
 			</div>
 
-			<Card className="mt-5 w-full border-2 border-slate-200 border-dashed bg-slate-50/50 py-12 text-center">
-				<CardContent className="mx-auto flex max-w-sm flex-col items-center justify-center space-y-3">
+			<Card className="mt-5 w-full border-2 border-slate-200 border-dashed bg-slate-50/50 py-10 text-center sm:py-12">
+				<CardContent className="mx-auto flex max-w-sm flex-col items-center justify-center space-y-3 px-5">
 					<ClipboardCheck size={28} className="text-primary" />
 					<div className="space-y-1">
 						<h4 className="font-semibold text-slate-800 text-sm">
@@ -108,6 +108,7 @@ export function ActividadesSeguimientoPage() {
 									setModalGenerarAbierto(true);
 								}
 							}}
+							className="min-h-11 w-full sm:w-auto"
 						>
 							<Plus size={16} className="mr-1.5" />
 							Generar actividad

@@ -42,8 +42,8 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({ plantilla })
 
 	return (
 		<Card className="border-slate-200/90 bg-white shadow-xs">
-			<CardContent className="space-y-4 px-6 pt-6 pb-5">
-				<div className="flex items-center justify-between gap-4">
+			<CardContent className="space-y-4 px-5 pt-5 pb-5 sm:px-6 sm:pt-6">
+				<div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
 					<div className="min-w-0">
 						<h3
 							className="line-clamp-2 font-bold text-slate-900 text-sm leading-snug"
@@ -79,7 +79,7 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({ plantilla })
 						</span>
 					</div>
 
-					<div className="flex items-center gap-2 pt-2">
+					<div className="flex flex-col gap-2 pt-2 sm:flex-row sm:items-center">
 						{plantilla.enlaceWeb ? (
 							<Button
 								type="button"
@@ -90,7 +90,7 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({ plantilla })
 										window.open(plantilla.enlaceWeb, "_blank", "noopener,noreferrer");
 									}
 								}}
-								className="w-full"
+								className="min-h-11 w-full"
 							>
 								<ExternalLink size={16} className="mr-2" />
 								Abrir plantilla
@@ -109,7 +109,7 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({ plantilla })
 									type="button"
 									variant="outline"
 									size="default"
-									className="px-3 text-slate-700 hover:border-primary-300 hover:text-primary"
+									className="min-h-11 w-full px-3 text-slate-700 hover:border-primary-300 hover:text-primary sm:w-auto"
 								>
 									<Download size={16} />
 								</Button>

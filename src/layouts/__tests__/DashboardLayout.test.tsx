@@ -39,6 +39,11 @@ describe("DashboardLayout", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		localStorage.clear();
+		Object.defineProperty(window, "innerWidth", {
+			configurable: true,
+			writable: true,
+			value: 1024,
+		});
 	});
 
 	it("no navega otra vez al pulsar el módulo activo y navega con alCambiarModulo", () => {
@@ -88,6 +93,7 @@ describe("DashboardLayout", () => {
 	});
 
 	it("abre y cierra el menú lateral móvil al hacer clic en el backdrop", () => {
+		window.innerWidth = 390;
 		render(
 			<MemoryRouter initialEntries={["/actividades"]}>
 				<DashboardLayout />
@@ -102,6 +108,23 @@ describe("DashboardLayout", () => {
 
 		fireEvent.click(backdrop);
 		expect(screen.queryByLabelText("Cerrar menú lateral")).toBeNull();
+	});
+
+	it("en tablet muestra sidebar colapsado sin boton hamburguesa", () => {
+		window.innerWidth = 820;
+		render(
+			<MemoryRouter initialEntries={["/actividades"]}>
+				<DashboardLayout />
+			</MemoryRouter>,
+		);
+
+		expect(screen.queryByLabelText("Abrir menú de navegación")).toBeNull();
+		expect(screen.queryByLabelText("Expandir barra lateral")).toBeNull();
+		expect(
+			screen.getByRole("heading", {
+				name: "Actividades de seguimiento",
+			}),
+		).toBeDefined();
 	});
 
 	it("abre modal y confirma cierre de sesión desde sidebar", async () => {

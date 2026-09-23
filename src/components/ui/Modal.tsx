@@ -81,7 +81,7 @@ export function Modal({ abierto, alCerrar, titulo, children, className }: ModalP
 	return createPortal(
 		<AnimatePresence>
 			{abierto && (
-				<div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+				<div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-6">
 					<motion.div
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
@@ -99,7 +99,7 @@ export function Modal({ abierto, alCerrar, titulo, children, className }: ModalP
 						exit={{ opacity: 0 }}
 						transition={{ duration: 0.15, ease: "easeOut" }}
 						className={cn(
-							"relative z-10 max-h-[90vh] w-full overflow-hidden overflow-y-auto rounded-2xl bg-white p-6 align-middle shadow-2xl",
+							"relative z-10 max-h-[calc(100dvh-1rem)] w-full overflow-hidden overflow-y-auto rounded-t-2xl bg-white p-5 align-middle shadow-2xl sm:max-h-[90vh] sm:rounded-2xl sm:p-6",
 							!className?.includes("max-w-") && "max-w-md",
 							!className?.includes("text-center") && "text-left",
 							className,
@@ -108,14 +108,14 @@ export function Modal({ abierto, alCerrar, titulo, children, className }: ModalP
 						aria-modal="true"
 					>
 						{titulo && (
-							<div className="mb-5 flex items-center justify-between">
+							<div className="mb-5 flex items-start justify-between gap-4">
 								<h3 className="font-heading font-semibold text-lg text-slate-900 tracking-tight">
 									{titulo}
 								</h3>
 								<button
 									type="button"
 									onClick={alCerrar}
-									className="inline-flex cursor-pointer rounded-md p-0.5 text-slate-500 opacity-70 outline-none transition-all hover:bg-black/5 hover:text-slate-800 hover:opacity-100 active:scale-95"
+									className="inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl text-slate-500 opacity-70 outline-none transition-all hover:bg-black/5 hover:text-slate-800 hover:opacity-100 active:scale-95"
 									aria-label="Cerrar"
 								>
 									<X size={18} />

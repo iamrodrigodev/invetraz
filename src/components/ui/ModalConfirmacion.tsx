@@ -28,13 +28,17 @@ export function ModalConfirmacion({
 	alCerrar,
 }: PropsModalConfirmacion) {
 	return (
-		<Modal abierto={abierto} alCerrar={alCerrar} className="relative max-w-sm p-6 text-center">
+		<Modal
+			abierto={abierto}
+			alCerrar={alCerrar}
+			className="relative max-w-sm p-5 text-center sm:p-6"
+		>
 			<button
 				type="button"
 				onClick={alCerrar}
 				disabled={cargando}
 				aria-label="Cerrar modal"
-				className="absolute top-4 right-4 inline-flex cursor-pointer rounded-md p-0.5 text-slate-500 opacity-70 outline-none transition-all hover:bg-black/5 hover:text-slate-800 hover:opacity-100 active:scale-95 disabled:pointer-events-none"
+				className="absolute top-3 right-3 inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-slate-500 opacity-70 outline-none transition-all hover:bg-black/5 hover:text-slate-800 hover:opacity-100 active:scale-95 disabled:pointer-events-none sm:top-4 sm:right-4"
 			>
 				<X size={18} />
 			</button>
@@ -58,13 +62,13 @@ export function ModalConfirmacion({
 				</div>
 			</div>
 
-			<div className="mt-7 flex flex-col gap-2.5">
+			<div className="mt-7 flex flex-col-reverse gap-2.5 sm:flex-col">
 				<Button
 					type="button"
 					variant={varianteBoton === "destructivo" ? "destructive" : "default"}
 					onClick={alConfirmar}
 					disabled={cargando}
-					className="h-11 w-full rounded-xl font-semibold text-[15px] shadow-sm active:scale-98"
+					className="min-h-11 w-full rounded-xl font-semibold text-[15px] shadow-sm active:scale-98"
 					size="lg"
 				>
 					{cargando ? (
@@ -88,7 +92,7 @@ export function ModalConfirmacion({
 					variant="ghost"
 					onClick={alCerrar}
 					disabled={cargando}
-					className="h-11 w-full rounded-xl font-medium text-[15px] text-slate-600 hover:bg-slate-100 active:scale-98"
+					className="min-h-11 w-full rounded-xl font-medium text-[15px] text-slate-600 hover:bg-slate-100 active:scale-98"
 					size="lg"
 				>
 					<X size={18} className="mr-2" />

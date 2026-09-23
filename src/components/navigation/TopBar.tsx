@@ -15,6 +15,7 @@ export interface TopBarProps {
 	alAbrirMenuMovil?: () => void;
 	className?: string;
 	alSolicitarCerrarSesion?: () => void;
+	mostrarBotonMenuMovil?: boolean;
 }
 
 export function TopBar({
@@ -22,6 +23,7 @@ export function TopBar({
 	alAbrirMenuMovil,
 	className,
 	alSolicitarCerrarSesion,
+	mostrarBotonMenuMovil = true,
 }: TopBarProps) {
 	const navigate = useNavigate();
 	const cerrarSesionStore = useAppStore((state) => state.cerrarSesion);
@@ -52,14 +54,16 @@ export function TopBar({
 				)}
 			>
 				<div className="flex items-center gap-3 md:gap-4">
-					<button
-						type="button"
-						onClick={alAbrirMenuMovil}
-						aria-label="Abrir menú de navegación"
-						className="-ml-2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-slate-500 transition-all hover:bg-slate-100 hover:text-slate-700 active:scale-95 lg:hidden"
-					>
-						<Menu className="h-5 w-5" />
-					</button>
+					{mostrarBotonMenuMovil && (
+						<button
+							type="button"
+							onClick={alAbrirMenuMovil}
+							aria-label="Abrir menú de navegación"
+							className="-ml-2 flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-slate-500 transition-all hover:bg-slate-100 hover:text-slate-700 active:scale-95 md:hidden"
+						>
+							<Menu className="h-5 w-5" />
+						</button>
+					)}
 
 					<h1 className="font-heading font-semibold text-base text-slate-800 md:text-lg">
 						{titulo}

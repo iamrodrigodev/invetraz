@@ -66,13 +66,13 @@ export const TarjetaConexionBase: React.FC<TarjetaConexionBaseProps> = ({
 	children,
 }) => {
 	const renderBotones = () => (
-		<div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row sm:items-center sm:justify-end">
+		<div className="flex flex-col-reverse gap-2.5 pt-4 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
 			<Button
 				type="button"
 				variant="outline"
 				onClick={onVerificar}
 				disabled={deshabilitarVerificar}
-				className="w-full sm:w-auto"
+				className="min-h-11 w-full sm:w-auto"
 				title={tooltipVerificar}
 			>
 				<RefreshCw size={16} className={`mr-2 ${verificando ? "animate-spin text-primary" : ""}`} />
@@ -84,7 +84,7 @@ export const TarjetaConexionBase: React.FC<TarjetaConexionBaseProps> = ({
 				variant="default"
 				onClick={esFormulario ? undefined : onGuardar}
 				disabled={deshabilitarGuardar}
-				className="w-full sm:w-auto"
+				className="min-h-11 w-full sm:w-auto"
 				title={tooltipGuardar}
 			>
 				{guardando ? (
@@ -99,7 +99,7 @@ export const TarjetaConexionBase: React.FC<TarjetaConexionBaseProps> = ({
 
 	return (
 		<Card className="flex h-full flex-col">
-			<CardHeader className="space-y-2 pb-4">
+			<CardHeader className="space-y-2 p-5 pb-4 sm:p-6 sm:pb-4">
 				<div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
 					<CardTitle className="flex items-center gap-2 font-bold text-base text-slate-900 sm:text-lg">
 						<Icono size={19} className="shrink-0 text-primary" />
@@ -112,7 +112,7 @@ export const TarjetaConexionBase: React.FC<TarjetaConexionBaseProps> = ({
 				</CardDescription>
 			</CardHeader>
 
-			<CardContent className="flex flex-1 flex-col space-y-5">
+			<CardContent className="flex flex-1 flex-col space-y-5 p-5 pt-0 sm:p-6 sm:pt-0">
 				{mensajeExito && (
 					<Alert
 						variant={varianteMensajeExito}

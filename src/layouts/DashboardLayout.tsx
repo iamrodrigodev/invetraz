@@ -9,6 +9,9 @@ import { ModuloContenidoSkeleton } from "@/components/ui/skeletons/DashboardSkel
 import { useAppStore } from "@/store/useAppStore.ts";
 import { cn } from "@/utils/cn.ts";
 
+const BREAKPOINT_TABLET = 768;
+const BREAKPOINT_DESKTOP = 1024;
+
 export interface DashboardLayoutProps {
 	moduloActivo?: ModuloId;
 	alCambiarModulo?: (modulo: ModuloId) => void;
@@ -29,6 +32,11 @@ export function DashboardLayout({
 	);
 	const [modalCerrarSesionAbierto, setModalCerrarSesionAbierto] = useState(false);
 	const [cerrandoSesion, setCerrandoSesion] = useState(false);
+	const [anchoVentana, setAnchoVentana] = useState(() => window.innerWidth);
+
+	const esTablet = anchoVentana >= BREAKPOINT_TABLET && anchoVentana < BREAKPOINT_DESKTOP;
+	const esDesktop = anchoVentana >= BREAKPOINT_DESKTOP;
+	const sidebarColapsadoVisual = esTablet || estaColapsado;
 
 	const moduloRuta = pathname.replace(/^\//u, "").split("/")[0];
 	const moduloActivoCalculado = ModuloIdSchema.catch("actividades").parse(
@@ -39,6 +47,18 @@ export function DashboardLayout({
 	useEffect(() => {
 		localStorage.setItem("sidebar_colapsado", String(estaColapsado));
 	}, [estaColapsado]);
+
+	useEffect(() => {
+		const actualizarAncho = () => setAnchoVentana(window.innerWidth);
+		window.addEventListener("resize", actualizarAncho);
+		return () => window.removeEventListener("resize", actualizarAncho);
+	}, []);
+
+	useEffect(() => {
+		if (esDesktop) {
+			setMenuLateralAbierto(false);
+		}
+	}, [esDesktop]);
 
 	useEffect(() => {
 		const temporizador = setTimeout(() => {
@@ -82,16 +102,17 @@ export function DashboardLayout({
 
 			<div
 				className={cn(
-					"fixed inset-y-0 left-0 z-30 w-72 transform transition-[width,transform] duration-300 ease-in-out lg:static lg:inset-0 lg:translate-x-0",
+					"fixed inset-y-0 left-0 z-30 w-72 transform transition-[width,transform] duration-300 ease-in-out md:static md:inset-0 md:translate-x-0",
 					menuLateralAbierto ? "translate-x-0" : "-translate-x-full",
-					estaColapsado ? "lg:w-20" : "lg:w-72",
+					sidebarColapsadoVisual ? "md:w-20" : "md:w-72",
 				)}
 			>
 				<Sidebar
 					moduloActivo={moduloActual}
 					alSeleccionarModulo={manejarSeleccion}
-					estaColapsado={estaColapsado}
+					estaColapsado={sidebarColapsadoVisual}
 					alAlternarColapso={() => setEstaColapsado((prev) => !prev)}
+					permiteColapsoManual={esDesktop}
 					alSolicitarCerrarSesion={() => setModalCerrarSesionAbierto(true)}
 					className="h-full w-full"
 				/>
@@ -102,9 +123,10 @@ export function DashboardLayout({
 					moduloActivo={moduloActual}
 					alAbrirMenuMovil={() => setMenuLateralAbierto(true)}
 					alSolicitarCerrarSesion={() => setModalCerrarSesionAbierto(true)}
+					mostrarBotonMenuMovil={!esTablet}
 				/>
 
-				<main className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden p-4 pb-12 sm:p-6">
+				<main className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden p-4 pb-12 sm:p-6 lg:p-8">
 					<div className="flex min-h-0 w-full flex-1 flex-col">
 						{children ?? (
 							<Suspense fallback={<ModuloContenidoSkeleton modulo={moduloActual} />}>

@@ -102,7 +102,7 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 
 	return (
 		<div className="flex min-h-full w-full flex-1 flex-col">
-			<div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+			<div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
 				<div className="min-w-0">
 					<h1 className="font-extrabold font-heading text-2xl text-slate-900 tracking-tight sm:text-3xl">
 						Plantillas de Seguimiento
@@ -113,14 +113,14 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 					</p>
 				</div>
 
-				<div className="flex w-full shrink-0 flex-col-reverse gap-3 sm:w-auto sm:flex-row sm:items-center lg:pt-1">
+				<div className="flex w-full shrink-0 flex-col-reverse gap-3 sm:w-auto sm:flex-row sm:items-center md:pt-1">
 					<Button
 						type="button"
 						variant="outline"
 						size="default"
 						onClick={cargar}
 						disabled={cargando}
-						className="w-full sm:w-auto"
+						className="min-h-11 w-full sm:w-auto"
 						title="Sincronizar plantillas con Google Drive"
 					>
 						<RefreshCw
@@ -145,8 +145,8 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 
 			<div className="mt-6 flex flex-1 flex-col">
 				{!datos?.carpetaConfigurada && (
-					<Card className="w-full border-2 border-slate-300 border-dashed bg-slate-50/50 py-12 text-center">
-						<CardContent className="mx-auto flex max-w-md flex-col items-center justify-center space-y-4">
+					<Card className="w-full border-2 border-slate-300 border-dashed bg-slate-50/50 py-10 text-center sm:py-12">
+						<CardContent className="mx-auto flex max-w-md flex-col items-center justify-center space-y-4 px-5">
 							<div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary">
 								<FolderGit2 size={28} />
 							</div>
@@ -163,7 +163,7 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 								type="button"
 								variant="default"
 								onClick={() => navigate("/configuracion")}
-								className="mt-2 font-semibold text-xs"
+								className="mt-2 min-h-11 font-semibold text-xs"
 							>
 								<Settings size={14} className="mr-1.5" />
 								Configurar carpeta ahora
@@ -184,8 +184,8 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 						)}
 
 						{totalPlantillas === 0 ? (
-							<Card className="mt-5 w-full border-2 border-slate-200 border-dashed bg-slate-50/50 py-12 text-center">
-								<CardContent className="mx-auto flex max-w-sm flex-col items-center justify-center space-y-3">
+							<Card className="mt-5 w-full border-2 border-slate-200 border-dashed bg-slate-50/50 py-10 text-center sm:py-12">
+								<CardContent className="mx-auto flex max-w-sm flex-col items-center justify-center space-y-3 px-5">
 									<FileSpreadsheet size={28} className="text-primary" />
 									<div className="space-y-1">
 										<h4 className="font-semibold text-slate-800 text-sm">
@@ -197,7 +197,7 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 							</Card>
 						) : (
 							<>
-								<div className="mt-5 grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+								<div className="mt-5 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 									{plantillasPaginadas.map((plantilla) => (
 										<TarjetaPlantilla key={plantilla.id} plantilla={plantilla} />
 									))}

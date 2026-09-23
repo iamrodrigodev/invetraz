@@ -15,6 +15,7 @@ export interface SidebarProps {
 	alSeleccionarModulo: (id: ModuloId) => void;
 	estaColapsado: boolean;
 	alAlternarColapso: () => void;
+	permiteColapsoManual?: boolean;
 	className?: string;
 	alSolicitarCerrarSesion?: () => void;
 }
@@ -24,6 +25,7 @@ export function Sidebar({
 	alSeleccionarModulo,
 	estaColapsado,
 	alAlternarColapso,
+	permiteColapsoManual = true,
 	className,
 	alSolicitarCerrarSesion,
 }: SidebarProps) {
@@ -42,18 +44,20 @@ export function Sidebar({
 				className,
 			)}
 		>
-			<button
-				type="button"
-				onClick={alAlternarColapso}
-				aria-label={estaColapsado ? "Expandir barra lateral" : "Colapsar barra lateral"}
-				className="absolute top-5 -right-3.5 z-20 hidden h-7 w-7 cursor-pointer items-center justify-center rounded-full border-2 border-slate-50 bg-primary text-white shadow-xs transition-all duration-150 ease-in-out hover:bg-primary-700 active:scale-95 lg:flex"
-			>
-				{estaColapsado ? (
-					<ChevronRight size={15} strokeWidth={2.5} />
-				) : (
-					<ChevronLeft size={15} strokeWidth={2.5} />
-				)}
-			</button>
+			{permiteColapsoManual && (
+				<button
+					type="button"
+					onClick={alAlternarColapso}
+					aria-label={estaColapsado ? "Expandir barra lateral" : "Colapsar barra lateral"}
+					className="absolute top-5 -right-3.5 z-20 hidden h-7 w-7 cursor-pointer items-center justify-center rounded-full border-2 border-slate-50 bg-primary text-white shadow-xs transition-all duration-150 ease-in-out hover:bg-primary-700 active:scale-95 lg:flex"
+				>
+					{estaColapsado ? (
+						<ChevronRight size={15} strokeWidth={2.5} />
+					) : (
+						<ChevronLeft size={15} strokeWidth={2.5} />
+					)}
+				</button>
+			)}
 
 			<div className="flex h-16 shrink-0 items-center border-slate-200 border-b px-4.5">
 				<Logo estaColapsado={estaColapsado} />

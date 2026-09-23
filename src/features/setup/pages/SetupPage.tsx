@@ -61,10 +61,13 @@ export function SetupPage() {
 	};
 
 	return (
-		<div className="flex min-h-screen w-full items-center justify-center bg-slate-50 p-4 font-sans text-slate-800">
-			<div className="w-full max-w-120 rounded-3xl border border-slate-200/60 bg-white p-8 shadow-xs md:p-12">
-				<div className="mb-8 flex flex-col items-center text-center">
-					<Microscope className="mb-4 h-14 w-14 shrink-0 text-primary" strokeWidth={2.2} />
+		<div className="flex min-h-dvh w-full items-center justify-center bg-slate-50 p-4 font-sans text-slate-800 sm:p-6">
+			<div className="w-full max-w-120 rounded-2xl bg-white p-5 shadow-xs sm:rounded-3xl sm:border sm:border-slate-200/60 sm:p-8 md:p-12">
+				<div className="mb-7 flex flex-col items-center text-center sm:mb-8">
+					<Microscope
+						className="mb-4 h-12 w-12 shrink-0 text-primary sm:h-14 sm:w-14"
+						strokeWidth={2.2}
+					/>
 					<h1 className="mb-2 font-extrabold font-heading text-2xl text-slate-900 tracking-tight md:text-3xl">
 						Sistema de <span className="text-primary">Investigación</span>
 					</h1>
@@ -73,7 +76,7 @@ export function SetupPage() {
 					</p>
 				</div>
 
-				<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+				<form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6">
 					<div>
 						<label htmlFor={emailId} className="mb-2 block font-medium text-slate-800 text-sm">
 							Correo Electrónico <span className="text-red-500">*</span>
@@ -105,7 +108,7 @@ export function SetupPage() {
 								<button
 									type="button"
 									onClick={() => setShowPassword(!showPassword)}
-									className="cursor-pointer text-primary/70 transition-colors hover:text-primary focus:outline-none"
+									className="flex h-11 w-11 cursor-pointer items-center justify-center text-primary/70 transition-colors hover:text-primary focus:outline-none"
 								>
 									{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
 								</button>
@@ -137,7 +140,7 @@ export function SetupPage() {
 								<button
 									type="button"
 									onClick={() => setShowConfirm(!showConfirm)}
-									className="cursor-pointer text-primary/70 transition-colors hover:text-primary focus:outline-none"
+									className="flex h-11 w-11 cursor-pointer items-center justify-center text-primary/70 transition-colors hover:text-primary focus:outline-none"
 								>
 									{showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
 								</button>
