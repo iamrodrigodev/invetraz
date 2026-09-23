@@ -21,11 +21,14 @@ export const PrevisualizacionPlantilla: React.FC<
 
 	if (validando) {
 		return (
-			<div className="flex items-center gap-2.5 rounded-xl border border-slate-200/90 bg-slate-50/80 p-3 text-xs text-slate-600 animate-pulse">
-				<RefreshCw size={14} className="shrink-0 animate-spin text-primary" />
-				<span className="font-medium text-slate-700">
-					Verificando estructura de la plantilla...
-				</span>
+			<div className="py-1">
+				<Badge
+					variant="primary"
+					className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold"
+				>
+					<RefreshCw size={13} className="shrink-0 animate-spin text-primary" />
+					<span>Verificando estructura de la plantilla...</span>
+				</Badge>
 			</div>
 		);
 	}
