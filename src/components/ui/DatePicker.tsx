@@ -339,7 +339,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 					<button
 						type="button"
 						onClick={limpiarFecha}
-						className="pointer-events-auto rounded-full p-0.5 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+						className="pointer-events-auto rounded-full p-0.5 hover:bg-slate-100 hover:text-slate-600 transition-colors cursor-pointer"
 						title="Limpiar fecha"
 					>
 						<X size={14} />
@@ -367,7 +367,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 						<button
 							type="button"
 							onClick={irMesAnterior}
-							className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
+							className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
 							title="Mes anterior"
 						>
 							<ChevronLeft size={16} />
@@ -380,7 +380,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 						<button
 							type="button"
 							onClick={irMesSiguiente}
-							className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
+							className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
 							title="Mes siguiente"
 						>
 							<ChevronRight size={16} />
@@ -406,6 +406,9 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 								}
 								className={cn(
 									"flex h-8 w-full items-center justify-center rounded-lg text-xs font-medium transition-all",
+									celda.deshabilitado
+										? "opacity-25 cursor-not-allowed text-slate-400 hover:bg-transparent"
+										: "cursor-pointer",
 									!celda.esMesActual && "text-slate-300",
 									celda.esMesActual &&
 										!celda.estaSeleccionado &&
@@ -416,8 +419,6 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 										"ring-1 ring-inset ring-primary text-primary font-bold hover:bg-primary/5",
 									celda.estaSeleccionado &&
 										"bg-primary text-white font-bold shadow-xs hover:bg-primary/95",
-									celda.deshabilitado &&
-										"opacity-25 cursor-not-allowed text-slate-400 hover:bg-transparent",
 								)}
 							>
 								{celda.dia}
@@ -432,7 +433,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 							disabled={Boolean(
 								(min && fechaHoyStr < min) || (max && fechaHoyStr > max),
 							)}
-							className="font-semibold text-primary hover:underline disabled:opacity-40 disabled:no-underline"
+							className="font-semibold text-primary hover:underline cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 disabled:no-underline"
 						>
 							Hoy
 						</button>
@@ -444,7 +445,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 									limpiarFecha(e);
 									setAbierto(false);
 								}}
-								className="text-slate-500 hover:text-slate-800"
+								className="text-slate-500 hover:text-slate-800 cursor-pointer"
 							>
 								Limpiar
 							</button>

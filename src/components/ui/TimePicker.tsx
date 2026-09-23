@@ -247,7 +247,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 											type="button"
 											onClick={() => seleccionarHora(h)}
 											className={cn(
-												"w-full py-1 text-center font-sans rounded text-xs transition-colors",
+												"w-full py-1 text-center font-sans rounded text-xs transition-colors cursor-pointer",
 												horaActual === h
 													? "bg-primary text-white font-bold"
 													: "text-slate-700 hover:bg-slate-200/70",
@@ -270,7 +270,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 											type="button"
 											onClick={() => seleccionarMinuto(m)}
 											className={cn(
-												"w-full py-1 text-center font-sans rounded text-xs transition-colors",
+												"w-full py-1 text-center font-sans rounded text-xs transition-colors cursor-pointer",
 												minutoActual === m
 													? "bg-primary text-white font-bold"
 													: "text-slate-700 hover:bg-slate-200/70",
@@ -287,7 +287,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 							<button
 								type="button"
 								onClick={() => seleccionarPreajuste("23:59")}
-								className="font-medium text-primary hover:underline"
+								className="font-medium text-primary hover:underline cursor-pointer"
 							>
 								Fin del día (23:59)
 							</button>
@@ -299,7 +299,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 										limpiarHora(e);
 										setAbierto(false);
 									}}
-									className="text-slate-500 hover:text-slate-800"
+									className="text-slate-500 hover:text-slate-800 cursor-pointer"
 								>
 									Limpiar
 								</button>
