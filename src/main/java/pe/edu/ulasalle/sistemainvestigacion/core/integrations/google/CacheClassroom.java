@@ -53,8 +53,8 @@ public class CacheClassroom {
                             List<ClaseClassroom> datos = cargador.get();
                             List<ClaseClassroom> inmutable =
                                     datos != null
-                                             ? Collections.unmodifiableList(datos)
-                                             : Collections.emptyList();
+                                            ? Collections.unmodifiableList(datos)
+                                            : Collections.emptyList();
                             return new EntradaCache<>(inmutable, tiempo + TTL_MILLIS);
                         });
 
@@ -85,8 +85,8 @@ public class CacheClassroom {
                             List<TareaClassroom> datos = cargador.get();
                             List<TareaClassroom> inmutable =
                                     datos != null
-                                             ? Collections.unmodifiableList(datos)
-                                             : Collections.emptyList();
+                                            ? Collections.unmodifiableList(datos)
+                                            : Collections.emptyList();
                             return new EntradaCache<>(inmutable, tiempo + TTL_MILLIS);
                         });
 
@@ -117,8 +117,8 @@ public class CacheClassroom {
                             List<TemaClassroom> datos = cargador.get();
                             List<TemaClassroom> inmutable =
                                     datos != null
-                                             ? Collections.unmodifiableList(datos)
-                                             : Collections.emptyList();
+                                            ? Collections.unmodifiableList(datos)
+                                            : Collections.emptyList();
                             return new EntradaCache<>(inmutable, tiempo + TTL_MILLIS);
                         });
 

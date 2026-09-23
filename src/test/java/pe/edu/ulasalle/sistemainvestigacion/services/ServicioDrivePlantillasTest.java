@@ -69,11 +69,11 @@ class ServicioDrivePlantillasTest {
                         .build();
 
         when(configuracionRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.of(config));
-        when(proveedorDrive.obtenerCliente()).thenThrow(new RuntimeException("Drive no disponible"));
+        when(proveedorDrive.obtenerCliente())
+                .thenThrow(new RuntimeException("Drive no disponible"));
 
         CarpetaPlantillasRespuestaDto resultado =
-                servicio.vincularCarpeta(
-                        "https://drive.google.com/drive/folders/folder-pendiente");
+                servicio.vincularCarpeta("https://drive.google.com/drive/folders/folder-pendiente");
 
         assertTrue(resultado.carpetaConfigurada());
         assertEquals("folder-pendiente", resultado.carpetaId());
@@ -98,8 +98,7 @@ class ServicioDrivePlantillasTest {
         when(configuracionRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.of(config));
 
         CarpetaPlantillasRespuestaDto resultado =
-                servicio.vincularCarpeta(
-                        "https://drive.google.com/drive/folders/folder-pendiente");
+                servicio.vincularCarpeta("https://drive.google.com/drive/folders/folder-pendiente");
 
         assertTrue(resultado.carpetaConfigurada());
         assertEquals("folder-pendiente", resultado.carpetaId());
@@ -153,7 +152,8 @@ class ServicioDrivePlantillasTest {
                         .build();
 
         when(configuracionRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.of(config));
-        when(proveedorDrive.obtenerCliente()).thenThrow(new RuntimeException("Drive no disponible"));
+        when(proveedorDrive.obtenerCliente())
+                .thenThrow(new RuntimeException("Drive no disponible"));
 
         CarpetaPlantillasRespuestaDto resultado = servicio.obtenerPlantillasConfiguradas();
 
@@ -165,7 +165,8 @@ class ServicioDrivePlantillasTest {
     }
 
     @Test
-    void obtenerPlantillasConfiguradas_cuandoGoogleNoVerificado_corrigeDriveYRetornaSinPlantillas() {
+    void
+            obtenerPlantillasConfiguradas_cuandoGoogleNoVerificado_corrigeDriveYRetornaSinPlantillas() {
         ConfiguracionSistema config =
                 ConfiguracionSistema.builder()
                         .googleClientId("id")

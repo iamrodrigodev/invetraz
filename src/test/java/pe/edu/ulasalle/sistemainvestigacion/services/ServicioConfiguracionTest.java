@@ -97,7 +97,8 @@ class ServicioConfiguracionTest {
     }
 
     @Test
-    void obtenerConfiguracion_cuandoGoogleNoVerificadoYDriveVerificado_corrigeDriveVerificadoAFalso() {
+    void
+            obtenerConfiguracion_cuandoGoogleNoVerificadoYDriveVerificado_corrigeDriveVerificadoAFalso() {
         ConfiguracionSistema config =
                 ConfiguracionSistema.builder()
                         .id(UUID.randomUUID())

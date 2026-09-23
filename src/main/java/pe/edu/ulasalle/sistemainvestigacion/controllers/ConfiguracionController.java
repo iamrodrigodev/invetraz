@@ -40,7 +40,6 @@ public class ConfiguracionController {
     public ResponseEntity<ApiRespuesta<Map<String, Object>>> verificarConfiguracion(
             @RequestBody(required = false) ActualizarCredencialesPeticion peticion) {
         Map<String, Object> resultado = servicioConfiguracion.verificarConfiguracion(peticion);
-        return ApiRespuesta.ok(
-                "Conexión con Google Classroom verificada exitosamente", resultado);
+        return ApiRespuesta.ok("Conexión con Google Classroom verificada exitosamente", resultado);
     }
 }

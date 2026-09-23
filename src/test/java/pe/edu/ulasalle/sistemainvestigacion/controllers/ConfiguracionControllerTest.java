@@ -32,7 +32,13 @@ class ConfiguracionControllerTest {
     void obtenerConfiguracion_delegaEnServicio() {
         ActualizarCredencialesPeticion mockRespuesta =
                 new ActualizarCredencialesPeticion(
-                        "client-123", "secret-456", "token-789", "folder-1", "Plantillas", true, true);
+                        "client-123",
+                        "secret-456",
+                        "token-789",
+                        "folder-1",
+                        "Plantillas",
+                        true,
+                        true);
         when(servicioConfiguracion.obtenerConfiguracion()).thenReturn(mockRespuesta);
 
         ResponseEntity<ApiRespuesta<ActualizarCredencialesPeticion>> response =

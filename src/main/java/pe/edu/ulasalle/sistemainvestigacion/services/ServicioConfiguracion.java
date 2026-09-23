@@ -37,8 +37,7 @@ public class ServicioConfiguracion {
         var configOpt = configuracionRepository.findFirstByOrderByIdAsc();
 
         if (configOpt.isEmpty()) {
-            return new ActualizarCredencialesPeticion(
-                    "", "", "", null, null, false, false);
+            return new ActualizarCredencialesPeticion("", "", "", null, null, false, false);
         }
 
         ConfiguracionSistema config = configOpt.get();

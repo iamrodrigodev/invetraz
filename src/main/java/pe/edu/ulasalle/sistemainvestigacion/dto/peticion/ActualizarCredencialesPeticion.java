@@ -3,6 +3,7 @@ package pe.edu.ulasalle.sistemainvestigacion.dto.peticion;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import pe.edu.ulasalle.sistemainvestigacion.core.constants.ValidationConstants;
+
 public record ActualizarCredencialesPeticion(
         @NotBlank(message = "El Client ID es obligatorio")
                 @Size(
@@ -20,8 +21,7 @@ public record ActualizarCredencialesPeticion(
                         message = "El Refresh Token no puede exceder los {max} caracteres")
                 String googleRefreshToken,
         @Size(max = ValidationConstants.MAX_GOOGLE_DRIVE_FOLDER_ID) String googleDriveFolderId,
-        @Size(max = ValidationConstants.MAX_GOOGLE_DRIVE_FOLDER_NAME)
-                String googleDriveFolderName,
+        @Size(max = ValidationConstants.MAX_GOOGLE_DRIVE_FOLDER_NAME) String googleDriveFolderName,
         Boolean googleVerificado,
         Boolean driveVerificado) {
 

@@ -68,7 +68,9 @@ public class ServicioDrivePlantillas {
                 configuracionRepository.save(config);
             }
             throw new ExcepcionDeNegocio(
-                    "Como las credenciales de Google Cloud no están verificadas, tampoco lo estarán en las plantillas de seguimiento. Verifica esa conexión antes de usar Drive o plantillas.");
+                    "Como las credenciales de Google Cloud no están verificadas, tampoco lo estarán"
+                        + " en las plantillas de seguimiento. Verifica esa conexión antes de usar"
+                        + " Drive o plantillas.");
         }
 
         File carpetaGoogle;
@@ -136,7 +138,8 @@ public class ServicioDrivePlantillas {
 
         if (!Boolean.TRUE.equals(config.getGoogleVerificado())) {
             log.warn(
-                    "Se guardará la carpeta Drive {} sin verificar porque Google Cloud no está verificado",
+                    "Se guardará la carpeta Drive {} sin verificar porque Google Cloud no está"
+                            + " verificado",
                     folderId);
             config.setGoogleDriveFolderId(folderId);
             config.setGoogleDriveFolderName(null);
