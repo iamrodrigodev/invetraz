@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class CodificadorContrasenasHibrido implements PasswordEncoder {
 
-    private final BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder(4);
     private final Argon2PasswordEncoder argon2 = new Argon2PasswordEncoder(16, 32, 1, 1024, 1);
 
     @Override
