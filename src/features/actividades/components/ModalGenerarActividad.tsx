@@ -86,7 +86,6 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 			return;
 		}
 
-		// Revalidar en tiempo real por si la hora ingresada expiró mientras el modal estaba abierto
 		const validacionFresca = GenerarActividadSchema.safeParse(valoresActuales);
 		if (!validacionFresca.success) {
 			setModalConfirmarAbierto(false);

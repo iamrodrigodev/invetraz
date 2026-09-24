@@ -116,7 +116,6 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 		}
 	}, [idClaseSeleccionada, onCambioClase]);
 
-	// Revalidación reactiva en tiempo real mientras el formulario sigue abierto
 	useEffect(() => {
 		if (!(fechaVencimientoSeleccionada && horaVencimientoSeleccionada)) {
 			return;
