@@ -61,7 +61,7 @@ function PantallaErrorConexion({
 		</main>
 	);
 }
- 
+
 export function AppRouter() {
 	const configurado = useAppStore((state) => state.configurado);
 	const autenticado = useAppStore((state) => state.autenticado);
