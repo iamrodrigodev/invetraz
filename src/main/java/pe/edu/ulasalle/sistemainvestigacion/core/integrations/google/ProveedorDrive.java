@@ -115,7 +115,7 @@ public class ProveedorDrive {
                                     HTTP_TRANSPORT,
                                     GsonFactory.getDefaultInstance(),
                                     requestInitializer)
-                            .setApplicationName("SistemaDeInvestigacion")
+                            .setApplicationName("Sistema de Investigación")
                             .build();
 
             return this.cachedClient;
