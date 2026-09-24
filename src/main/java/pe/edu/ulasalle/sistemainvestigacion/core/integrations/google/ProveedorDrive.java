@@ -125,16 +125,4 @@ public class ProveedorDrive {
             throw new ExcepcionPersonalizada(MensajesDeError.ERROR_CONFIGURACION_GOOGLE);
         }
     }
-
-    public void precalentar() {
-        try {
-            Drive cliente = obtenerCliente();
-            if (cliente != null) {
-                cliente.files().list().setPageSize(1).setFields("files(id)").execute();
-            }
-            log.info("Precalentamiento de Google Drive completado exitosamente");
-        } catch (Exception e) {
-            log.debug("Precalentamiento de Drive omitido: {}", e.getMessage());
-        }
-    }
 }
