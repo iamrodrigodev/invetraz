@@ -5,6 +5,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorClassroom;
+import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorDrive;
 import pe.edu.ulasalle.sistemainvestigacion.core.security.ConstantesSeguridad;
 import pe.edu.ulasalle.sistemainvestigacion.core.security.ServicioJwt;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.UsuarioRepository;
@@ -20,16 +22,22 @@ public class PrecalentadorAplicacion {
     private final ServicioJwt servicioJwt;
     private final PasswordEncoder passwordEncoder;
     private final UsuarioRepository usuarioRepository;
+    private final ProveedorClassroom proveedorClassroom;
+    private final ProveedorDrive proveedorDrive;
 
     public PrecalentadorAplicacion(
             ServicioReadiness servicioReadiness,
             ServicioJwt servicioJwt,
             PasswordEncoder passwordEncoder,
-            UsuarioRepository usuarioRepository) {
+            UsuarioRepository usuarioRepository,
+            ProveedorClassroom proveedorClassroom,
+            ProveedorDrive proveedorDrive) {
         this.servicioReadiness = servicioReadiness;
         this.servicioJwt = servicioJwt;
         this.passwordEncoder = passwordEncoder;
         this.usuarioRepository = usuarioRepository;
+        this.proveedorClassroom = proveedorClassroom;
+        this.proveedorDrive = proveedorDrive;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -41,6 +49,8 @@ public class PrecalentadorAplicacion {
             passwordEncoder.matches(PASSWORD_DUMMY, passwordEncoder.encode(PASSWORD_DUMMY));
             servicioJwt.generarTokenAcceso(
                     java.util.UUID.randomUUID(), ConstantesSeguridad.ROL_ADMIN);
+            proveedorClassroom.precalentar();
+            proveedorDrive.precalentar();
             log.info(
                     "Precalentamiento seguro completado en {} ms",
                     System.currentTimeMillis() - inicio);

@@ -10,12 +10,14 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.UserCredentials;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionPersonalizada;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 import pe.edu.ulasalle.sistemainvestigacion.models.ConfiguracionSistema;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.ConfiguracionSistemaRepository;
 
+@Slf4j
 @Component
 public class ProveedorDrive {
 
@@ -103,6 +105,9 @@ public class ProveedorDrive {
                         request.setConnectTimeout(5000);
                         request.setReadTimeout(15000);
                         request.setNumberOfRetries(2);
+                        if (request.getHeaders() != null) {
+                            request.getHeaders().set("Connection", "keep-alive");
+                        }
                     };
 
             this.cachedClient =
@@ -118,6 +123,18 @@ public class ProveedorDrive {
             throw e;
         } catch (Exception e) {
             throw new ExcepcionPersonalizada(MensajesDeError.ERROR_CONFIGURACION_GOOGLE);
+        }
+    }
+
+    public void precalentar() {
+        try {
+            Drive cliente = obtenerCliente();
+            if (cliente != null) {
+                cliente.files().list().setPageSize(1).setFields("files(id)").execute();
+            }
+            log.info("Precalentamiento de Google Drive completado exitosamente");
+        } catch (Exception e) {
+            log.debug("Precalentamiento de Drive omitido: {}", e.getMessage());
         }
     }
 }
