@@ -121,16 +121,11 @@ describe("ModalGenerarActividad", () => {
 			ejecutarGeneracion,
 		});
 
-		const onInicioEnvio = vi.fn();
-		const onFinEnvio = vi.fn();
-
 		render(
 			<ModalGenerarActividad
 				abierto={true}
 				alCerrar={alCerrar}
 				onActividadGenerada={onActividadGenerada}
-				onInicioEnvio={onInicioEnvio}
-				onFinEnvio={onFinEnvio}
 			/>,
 		);
 
@@ -159,11 +154,17 @@ describe("ModalGenerarActividad", () => {
 			fireEvent.click(btnConfirmar);
 		});
 
-		expect(alCerrar).toHaveBeenCalled();
-		expect(onInicioEnvio).toHaveBeenCalledWith("Actividad Test");
 		expect(ejecutarGeneracion).toHaveBeenCalled();
-		expect(onFinEnvio).toHaveBeenCalledWith(true, "Actividad Test");
+
+		expect(screen.getByText("Actividad de seguimiento generada")).toBeDefined();
+
+		const btnAceptarExito = screen.getByRole("button", {
+			name: "Aceptar",
+		});
+		fireEvent.click(btnAceptarExito);
+
 		expect(onActividadGenerada).toHaveBeenCalled();
+		expect(alCerrar).toHaveBeenCalled();
 	});
 
 	it("no abre confirmacion si configuracionValida es false", () => {
@@ -264,7 +265,9 @@ describe("ModalGenerarActividad", () => {
 			fireEvent.click(btnConfirmar);
 		});
 
-		expect(ejecutarGeneracion).toHaveBeenCalled();
+		const btnAceptar = screen.getByRole("button", { name: "Aceptar" });
+		fireEvent.click(btnAceptar);
+
 		expect(alCerrar).toHaveBeenCalled();
 	});
 

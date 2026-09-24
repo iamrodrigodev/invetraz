@@ -3,7 +3,6 @@ import { ClipboardCheck, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button.tsx";
 import { Card, CardContent } from "@/components/ui/Card.tsx";
-import { BadgeNotificacionEnvio } from "@/features/actividades/components/BadgeNotificacionEnvio.tsx";
 import { ModalGenerarActividad } from "@/features/actividades/components/ModalGenerarActividad.tsx";
 import {
 	esConfiguracionListaParaActividades,
@@ -20,15 +19,6 @@ export function ActividadesSeguimientoPage() {
 	} = useConfiguracionStore();
 	const [cargando, setCargando] = useState(!configuracionCargada);
 	const [modalGenerarAbierto, setModalGenerarAbierto] = useState(false);
-	const [notificacionEnvio, setNotificacionEnvio] = useState<{
-		visible: boolean;
-		estado: "enviando" | "exito" | "error";
-		titulo: string;
-	}>({
-		visible: false,
-		estado: "enviando",
-		titulo: "",
-	});
 
 	useEffect(() => {
 		let montado = true;
@@ -54,36 +44,8 @@ export function ActividadesSeguimientoPage() {
 
 	const configuracionValida = esConfiguracionListaParaActividades(credenciales, estadoConexion);
 
-	const manejarInicioEnvio = (titulo: string) => {
-		setNotificacionEnvio({
-			visible: true,
-			estado: "enviando",
-			titulo,
-		});
-	};
-
-	const manejarFinEnvio = (exito: boolean, titulo: string) => {
-		setNotificacionEnvio({
-			visible: true,
-			estado: exito ? "exito" : "error",
-			titulo,
-		});
-	};
-
 	return (
 		<div className="flex min-h-full w-full flex-1 flex-col">
-			<BadgeNotificacionEnvio
-				visible={notificacionEnvio.visible}
-				estado={notificacionEnvio.estado}
-				tituloTarea={notificacionEnvio.titulo}
-				onOcultar={() =>
-					setNotificacionEnvio((prev) => ({
-						...prev,
-						visible: false,
-					}))
-				}
-			/>
-
 			<div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
 				<div className="min-w-0">
 					<h1 className="font-extrabold font-heading text-2xl text-slate-900 tracking-tight sm:text-3xl">
@@ -159,8 +121,6 @@ export function ActividadesSeguimientoPage() {
 			<ModalGenerarActividad
 				abierto={modalGenerarAbierto}
 				alCerrar={() => setModalGenerarAbierto(false)}
-				onInicioEnvio={manejarInicioEnvio}
-				onFinEnvio={manejarFinEnvio}
 			/>
 		</div>
 	);

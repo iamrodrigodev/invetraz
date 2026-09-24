@@ -4,6 +4,7 @@ import { Modal } from "@/components/ui/Modal.tsx";
 import { FormGenerarActividad } from "@/features/actividades/components/FormGenerarActividad.tsx";
 import { ModalConfirmarGeneracion } from "@/features/actividades/components/ModalConfirmarGeneracion.tsx";
 import { ModalErrorGeneracion } from "@/features/actividades/components/ModalErrorGeneracion.tsx";
+import { ModalExitoGeneracion } from "@/features/actividades/components/ModalExitoGeneracion.tsx";
 import { useGenerarActividad } from "@/features/actividades/hooks/useGenerarActividad.ts";
 import {
 	GenerarActividadSchema,
@@ -16,16 +17,12 @@ export type ModalGenerarActividadProps = {
 	abierto: boolean;
 	alCerrar: () => void;
 	onActividadGenerada?: () => void;
-	onInicioEnvio?: (titulo: string) => void;
-	onFinEnvio?: (exito: boolean, titulo: string) => void;
 };
 
 export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 	abierto,
 	alCerrar,
 	onActividadGenerada,
-	onInicioEnvio,
-	onFinEnvio,
 }) => {
 	const {
 		clases,
@@ -36,11 +33,13 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 		cargandoClases,
 		cargandoPlantillas,
 		cargandoTemas,
+		generando,
 		cargarTemasDeClase,
 		ejecutarGeneracion,
 	} = useGenerarActividad(abierto);
 
 	const [modalConfirmarAbierto, setModalConfirmarAbierto] = useState(false);
+	const [modalExitoAbierto, setModalExitoAbierto] = useState(false);
 	const [modalErrorAbierto, setModalErrorAbierto] = useState(false);
 	const [resumen, setResumen] = useState<ResumenConfirmacionActividad | null>(null);
 	const [valoresActuales, setValoresActuales] = useState<GenerarActividadSchemaTipo | null>(null);
@@ -49,6 +48,7 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 		setResumen(null);
 		setValoresActuales(null);
 		setModalConfirmarAbierto(false);
+		setModalExitoAbierto(false);
 		setModalErrorAbierto(false);
 		alCerrar();
 	};
@@ -92,42 +92,35 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 			return;
 		}
 
-		const datosAEnviar = valoresActuales;
-		const tituloTarea = datosAEnviar.titulo;
-		setModalConfirmarAbierto(false);
-		manejarCancelar();
-
-		if (onInicioEnvio) {
-			onInicioEnvio(tituloTarea);
-		}
-
 		try {
-			const exito = await ejecutarGeneracion(datosAEnviar);
+			const exito = await ejecutarGeneracion(valoresActuales);
 			if (exito) {
-				if (onFinEnvio) {
-					onFinEnvio(true, tituloTarea);
-				}
-				if (onActividadGenerada) {
-					onActividadGenerada();
-				}
+				setModalConfirmarAbierto(false);
+				setModalExitoAbierto(true);
 			} else {
-				if (onFinEnvio) {
-					onFinEnvio(false, tituloTarea);
-				}
+				setModalConfirmarAbierto(false);
 				setModalErrorAbierto(true);
 			}
 		} catch {
-			if (onFinEnvio) {
-				onFinEnvio(false, tituloTarea);
-			}
+			setModalConfirmarAbierto(false);
 			setModalErrorAbierto(true);
+		}
+	};
+
+	const completarYSalir = () => {
+		setModalExitoAbierto(false);
+		setResumen(null);
+		setValoresActuales(null);
+		alCerrar();
+		if (onActividadGenerada) {
+			onActividadGenerada();
 		}
 	};
 
 	return (
 		<>
 			<Modal
-				abierto={abierto && !modalErrorAbierto}
+				abierto={abierto && !modalExitoAbierto && !modalErrorAbierto}
 				alCerrar={manejarCancelar}
 				titulo="Generar actividades de seguimiento"
 				className={modalConfirmarAbierto ? "pointer-events-none max-w-4xl" : "max-w-4xl"}
@@ -150,11 +143,13 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 
 			<ModalConfirmarGeneracion
 				abierto={modalConfirmarAbierto}
-				cargando={false}
+				cargando={generando}
 				resumen={resumen}
 				alConfirmar={ejecutarConfirmacion}
 				alCerrar={() => setModalConfirmarAbierto(false)}
 			/>
+
+			<ModalExitoGeneracion abierto={modalExitoAbierto} alAceptar={completarYSalir} />
 
 			<ModalErrorGeneracion
 				abierto={modalErrorAbierto}
