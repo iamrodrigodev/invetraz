@@ -329,7 +329,7 @@ export const ModalConfirmarGeneracion: React.FC<ModalConfirmarGeneracionProps> =
 						{cargando ? (
 							<>
 								<RefreshCw size={16} className="mr-2 animate-spin" />
-								Generando actividad de seguimiento
+								Generando...
 							</>
 						) : (
 							<>

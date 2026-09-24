@@ -105,7 +105,7 @@ describe("ModalConfirmarGeneracion", () => {
 			/>,
 		);
 
-		expect(screen.getByText("Generando actividad de seguimiento")).toBeDefined();
+		expect(screen.getByText("Generando...")).toBeDefined();
 		expect(screen.getByTestId("indicador-progreso-actividad")).toBeDefined();
 		expect(screen.getByText("Progreso de creación")).toBeDefined();
 		expect(screen.getByText("Paso 1 de 3")).toBeDefined();
@@ -114,7 +114,7 @@ describe("ModalConfirmarGeneracion", () => {
 		expect(screen.getByText("Asignando actividad a los alumnos")).toBeDefined();
 
 		const btnConfirmar = screen.getByRole("button", {
-			name: /Generando actividad de seguimiento/iu,
+			name: /Generando\.\.\./iu,
 		});
 		expect(btnConfirmar.getAttribute("disabled")).not.toBeNull();
 
