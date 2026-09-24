@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { obtenerTemasClase } from "@/features/actividades/api/actividades.api.ts";
-import { simularGeneracionActividad } from "@/features/actividades/mocks/actividadesCascaron.mock.ts";
+import {
+	generarActividadSeguimientoApi,
+	obtenerTemasClase,
+} from "@/features/actividades/api/actividades.api.ts";
 import { useClasesDocenteStore } from "@/features/actividades/store/useClasesDocenteStore.ts";
 import { usePlantillasSeguimientoStore } from "@/features/actividades/store/usePlantillasSeguimientoStore.ts";
 import type {
@@ -113,7 +115,9 @@ export function useGenerarActividad(activo = false) {
 			}
 			setGenerando(true);
 			try {
-				return await simularGeneracionActividad(datos);
+				return await generarActividadSeguimientoApi(datos);
+			} catch {
+				return false;
 			} finally {
 				setGenerando(false);
 			}

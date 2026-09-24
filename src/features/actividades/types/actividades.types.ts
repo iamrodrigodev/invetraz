@@ -43,4 +43,25 @@ export interface ResumenConfirmacionActividad {
 	esGoogleSheet?: boolean | undefined;
 }
 
+export interface CrearTareaPeticionDto {
+	titulo: string;
+	descripcion?: string | undefined;
+	puntajeMaximo?: number | undefined;
+	fechaLimite?: string | undefined;
+	estado?: string | undefined;
+	idTema?: string | undefined;
+	idPlantilla?: string | undefined;
+}
+
+export interface TareaRespuestaDto {
+	idTarea: string;
+	idClase?: string | undefined;
+	titulo: string;
+	descripcion?: string | undefined;
+	estado?: string | undefined;
+	enlaceTarea?: string | undefined;
+	fechaLimite?: string | null | undefined;
+	puntajeMaximo?: number | null | undefined;
+}
+
 export const TiposActividades = true;

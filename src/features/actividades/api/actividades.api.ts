@@ -21,6 +21,29 @@ export const TemaClassroomDtoSchema = z.object({
 	nombre: z.string(),
 });
 
+export const TareaClassroomDtoSchema = z.object({
+	idTarea: z.string(),
+	idClase: z.string().optional(),
+	titulo: z.string(),
+	descripcion: z.string().optional(),
+	estado: z.string().optional(),
+	enlaceTarea: z.string().optional(),
+	fechaLimite: z.string().nullable().optional(),
+	puntajeMaximo: z.number().nullable().optional(),
+});
+export type TareaClassroomDto = z.infer<typeof TareaClassroomDtoSchema>;
+
+export const CrearTareaPeticionDtoSchema = z.object({
+	titulo: z.string().min(1),
+	descripcion: z.string().optional(),
+	puntajeMaximo: z.number().optional(),
+	fechaLimite: z.string().optional(),
+	estado: z.string().optional(),
+	idTema: z.string().optional(),
+	idPlantilla: z.string().optional(),
+});
+export type CrearTareaPeticionDto = z.infer<typeof CrearTareaPeticionDtoSchema>;
+
 const PLANTILLA_MOCK_INVALIDA: PlantillaSeguimientoOpcion = {
 	id: "mock-plantilla-seguimiento-invalida",
 	nombre: "Plantilla de prueba - estructura inválida",
@@ -91,19 +114,31 @@ export async function obtenerTemasClase(idClase: string): Promise<TemaClase[]> {
 export async function generarActividadSeguimientoApi(
 	datos: FormGenerarActividadValores,
 ): Promise<boolean> {
-	const res = await fetch(`${entorno.VITE_API_BASE_URL}/clases/${datos.idClase}/tareas`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		credentials: "include",
-		body: JSON.stringify({
-			titulo: datos.titulo,
-			descripcion: datos.descripcion,
-			fechaLimite: datos.fechaVencimiento
-				? `${datos.fechaVencimiento}T${datos.horaVencimiento || "23:59"}:00`
-				: undefined,
-		}),
-	});
-	return res.ok;
+	const peticionDto: CrearTareaPeticionDto = {
+		titulo: datos.titulo,
+		descripcion: datos.descripcion || undefined,
+		idTema: datos.idTema || undefined,
+		idPlantilla: datos.idPlantilla || undefined,
+		fechaLimite: datos.fechaVencimiento
+			? `${datos.fechaVencimiento}T${datos.horaVencimiento || "23:59"}:00`
+			: undefined,
+	};
+
+	try {
+		await ejecutarPeticion(
+			`${entorno.VITE_API_BASE_URL}/clases/${datos.idClase}/tareas`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(peticionDto),
+			},
+			TareaClassroomDtoSchema,
+			"Error al generar la actividad de seguimiento",
+		);
+		return true;
+	} catch {
+		return false;
+	}
 }

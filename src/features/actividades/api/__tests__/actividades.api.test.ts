@@ -114,7 +114,17 @@ describe("actividades.api", () => {
 	});
 
 	it("generarActividadSeguimientoApi envia la tarea con hora especifica o por defecto 23:59", async () => {
-		const mockFetch = vi.fn().mockResolvedValue({ ok: true });
+		const mockFetch = vi.fn().mockResolvedValue({
+			ok: true,
+			status: 201,
+			headers: new Headers({ "content-type": "application/json" }),
+			json: async () => ({
+				datos: {
+					idTarea: "t-creada",
+					titulo: "Tarea creada",
+				},
+			}),
+		});
 		vi.stubGlobal("fetch", mockFetch);
 
 		const resConHora = await generarActividadSeguimientoApi({
@@ -124,6 +134,7 @@ describe("actividades.api", () => {
 			fechaVencimiento: "2026-10-15",
 			horaVencimiento: "18:30",
 			descripcion: "Desc",
+			idTema: "tema-1",
 		});
 		expect(resConHora).toBe(true);
 

@@ -92,6 +92,10 @@ describe("useGenerarActividad", () => {
 	});
 
 	it("ejecuta generacion exitosamente cuando la configuracion es valida", async () => {
+		const spyGenerar = vi
+			.spyOn(actividadesApi, "generarActividadSeguimientoApi")
+			.mockResolvedValue(true);
+
 		useConfiguracionStore.setState({
 			estadoConexion: "conectado",
 			credenciales: {
@@ -109,7 +113,7 @@ describe("useGenerarActividad", () => {
 		expect(result.current.carpetaDrive.id).toBe("folder-123");
 
 		let res = false;
-		const generacionPromise = act(async () => {
+		await act(async () => {
 			res = await result.current.ejecutarGeneracion({
 				idClase: "c-101",
 				titulo: "Nueva Tarea",
@@ -118,9 +122,12 @@ describe("useGenerarActividad", () => {
 			});
 		});
 
-		await vi.advanceTimersByTimeAsync(1500);
-		await generacionPromise;
-
+		expect(spyGenerar).toHaveBeenCalledWith({
+			idClase: "c-101",
+			titulo: "Nueva Tarea",
+			idPlantilla: "p-1",
+			fechaVencimiento: "2026-10-10",
+		});
 		expect(res).toBe(true);
 	});
 });
