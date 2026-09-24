@@ -81,16 +81,18 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
                 coursework.setDueTime(dueTime);
             }
 
-            if (tarea.getIdTema() != null && !tarea.getIdTema().isBlank() && !tarea.getIdTema().startsWith("mock")) {
+            if (tarea.getIdTema() != null
+                    && !tarea.getIdTema().isBlank()
+                    && !tarea.getIdTema().startsWith("mock")) {
                 coursework.setTopicId(tarea.getIdTema());
             }
 
-            if (tarea.getIdPlantilla() != null && !tarea.getIdPlantilla().isBlank() && !tarea.getIdPlantilla().startsWith("mock")) {
+            if (tarea.getIdPlantilla() != null
+                    && !tarea.getIdPlantilla().isBlank()
+                    && !tarea.getIdPlantilla().startsWith("mock")) {
                 DriveFile driveFile = new DriveFile().setId(tarea.getIdPlantilla());
                 SharedDriveFile sharedDriveFile =
-                        new SharedDriveFile()
-                                .setDriveFile(driveFile)
-                                .setShareMode("STUDENT_COPY");
+                        new SharedDriveFile().setDriveFile(driveFile).setShareMode("STUDENT_COPY");
                 Material material = new Material().setDriveFile(sharedDriveFile);
                 coursework.setMaterials(Collections.singletonList(material));
             }

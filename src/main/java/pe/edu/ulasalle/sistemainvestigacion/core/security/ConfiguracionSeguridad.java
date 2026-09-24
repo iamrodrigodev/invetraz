@@ -2,6 +2,7 @@ package pe.edu.ulasalle.sistemainvestigacion.core.security;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +29,11 @@ public class ConfiguracionSeguridad {
             FiltroAutenticacionJwt filtroAutenticacionJwt,
             @Value("${app.cors.origins}") String origenesCors) {
         this.filtroAutenticacionJwt = filtroAutenticacionJwt;
-        this.origenesCors = Arrays.asList(origenesCors.split(","));
+        this.origenesCors =
+                Stream.of(origenesCors.split(","))
+                        .map(String::trim)
+                        .filter(origen -> !origen.isBlank())
+                        .toList();
     }
 
     @Bean
@@ -111,8 +116,7 @@ public class ConfiguracionSeguridad {
         configuration.setAllowedOrigins(origenesCors);
         configuration.setAllowedMethods(
                 Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(
-                Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept"));
+        configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

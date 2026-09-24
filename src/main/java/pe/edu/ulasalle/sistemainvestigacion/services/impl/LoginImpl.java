@@ -3,6 +3,7 @@ package pe.edu.ulasalle.sistemainvestigacion.services.impl;
 import java.util.Locale;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionDeNegocio;
@@ -24,16 +25,20 @@ public class LoginImpl implements CasoUsoLogin {
     private final PasswordEncoder passwordEncoder;
     private final ServicioJwt servicioJwt;
     private final ServicioLimitadorIntentos servicioLimitadorIntentos;
+    private final boolean actualizarPasswordEnLogin;
 
     public LoginImpl(
             UsuarioRepository usuarioRepository,
             PasswordEncoder passwordEncoder,
             ServicioJwt servicioJwt,
-            ServicioLimitadorIntentos servicioLimitadorIntentos) {
+            ServicioLimitadorIntentos servicioLimitadorIntentos,
+            @Value("${app.security.upgrade-password-on-login:false}")
+                    boolean actualizarPasswordEnLogin) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.servicioJwt = servicioJwt;
         this.servicioLimitadorIntentos = servicioLimitadorIntentos;
+        this.actualizarPasswordEnLogin = actualizarPasswordEnLogin;
     }
 
     @Override
@@ -84,10 +89,10 @@ public class LoginImpl implements CasoUsoLogin {
 
         servicioLimitadorIntentos.limpiarIntentos(claveRateLimit);
 
-        if (passwordEncoder.upgradeEncoding(usuario.getPassword())) {
+        if (actualizarPasswordEnLogin && passwordEncoder.upgradeEncoding(usuario.getPassword())) {
             usuario.setPassword(passwordEncoder.encode(peticion.password()));
-            usuarioRepository.saveAndFlush(usuario);
-            log.info(
+            usuarioRepository.save(usuario);
+            log.debug(
                     "Password de usuario {} actualizado transparentemente a BCrypt",
                     emailNormalizado);
         }

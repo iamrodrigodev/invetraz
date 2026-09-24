@@ -45,7 +45,11 @@ class LoginImplTest {
         servicioLimitadorIntentos = new ServicioLimitadorIntentos();
         loginService =
                 new LoginImpl(
-                        usuarioRepository, passwordEncoder, servicioJwt, servicioLimitadorIntentos);
+                        usuarioRepository,
+                        passwordEncoder,
+                        servicioJwt,
+                        servicioLimitadorIntentos,
+                        false);
     }
 
     @Test
@@ -63,7 +67,6 @@ class LoginImplTest {
         when(usuarioRepository.findByEmail("admin@ulasalle.edu.pe"))
                 .thenReturn(Optional.of(usuario));
         when(passwordEncoder.matches(rawPassword, encodedPassword)).thenReturn(true);
-        when(passwordEncoder.upgradeEncoding(encodedPassword)).thenReturn(false);
         when(servicioJwt.generarTokenAcceso(idUsuario, ConstantesSeguridad.ROL_ADMIN))
                 .thenReturn("token-de-prueba");
 
@@ -117,7 +120,14 @@ class LoginImplTest {
     }
 
     @Test
-    void ejecutar_upgradeEncodingNecesario_actualizaPasswordYRetornaToken() {
+    void ejecutar_upgradeEncodingNecesarioConFlagActivo_actualizaPasswordYRetornaToken() {
+        loginService =
+                new LoginImpl(
+                        usuarioRepository,
+                        passwordEncoder,
+                        servicioJwt,
+                        servicioLimitadorIntentos,
+                        true);
         UUID idUsuario = UUID.randomUUID();
         String rawPassword = "Password123";
         String legacyHash = "$argon2id$v=19$m=1024,t=1,p=1$oldhash";
@@ -144,7 +154,36 @@ class LoginImplTest {
         assertNotNull(respuesta);
         assertEquals("token-upgrade", respuesta.tokenAcceso());
         assertEquals(nuevoBcrypt, usuario.getPassword());
-        verify(usuarioRepository).saveAndFlush(usuario);
+        verify(usuarioRepository).save(usuario);
+    }
+
+    @Test
+    void ejecutar_upgradeEncodingNecesarioConFlagInactivo_noActualizaPassword() {
+        UUID idUsuario = UUID.randomUUID();
+        String rawPassword = "Password123";
+        String legacyHash = "$argon2id$v=19$m=1024,t=1,p=1$oldhash";
+
+        Usuario usuario =
+                Usuario.builder()
+                        .id(idUsuario)
+                        .email("admin@ulasalle.edu.pe")
+                        .password(legacyHash)
+                        .build();
+
+        when(usuarioRepository.findByEmail("admin@ulasalle.edu.pe"))
+                .thenReturn(Optional.of(usuario));
+        when(passwordEncoder.matches(rawPassword, legacyHash)).thenReturn(true);
+        when(servicioJwt.generarTokenAcceso(idUsuario, ConstantesSeguridad.ROL_ADMIN))
+                .thenReturn("token-sin-upgrade");
+
+        LoginPeticion peticion = new LoginPeticion("admin@ulasalle.edu.pe", rawPassword);
+        LoginRespuesta respuesta = loginService.ejecutar(peticion);
+
+        assertNotNull(respuesta);
+        assertEquals("token-sin-upgrade", respuesta.tokenAcceso());
+        assertEquals(legacyHash, usuario.getPassword());
+        verify(passwordEncoder, never()).upgradeEncoding(legacyHash);
+        verify(usuarioRepository, never()).save(any());
     }
 
     @Test
@@ -193,7 +232,6 @@ class LoginImplTest {
         when(usuarioRepository.findByEmailIgnoreCase("admin@ulasalle.edu.pe"))
                 .thenReturn(Optional.of(usuario));
         when(passwordEncoder.matches(rawPassword, encodedPassword)).thenReturn(true);
-        when(passwordEncoder.upgradeEncoding(encodedPassword)).thenReturn(false);
         when(servicioJwt.generarTokenAcceso(idUsuario, ConstantesSeguridad.ROL_ADMIN))
                 .thenReturn("token-fallback");
 
