@@ -136,7 +136,7 @@ describe("PrevisualizacionPlantilla", () => {
 		);
 		const badgeInvalida = screen.getByText("Google Sheets").closest("span");
 		expect(badgeInvalida).toBeDefined();
-		expect(badgeInvalida?.className).toContain("text-primary");
+		expect(badgeInvalida?.className).toContain("text-red-700");
 		expect(screen.getByText("Estructura inválida")).toBeDefined();
 
 		rerender(
@@ -152,7 +152,7 @@ describe("PrevisualizacionPlantilla", () => {
 		);
 		const badgeXlsx = screen.getByText("XLSX").closest("span");
 		expect(badgeXlsx).toBeDefined();
-		expect(badgeXlsx?.className).toContain("text-primary");
+		expect(badgeXlsx?.className).toContain("text-red-700");
 		expect(screen.getByText("Estructura inválida")).toBeDefined();
 	});
 });

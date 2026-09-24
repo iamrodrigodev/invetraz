@@ -53,7 +53,7 @@ export const PrevisualizacionPlantilla: React.FC<PrevisualizacionPlantillaProps>
 								{plantilla.nombre}
 							</span>
 							<Badge
-								variant="primary"
+								variant="destructive"
 								className="inline-flex shrink-0 items-center gap-1 px-1.5 py-0 font-semibold text-[10px] uppercase tracking-wider"
 							>
 								<FileSpreadsheet size={10} className="shrink-0" />
