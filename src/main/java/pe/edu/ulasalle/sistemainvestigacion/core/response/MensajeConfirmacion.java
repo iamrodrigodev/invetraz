@@ -3,7 +3,8 @@ package pe.edu.ulasalle.sistemainvestigacion.core.response;
 public enum MensajeConfirmacion {
     OPERACION_EXITOSA("Operacion realizada exitosamente", 200),
     RECURSO_CREADO("Recurso creado exitosamente", 201),
-    SISTEMA_OPERATIVO("El sistema de investigacion esta funcionando correctamente.", 200);
+    SISTEMA_OPERATIVO("El sistema de investigacion esta funcionando correctamente.", 200),
+    SISTEMA_LISTO("El sistema esta listo para recibir trafico.", 200);
 
     private final String mensaje;
     private final int codigo;

@@ -65,7 +65,13 @@ public class ConfiguracionSeguridad {
                 .authorizeHttpRequests(
                         autorizacion ->
                                 autorizacion
-                                        .requestMatchers("/", "/api/v1/estado")
+                                        .requestMatchers(
+                                                "/",
+                                                "/api/v1/estado",
+                                                "/api/v1/estado/readiness",
+                                                "/actuator/health",
+                                                "/actuator/health/liveness",
+                                                "/actuator/health/readiness")
                                         .permitAll()
                                         .requestMatchers("/api/v1/setup/**")
                                         .permitAll()
