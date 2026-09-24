@@ -2,11 +2,11 @@ import { AlertCircle, AlertTriangle, CheckCircle2, Info, X } from "lucide-react"
 import type React from "react";
 import { cn } from "@/utils/cn.ts";
 
-export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
+export type AlertProps = React.HTMLAttributes<HTMLDivElement> & {
 	message: string;
 	variant?: "error" | "success" | "warning" | "info";
 	onClose?: () => void;
-}
+};
 
 export const Alert: React.FC<AlertProps> = ({
 	message,

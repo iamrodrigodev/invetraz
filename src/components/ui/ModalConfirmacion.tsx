@@ -2,7 +2,7 @@ import { AlertCircle, Check, LogOut, RefreshCw, X } from "lucide-react";
 import { Button } from "@/components/ui/Button.tsx";
 import { Modal } from "@/components/ui/Modal.tsx";
 
-export interface PropsModalConfirmacion {
+export type PropsModalConfirmacion = {
 	abierto: boolean;
 	titulo: string;
 	descripcion: string;
@@ -12,7 +12,7 @@ export interface PropsModalConfirmacion {
 	varianteBoton?: "destructivo" | "primario";
 	alConfirmar: () => void;
 	alCerrar: () => void;
-}
+};
 
 export type ModalConfirmacionProps = PropsModalConfirmacion;
 

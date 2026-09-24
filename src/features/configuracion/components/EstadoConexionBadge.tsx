@@ -10,10 +10,10 @@ export type TipoEstadoConexion =
 	| "error"
 	| "no_disponible";
 
-interface EstadoConexionBadgeProps {
+type EstadoConexionBadgeProps = {
 	estado: TipoEstadoConexion;
 	className?: string;
-}
+};
 
 export const EstadoConexionBadge: React.FC<EstadoConexionBadgeProps> = ({ estado, className }) => {
 	switch (estado) {

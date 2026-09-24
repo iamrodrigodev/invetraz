@@ -14,10 +14,10 @@ import {
 	useConfiguracionStore,
 } from "@/features/configuracion/store/useConfiguracionStore.ts";
 
-export interface CarpetaDriveInfo {
+export type CarpetaDriveInfo = {
 	id: string;
 	nombre: string;
-}
+};
 
 export function useGenerarActividad(activo = false) {
 	const {

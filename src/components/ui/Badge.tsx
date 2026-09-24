@@ -1,9 +1,9 @@
 import type React from "react";
 import { cn } from "@/utils/cn.ts";
 
-export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
+export type BadgeProps = React.HTMLAttributes<HTMLSpanElement> & {
 	variant?: "primary" | "success" | "warning" | "destructive" | "slate" | "blue";
-}
+};
 
 export function Badge({ className, variant = "primary", children, ...props }: BadgeProps) {
 	const variantStyles = {

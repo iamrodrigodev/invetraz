@@ -1,8 +1,8 @@
-export interface ReferenciaPlantilla {
+export type ReferenciaPlantilla = {
 	tipoMime?: string | null | undefined;
 	enlaceWeb?: string | null | undefined;
 	nombre?: string | undefined;
-}
+};
 
 export function esFormatoGoogleSheet(plantilla?: ReferenciaPlantilla | null): boolean {
 	if (!plantilla) {

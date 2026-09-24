@@ -3,12 +3,12 @@ import type React from "react";
 import { useState } from "react";
 import { Input, type InputProps } from "@/components/ui/Input.tsx";
 
-export interface CampoCredencialProps extends Omit<InputProps, "rightElement"> {
+export type CampoCredencialProps = Omit<InputProps, "rightElement"> & {
 	label: string;
 	descripcion?: React.ReactNode;
 	obligatorio?: boolean;
 	esSensible?: boolean;
-}
+};
 
 export const CampoCredencial = ({
 	id,

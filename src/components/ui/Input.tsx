@@ -2,13 +2,13 @@ import type React from "react";
 import { useEffect, useId, useState } from "react";
 import { cn } from "@/utils/cn.ts";
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 	error?: boolean;
 	errorMessage?: React.ReactNode;
 	rightElement?: React.ReactNode;
 	showCount?: boolean;
 	charCount?: number;
-}
+};
 
 export const Input = ({
 	id,

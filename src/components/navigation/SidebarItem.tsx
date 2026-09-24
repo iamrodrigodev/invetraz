@@ -2,13 +2,13 @@ import { precargarModulo } from "@/components/navigation/precargaModulos.ts";
 import type { ItemNavegacion } from "@/components/navigation/types.ts";
 import { cn } from "@/utils/cn.ts";
 
-export interface SidebarItemProps {
+export type SidebarItemProps = {
 	item: ItemNavegacion;
 	esActivo: boolean;
 	estaColapsado: boolean;
 	alHacerClic: () => void;
 	className?: string;
-}
+};
 
 export function SidebarItem({
 	item,

@@ -3,7 +3,7 @@ import type React from "react";
 import { Button } from "@/components/ui/Button.tsx";
 import { cn } from "@/utils/cn.ts";
 
-export interface PiePaginacionPlantillasProps {
+export type PiePaginacionPlantillasProps = {
 	indiceInicio: number;
 	indiceFin: number;
 	totalItems: number;
@@ -11,7 +11,7 @@ export interface PiePaginacionPlantillasProps {
 	totalPaginas: number;
 	onCambiarPagina: (pagina: number) => void;
 	className?: string;
-}
+};
 
 export const PiePaginacionPlantillas: React.FC<PiePaginacionPlantillasProps> = ({
 	indiceInicio,

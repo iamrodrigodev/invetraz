@@ -25,10 +25,10 @@ import {
 	CambiarClavePaso2Schema,
 } from "@/schemas/auth.schemas.ts";
 
-export interface ModalCambiarClaveProps {
+export type ModalCambiarClaveProps = {
 	abierto: boolean;
 	alCerrar: () => void;
-}
+};
 
 export function ModalCambiarClave({ abierto, alCerrar }: ModalCambiarClaveProps) {
 	const claveActualId = useId();

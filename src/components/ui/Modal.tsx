@@ -9,13 +9,13 @@ import { cn } from "@/utils/cn.ts";
 let modalesAbiertos = 0;
 let overflowOriginal = "";
 
-export interface ModalProps {
+export type ModalProps = {
 	abierto: boolean;
 	alCerrar: () => void;
 	titulo?: string;
 	children: React.ReactNode;
 	className?: string;
-}
+};
 
 export function Modal({ abierto, alCerrar, titulo, children, className }: ModalProps) {
 	const [montado, setMontado] = useState(false);

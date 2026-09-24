@@ -1,16 +1,16 @@
-export interface ClaseDocente {
+export type ClaseDocente = {
 	idClassroom: string;
 	nombre: string;
 	seccion?: string | undefined;
 	estado?: string | undefined;
-}
+};
 
-export interface TemaClase {
+export type TemaClase = {
 	idTema: string;
 	nombre: string;
-}
+};
 
-export interface PlantillaSeguimientoOpcion {
+export type PlantillaSeguimientoOpcion = {
 	id: string;
 	nombre: string;
 	tipoMime?: string | null | undefined;
@@ -19,9 +19,9 @@ export interface PlantillaSeguimientoOpcion {
 	estructuraValida: boolean;
 	mensajeErrorEstructura?: string | undefined;
 	erroresEstructura?: string[] | undefined;
-}
+};
 
-export interface FormGenerarActividadValores {
+export type FormGenerarActividadValores = {
 	idClase: string;
 	titulo: string;
 	fechaVencimiento: string;
@@ -29,9 +29,9 @@ export interface FormGenerarActividadValores {
 	descripcion?: string | undefined;
 	horaVencimiento?: string | undefined;
 	idTema?: string | undefined;
-}
+};
 
-export interface ResumenConfirmacionActividad {
+export type ResumenConfirmacionActividad = {
 	nombreClase: string;
 	titulo: string;
 	nombrePlantilla: string;
@@ -41,9 +41,9 @@ export interface ResumenConfirmacionActividad {
 	descripcion?: string | undefined;
 	enlacePlantillaWeb?: string | null | undefined;
 	esGoogleSheet?: boolean | undefined;
-}
+};
 
-export interface CrearTareaPeticionDto {
+export type CrearTareaPeticionDto = {
 	titulo: string;
 	descripcion?: string | undefined;
 	puntajeMaximo?: number | undefined;
@@ -51,9 +51,9 @@ export interface CrearTareaPeticionDto {
 	estado?: string | undefined;
 	idTema?: string | undefined;
 	idPlantilla?: string | undefined;
-}
+};
 
-export interface TareaRespuestaDto {
+export type TareaRespuestaDto = {
 	idTarea: string;
 	idClase?: string | undefined;
 	titulo: string;
@@ -62,6 +62,6 @@ export interface TareaRespuestaDto {
 	enlaceTarea?: string | undefined;
 	fechaLimite?: string | null | undefined;
 	puntajeMaximo?: number | null | undefined;
-}
+};
 
 export const TiposActividades = true;

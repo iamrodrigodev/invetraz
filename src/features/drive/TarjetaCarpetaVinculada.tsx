@@ -7,13 +7,13 @@ import {
 	resolverVistaCarpetaDrive,
 } from "@/features/drive/estadoCarpetaDrive.ts";
 
-export interface TarjetaCarpetaVinculadaProps {
+export type TarjetaCarpetaVinculadaProps = {
 	nombre?: string | null | undefined;
 	carpetaId: string;
 	textoBoton?: string | undefined;
 	estado?: EstadoCarpetaDrive | undefined;
 	compacto?: boolean | undefined;
-}
+};
 
 export const TarjetaCarpetaVinculada: React.FC<TarjetaCarpetaVinculadaProps> = ({
 	nombre,

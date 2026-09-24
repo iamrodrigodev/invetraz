@@ -3,14 +3,14 @@ import { obtenerClasesDocente } from "@/features/actividades/api/actividades.api
 import type { ClaseDocente } from "@/features/actividades/types/actividades.types.ts";
 import { registrarLimpiadorSesion } from "@/utils/eventosSesion.ts";
 
-interface ClasesDocenteState {
+type ClasesDocenteState = {
 	clases: ClaseDocente[];
 	cargando: boolean;
 	cargado: boolean;
 	error: string | null;
 	cargarClases: (forzar?: boolean) => Promise<ClaseDocente[]>;
 	limpiar: () => void;
-}
+};
 
 export const useClasesDocenteStore = create<ClasesDocenteState>((set, get) => ({
 	clases: [],

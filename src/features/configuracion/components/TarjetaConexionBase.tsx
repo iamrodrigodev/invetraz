@@ -14,7 +14,7 @@ import {
 	type TipoEstadoConexion,
 } from "@/features/configuracion/components/EstadoConexionBadge.tsx";
 
-export interface TarjetaConexionBaseProps {
+export type TarjetaConexionBaseProps = {
 	titulo: string;
 	descripcion: string;
 	icono: React.ComponentType<{ size?: number; className?: string }>;
@@ -38,7 +38,7 @@ export interface TarjetaConexionBaseProps {
 	onSubmit?: ((e: React.SyntheticEvent) => void) | undefined;
 	cabeceraExtra?: React.ReactNode;
 	children: React.ReactNode;
-}
+};
 
 export const TarjetaConexionBase: React.FC<TarjetaConexionBaseProps> = ({
 	titulo,

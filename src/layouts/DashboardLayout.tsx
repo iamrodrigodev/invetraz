@@ -13,11 +13,11 @@ import { cn } from "@/utils/cn.ts";
 const BREAKPOINT_TABLET = 768;
 const BREAKPOINT_DESKTOP = 1024;
 
-export interface DashboardLayoutProps {
+export type DashboardLayoutProps = {
 	moduloActivo?: ModuloId;
 	alCambiarModulo?: (modulo: ModuloId) => void;
 	children?: React.ReactNode;
-}
+};
 
 export function DashboardLayout({
 	moduloActivo,

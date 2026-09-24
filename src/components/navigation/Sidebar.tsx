@@ -10,7 +10,7 @@ import { cn } from "@/utils/cn.ts";
 
 export { ELEMENTOS_NAVEGACION };
 
-export interface SidebarProps {
+export type SidebarProps = {
 	moduloActivo: ModuloId;
 	alSeleccionarModulo: (id: ModuloId) => void;
 	estaColapsado: boolean;
@@ -19,7 +19,7 @@ export interface SidebarProps {
 	className?: string;
 	alSolicitarCerrarSesion?: () => void;
 	alCerrarMenuMovil?: () => void;
-}
+};
 
 export function Sidebar({
 	moduloActivo,

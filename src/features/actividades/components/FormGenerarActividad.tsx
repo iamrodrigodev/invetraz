@@ -23,7 +23,7 @@ import type {
 } from "@/features/actividades/types/actividades.types.ts";
 import { TarjetaCarpetaVinculada } from "@/features/drive/TarjetaCarpetaVinculada.tsx";
 
-export interface FormGenerarActividadProps {
+export type FormGenerarActividadProps = {
 	valoresIniciales?: Partial<GenerarActividadSchemaTipo> | null | undefined;
 	clases: ClaseDocente[];
 	plantillas: PlantillaSeguimientoOpcion[];
@@ -36,7 +36,7 @@ export interface FormGenerarActividadProps {
 	onCambioClase?: ((idClase: string) => void) | undefined;
 	alEnviar: (datos: GenerarActividadSchemaTipo) => void;
 	alCancelar: () => void;
-}
+};
 
 export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 	valoresIniciales,

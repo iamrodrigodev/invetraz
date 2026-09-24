@@ -17,13 +17,13 @@ import { Button } from "@/components/ui/Button.tsx";
 import { Modal } from "@/components/ui/Modal.tsx";
 import type { ResumenConfirmacionActividad } from "@/features/actividades/types/actividades.types.ts";
 
-export interface ModalConfirmarGeneracionProps {
+export type ModalConfirmarGeneracionProps = {
 	abierto: boolean;
 	cargando: boolean;
 	resumen: ResumenConfirmacionActividad | null;
 	alConfirmar: () => void;
 	alCerrar: () => void;
-}
+};
 
 function formatearHora12(horaStr: string): string {
 	if (!horaStr) {

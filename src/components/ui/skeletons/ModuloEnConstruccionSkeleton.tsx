@@ -1,9 +1,9 @@
 import { Skeleton } from "@/components/ui/Skeleton.tsx";
 import { cn } from "@/utils/cn.ts";
 
-export interface ModuloEnConstruccionSkeletonProps {
+export type ModuloEnConstruccionSkeletonProps = {
 	tituloAncho: string;
-}
+};
 
 export function ModuloEnConstruccionSkeleton({ tituloAncho }: ModuloEnConstruccionSkeletonProps) {
 	return (

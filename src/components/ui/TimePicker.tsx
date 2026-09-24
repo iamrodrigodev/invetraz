@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button.tsx";
 import { useClickOutside } from "@/hooks/useClickOutside.ts";
 import { cn } from "@/utils/cn.ts";
 
-export interface TimePickerProps {
+export type TimePickerProps = {
 	id?: string | undefined;
 	name?: string | undefined;
 	value?: string | undefined;
@@ -19,7 +19,7 @@ export interface TimePickerProps {
 	errorMessage?: React.ReactNode | undefined;
 	className?: string | undefined;
 	posicionDropdown?: "auto" | "abajo" | "arriba" | undefined;
-}
+};
 
 const HORAS_OPCIONES = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0"));
 

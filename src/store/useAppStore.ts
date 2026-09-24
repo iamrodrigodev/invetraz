@@ -10,7 +10,7 @@ import {
 	programarExpiracionAutomatica,
 } from "@/utils/sesion.ts";
 
-interface AppState {
+type AppState = {
 	configurado: boolean | null;
 	autenticado: boolean | null;
 	usuarioEmail: string | null;
@@ -20,7 +20,7 @@ interface AppState {
 	setConfigurado: (valor: boolean) => void;
 	setAutenticado: (valor: boolean, email?: string | null, tokenAcceso?: string) => void;
 	cerrarSesion: () => Promise<void>;
-}
+};
 
 const configuradoCacheado =
 	typeof window !== "undefined" && localStorage.getItem("sistema_configurado") === "true";

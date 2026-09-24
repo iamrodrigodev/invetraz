@@ -10,11 +10,11 @@ import type { GenerarActividadSchemaTipo } from "@/features/actividades/schemas/
 import type { ResumenConfirmacionActividad } from "@/features/actividades/types/actividades.types.ts";
 import { esFormatoGoogleSheet } from "@/utils/formatoPlantilla.ts";
 
-export interface ModalGenerarActividadProps {
+export type ModalGenerarActividadProps = {
 	abierto: boolean;
 	alCerrar: () => void;
 	onActividadGenerada?: () => void;
-}
+};
 
 export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 	abierto,

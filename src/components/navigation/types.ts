@@ -11,10 +11,10 @@ export const ModuloIdSchema = z.enum([
 
 export type ModuloId = z.infer<typeof ModuloIdSchema>;
 
-export interface ItemNavegacion {
+export type ItemNavegacion = {
 	id: ModuloId;
 	titulo: string;
 	icono: LucideIcon;
 	etiquetaMenu?: string;
 	descripcion?: string;
-}
+};

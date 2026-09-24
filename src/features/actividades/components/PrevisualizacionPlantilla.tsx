@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/Button.tsx";
 import type { PlantillaSeguimientoOpcion } from "@/features/actividades/types/actividades.types.ts";
 import { obtenerEtiquetaFormatoPlantilla } from "@/utils/formatoPlantilla.ts";
 
-export interface PrevisualizacionPlantillaProps {
+export type PrevisualizacionPlantillaProps = {
 	plantilla?: PlantillaSeguimientoOpcion | null | undefined;
 	validando?: boolean | undefined;
-}
+};
 
 export const PrevisualizacionPlantilla: React.FC<PrevisualizacionPlantillaProps> = ({
 	plantilla,

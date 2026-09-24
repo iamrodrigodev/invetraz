@@ -1,8 +1,8 @@
 import { Skeleton } from "@/components/ui/Skeleton.tsx";
 
-export interface AuthCardSkeletonProps {
+export type AuthCardSkeletonProps = {
 	esSetup?: boolean;
-}
+};
 
 export function AuthCardSkeleton({ esSetup }: AuthCardSkeletonProps = {}) {
 	const isSetup =

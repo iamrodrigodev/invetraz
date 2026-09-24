@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
-export interface OpcionesClipboard {
+export type OpcionesClipboard = {
 	tiempoResetMs?: number;
-}
+};
 
 export function useClipboard(opciones: OpcionesClipboard = {}) {
 	const { tiempoResetMs = 2000 } = opciones;

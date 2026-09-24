@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/Button.tsx";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card.tsx";
 import { useCopiarTexto } from "@/features/documentacion/hooks/useCopiarTexto.ts";
 
-interface ScopeInfo {
+type ScopeInfo = {
 	id: string;
 	nombre: string;
 	scope: string;
-}
+};
 
 const SCOPES_CLASSROOM: ScopeInfo[] = [
 	{

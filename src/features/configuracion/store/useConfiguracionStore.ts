@@ -37,7 +37,7 @@ export function esConfiguracionListaParaActividades(
 	return googleValido && driveValido;
 }
 
-interface ConfiguracionState {
+type ConfiguracionState = {
 	credenciales: ActualizarCredencialesPeticion;
 	estadoConexion: TipoEstadoConexion;
 	cargado: boolean;
@@ -47,7 +47,7 @@ interface ConfiguracionState {
 	verificarConexion: (datos?: ActualizarCredencialesPeticion) => Promise<ResultadoVerificacion>;
 	actualizarCarpetaDrive: (id: string, nombre: string | null, verificado?: boolean) => void;
 	limpiar: () => void;
-}
+};
 
 const VALORES_POR_DEFECTO: ActualizarCredencialesPeticion = {
 	googleClientId: "",

@@ -21,10 +21,10 @@ export async function login(peticion: LoginPeticion): Promise<LoginRespuesta> {
 	);
 }
 
-export interface ResultadoAutenticacion {
+export type ResultadoAutenticacion = {
 	autenticado: boolean;
 	email?: string | null;
-}
+};
 
 export async function verificarAutenticacion(): Promise<ResultadoAutenticacion> {
 	const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/auth/me`, {

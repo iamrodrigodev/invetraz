@@ -1,12 +1,12 @@
 export type EstadoCarpetaDrive = "verificada" | "pendiente" | "verificando" | "no_disponible";
 
-export interface DatosCarpetaDrive {
+export type DatosCarpetaDrive = {
 	carpetaId?: string | null | undefined;
 	carpetaNombre?: string | null | undefined;
 	estado?: EstadoCarpetaDrive | undefined;
-}
+};
 
-export interface VistaEstadoCarpetaDrive {
+export type VistaEstadoCarpetaDrive = {
 	estado: EstadoCarpetaDrive;
 	nombreVisible: string | null;
 	estaConfigurada: boolean;
@@ -16,7 +16,7 @@ export interface VistaEstadoCarpetaDrive {
 	badgeTexto: string;
 	tituloVacio: string;
 	descripcionVacia: string;
-}
+};
 
 export function resolverVistaCarpetaDrive({
 	carpetaId,

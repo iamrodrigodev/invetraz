@@ -85,7 +85,13 @@
 				"useExportsLast": "off",
 				"useFilenamingConvention": "off",
 				"useGlobalThis": "off",
-				"useNamingConvention": "off"
+				"useNamingConvention": "off",
+				"useConsistentTypeDefinitions": {
+					"level": "error",
+					"options": {
+						"style": "type"
+					}
+				}
 			},
 			"suspicious": {
 				"noEmptyBlockStatements": "off",

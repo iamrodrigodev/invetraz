@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button.tsx";
 import { useClickOutside } from "@/hooks/useClickOutside.ts";
 import { cn } from "@/utils/cn.ts";
 
-export interface DatePickerProps {
+export type DatePickerProps = {
 	id?: string | undefined;
 	name?: string | undefined;
 	value?: string | undefined;
@@ -21,7 +21,7 @@ export interface DatePickerProps {
 	errorMessage?: React.ReactNode | undefined;
 	className?: string | undefined;
 	posicionDropdown?: "auto" | "abajo" | "arriba" | undefined;
-}
+};
 
 const NOMBRES_MESES = [
 	"Enero",

@@ -2,11 +2,11 @@ import { RefreshCw } from "lucide-react";
 import type React from "react";
 import { cn } from "@/utils/cn.ts";
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 	variant?: "default" | "outline" | "secondary" | "ghost" | "destructive" | "link";
 	size?: "default" | "sm" | "lg" | "icon" | "icon-sm";
 	isLoading?: boolean;
-}
+};
 
 export const Button = ({
 	className,

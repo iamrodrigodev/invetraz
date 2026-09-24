@@ -3,10 +3,10 @@ import type React from "react";
 import { Button } from "@/components/ui/Button.tsx";
 import { Modal } from "@/components/ui/Modal.tsx";
 
-export interface ModalExitoGeneracionProps {
+export type ModalExitoGeneracionProps = {
 	abierto: boolean;
 	alAceptar: () => void;
-}
+};
 
 export const ModalExitoGeneracion: React.FC<ModalExitoGeneracionProps> = ({
 	abierto,

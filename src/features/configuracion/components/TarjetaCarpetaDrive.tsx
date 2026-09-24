@@ -10,13 +10,13 @@ import { useCarpetaDriveConfig } from "@/features/configuracion/hooks/useCarpeta
 import type { EstadoCarpetaDrive } from "@/features/drive/estadoCarpetaDrive.ts";
 import { TarjetaCarpetaVinculada } from "@/features/drive/TarjetaCarpetaVinculada.tsx";
 
-interface TarjetaCarpetaDriveProps {
+type TarjetaCarpetaDriveProps = {
 	carpetaIdInicial?: string | null | undefined;
 	carpetaNombreInicial?: string | null | undefined;
 	carpetaVerificadaInicial?: boolean | undefined;
 	onCarpetaActualizada?: (id: string, nombre: string | null, verificado?: boolean) => void;
 	estadoCredencialesGoogle?: TipoEstadoConexion | undefined;
-}
+};
 
 export const TarjetaCarpetaDrive: React.FC<TarjetaCarpetaDriveProps> = (props) => {
 	const carpetaUrlOIdId = useId();

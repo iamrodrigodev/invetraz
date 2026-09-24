@@ -3,13 +3,13 @@ import { obtenerPlantillasParaFormulario } from "@/features/actividades/api/acti
 import type { PlantillaSeguimientoOpcion } from "@/features/actividades/types/actividades.types.ts";
 import { registrarLimpiadorSesion } from "@/utils/eventosSesion.ts";
 
-interface PlantillasSeguimientoState {
+type PlantillasSeguimientoState = {
 	plantillas: PlantillaSeguimientoOpcion[];
 	cargando: boolean;
 	cargado: boolean;
 	cargarPlantillas: (forzar?: boolean) => Promise<PlantillaSeguimientoOpcion[]>;
 	limpiar: () => void;
-}
+};
 
 export const usePlantillasSeguimientoStore = create<PlantillasSeguimientoState>((set, get) => ({
 	plantillas: [],

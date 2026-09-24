@@ -6,16 +6,16 @@ import { Badge } from "@/components/ui/Badge.tsx";
 import { useClickOutside } from "@/hooks/useClickOutside.ts";
 import { cn } from "@/utils/cn.ts";
 
-export interface SelectOption {
+export type SelectOption = {
 	value: string;
 	label: string;
 	badge?: string | undefined;
 	badgeVariant?: ("primary" | "success" | "warning" | "destructive" | "slate" | "blue") | undefined;
 	disabled?: boolean | undefined;
 	sublabel?: string | undefined;
-}
+};
 
-export interface SelectProps {
+export type SelectProps = {
 	id?: string | undefined;
 	name?: string | undefined;
 	value?: string | undefined;
@@ -29,7 +29,7 @@ export interface SelectProps {
 	errorMessage?: React.ReactNode | undefined;
 	className?: string | undefined;
 	posicionDropdown?: "auto" | "abajo" | "arriba" | undefined;
-}
+};
 
 export const Select: React.FC<SelectProps> = ({
 	id,

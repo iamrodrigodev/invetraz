@@ -3,11 +3,11 @@ import type React from "react";
 import { Button } from "@/components/ui/Button.tsx";
 import { Modal } from "@/components/ui/Modal.tsx";
 
-export interface ModalErrorGeneracionProps {
+export type ModalErrorGeneracionProps = {
 	abierto: boolean;
 	mensaje?: string;
 	alAceptar: () => void;
-}
+};
 
 export const ModalErrorGeneracion: React.FC<ModalErrorGeneracionProps> = ({
 	abierto,

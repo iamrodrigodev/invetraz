@@ -10,13 +10,13 @@ import { useClickOutside } from "@/hooks/useClickOutside.ts";
 import { useAppStore } from "@/store/useAppStore.ts";
 import { cn } from "@/utils/cn.ts";
 
-export interface TopBarProps {
+export type TopBarProps = {
 	moduloActivo: ModuloId;
 	alAbrirMenuMovil?: () => void;
 	className?: string;
 	alSolicitarCerrarSesion?: () => void;
 	mostrarBotonMenuMovil?: boolean;
-}
+};
 
 export function TopBar({
 	moduloActivo,

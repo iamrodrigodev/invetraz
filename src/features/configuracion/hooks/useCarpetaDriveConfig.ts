@@ -10,13 +10,13 @@ import {
 	vincularCarpetaDrive,
 } from "@/features/plantillas/api/plantillas.api.ts";
 
-export interface UseCarpetaDriveConfigOptions {
+export type UseCarpetaDriveConfigOptions = {
 	carpetaIdInicial?: string | null | undefined;
 	carpetaNombreInicial?: string | null | undefined;
 	carpetaVerificadaInicial?: boolean | undefined;
 	onCarpetaActualizada?: (id: string, nombre: string | null, verificado?: boolean) => void;
 	estadoCredencialesGoogle?: TipoEstadoConexion | undefined;
-}
+};
 
 function normalizarId(entrada: string): string {
 	const limpia = entrada.trim();

@@ -2,12 +2,12 @@ import type React from "react";
 import { useEffect, useId, useState } from "react";
 import { cn } from "@/utils/cn.ts";
 
-export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
 	error?: boolean;
 	errorMessage?: React.ReactNode;
 	showCount?: boolean;
 	charCount?: number;
-}
+};
 
 export const Textarea = ({
 	id,

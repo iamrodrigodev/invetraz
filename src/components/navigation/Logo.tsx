@@ -1,10 +1,10 @@
 import { Microscope } from "lucide-react";
 import { cn } from "@/utils/cn.ts";
 
-export interface LogoProps {
+export type LogoProps = {
 	estaColapsado?: boolean;
 	className?: string;
-}
+};
 
 export function Logo({ estaColapsado = false, className }: LogoProps) {
 	return (

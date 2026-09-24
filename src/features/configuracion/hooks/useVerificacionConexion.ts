@@ -2,10 +2,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { TipoEstadoConexion } from "@/features/configuracion/components/EstadoConexionBadge.tsx";
 
-export interface ResultadoAccionConexion {
+export type ResultadoAccionConexion = {
 	mensaje?: string;
 	verificado?: boolean;
-}
+};
 
 type RespuestaAccionConexion = string | ResultadoAccionConexion | undefined;
 
@@ -19,7 +19,7 @@ function normalizarRespuesta(res: RespuestaAccionConexion) {
 	};
 }
 
-export interface OpcionesVerificacionConexion<T> {
+export type OpcionesVerificacionConexion<T> = {
 	valorActual: T;
 	valorGuardado: T | null;
 	sonIguales: (a: T | null | undefined, b: T | null | undefined) => boolean;
@@ -34,7 +34,7 @@ export interface OpcionesVerificacionConexion<T> {
 	mensajeSinCambios?: string;
 	permitirGuardarConFallo?: boolean;
 	permitirGuardarSinCambios?: boolean;
-}
+};
 
 export function useVerificacionConexion<T>({
 	valorActual,

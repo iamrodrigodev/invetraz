@@ -1,12 +1,12 @@
 import { Hammer, type LucideIcon } from "lucide-react";
 import { cn } from "@/utils/cn.ts";
 
-export interface ModuloEnConstruccionProps {
+export type ModuloEnConstruccionProps = {
 	titulo: string;
 	descripcion?: string;
 	icono?: LucideIcon;
 	className?: string;
-}
+};
 
 export function ModuloEnConstruccion({
 	titulo,

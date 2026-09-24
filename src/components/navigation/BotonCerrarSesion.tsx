@@ -1,11 +1,11 @@
 import { LogOut } from "lucide-react";
 import { cn } from "@/utils/cn.ts";
 
-export interface BotonCerrarSesionProps {
+export type BotonCerrarSesionProps = {
 	estaColapsado?: boolean;
 	alHacerClic: () => void;
 	className?: string;
-}
+};
 
 export function BotonCerrarSesion({
 	estaColapsado = false,

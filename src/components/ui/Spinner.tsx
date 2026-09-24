@@ -1,13 +1,13 @@
 import { cn } from "@/utils/cn.ts";
 
-export interface SpinnerProps {
+export type SpinnerProps = {
 	size?: "sm" | "md" | "lg" | "xl";
 	color?: "primary" | "white" | "slate";
 	mensaje?: string;
 	className?: string;
 	spinnerClassName?: string;
 	fullContainer?: boolean;
-}
+};
 
 export function Spinner({
 	size = "md",

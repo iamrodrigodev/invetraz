@@ -6,9 +6,9 @@ import { Card, CardContent } from "@/components/ui/Card.tsx";
 import type { PlantillaXlsx } from "@/features/plantillas/types/plantillas.types.ts";
 import { obtenerEtiquetaFormatoPlantilla } from "@/utils/formatoPlantilla.ts";
 
-export interface TarjetaPlantillaProps {
+export type TarjetaPlantillaProps = {
 	plantilla: PlantillaXlsx;
-}
+};
 
 function formatearTamano(bytes?: number | null): string {
 	if (!bytes || bytes <= 0) {
