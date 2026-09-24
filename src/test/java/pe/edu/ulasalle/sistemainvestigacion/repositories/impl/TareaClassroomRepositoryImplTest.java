@@ -102,8 +102,6 @@ class TareaClassroomRepositoryImplTest {
         assertEquals("Investigacion Preliminar", resultado.getTitulo());
         assertEquals(20.0, resultado.getPuntajeMaximo());
         verify(cacheClassroom).invalidarTareas("c1");
-        verify(createRequest)
-                .setFields(
-                        "id,courseId,title,description,state,alternateLink,dueDate,dueTime,maxPoints");
+        verify(createRequest).setFields("id,alternateLink");
     }
 }

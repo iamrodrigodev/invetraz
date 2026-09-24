@@ -107,7 +107,7 @@ public class ProveedorClassroom {
                     request -> {
                         adapter.initialize(request);
                         request.setConnectTimeout(5000);
-                        request.setReadTimeout(15000);
+                        request.setReadTimeout(25000);
                         request.setNumberOfRetries(2);
                         if (request.getHeaders() != null) {
                             request.getHeaders().set("Connection", "keep-alive");

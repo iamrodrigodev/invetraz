@@ -28,6 +28,7 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
 
     private static final ZoneId ZONA_LIMA = ZoneId.of("America/Lima");
     private static final ZoneId ZONA_UTC = ZoneId.of("UTC");
+    private static final String CAMPOS_CREACION_TAREA = "id,alternateLink";
     private static final String CAMPOS_TAREA =
             "id,courseId,title,description,state,alternateLink,dueDate,dueTime,maxPoints";
     private static final String CAMPOS_LISTA_TAREAS = "courseWork(" + CAMPOS_TAREA + ")";
@@ -103,12 +104,21 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
                             .courses()
                             .courseWork()
                             .create(idClase, coursework)
-                            .setFields(CAMPOS_TAREA)
+                            .setFields(CAMPOS_CREACION_TAREA)
                             .execute();
 
             cacheClassroom.invalidarTareas(idClase);
 
-            return mapearTarea(tareaCreada);
+            return TareaClassroom.builder()
+                    .idTarea(tareaCreada.getId())
+                    .idClase(idClase)
+                    .titulo(tarea.getTitulo())
+                    .descripcion(tarea.getDescripcion())
+                    .estado(tarea.getEstado() != null ? tarea.getEstado() : EstadoTarea.PUBLISHED)
+                    .enlaceTarea(tareaCreada.getAlternateLink())
+                    .fechaLimite(tarea.getFechaLimite())
+                    .puntajeMaximo(tarea.getPuntajeMaximo())
+                    .build();
         } catch (Exception e) {
             throw manejadorErroresGoogle.manejar(
                     "TareaClassroomRepository.guardar (" + idClase + ")", e);
