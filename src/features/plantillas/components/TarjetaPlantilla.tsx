@@ -1,4 +1,4 @@
-import { Calendar, Download, ExternalLink, FileSpreadsheet } from "lucide-react";
+import { Calendar, ExternalLink, FileSpreadsheet } from "lucide-react";
 import type React from "react";
 import { Badge } from "@/components/ui/Badge.tsx";
 import { Button } from "@/components/ui/Button.tsx";
@@ -80,7 +80,7 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({ plantilla })
 						</span>
 					</div>
 
-					<div className="flex flex-col gap-2 pt-2 sm:flex-row sm:items-center">
+					<div className="pt-2">
 						{plantilla.enlaceWeb ? (
 							<Button
 								type="button"
@@ -91,31 +91,12 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({ plantilla })
 										window.open(plantilla.enlaceWeb, "_blank", "noopener,noreferrer");
 									}
 								}}
-								className="min-h-11 w-full"
+								className="min-h-11 w-full font-semibold shadow-xs"
 							>
 								<ExternalLink size={16} className="mr-2" />
 								Abrir plantilla
 							</Button>
 						) : null}
-
-						{plantilla.enlaceDescarga && (
-							<a
-								href={plantilla.enlaceDescarga}
-								target="_blank"
-								rel="noreferrer"
-								download={true}
-								title="Descargar archivo"
-							>
-								<Button
-									type="button"
-									variant="outline"
-									size="default"
-									className="min-h-11 w-full px-3 text-slate-700 hover:border-primary-300 hover:text-primary sm:w-auto"
-								>
-									<Download size={16} />
-								</Button>
-							</a>
-						)}
 					</div>
 				</div>
 			</CardContent>
