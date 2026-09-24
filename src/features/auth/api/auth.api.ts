@@ -1,4 +1,4 @@
-import { entorno } from "@/config/entorno.ts";
+import { obtenerApiBaseUrl } from "@/config/entorno.ts";
 import type { LoginPeticion } from "@/features/auth/types/LoginPeticion.ts";
 import {
 	type LoginRespuesta,
@@ -9,8 +9,9 @@ import { ejecutarAccion, ejecutarPeticion, leerDatos } from "@/utils/api.ts";
 import { fetchSeguro } from "@/utils/fetch.ts";
 
 export async function login(peticion: LoginPeticion): Promise<LoginRespuesta> {
+	const apiBaseUrl = obtenerApiBaseUrl();
 	return ejecutarPeticion(
-		`${entorno.VITE_API_BASE_URL}/auth/login`,
+		`${apiBaseUrl}/auth/login`,
 		{
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
@@ -27,7 +28,8 @@ export type ResultadoAutenticacion = {
 };
 
 export async function verificarAutenticacion(): Promise<ResultadoAutenticacion> {
-	const res = await fetchSeguro(`${entorno.VITE_API_BASE_URL}/auth/me`, {
+	const apiBaseUrl = obtenerApiBaseUrl();
+	const res = await fetchSeguro(`${apiBaseUrl}/auth/me`, {
 		method: "GET",
 	});
 	if (res.status === 401) {
@@ -46,16 +48,14 @@ export async function verificarAutenticacion(): Promise<ResultadoAutenticacion> 
 }
 
 export async function logout(): Promise<void> {
-	return ejecutarAccion(
-		`${entorno.VITE_API_BASE_URL}/auth/logout`,
-		{ method: "POST" },
-		"Error al cerrar sesión",
-	);
+	const apiBaseUrl = obtenerApiBaseUrl();
+	return ejecutarAccion(`${apiBaseUrl}/auth/logout`, { method: "POST" }, "Error al cerrar sesión");
 }
 
 export async function verificarPasswordActual(password: string): Promise<void> {
+	const apiBaseUrl = obtenerApiBaseUrl();
 	return ejecutarAccion(
-		`${entorno.VITE_API_BASE_URL}/auth/verificar-password`,
+		`${apiBaseUrl}/auth/verificar-password`,
 		{
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
@@ -69,8 +69,9 @@ export async function cambiarPassword(
 	passwordActual: string,
 	passwordNueva: string,
 ): Promise<void> {
+	const apiBaseUrl = obtenerApiBaseUrl();
 	return ejecutarAccion(
-		`${entorno.VITE_API_BASE_URL}/auth/cambiar-password`,
+		`${apiBaseUrl}/auth/cambiar-password`,
 		{
 			method: "PUT",
 			headers: { "Content-Type": "application/json" },

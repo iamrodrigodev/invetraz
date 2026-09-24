@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { entorno } from "@/config/entorno.ts";
+import { obtenerApiBaseUrl } from "@/config/entorno.ts";
 import type {
 	ClaseDocente,
 	FormGenerarActividadValores,
@@ -61,8 +61,9 @@ const PLANTILLA_MOCK_INVALIDA: PlantillaSeguimientoOpcion = {
 };
 
 export async function obtenerClasesDocente(): Promise<ClaseDocente[]> {
+	const apiBaseUrl = obtenerApiBaseUrl();
 	const clases = await ejecutarPeticion(
-		`${entorno.VITE_API_BASE_URL}/clases/como-docente`,
+		`${apiBaseUrl}/clases/como-docente`,
 		{ method: "GET" },
 		z.array(ClaseClassroomDtoSchema),
 		"Error al consultar las clases del docente",
@@ -103,8 +104,9 @@ export async function obtenerPlantillasParaFormulario(): Promise<PlantillaSeguim
 }
 
 export async function obtenerTemasClase(idClase: string): Promise<TemaClase[]> {
+	const apiBaseUrl = obtenerApiBaseUrl();
 	return ejecutarPeticion(
-		`${entorno.VITE_API_BASE_URL}/clases/${idClase}/temas`,
+		`${apiBaseUrl}/clases/${idClase}/temas`,
 		{ method: "GET" },
 		z.array(TemaClassroomDtoSchema),
 		"Error al consultar los temas de la clase",
@@ -125,8 +127,9 @@ export async function generarActividadSeguimientoApi(
 	};
 
 	try {
+		const apiBaseUrl = obtenerApiBaseUrl();
 		await ejecutarPeticion(
-			`${entorno.VITE_API_BASE_URL}/clases/${datos.idClase}/tareas`,
+			`${apiBaseUrl}/clases/${datos.idClase}/tareas`,
 			{
 				method: "POST",
 				headers: {

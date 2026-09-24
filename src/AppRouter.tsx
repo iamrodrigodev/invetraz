@@ -34,11 +34,9 @@ function PantallaErrorConexion({
 			className="grid min-h-screen w-full place-items-center bg-slate-50 px-4 py-10 font-sans text-slate-800"
 		>
 			<section className="flex w-full max-w-125 flex-col items-center text-center">
-				<div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-red-100 bg-red-50 text-red-600">
-					<span aria-hidden="true" className="font-semibold text-2xl leading-none">
-						!
-					</span>
-				</div>
+				<span aria-hidden="true" className="mb-5 font-semibold text-3xl text-red-600 leading-none">
+					!
+				</span>
 				<h1 className="mb-2 font-semibold text-slate-950 text-xl">Servidor no disponible</h1>
 				<p className="max-w-md text-slate-600 text-sm leading-6">{mensaje}</p>
 				<div className="mt-6 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">

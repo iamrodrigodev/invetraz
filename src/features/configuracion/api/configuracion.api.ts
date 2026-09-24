@@ -1,4 +1,4 @@
-import { entorno } from "@/config/entorno.ts";
+import { obtenerApiBaseUrl } from "@/config/entorno.ts";
 import {
 	type ActualizarCredencialesPeticion,
 	type ConfiguracionRespuesta,
@@ -9,8 +9,9 @@ import {
 import { ejecutarAccion, ejecutarPeticion } from "@/utils/api.ts";
 
 export async function obtenerConfiguracion(): Promise<ConfiguracionRespuesta> {
+	const apiBaseUrl = obtenerApiBaseUrl();
 	return ejecutarPeticion(
-		`${entorno.VITE_API_BASE_URL}/configuracion`,
+		`${apiBaseUrl}/configuracion`,
 		{ method: "GET" },
 		ConfiguracionRespuestaSchema,
 		"Error al obtener la configuración del sistema",
@@ -20,8 +21,9 @@ export async function obtenerConfiguracion(): Promise<ConfiguracionRespuesta> {
 export async function actualizarConfiguracion(
 	peticion: ActualizarCredencialesPeticion,
 ): Promise<void> {
+	const apiBaseUrl = obtenerApiBaseUrl();
 	return ejecutarAccion(
-		`${entorno.VITE_API_BASE_URL}/configuracion`,
+		`${apiBaseUrl}/configuracion`,
 		{
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
@@ -34,8 +36,9 @@ export async function actualizarConfiguracion(
 export async function verificarConfiguracion(
 	peticion?: ActualizarCredencialesPeticion,
 ): Promise<ResultadoVerificacion> {
+	const apiBaseUrl = obtenerApiBaseUrl();
 	return ejecutarPeticion(
-		`${entorno.VITE_API_BASE_URL}/configuracion/verificar`,
+		`${apiBaseUrl}/configuracion/verificar`,
 		{
 			method: "POST",
 			headers: { "Content-Type": "application/json" },

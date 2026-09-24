@@ -1,4 +1,4 @@
-import { entorno } from "@/config/entorno.ts";
+import { obtenerApiBaseUrl } from "@/config/entorno.ts";
 import type {
 	CarpetaPlantillasRespuesta,
 	VincularCarpetaPeticion,
@@ -7,8 +7,9 @@ import { CarpetaPlantillasRespuestaSchema } from "@/features/plantillas/types/pl
 import { ejecutarPeticion } from "@/utils/api.ts";
 
 export async function obtenerPlantillas(): Promise<CarpetaPlantillasRespuesta> {
+	const apiBaseUrl = obtenerApiBaseUrl();
 	return ejecutarPeticion(
-		`${entorno.VITE_API_BASE_URL}/plantillas`,
+		`${apiBaseUrl}/plantillas`,
 		{ method: "GET" },
 		CarpetaPlantillasRespuestaSchema,
 		"Error al consultar las plantillas de seguimiento",
@@ -18,8 +19,9 @@ export async function obtenerPlantillas(): Promise<CarpetaPlantillasRespuesta> {
 export async function verificarCarpetaDrive(
 	peticion: VincularCarpetaPeticion,
 ): Promise<CarpetaPlantillasRespuesta> {
+	const apiBaseUrl = obtenerApiBaseUrl();
 	return ejecutarPeticion(
-		`${entorno.VITE_API_BASE_URL}/plantillas/verificar`,
+		`${apiBaseUrl}/plantillas/verificar`,
 		{
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
@@ -33,8 +35,9 @@ export async function verificarCarpetaDrive(
 export async function vincularCarpetaDrive(
 	peticion: VincularCarpetaPeticion,
 ): Promise<CarpetaPlantillasRespuesta> {
+	const apiBaseUrl = obtenerApiBaseUrl();
 	return ejecutarPeticion(
-		`${entorno.VITE_API_BASE_URL}/plantillas/carpeta`,
+		`${apiBaseUrl}/plantillas/carpeta`,
 		{
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
