@@ -10,10 +10,10 @@ import org.springframework.web.cors.CorsConfiguration;
 class ConfiguracionSeguridadTest {
 
     @Test
-    void corsConfigurationSource_recortaOrigenesYPermiteProduccion() {
+    void corsConfigurationSource_recortaOrigenesConfigurados() {
         ConfiguracionSeguridad configuracion =
                 new ConfiguracionSeguridad(
-                        null, " https://appinvestigacion.iamrodrigo.dev , http://localhost:5173 ");
+                        null, " https://front.example.com , http://localhost:5173 ");
 
         MockHttpServletRequest request =
                 new MockHttpServletRequest("OPTIONS", "/api/v1/clases/1/tareas");
@@ -21,7 +21,7 @@ class ConfiguracionSeguridadTest {
                 configuracion.corsConfigurationSource().getCorsConfiguration(request);
 
         assertNotNull(cors);
-        assertTrue(cors.getAllowedOrigins().contains("https://appinvestigacion.iamrodrigo.dev"));
+        assertTrue(cors.getAllowedOrigins().contains("https://front.example.com"));
         assertTrue(cors.getAllowedOrigins().contains("http://localhost:5173"));
         assertTrue(cors.getAllowedHeaders().contains("*"));
     }
