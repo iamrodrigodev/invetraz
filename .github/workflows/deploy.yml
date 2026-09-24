@@ -32,20 +32,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Resolver variables de compilación
-        env:
-          API_BASE_URL_FROM_VAR: ${{ vars.VITE_API_BASE_URL }}
-          API_BASE_URL_FROM_SECRET: ${{ secrets.VITE_API_BASE_URL }}
-        run: |
-          VITE_API_BASE_URL="${API_BASE_URL_FROM_VAR:-$API_BASE_URL_FROM_SECRET}"
-
-          if [ -z "$VITE_API_BASE_URL" ]; then
-            echo "Falta VITE_API_BASE_URL en Actions Variables o Secrets."
-            exit 1
-          fi
-
-          echo "VITE_API_BASE_URL=$VITE_API_BASE_URL" >> "$GITHUB_ENV"
-
       - name: Extraer metadatos para Docker
         id: meta
         uses: docker/metadata-action@v5
@@ -64,8 +50,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            VITE_API_BASE_URL=${{ env.VITE_API_BASE_URL }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           sbom: true
