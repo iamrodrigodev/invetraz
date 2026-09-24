@@ -7,7 +7,7 @@ import { Alert } from "@/components/ui/Alert.tsx";
 import { Button } from "@/components/ui/Button.tsx";
 import { Input } from "@/components/ui/Input.tsx";
 import { VALIDATION_LIMITS } from "@/constants/validations.ts";
-import { login, precalentarConexion } from "@/features/auth/api/auth.api.ts";
+import { login } from "@/features/auth/api/auth.api.ts";
 import { type LoginPeticion, LoginPeticionSchema } from "@/features/auth/types/LoginPeticion.ts";
 import { useAppStore } from "@/store/useAppStore.ts";
 
@@ -21,7 +21,6 @@ export function LoginPage() {
 
 	useEffect(() => {
 		sessionStorage.removeItem("motivo_salida");
-		precalentarConexion();
 	}, []);
 
 	const {
