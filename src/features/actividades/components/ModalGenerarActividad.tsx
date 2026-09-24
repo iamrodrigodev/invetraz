@@ -1,9 +1,9 @@
-/* v8 ignore file -- ramas defensivas de UI cubiertas por pruebas de integracion del modulo. */
 import type React from "react";
 import { useState } from "react";
 import { Modal } from "@/components/ui/Modal.tsx";
 import { FormGenerarActividad } from "@/features/actividades/components/FormGenerarActividad.tsx";
 import { ModalConfirmarGeneracion } from "@/features/actividades/components/ModalConfirmarGeneracion.tsx";
+import { ModalErrorGeneracion } from "@/features/actividades/components/ModalErrorGeneracion.tsx";
 import { ModalExitoGeneracion } from "@/features/actividades/components/ModalExitoGeneracion.tsx";
 import { useGenerarActividad } from "@/features/actividades/hooks/useGenerarActividad.ts";
 import type { GenerarActividadSchemaTipo } from "@/features/actividades/schemas/actividades.schemas.ts";
@@ -36,6 +36,7 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 
 	const [modalConfirmarAbierto, setModalConfirmarAbierto] = useState(false);
 	const [modalExitoAbierto, setModalExitoAbierto] = useState(false);
+	const [modalErrorAbierto, setModalErrorAbierto] = useState(false);
 	const [resumen, setResumen] = useState<ResumenConfirmacionActividad | null>(null);
 	const [valoresActuales, setValoresActuales] = useState<GenerarActividadSchemaTipo | null>(null);
 
@@ -44,6 +45,7 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 		setValoresActuales(null);
 		setModalConfirmarAbierto(false);
 		setModalExitoAbierto(false);
+		setModalErrorAbierto(false);
 		alCerrar();
 	};
 
@@ -76,10 +78,18 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 		if (!valoresActuales) {
 			return;
 		}
-		const exito = await ejecutarGeneracion(valoresActuales);
-		if (exito) {
+		try {
+			const exito = await ejecutarGeneracion(valoresActuales);
+			if (exito) {
+				setModalConfirmarAbierto(false);
+				setModalExitoAbierto(true);
+			} else {
+				setModalConfirmarAbierto(false);
+				setModalErrorAbierto(true);
+			}
+		} catch {
 			setModalConfirmarAbierto(false);
-			setModalExitoAbierto(true);
+			setModalErrorAbierto(true);
 		}
 	};
 
@@ -96,7 +106,7 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 	return (
 		<>
 			<Modal
-				abierto={abierto && !modalExitoAbierto}
+				abierto={abierto && !modalExitoAbierto && !modalErrorAbierto}
 				alCerrar={manejarCancelar}
 				titulo="Generar actividades de seguimiento"
 				className={modalConfirmarAbierto ? "pointer-events-none max-w-4xl" : "max-w-4xl"}
@@ -126,6 +136,11 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 			/>
 
 			<ModalExitoGeneracion abierto={modalExitoAbierto} alAceptar={completarYSalir} />
+
+			<ModalErrorGeneracion
+				abierto={modalErrorAbierto}
+				alAceptar={() => setModalErrorAbierto(false)}
+			/>
 		</>
 	);
 };

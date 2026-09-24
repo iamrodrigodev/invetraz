@@ -37,7 +37,7 @@ export function DashboardSkeleton() {
 			<aside
 				className={cn(
 					"hidden h-full flex-col border-slate-200 border-r bg-white lg:flex",
-					estaColapsado ? "w-20" : "w-72",
+					estaColapsado ? "w-20" : "w-64",
 				)}
 			>
 				<div className="flex h-16 shrink-0 items-center border-slate-200 border-b px-4.5">

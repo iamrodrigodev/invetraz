@@ -194,7 +194,7 @@ describe("ModalGenerarActividad", () => {
 		expect(screen.queryByText("Confirmar actividad de seguimiento")).toBeNull();
 	});
 
-	it("no abre exito si la ejecucion de generacion retorna false", async () => {
+	it("muestra modal de error amigable cuando la ejecucion retorna false o falla", async () => {
 		const ejecutarGeneracion = vi.fn().mockResolvedValue(false);
 		vi.spyOn(hookActividad, "useGenerarActividad").mockReturnValue({
 			clases: [],
@@ -223,6 +223,16 @@ describe("ModalGenerarActividad", () => {
 
 		expect(ejecutarGeneracion).toHaveBeenCalled();
 		expect(screen.queryByText("Actividad de seguimiento generada")).toBeNull();
+		expect(screen.getByText("Error al generar actividad")).toBeDefined();
+		expect(
+			screen.getByText(
+				"Ocurrió un inconveniente al generar la actividad de seguimiento. Por favor, verifica tu conexión e inténtalo nuevamente.",
+			),
+		).toBeDefined();
+
+		const btnEntendido = screen.getByRole("button", { name: "Entendido" });
+		fireEvent.click(btnEntendido);
+		expect(screen.queryByText("Error al generar actividad")).toBeNull();
 	});
 
 	it("maneja fallbacks en resumen cuando no hay coincidencias de clase o plantilla y completa sin callback", async () => {

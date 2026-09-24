@@ -77,7 +77,7 @@ export function Sidebar({
 
 			<nav
 				className={cn(
-					"flex-1 space-y-1.5 px-4.5 py-5",
+					"flex-1 space-y-1.5 px-3.5 py-5",
 					estaColapsado ? "overflow-visible" : "overflow-y-auto overflow-x-hidden",
 				)}
 			>
@@ -92,7 +92,7 @@ export function Sidebar({
 				))}
 			</nav>
 
-			<div className="border-slate-200/80 border-t px-4.5 py-4">
+			<div className="border-slate-200/80 border-t px-3.5 py-4">
 				<BotonCerrarSesion
 					estaColapsado={estaColapsado}
 					alHacerClic={alSolicitarCerrarSesion ?? manejarCerrarSesion}

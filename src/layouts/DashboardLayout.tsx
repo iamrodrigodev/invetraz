@@ -118,7 +118,7 @@ export function DashboardLayout({
 							animate={{ x: 0 }}
 							exit={{ x: "-100%" }}
 							transition={{ type: "spring", damping: 28, stiffness: 280 }}
-							className="fixed inset-y-0 left-0 z-50 h-full w-80 max-w-[85vw] shadow-2xl"
+							className="fixed inset-y-0 left-0 z-50 h-full w-64 max-w-[85vw] shadow-2xl"
 						>
 							<Sidebar
 								moduloActivo={moduloActual}
@@ -142,7 +142,7 @@ export function DashboardLayout({
 			<aside
 				className={cn(
 					"hidden h-full shrink-0 transition-[width] duration-300 ease-in-out md:flex",
-					sidebarColapsadoVisual ? "w-20" : "w-72",
+					sidebarColapsadoVisual ? "w-20" : "w-64",
 				)}
 			>
 				<Sidebar
