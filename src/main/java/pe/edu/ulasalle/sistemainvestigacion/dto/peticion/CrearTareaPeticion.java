@@ -21,6 +21,4 @@ public class CrearTareaPeticion {
     private String idTema;
 
     private String idPlantilla;
-
-    private Boolean asincrono;
 }
