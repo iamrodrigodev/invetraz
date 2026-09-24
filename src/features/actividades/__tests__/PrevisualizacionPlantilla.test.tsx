@@ -106,7 +106,7 @@ describe("PrevisualizacionPlantilla", () => {
 		expect(screen.queryByText("Abrir plantilla")).toBeNull();
 	});
 
-	it("muestra insignia de Google Sheets y XLSX con color verde tanto en estado válido como inválido", () => {
+	it("muestra insignia de Google Sheets y XLSX con color azul en estado inválido y verde en estado válido", () => {
 		const { rerender } = render(
 			<PrevisualizacionPlantilla
 				plantilla={{
@@ -118,7 +118,9 @@ describe("PrevisualizacionPlantilla", () => {
 				}}
 			/>,
 		);
-		expect(screen.getByText("Google Sheets")).toBeDefined();
+		const badgeValida = screen.getByText("Google Sheets").closest("span");
+		expect(badgeValida).toBeDefined();
+		expect(badgeValida?.className).toContain("text-emerald-700");
 		expect(screen.getByText("Estructura válida")).toBeDefined();
 
 		rerender(
@@ -132,7 +134,9 @@ describe("PrevisualizacionPlantilla", () => {
 				}}
 			/>,
 		);
-		expect(screen.getByText("Google Sheets")).toBeDefined();
+		const badgeInvalida = screen.getByText("Google Sheets").closest("span");
+		expect(badgeInvalida).toBeDefined();
+		expect(badgeInvalida?.className).toContain("text-primary");
 		expect(screen.getByText("Estructura inválida")).toBeDefined();
 
 		rerender(
@@ -146,7 +150,9 @@ describe("PrevisualizacionPlantilla", () => {
 				}}
 			/>,
 		);
-		expect(screen.getByText("XLSX")).toBeDefined();
+		const badgeXlsx = screen.getByText("XLSX").closest("span");
+		expect(badgeXlsx).toBeDefined();
+		expect(badgeXlsx?.className).toContain("text-primary");
 		expect(screen.getByText("Estructura inválida")).toBeDefined();
 	});
 });
