@@ -22,6 +22,22 @@ export async function login(peticion: LoginPeticion): Promise<LoginRespuesta> {
 	);
 }
 
+export function precalentarConexion(): void {
+	if (typeof window === "undefined") {
+		return;
+	}
+	const apiBaseUrl = obtenerApiBaseUrl();
+	const rutaCalentamiento = apiBaseUrl.replace(/\/api\/v1\/?$/, "/actuator/health");
+	fetch(rutaCalentamiento, {
+		method: "GET",
+		credentials: "omit",
+		cache: "no-store",
+		mode: "cors",
+	}).catch(() => {
+		// Silencioso: solo busca establecer y mantener caliente la conexión TCP/TLS
+	});
+}
+
 export type ResultadoAutenticacion = {
 	autenticado: boolean;
 	email?: string | null;

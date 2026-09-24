@@ -17,6 +17,7 @@ vi.mock("react-router-dom", async () => {
 
 vi.mock("@/features/auth/api/auth.api", () => ({
 	login: vi.fn(),
+	precalentarConexion: vi.fn(),
 }));
 
 describe("LoginPage", () => {
