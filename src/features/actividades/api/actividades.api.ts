@@ -24,6 +24,7 @@ export const TemaClassroomDtoSchema = z.object({
 const PLANTILLA_MOCK_INVALIDA: PlantillaSeguimientoOpcion = {
 	id: "mock-plantilla-seguimiento-invalida",
 	nombre: "Plantilla de prueba - estructura inválida",
+	tipoMime: "application/vnd.google-apps.spreadsheet",
 	enlaceWeb: "https://docs.google.com/spreadsheets/d/mock-plantilla-invalida",
 	frecuenciaUso: 0,
 	estructuraValida: false,
@@ -59,6 +60,7 @@ export async function obtenerPlantillasParaFormulario(): Promise<PlantillaSeguim
 		return {
 			id: p.id,
 			nombre: p.nombre.replace(/\.(xlsx|xls|gsheet)$/iu, ""),
+			tipoMime: p.tipoMime,
 			enlaceWeb: p.enlaceWeb ?? null,
 			frecuenciaUso: 0,
 			estructuraValida,

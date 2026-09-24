@@ -13,6 +13,7 @@ export interface TemaClase {
 export interface PlantillaSeguimientoOpcion {
 	id: string;
 	nombre: string;
+	tipoMime?: string | null | undefined;
 	enlaceWeb?: string | null | undefined;
 	frecuenciaUso: number;
 	estructuraValida: boolean;
@@ -39,6 +40,7 @@ export interface ResumenConfirmacionActividad {
 	nombreTema?: string | undefined;
 	descripcion?: string | undefined;
 	enlacePlantillaWeb?: string | null | undefined;
+	esGoogleSheet?: boolean | undefined;
 }
 
 export const TiposActividades = true;

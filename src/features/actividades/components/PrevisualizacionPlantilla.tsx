@@ -3,6 +3,7 @@ import type React from "react";
 import { Badge } from "@/components/ui/Badge.tsx";
 import { Button } from "@/components/ui/Button.tsx";
 import type { PlantillaSeguimientoOpcion } from "@/features/actividades/types/actividades.types.ts";
+import { obtenerEtiquetaFormatoPlantilla } from "@/utils/formatoPlantilla.ts";
 
 export interface PrevisualizacionPlantillaProps {
 	plantilla?: PlantillaSeguimientoOpcion | null | undefined;
@@ -31,6 +32,8 @@ export const PrevisualizacionPlantilla: React.FC<PrevisualizacionPlantillaProps>
 		);
 	}
 
+	const etiquetaFormato = obtenerEtiquetaFormatoPlantilla(plantilla);
+
 	if (!plantilla.estructuraValida) {
 		const errores = plantilla.erroresEstructura ?? [];
 
@@ -49,6 +52,13 @@ export const PrevisualizacionPlantilla: React.FC<PrevisualizacionPlantillaProps>
 							>
 								{plantilla.nombre}
 							</span>
+							<Badge
+								variant="success"
+								className="inline-flex shrink-0 items-center gap-1 px-1.5 py-0 font-semibold text-[10px] uppercase tracking-wider"
+							>
+								<FileSpreadsheet size={10} className="shrink-0" />
+								{etiquetaFormato}
+							</Badge>
 							<Badge
 								variant="destructive"
 								className="inline-flex shrink-0 items-center gap-1 px-1.5 py-0 font-medium text-[10px]"
@@ -102,6 +112,13 @@ export const PrevisualizacionPlantilla: React.FC<PrevisualizacionPlantillaProps>
 						>
 							{plantilla.nombre}
 						</span>
+						<Badge
+							variant="success"
+							className="inline-flex shrink-0 items-center gap-1 px-1.5 py-0 font-semibold text-[10px] uppercase tracking-wider"
+						>
+							<FileSpreadsheet size={10} className="shrink-0" />
+							{etiquetaFormato}
+						</Badge>
 						<Badge
 							variant="success"
 							className="inline-flex shrink-0 items-center gap-1 px-1.5 py-0 text-[10px]"

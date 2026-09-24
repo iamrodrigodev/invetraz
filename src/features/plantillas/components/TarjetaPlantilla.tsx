@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge.tsx";
 import { Button } from "@/components/ui/Button.tsx";
 import { Card, CardContent } from "@/components/ui/Card.tsx";
 import type { PlantillaXlsx } from "@/features/plantillas/types/plantillas.types.ts";
+import { obtenerEtiquetaFormatoPlantilla } from "@/utils/formatoPlantilla.ts";
 
 export interface TarjetaPlantillaProps {
 	plantilla: PlantillaXlsx;
@@ -38,7 +39,7 @@ function formatearFecha(fechaIso?: string | null): string {
 }
 
 export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({ plantilla }) => {
-	const esGoogleSheet = plantilla.tipoMime === "application/vnd.google-apps.spreadsheet";
+	const etiquetaFormato = obtenerEtiquetaFormatoPlantilla(plantilla);
 
 	return (
 		<Card className="border-slate-200/90 bg-white shadow-xs">
@@ -53,11 +54,11 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({ plantilla })
 						</h3>
 					</div>
 					<Badge
-						variant={esGoogleSheet ? "success" : "primary"}
+						variant="success"
 						className="shrink-0 font-semibold text-[10.5px] uppercase tracking-wider"
 					>
 						<FileSpreadsheet size={12} className="shrink-0" />
-						{esGoogleSheet ? "Google Sheets" : "XLSX"}
+						{etiquetaFormato}
 					</Badge>
 				</div>
 

@@ -8,6 +8,7 @@ import { ModalExitoGeneracion } from "@/features/actividades/components/ModalExi
 import { useGenerarActividad } from "@/features/actividades/hooks/useGenerarActividad.ts";
 import type { GenerarActividadSchemaTipo } from "@/features/actividades/schemas/actividades.schemas.ts";
 import type { ResumenConfirmacionActividad } from "@/features/actividades/types/actividades.types.ts";
+import { esFormatoGoogleSheet } from "@/utils/formatoPlantilla.ts";
 
 export interface ModalGenerarActividadProps {
 	abierto: boolean;
@@ -58,6 +59,8 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 		const plantillaObj = plantillas.find((p) => p.id === datos.idPlantilla);
 		const temaObj = temas.find((t) => t.idTema === datos.idTema);
 
+		const esSheet = esFormatoGoogleSheet(plantillaObj);
+
 		setResumen({
 			nombreClase: claseObj ? claseObj.nombre : datos.idClase,
 			titulo: datos.titulo,
@@ -69,6 +72,7 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 			enlacePlantillaWeb:
 				plantillaObj?.enlaceWeb ||
 				(datos.idPlantilla ? `https://drive.google.com/open?id=${datos.idPlantilla}` : undefined),
+			esGoogleSheet: esSheet,
 		});
 
 		setModalConfirmarAbierto(true);

@@ -135,6 +135,13 @@ export const ModalConfirmarGeneracion: React.FC<ModalConfirmarGeneracionProps> =
 									</span>
 									<Badge
 										variant="success"
+										className="inline-flex shrink-0 items-center gap-1 px-1.5 py-0 font-semibold text-[10px] uppercase tracking-wider"
+									>
+										<FileSpreadsheet size={10} className="shrink-0" />
+										{resumen.esGoogleSheet ? "Google Sheets" : "XLSX"}
+									</Badge>
+									<Badge
+										variant="success"
 										className="inline-flex shrink-0 items-center gap-1 px-1.5 py-0 font-medium text-[10px]"
 									>
 										<CheckCircle2 size={10} />

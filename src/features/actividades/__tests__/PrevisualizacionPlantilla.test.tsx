@@ -105,4 +105,48 @@ describe("PrevisualizacionPlantilla", () => {
 		).toBeDefined();
 		expect(screen.queryByText("Abrir plantilla")).toBeNull();
 	});
+
+	it("muestra insignia de Google Sheets y XLSX con color verde tanto en estado válido como inválido", () => {
+		const { rerender } = render(
+			<PrevisualizacionPlantilla
+				plantilla={{
+					id: "sheet-valida",
+					nombre: "Plantilla Sheets",
+					tipoMime: "application/vnd.google-apps.spreadsheet",
+					frecuenciaUso: 2,
+					estructuraValida: true,
+				}}
+			/>,
+		);
+		expect(screen.getByText("Google Sheets")).toBeDefined();
+		expect(screen.getByText("Estructura válida")).toBeDefined();
+
+		rerender(
+			<PrevisualizacionPlantilla
+				plantilla={{
+					id: "sheet-invalida",
+					nombre: "Plantilla Sheets Invalida",
+					tipoMime: "application/vnd.google-apps.spreadsheet",
+					frecuenciaUso: 0,
+					estructuraValida: false,
+				}}
+			/>,
+		);
+		expect(screen.getByText("Google Sheets")).toBeDefined();
+		expect(screen.getByText("Estructura inválida")).toBeDefined();
+
+		rerender(
+			<PrevisualizacionPlantilla
+				plantilla={{
+					id: "xlsx-invalida",
+					nombre: "Plantilla Excel",
+					tipoMime: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+					frecuenciaUso: 0,
+					estructuraValida: false,
+				}}
+			/>,
+		);
+		expect(screen.getByText("XLSX")).toBeDefined();
+		expect(screen.getByText("Estructura inválida")).toBeDefined();
+	});
 });
