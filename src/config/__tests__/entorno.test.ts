@@ -15,6 +15,6 @@ describe("entorno", () => {
 		(import.meta.env as unknown as Record<string, unknown>).VITE_API_BASE_URL = undefined;
 		const mod = await import("@/config/entorno.ts");
 		expect(mod.entorno.VITE_API_BASE_URL).toBe("");
-		expect(() => mod.asegurarApiConfigurada()).toThrow("Falta configurar VITE_API_BASE_URL");
+		expect(() => mod.asegurarApiConfigurada()).toThrow("El servidor no responde");
 	});
 });

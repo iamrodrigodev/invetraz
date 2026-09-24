@@ -23,7 +23,7 @@ export const entorno = EntornoSchema.parse({
 
 export function asegurarApiConfigurada(): void {
 	if (!entorno.VITE_API_BASE_URL) {
-		throw new Error("Falta configurar VITE_API_BASE_URL para conectar con la API del sistema.");
+		throw new Error("El servidor no responde. Inténtalo nuevamente en unos minutos.");
 	}
 }
 
