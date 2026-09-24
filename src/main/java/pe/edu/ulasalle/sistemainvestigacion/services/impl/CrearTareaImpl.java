@@ -29,6 +29,8 @@ public class CrearTareaImpl implements CasoUsoCrearTarea {
                         .puntajeMaximo(peticion.getPuntajeMaximo())
                         .fechaLimite(peticion.getFechaLimite())
                         .estado(peticion.getEstado())
+                        .idTema(peticion.getIdTema())
+                        .idPlantilla(peticion.getIdPlantilla())
                         .build();
 
         TareaClassroom tareaGuardada = tareaRepository.guardar(idClase, tareaDominio);

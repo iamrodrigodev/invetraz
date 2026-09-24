@@ -2,7 +2,10 @@ package pe.edu.ulasalle.sistemainvestigacion.repositories.impl;
 
 import com.google.api.services.classroom.model.CourseWork;
 import com.google.api.services.classroom.model.Date;
+import com.google.api.services.classroom.model.DriveFile;
 import com.google.api.services.classroom.model.ListCourseWorkResponse;
+import com.google.api.services.classroom.model.Material;
+import com.google.api.services.classroom.model.SharedDriveFile;
 import com.google.api.services.classroom.model.TimeOfDay;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -76,6 +79,20 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
                                 .setSeconds(fechaUtc.getSecond());
                 coursework.setDueDate(dueDate);
                 coursework.setDueTime(dueTime);
+            }
+
+            if (tarea.getIdTema() != null && !tarea.getIdTema().isBlank() && !tarea.getIdTema().startsWith("mock")) {
+                coursework.setTopicId(tarea.getIdTema());
+            }
+
+            if (tarea.getIdPlantilla() != null && !tarea.getIdPlantilla().isBlank() && !tarea.getIdPlantilla().startsWith("mock")) {
+                DriveFile driveFile = new DriveFile().setId(tarea.getIdPlantilla());
+                SharedDriveFile sharedDriveFile =
+                        new SharedDriveFile()
+                                .setDriveFile(driveFile)
+                                .setShareMode("STUDENT_COPY");
+                Material material = new Material().setDriveFile(sharedDriveFile);
+                coursework.setMaterials(Collections.singletonList(material));
             }
 
             CourseWork tareaCreada =

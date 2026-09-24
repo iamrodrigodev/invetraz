@@ -16,4 +16,6 @@ public class TareaClassroom {
     private String enlaceTarea;
     private LocalDateTime fechaLimite;
     private Double puntajeMaximo;
+    private String idTema;
+    private String idPlantilla;
 }

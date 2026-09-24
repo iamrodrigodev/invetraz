@@ -17,4 +17,8 @@ public class CrearTareaPeticion {
     private LocalDateTime fechaLimite;
 
     private EstadoTarea estado;
+
+    private String idTema;
+
+    private String idPlantilla;
 }
