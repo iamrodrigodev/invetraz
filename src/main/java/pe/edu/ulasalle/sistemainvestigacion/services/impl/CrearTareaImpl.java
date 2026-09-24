@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.dto.peticion.CrearTareaPeticion;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.TareaRespuesta;
+import pe.edu.ulasalle.sistemainvestigacion.enums.EstadoTarea;
 import pe.edu.ulasalle.sistemainvestigacion.models.TareaClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.TareaRepository;
+import pe.edu.ulasalle.sistemainvestigacion.services.asincrono.ServicioTareasAsincrono;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoCrearTarea;
 
 @Slf4j
@@ -13,9 +15,12 @@ import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoCrearTare
 public class CrearTareaImpl implements CasoUsoCrearTarea {
 
     private final TareaRepository tareaRepository;
+    private final ServicioTareasAsincrono servicioTareasAsincrono;
 
-    public CrearTareaImpl(TareaRepository tareaRepository) {
+    public CrearTareaImpl(
+            TareaRepository tareaRepository, ServicioTareasAsincrono servicioTareasAsincrono) {
         this.tareaRepository = tareaRepository;
+        this.servicioTareasAsincrono = servicioTareasAsincrono;
     }
 
     @Override
@@ -32,6 +37,30 @@ public class CrearTareaImpl implements CasoUsoCrearTarea {
                         .idTema(peticion.getIdTema())
                         .idPlantilla(peticion.getIdPlantilla())
                         .build();
+
+        boolean esAsincrono =
+                peticion.getAsincrono() == null || Boolean.TRUE.equals(peticion.getAsincrono());
+
+        if (esAsincrono) {
+            log.info(
+                    "Despachando creacion de tarea '{}' de forma asincrona en clase '{}'",
+                    peticion.getTitulo(),
+                    idClase);
+            servicioTareasAsincrono.ejecutarCreacionEnSegundoPlano(idClase, tareaDominio);
+
+            return TareaRespuesta.builder()
+                    .idTarea("async-" + System.currentTimeMillis())
+                    .idClase(idClase)
+                    .titulo(tareaDominio.getTitulo())
+                    .descripcion(tareaDominio.getDescripcion())
+                    .estado(
+                            tareaDominio.getEstado() != null
+                                    ? tareaDominio.getEstado()
+                                    : EstadoTarea.PUBLISHED)
+                    .fechaLimite(tareaDominio.getFechaLimite())
+                    .puntajeMaximo(tareaDominio.getPuntajeMaximo())
+                    .build();
+        }
 
         TareaClassroom tareaGuardada = tareaRepository.guardar(idClase, tareaDominio);
 
