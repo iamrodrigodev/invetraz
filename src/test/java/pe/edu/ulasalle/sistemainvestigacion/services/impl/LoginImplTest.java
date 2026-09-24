@@ -114,31 +114,30 @@ class LoginImplTest {
     }
 
     @Test
-    void ejecutar_hashLegacyValido_noActualizaPasswordDuranteLogin() {
+    void ejecutar_passwordValido_autenticaCorrectamente() {
         UUID idUsuario = UUID.randomUUID();
         String rawPassword = "Password123";
-        String legacyHash = "$argon2id$v=19$m=1024,t=1,p=1$oldhash";
+        String passwordHash = "$2a$10$abcdefghijklmnopqrstuvwxyz1234567890";
 
         Usuario usuario =
                 Usuario.builder()
                         .id(idUsuario)
                         .email("admin@ulasalle.edu.pe")
-                        .password(legacyHash)
+                        .password(passwordHash)
                         .build();
 
         when(usuarioRepository.findByEmail("admin@ulasalle.edu.pe"))
                 .thenReturn(Optional.of(usuario));
-        when(passwordEncoder.matches(rawPassword, legacyHash)).thenReturn(true);
+        when(passwordEncoder.matches(rawPassword, passwordHash)).thenReturn(true);
         when(servicioJwt.generarTokenAcceso(idUsuario, ConstantesSeguridad.ROL_ADMIN))
-                .thenReturn("token-sin-upgrade");
+                .thenReturn("token-exitoso");
 
         LoginPeticion peticion = new LoginPeticion("admin@ulasalle.edu.pe", rawPassword);
         LoginRespuesta respuesta = loginService.ejecutar(peticion);
 
         assertNotNull(respuesta);
-        assertEquals("token-sin-upgrade", respuesta.tokenAcceso());
-        assertEquals(legacyHash, usuario.getPassword());
-        verify(passwordEncoder, never()).upgradeEncoding(legacyHash);
+        assertEquals("token-exitoso", respuesta.tokenAcceso());
+        assertEquals(passwordHash, usuario.getPassword());
         verify(usuarioRepository, never()).save(any());
     }
 

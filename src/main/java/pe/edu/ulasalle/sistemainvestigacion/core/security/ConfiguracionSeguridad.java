@@ -144,7 +144,7 @@ public class ConfiguracionSeguridad {
 
     @Bean
     public PasswordEncoder codificadorClaves() {
-        return new CodificadorContrasenasHibrido();
+        return new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
     }
 
     @Bean
