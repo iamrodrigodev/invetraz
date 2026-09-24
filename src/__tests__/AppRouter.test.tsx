@@ -114,7 +114,7 @@ describe("AppRouter", () => {
 		expect(container.querySelector(".animate-pulse")).toBeDefined();
 	});
 
-	it("muestra verificacion neutra cuando no esta verificado pero tiene sesion previa", () => {
+	it("muestra DashboardSkeleton cuando no esta verificado pero tiene sesion previa", () => {
 		vi.spyOn(sesionUtils, "esSesionValida").mockReturnValue(true);
 		window.history.pushState({}, "", "/actividades");
 
@@ -123,7 +123,7 @@ describe("AppRouter", () => {
 		});
 
 		render(<AppRouter />);
-		expect(screen.getByLabelText("Verificando conexión")).toBeDefined();
+		expect(screen.getByLabelText("Cargando panel...")).toBeDefined();
 		expect(screen.queryByTestId("dashboard-layout")).toBeNull();
 	});
 

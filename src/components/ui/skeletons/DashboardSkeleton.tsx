@@ -33,7 +33,12 @@ export function DashboardSkeleton() {
 	})();
 
 	return (
-		<div className="flex h-screen w-full overflow-hidden bg-slate-50 font-sans text-slate-800">
+		<div
+			className="flex h-screen w-full overflow-hidden bg-slate-50 font-sans text-slate-800"
+			role="status"
+			aria-busy="true"
+			aria-label="Cargando panel..."
+		>
 			<aside
 				className={cn(
 					"hidden h-full flex-col border-slate-200 border-r bg-white lg:flex",
