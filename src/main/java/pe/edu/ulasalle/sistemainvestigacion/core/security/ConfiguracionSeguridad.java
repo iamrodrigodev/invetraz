@@ -31,7 +31,7 @@ public class ConfiguracionSeguridad {
         this.filtroAutenticacionJwt = filtroAutenticacionJwt;
         this.origenesCors =
                 Stream.of(origenesCors.split(","))
-                        .map(String::trim)
+                        .map(origen -> origen.trim())
                         .filter(origen -> !origen.isBlank())
                         .toList();
     }
