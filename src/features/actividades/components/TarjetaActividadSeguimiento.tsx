@@ -1,4 +1,12 @@
-import { BookOpen, Calendar, ExternalLink, FileSpreadsheet, FolderKanban } from "lucide-react";
+import {
+	BookOpen,
+	Calendar,
+	CheckCircle2,
+	Clock,
+	ExternalLink,
+	FileSpreadsheet,
+	FolderKanban,
+} from "lucide-react";
 import type React from "react";
 import { Badge } from "@/components/ui/Badge.tsx";
 import { Button } from "@/components/ui/Button.tsx";
@@ -61,6 +69,11 @@ export const TarjetaActividadSeguimiento: React.FC<TarjetaActividadSeguimientoPr
 							variant={esPublicada ? "success" : "warning"}
 							className="shrink-0 font-semibold text-[10.5px] uppercase tracking-wider"
 						>
+							{esPublicada ? (
+								<CheckCircle2 size={12} className="shrink-0" />
+							) : (
+								<Clock size={12} className="shrink-0" />
+							)}
 							{etiquetaEstado}
 						</Badge>
 					</div>
