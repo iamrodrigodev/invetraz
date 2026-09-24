@@ -20,5 +20,13 @@ public class CrearTareaPeticion {
 
     private String idTema;
 
+    private String nombreTema;
+
     private String idPlantilla;
+
+    private String nombrePlantilla;
+
+    private String enlacePlantilla;
+
+    private String nombreClase;
 }

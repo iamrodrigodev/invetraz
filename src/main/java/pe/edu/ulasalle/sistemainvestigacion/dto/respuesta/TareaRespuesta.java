@@ -10,10 +10,17 @@ import pe.edu.ulasalle.sistemainvestigacion.enums.EstadoTarea;
 public class TareaRespuesta {
     private String idTarea;
     private String idClase;
+    private String nombreClase;
     private String titulo;
     private String descripcion;
     private EstadoTarea estado;
     private String enlaceTarea;
     private LocalDateTime fechaLimite;
     private Double puntajeMaximo;
+    private String idTema;
+    private String nombreTema;
+    private String idPlantilla;
+    private String nombrePlantilla;
+    private String enlacePlantilla;
+    private LocalDateTime fechaCreacion;
 }

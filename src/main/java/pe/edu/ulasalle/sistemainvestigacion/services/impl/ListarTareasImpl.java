@@ -1,11 +1,11 @@
 package pe.edu.ulasalle.sistemainvestigacion.services.impl;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.TareaRespuesta;
+import pe.edu.ulasalle.sistemainvestigacion.mapper.TareaMapper;
 import pe.edu.ulasalle.sistemainvestigacion.models.TareaClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.TareaRepository;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarTareas;
@@ -15,9 +15,11 @@ import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarTar
 public class ListarTareasImpl implements CasoUsoListarTareas {
 
     private final TareaRepository tareaRepository;
+    private final TareaMapper tareaMapper;
 
-    public ListarTareasImpl(TareaRepository tareaRepository) {
+    public ListarTareasImpl(TareaRepository tareaRepository, TareaMapper tareaMapper) {
         this.tareaRepository = tareaRepository;
+        this.tareaMapper = tareaMapper;
     }
 
     @Override
@@ -30,20 +32,6 @@ public class ListarTareasImpl implements CasoUsoListarTareas {
             return Collections.emptyList();
         }
 
-        List<TareaRespuesta> resultado = new ArrayList<>(tareas.size());
-        for (TareaClassroom tarea : tareas) {
-            resultado.add(
-                    TareaRespuesta.builder()
-                            .idTarea(tarea.getIdTarea())
-                            .idClase(tarea.getIdClase())
-                            .titulo(tarea.getTitulo())
-                            .descripcion(tarea.getDescripcion())
-                            .estado(tarea.getEstado())
-                            .enlaceTarea(tarea.getEnlaceTarea())
-                            .fechaLimite(tarea.getFechaLimite())
-                            .puntajeMaximo(tarea.getPuntajeMaximo())
-                            .build());
-        }
-        return resultado;
+        return tareaMapper.toRespuestaList(tareas);
     }
 }

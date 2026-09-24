@@ -13,6 +13,7 @@ import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorDrive;
 import pe.edu.ulasalle.sistemainvestigacion.dto.peticion.ActualizarCredencialesPeticion;
+import pe.edu.ulasalle.sistemainvestigacion.mapper.ConfiguracionSistemaMapper;
 import pe.edu.ulasalle.sistemainvestigacion.models.ConfiguracionSistema;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.ConfiguracionSistemaRepository;
 
@@ -23,14 +24,17 @@ public class ServicioConfiguracion {
     private final ConfiguracionSistemaRepository configuracionRepository;
     private final ProveedorClassroom proveedorClassroom;
     private final ProveedorDrive proveedorDrive;
+    private final ConfiguracionSistemaMapper configuracionMapper;
 
     public ServicioConfiguracion(
             ConfiguracionSistemaRepository configuracionRepository,
             ProveedorClassroom proveedorClassroom,
-            ProveedorDrive proveedorDrive) {
+            ProveedorDrive proveedorDrive,
+            ConfiguracionSistemaMapper configuracionMapper) {
         this.configuracionRepository = configuracionRepository;
         this.proveedorClassroom = proveedorClassroom;
         this.proveedorDrive = proveedorDrive;
+        this.configuracionMapper = configuracionMapper;
     }
 
     @Transactional
@@ -51,14 +55,8 @@ public class ServicioConfiguracion {
             driveVerificado = false;
         }
 
-        return new ActualizarCredencialesPeticion(
-                config.getGoogleClientId() != null ? config.getGoogleClientId() : "",
-                config.getGoogleClientSecret() != null ? config.getGoogleClientSecret() : "",
-                config.getGoogleRefreshToken() != null ? config.getGoogleRefreshToken() : "",
-                config.getGoogleDriveFolderId(),
-                config.getGoogleDriveFolderName(),
-                googleVerificado,
-                driveVerificado);
+        return configuracionMapper.toCredencialesPeticion(
+                config, googleVerificado, driveVerificado);
     }
 
     @Transactional

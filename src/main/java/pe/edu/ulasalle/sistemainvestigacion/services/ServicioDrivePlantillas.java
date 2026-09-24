@@ -6,7 +6,10 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +20,10 @@ import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorDrive;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.CarpetaPlantillasRespuestaDto;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.PlantillaXlsxDto;
+import pe.edu.ulasalle.sistemainvestigacion.enums.EstadoTarea;
+import pe.edu.ulasalle.sistemainvestigacion.mapper.PlantillaMapper;
 import pe.edu.ulasalle.sistemainvestigacion.models.ConfiguracionSistema;
+import pe.edu.ulasalle.sistemainvestigacion.repositories.ActividadSeguimientoRepository;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.ConfiguracionSistemaRepository;
 
 @Slf4j
@@ -29,11 +35,18 @@ public class ServicioDrivePlantillas {
 
     private final ProveedorDrive proveedorDrive;
     private final ConfiguracionSistemaRepository configuracionRepository;
+    private final ActividadSeguimientoRepository actividadSeguimientoRepository;
+    private final PlantillaMapper plantillaMapper;
 
     public ServicioDrivePlantillas(
-            ProveedorDrive proveedorDrive, ConfiguracionSistemaRepository configuracionRepository) {
+            ProveedorDrive proveedorDrive,
+            ConfiguracionSistemaRepository configuracionRepository,
+            ActividadSeguimientoRepository actividadSeguimientoRepository,
+            PlantillaMapper plantillaMapper) {
         this.proveedorDrive = proveedorDrive;
         this.configuracionRepository = configuracionRepository;
+        this.actividadSeguimientoRepository = actividadSeguimientoRepository;
+        this.plantillaMapper = plantillaMapper;
     }
 
     public static String extraerIdCarpeta(String entrada) {
@@ -229,6 +242,24 @@ public class ServicioDrivePlantillas {
         }
     }
 
+    private Map<String, Long> obtenerMapaUsosPorPlantilla() {
+        if (actividadSeguimientoRepository == null) {
+            return Collections.emptyMap();
+        }
+        List<ActividadSeguimientoRepository.ConteoPlantilla> conteos =
+                actividadSeguimientoRepository.contarUsosPorPlantilla(EstadoTarea.DELETED);
+        if (conteos == null || conteos.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        Map<String, Long> mapa = new HashMap<>(conteos.size());
+        for (ActividadSeguimientoRepository.ConteoPlantilla c : conteos) {
+            if (c.getIdPlantillaDrive() != null && c.getTotal() != null) {
+                mapa.put(c.getIdPlantillaDrive(), c.getTotal());
+            }
+        }
+        return mapa;
+    }
+
     private CarpetaPlantillasRespuestaDto obtenerPlantillas(String folderId, String folderNombre) {
         String q =
                 String.format(
@@ -237,6 +268,7 @@ public class ServicioDrivePlantillas {
                             + " or mimeType = 'application/vnd.google-apps.spreadsheet')",
                         folderId);
 
+        Map<String, Long> usosPorPlantilla = obtenerMapaUsosPorPlantilla();
         List<PlantillaXlsxDto> plantillas = new ArrayList<>();
         try {
             Drive drive = proveedorDrive.obtenerCliente();
@@ -252,19 +284,8 @@ public class ServicioDrivePlantillas {
 
             if (fileList.getFiles() != null) {
                 for (File f : fileList.getFiles()) {
-                    plantillas.add(
-                            PlantillaXlsxDto.builder()
-                                    .id(f.getId())
-                                    .nombre(f.getName())
-                                    .tipoMime(f.getMimeType())
-                                    .enlaceWeb(f.getWebViewLink())
-                                    .enlaceDescarga(f.getWebContentLink())
-                                    .tamanoBytes(f.getSize())
-                                    .ultimaModificacion(
-                                            f.getModifiedTime() != null
-                                                    ? f.getModifiedTime().toStringRfc3339()
-                                                    : null)
-                                    .build());
+                    long usos = usosPorPlantilla.getOrDefault(f.getId(), 0L);
+                    plantillas.add(plantillaMapper.toDto(f, usos));
                 }
             }
         } catch (Exception e) {
@@ -274,6 +295,15 @@ public class ServicioDrivePlantillas {
                     e.getMessage());
             throw new ExcepcionDeNegocio(MensajesDeError.ERROR_LISTAR_ARCHIVOS_DRIVE);
         }
+
+        plantillas.sort(
+                Comparator.comparingLong(
+                                (PlantillaXlsxDto p) ->
+                                        p.frecuenciaUso() != null ? p.frecuenciaUso() : 0L)
+                        .reversed()
+                        .thenComparing(
+                                p -> p.nombre() != null ? p.nombre() : "",
+                                String.CASE_INSENSITIVE_ORDER));
 
         return CarpetaPlantillasRespuestaDto.builder()
                 .carpetaConfigurada(true)

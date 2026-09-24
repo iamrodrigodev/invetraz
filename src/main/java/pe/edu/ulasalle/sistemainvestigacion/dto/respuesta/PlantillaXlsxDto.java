@@ -10,4 +10,5 @@ public record PlantillaXlsxDto(
         String enlaceWeb,
         String enlaceDescarga,
         Long tamanoBytes,
-        String ultimaModificacion) {}
+        String ultimaModificacion,
+        Long frecuenciaUso) {}

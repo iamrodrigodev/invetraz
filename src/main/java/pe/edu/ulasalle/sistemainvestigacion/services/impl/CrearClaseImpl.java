@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.dto.peticion.CrearClasePeticion;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.ClaseRespuesta;
-import pe.edu.ulasalle.sistemainvestigacion.enums.EstadoClase;
+import pe.edu.ulasalle.sistemainvestigacion.mapper.ClaseMapper;
 import pe.edu.ulasalle.sistemainvestigacion.models.ClaseClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.ClaseRepository;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoCrearClase;
@@ -14,9 +14,11 @@ import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoCrearClas
 public class CrearClaseImpl implements CasoUsoCrearClase {
 
     private final ClaseRepository claseRepository;
+    private final ClaseMapper claseMapper;
 
-    public CrearClaseImpl(ClaseRepository claseRepository) {
+    public CrearClaseImpl(ClaseRepository claseRepository, ClaseMapper claseMapper) {
         this.claseRepository = claseRepository;
+        this.claseMapper = claseMapper;
     }
 
     @Override
@@ -27,13 +29,7 @@ public class CrearClaseImpl implements CasoUsoCrearClase {
                 peticion.getSeccion(),
                 peticion.getProfesorId());
 
-        ClaseClassroom nuevaClase =
-                ClaseClassroom.builder()
-                        .nombre(peticion.getNombre())
-                        .seccion(peticion.getSeccion())
-                        .profesorId(peticion.getProfesorId())
-                        .estado(EstadoClase.PROVISIONED)
-                        .build();
+        ClaseClassroom nuevaClase = claseMapper.toDominio(peticion);
 
         ClaseClassroom claseCreada = claseRepository.guardar(nuevaClase);
 
@@ -42,11 +38,6 @@ public class CrearClaseImpl implements CasoUsoCrearClase {
                 claseCreada.getNombre(),
                 claseCreada.getIdClassroom());
 
-        return ClaseRespuesta.builder()
-                .idClassroom(claseCreada.getIdClassroom())
-                .nombre(claseCreada.getNombre())
-                .estado(claseCreada.getEstado())
-                .enlaceClase(claseCreada.getEnlaceClase())
-                .build();
+        return claseMapper.toRespuesta(claseCreada);
     }
 }

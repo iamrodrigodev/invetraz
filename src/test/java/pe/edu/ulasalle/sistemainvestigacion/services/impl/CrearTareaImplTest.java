@@ -10,12 +10,16 @@ import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pe.edu.ulasalle.sistemainvestigacion.dto.peticion.CrearTareaPeticion;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.TareaRespuesta;
 import pe.edu.ulasalle.sistemainvestigacion.enums.EstadoTarea;
+import pe.edu.ulasalle.sistemainvestigacion.mapper.ActividadSeguimientoMapper;
+import pe.edu.ulasalle.sistemainvestigacion.mapper.TareaMapper;
 import pe.edu.ulasalle.sistemainvestigacion.models.TareaClassroom;
+import pe.edu.ulasalle.sistemainvestigacion.repositories.ActividadSeguimientoRepository;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.TareaRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,11 +27,18 @@ class CrearTareaImplTest {
 
     @Mock private TareaRepository tareaRepository;
 
+    @Mock private ActividadSeguimientoRepository actividadSeguimientoRepository;
+
     private CrearTareaImpl crearTarea;
 
     @BeforeEach
     void setUp() {
-        crearTarea = new CrearTareaImpl(tareaRepository);
+        crearTarea =
+                new CrearTareaImpl(
+                        tareaRepository,
+                        actividadSeguimientoRepository,
+                        Mappers.getMapper(TareaMapper.class),
+                        Mappers.getMapper(ActividadSeguimientoMapper.class));
     }
 
     @Test
@@ -52,5 +63,34 @@ class CrearTareaImplTest {
         assertEquals("t-sync-100", respuesta.getIdTarea());
         assertEquals("Actividad Sincrona", respuesta.getTitulo());
         verify(tareaRepository).guardar(eq("clase-1"), any(TareaClassroom.class));
+    }
+
+    @Test
+    void deberiaPersistirActividadSeguimientoCuandoTienePlantilla() {
+        CrearTareaPeticion peticion = new CrearTareaPeticion();
+        peticion.setTitulo("Avance 1");
+        peticion.setIdPlantilla("plan-drive-01");
+        peticion.setNombrePlantilla("Matriz.xlsx");
+        peticion.setNombreClase("Tesis I");
+
+        TareaClassroom guardada =
+                TareaClassroom.builder()
+                        .idTarea("t-200")
+                        .idClase("clase-1")
+                        .titulo("Avance 1")
+                        .estado(EstadoTarea.PUBLISHED)
+                        .enlaceTarea("https://classroom.google.com/c/1/a/200")
+                        .build();
+
+        when(tareaRepository.guardar(eq("clase-1"), any(TareaClassroom.class)))
+                .thenReturn(guardada);
+
+        TareaRespuesta respuesta = crearTarea.ejecutar("clase-1", peticion);
+
+        assertNotNull(respuesta);
+        assertEquals("t-200", respuesta.getIdTarea());
+        assertEquals("plan-drive-01", respuesta.getIdPlantilla());
+        assertEquals("Matriz.xlsx", respuesta.getNombrePlantilla());
+        verify(actividadSeguimientoRepository).save(any());
     }
 }

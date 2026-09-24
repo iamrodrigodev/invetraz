@@ -30,7 +30,7 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
     private static final ZoneId ZONA_UTC = ZoneId.of("UTC");
     private static final String CAMPOS_CREACION_TAREA = "id,alternateLink";
     private static final String CAMPOS_TAREA =
-            "id,courseId,title,description,state,alternateLink,dueDate,dueTime,maxPoints";
+            "id,courseId,title,description,state,alternateLink,dueDate,dueTime,maxPoints,topicId,materials";
     private static final String CAMPOS_LISTA_TAREAS = "courseWork(" + CAMPOS_TAREA + ")";
 
     private final ProveedorClassroom proveedorClassroom;
@@ -118,6 +118,8 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
                     .enlaceTarea(tareaCreada.getAlternateLink())
                     .fechaLimite(tarea.getFechaLimite())
                     .puntajeMaximo(tarea.getPuntajeMaximo())
+                    .idTema(tarea.getIdTema())
+                    .idPlantilla(tarea.getIdPlantilla())
                     .build();
         } catch (Exception e) {
             throw manejadorErroresGoogle.manejar(
@@ -162,7 +164,24 @@ public class TareaClassroomRepositoryImpl implements TareaRepository {
                 .enlaceTarea(coursework.getAlternateLink())
                 .fechaLimite(mapearFechaLimite(coursework.getDueDate(), coursework.getDueTime()))
                 .puntajeMaximo(coursework.getMaxPoints())
+                .idTema(coursework.getTopicId())
+                .idPlantilla(extraerIdPlantilla(coursework.getMaterials()))
                 .build();
+    }
+
+    private String extraerIdPlantilla(List<Material> materiales) {
+        if (materiales == null || materiales.isEmpty()) {
+            return null;
+        }
+        for (Material material : materiales) {
+            if (material != null
+                    && material.getDriveFile() != null
+                    && material.getDriveFile().getDriveFile() != null
+                    && material.getDriveFile().getDriveFile().getId() != null) {
+                return material.getDriveFile().getDriveFile().getId();
+            }
+        }
+        return null;
     }
 
     private EstadoTarea mapearEstado(String estado) {

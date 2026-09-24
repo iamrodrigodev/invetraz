@@ -1,11 +1,11 @@
 package pe.edu.ulasalle.sistemainvestigacion.services.impl;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.TemaRespuesta;
+import pe.edu.ulasalle.sistemainvestigacion.mapper.TemaMapper;
 import pe.edu.ulasalle.sistemainvestigacion.models.TemaClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.TemaRepository;
 import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarTemas;
@@ -15,9 +15,11 @@ import pe.edu.ulasalle.sistemainvestigacion.services.casosdeuso.CasoUsoListarTem
 public class ListarTemasImpl implements CasoUsoListarTemas {
 
     private final TemaRepository temaRepository;
+    private final TemaMapper temaMapper;
 
-    public ListarTemasImpl(TemaRepository temaRepository) {
+    public ListarTemasImpl(TemaRepository temaRepository, TemaMapper temaMapper) {
         this.temaRepository = temaRepository;
+        this.temaMapper = temaMapper;
     }
 
     @Override
@@ -30,15 +32,6 @@ public class ListarTemasImpl implements CasoUsoListarTemas {
             return Collections.emptyList();
         }
 
-        List<TemaRespuesta> resultado = new ArrayList<>(temas.size());
-        for (TemaClassroom tema : temas) {
-            resultado.add(
-                    TemaRespuesta.builder()
-                            .idTema(tema.getIdTema())
-                            .idClase(tema.getIdClase())
-                            .nombre(tema.getNombre())
-                            .build());
-        }
-        return resultado;
+        return temaMapper.toRespuestaList(temas);
     }
 }

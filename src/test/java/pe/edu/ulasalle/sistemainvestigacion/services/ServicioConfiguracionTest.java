@@ -12,12 +12,14 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionDeNegocio;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorClassroom;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorDrive;
 import pe.edu.ulasalle.sistemainvestigacion.dto.peticion.ActualizarCredencialesPeticion;
+import pe.edu.ulasalle.sistemainvestigacion.mapper.ConfiguracionSistemaMapper;
 import pe.edu.ulasalle.sistemainvestigacion.models.ConfiguracionSistema;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.ConfiguracionSistemaRepository;
 
@@ -36,7 +38,10 @@ class ServicioConfiguracionTest {
     void setUp() {
         servicio =
                 new ServicioConfiguracion(
-                        configuracionRepository, proveedorClassroom, proveedorDrive);
+                        configuracionRepository,
+                        proveedorClassroom,
+                        proveedorDrive,
+                        Mappers.getMapper(ConfiguracionSistemaMapper.class));
     }
 
     @Test

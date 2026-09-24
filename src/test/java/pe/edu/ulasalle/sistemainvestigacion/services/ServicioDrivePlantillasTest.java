@@ -12,12 +12,15 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionDeNegocio;
 import pe.edu.ulasalle.sistemainvestigacion.core.integrations.google.ProveedorDrive;
 import pe.edu.ulasalle.sistemainvestigacion.dto.respuesta.CarpetaPlantillasRespuestaDto;
+import pe.edu.ulasalle.sistemainvestigacion.mapper.PlantillaMapper;
 import pe.edu.ulasalle.sistemainvestigacion.models.ConfiguracionSistema;
+import pe.edu.ulasalle.sistemainvestigacion.repositories.ActividadSeguimientoRepository;
 import pe.edu.ulasalle.sistemainvestigacion.repositories.ConfiguracionSistemaRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,11 +30,18 @@ class ServicioDrivePlantillasTest {
 
     @Mock private ConfiguracionSistemaRepository configuracionRepository;
 
+    @Mock private ActividadSeguimientoRepository actividadSeguimientoRepository;
+
     private ServicioDrivePlantillas servicio;
 
     @BeforeEach
     void setUp() {
-        servicio = new ServicioDrivePlantillas(proveedorDrive, configuracionRepository);
+        servicio =
+                new ServicioDrivePlantillas(
+                        proveedorDrive,
+                        configuracionRepository,
+                        actividadSeguimientoRepository,
+                        Mappers.getMapper(PlantillaMapper.class));
     }
 
     @Test
