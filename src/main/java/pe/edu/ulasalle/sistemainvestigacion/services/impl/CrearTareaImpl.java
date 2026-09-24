@@ -38,8 +38,7 @@ public class CrearTareaImpl implements CasoUsoCrearTarea {
                         .idPlantilla(peticion.getIdPlantilla())
                         .build();
 
-        boolean esAsincrono =
-                peticion.getAsincrono() == null || Boolean.TRUE.equals(peticion.getAsincrono());
+        boolean esAsincrono = Boolean.TRUE.equals(peticion.getAsincrono());
 
         if (esAsincrono) {
             log.info(

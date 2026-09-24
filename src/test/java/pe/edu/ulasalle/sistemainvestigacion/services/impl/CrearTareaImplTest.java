@@ -35,27 +35,9 @@ class CrearTareaImplTest {
     }
 
     @Test
-    void deberiaCrearTareaDeFormaAsincronaPorDefecto() {
-        CrearTareaPeticion peticion = new CrearTareaPeticion();
-        peticion.setTitulo("Actividad 1");
-        peticion.setDescripcion("Descripcion de prueba");
-
-        TareaRespuesta respuesta = crearTarea.ejecutar("clase-1", peticion);
-
-        assertNotNull(respuesta);
-        assertEquals("clase-1", respuesta.getIdClase());
-        assertEquals("Actividad 1", respuesta.getTitulo());
-        assertTrue(respuesta.getIdTarea().startsWith("async-"));
-        verify(servicioTareasAsincrono)
-                .ejecutarCreacionEnSegundoPlano(eq("clase-1"), any(TareaClassroom.class));
-        verify(tareaRepository, never()).guardar(any(), any());
-    }
-
-    @Test
-    void deberiaCrearTareaDeFormaSincronaCuandoSeEspecifica() {
+    void deberiaCrearTareaDeFormaSincronaPorDefecto() {
         CrearTareaPeticion peticion = new CrearTareaPeticion();
         peticion.setTitulo("Actividad Sincrona");
-        peticion.setAsincrono(false);
 
         TareaClassroom guardada =
                 TareaClassroom.builder()
@@ -75,5 +57,22 @@ class CrearTareaImplTest {
         assertEquals("Actividad Sincrona", respuesta.getTitulo());
         verify(tareaRepository).guardar(eq("clase-1"), any(TareaClassroom.class));
         verify(servicioTareasAsincrono, never()).ejecutarCreacionEnSegundoPlano(any(), any());
+    }
+
+    @Test
+    void deberiaCrearTareaDeFormaAsincronaCuandoSeSolicita() {
+        CrearTareaPeticion peticion = new CrearTareaPeticion();
+        peticion.setTitulo("Actividad Asincrona");
+        peticion.setAsincrono(true);
+
+        TareaRespuesta respuesta = crearTarea.ejecutar("clase-1", peticion);
+
+        assertNotNull(respuesta);
+        assertEquals("clase-1", respuesta.getIdClase());
+        assertEquals("Actividad Asincrona", respuesta.getTitulo());
+        assertTrue(respuesta.getIdTarea().startsWith("async-"));
+        verify(servicioTareasAsincrono)
+                .ejecutarCreacionEnSegundoPlano(eq("clase-1"), any(TareaClassroom.class));
+        verify(tareaRepository, never()).guardar(any(), any());
     }
 }
