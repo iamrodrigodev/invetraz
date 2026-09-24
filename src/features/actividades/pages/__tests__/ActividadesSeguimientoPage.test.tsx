@@ -188,7 +188,8 @@ describe("ActividadesSeguimientoPage", () => {
 		fireEvent.click(screen.getByRole("button", { name: /^Generar$/iu }));
 		fireEvent.click(screen.getByRole("button", { name: "Completar Generacion" }));
 
-		expect(screen.getByTestId("actividades-seguimiento-skeleton")).toBeDefined();
+		expect(screen.getByText("Actividades de seguimiento")).toBeDefined();
+		expect(screen.getByTestId("tarjetas-actividades-skeleton")).toBeDefined();
 
 		await act(async () => {
 			resolverActividades([

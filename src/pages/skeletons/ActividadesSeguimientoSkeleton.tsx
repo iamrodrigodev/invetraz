@@ -1,5 +1,46 @@
 import { Skeleton } from "@/components/ui/Skeleton.tsx";
 
+export function TarjetasActividadesSkeleton() {
+	return (
+		<div
+			data-testid="tarjetas-actividades-skeleton"
+			className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+		>
+			{[1, 2, 3, 4, 5, 6].map((i) => (
+				<div
+					key={i}
+					className="space-y-4 rounded-2xl border border-slate-200/90 bg-white px-5 pt-5 pb-5 shadow-xs sm:px-6 sm:pt-6"
+				>
+					<div className="flex items-start justify-between gap-3">
+						<div className="space-y-1.5">
+							<Skeleton className="h-4 w-44 rounded-md" />
+							<Skeleton className="h-3.5 w-28 rounded-md" />
+						</div>
+						<Skeleton className="h-5 w-20 rounded-full" />
+					</div>
+					<div className="space-y-3 border-slate-100 border-t pt-3">
+						<div className="flex items-center justify-between">
+							<Skeleton className="h-3.5 w-16 rounded-md" />
+							<Skeleton className="h-3.5 w-28 rounded-md" />
+						</div>
+						<div className="flex items-center justify-between">
+							<Skeleton className="h-3.5 w-20 rounded-md" />
+							<Skeleton className="h-3.5 w-32 rounded-md" />
+						</div>
+						<div className="flex items-center justify-between">
+							<Skeleton className="h-3.5 w-24 rounded-md" />
+							<Skeleton className="h-3.5 w-24 rounded-md" />
+						</div>
+						<div className="pt-2">
+							<Skeleton className="h-11 w-full rounded-lg" />
+						</div>
+					</div>
+				</div>
+			))}
+		</div>
+	);
+}
+
 export function ActividadesSeguimientoSkeleton() {
 	return (
 		<div
@@ -18,39 +59,7 @@ export function ActividadesSeguimientoSkeleton() {
 				</div>
 			</div>
 
-			<div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-				{[1, 2, 3, 4, 5, 6].map((i) => (
-					<div
-						key={i}
-						className="space-y-4 rounded-2xl border border-slate-200/90 bg-white px-5 pt-5 pb-5 shadow-xs sm:px-6 sm:pt-6"
-					>
-						<div className="flex items-start justify-between gap-3">
-							<div className="space-y-1.5">
-								<Skeleton className="h-4 w-44 rounded-md" />
-								<Skeleton className="h-3.5 w-28 rounded-md" />
-							</div>
-							<Skeleton className="h-5 w-20 rounded-full" />
-						</div>
-						<div className="space-y-3 border-slate-100 border-t pt-3">
-							<div className="flex items-center justify-between">
-								<Skeleton className="h-3.5 w-16 rounded-md" />
-								<Skeleton className="h-3.5 w-28 rounded-md" />
-							</div>
-							<div className="flex items-center justify-between">
-								<Skeleton className="h-3.5 w-20 rounded-md" />
-								<Skeleton className="h-3.5 w-32 rounded-md" />
-							</div>
-							<div className="flex items-center justify-between">
-								<Skeleton className="h-3.5 w-24 rounded-md" />
-								<Skeleton className="h-3.5 w-24 rounded-md" />
-							</div>
-							<div className="pt-2">
-								<Skeleton className="h-11 w-full rounded-lg" />
-							</div>
-						</div>
-					</div>
-				))}
-			</div>
+			<TarjetasActividadesSkeleton />
 		</div>
 	);
 }

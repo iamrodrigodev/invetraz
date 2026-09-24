@@ -16,7 +16,10 @@ import {
 import { TarjetaCarpetaVinculada } from "@/features/drive/TarjetaCarpetaVinculada.tsx";
 import { obtenerPlantillas } from "@/features/plantillas/api/plantillas.api.ts";
 import { PiePaginacionPlantillas } from "@/features/plantillas/components/PiePaginacionPlantillas.tsx";
-import { PlantillasSkeleton } from "@/features/plantillas/components/PlantillasSkeleton.tsx";
+import {
+	PlantillasSkeleton,
+	TarjetasPlantillasSkeleton,
+} from "@/features/plantillas/components/PlantillasSkeleton.tsx";
 import { TarjetaPlantilla } from "@/features/plantillas/components/TarjetaPlantilla.tsx";
 import type { CarpetaPlantillasRespuesta } from "@/features/plantillas/types/plantillas.types.ts";
 
@@ -196,7 +199,11 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 							/>
 						)}
 
-						{totalPlantillas === 0 ? (
+						{cargando ? (
+							<div className="mt-5">
+								<TarjetasPlantillasSkeleton />
+							</div>
+						) : totalPlantillas === 0 ? (
 							<Card className="mt-5 w-full border-2 border-slate-200 border-dashed bg-slate-50/50 py-10 text-center sm:py-12">
 								<CardContent className="mx-auto flex max-w-sm flex-col items-center justify-center space-y-3 px-5">
 									<FileSpreadsheet size={28} className="text-primary" />

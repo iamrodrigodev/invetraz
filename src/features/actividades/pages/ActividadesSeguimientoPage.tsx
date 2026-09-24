@@ -17,7 +17,10 @@ import {
 	esConfiguracionListaParaActividades,
 	useConfiguracionStore,
 } from "@/features/configuracion/store/useConfiguracionStore.ts";
-import { ActividadesSeguimientoSkeleton } from "@/pages/skeletons/ActividadesSeguimientoSkeleton.tsx";
+import {
+	ActividadesSeguimientoSkeleton,
+	TarjetasActividadesSkeleton,
+} from "@/pages/skeletons/ActividadesSeguimientoSkeleton.tsx";
 
 export function ActividadesSeguimientoPage() {
 	const {
@@ -27,6 +30,7 @@ export function ActividadesSeguimientoPage() {
 		cargarConfiguracion,
 	} = useConfiguracionStore();
 	const [cargando, setCargando] = useState(true);
+	const [cargandoLista, setCargandoLista] = useState(false);
 	const [sincronizando, setSincronizando] = useState(false);
 	const [actividades, setActividades] = useState<TareaClassroomDto[]>([]);
 	const [error, setError] = useState<string | null>(null);
@@ -34,24 +38,23 @@ export function ActividadesSeguimientoPage() {
 
 	const cargarActividades = useCallback(async (mostrarSkeleton = true) => {
 		if (mostrarSkeleton) {
-			setCargando(true);
+			setCargandoLista(true);
 		}
 		setError(null);
 		try {
 			const lista = await obtenerActividadesSeguimiento();
 			setActividades(lista);
 		} catch {
-			// Si el backend no responde en el primer montaje, mantenemos la lista actual sin interrumpir la vista
 		} finally {
 			if (mostrarSkeleton) {
-				setCargando(false);
+				setCargandoLista(false);
 			}
 		}
 	}, []);
 
 	const manejarSincronizar = useCallback(async () => {
 		setSincronizando(true);
-		setCargando(true);
+		setCargandoLista(true);
 		setError(null);
 		try {
 			const lista = await sincronizarActividadesSeguimiento();
@@ -68,12 +71,12 @@ export function ActividadesSeguimientoPage() {
 			);
 		} finally {
 			setSincronizando(false);
-			setCargando(false);
+			setCargandoLista(false);
 		}
 	}, []);
 
 	const manejarActividadGenerada = useCallback(async () => {
-		setCargando(true);
+		setCargandoLista(true);
 		try {
 			const [lista] = await Promise.all([
 				obtenerActividadesSeguimiento().catch(() => []),
@@ -84,7 +87,7 @@ export function ActividadesSeguimientoPage() {
 			]);
 			setActividades(lista);
 		} finally {
-			setCargando(false);
+			setCargandoLista(false);
 		}
 	}, []);
 
@@ -197,7 +200,11 @@ export function ActividadesSeguimientoPage() {
 				</div>
 			)}
 
-			{actividades.length === 0 ? (
+			{cargandoLista || sincronizando ? (
+				<div className="mt-6">
+					<TarjetasActividadesSkeleton />
+				</div>
+			) : actividades.length === 0 ? (
 				<Card className="mt-5 w-full border-2 border-slate-200 border-dashed bg-slate-50/50 py-10 text-center sm:py-12">
 					<CardContent className="mx-auto flex max-w-sm flex-col items-center justify-center space-y-3 px-5">
 						<ClipboardCheck size={28} className="text-primary" />
