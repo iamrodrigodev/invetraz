@@ -127,7 +127,7 @@ describe("GenerarActividadSchema", () => {
 				fechaVencimiento: fechaValida,
 				idPlantilla: "p-1",
 				descripcion: "d".repeat(2000),
-				horaVencimiento: "14:00",
+				horaVencimiento: "23:59",
 				idTema: "tema-1",
 			}).success,
 		).toBe(true);
@@ -141,5 +141,40 @@ describe("GenerarActividadSchema", () => {
 				descripcion: "d".repeat(2001),
 			}).success,
 		).toBe(false);
+	});
+
+	it("rechaza hora pasada si la fecha de vencimiento es el dia de hoy", () => {
+		const resultado = GenerarActividadSchema.safeParse({
+			idClase: "c-1",
+			titulo: "Actividad",
+			fechaVencimiento: fechaValida,
+			idPlantilla: "p-1",
+			horaVencimiento: "00:00",
+		});
+
+		expect(resultado.success).toBe(false);
+		expect(
+			resultado.error?.issues.some(
+				(i) => i.message === "La hora de vencimiento debe ser posterior a la hora actual",
+			),
+		).toBe(true);
+	});
+
+	it("permite hora temprana si la fecha de vencimiento es un dia futuro", () => {
+		const futuro = new Date();
+		futuro.setDate(futuro.getDate() + 5);
+		const fAnio = futuro.getFullYear();
+		const fMes = String(futuro.getMonth() + 1).padStart(2, "0");
+		const fDia = String(futuro.getDate()).padStart(2, "0");
+
+		const resultado = GenerarActividadSchema.safeParse({
+			idClase: "c-1",
+			titulo: "Actividad",
+			fechaVencimiento: `${fAnio}-${fMes}-${fDia}`,
+			idPlantilla: "p-1",
+			horaVencimiento: "00:00",
+		});
+
+		expect(resultado.success).toBe(true);
 	});
 });

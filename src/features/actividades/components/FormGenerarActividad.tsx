@@ -73,6 +73,8 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 		control,
 		handleSubmit,
 		watch,
+		setValue,
+		trigger,
 		reset,
 		formState: { errors, isValid },
 	} = useForm<GenerarActividadSchemaTipo>({
@@ -258,7 +260,17 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 										<DatePicker
 											id={idFechaVencimientoCampo}
 											value={field.value}
-											onChange={field.onChange}
+											onChange={(val) => {
+												field.onChange(val);
+												const horaActual = watch("horaVencimiento");
+												if (val && !horaActual) {
+													setValue("horaVencimiento", "23:59", {
+														shouldValidate: true,
+													});
+												} else if (horaActual) {
+													trigger("horaVencimiento");
+												}
+											}}
 											onBlur={field.onBlur}
 											min={hoy}
 											placeholder="dd/mm/aaaa"
