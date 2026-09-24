@@ -8,14 +8,22 @@ import { useConfiguracionStore } from "@/features/configuracion/store/useConfigu
 
 describe("useGenerarActividad", () => {
 	beforeEach(() => {
-		vi.useFakeTimers();
+		vi.useRealTimers();
 		vi.restoreAllMocks();
 		useConfiguracionStore.getState().limpiar();
 		usePlantillasSeguimientoStore.getState().limpiar();
 		useClasesDocenteStore.getState().limpiar();
+		vi.spyOn(useConfiguracionStore.getState(), "cargarConfiguracion").mockResolvedValue(
+			{} as never,
+		);
+		vi.spyOn(usePlantillasSeguimientoStore.getState(), "cargarPlantillas").mockResolvedValue(
+			[] as never,
+		);
+		vi.spyOn(useClasesDocenteStore.getState(), "cargarClases").mockResolvedValue([] as never);
 	});
 
 	it("no ejecuta cargas automaticas si activo es false", () => {
+		vi.restoreAllMocks();
 		const spyConfig = vi.spyOn(useConfiguracionStore.getState(), "cargarConfiguracion");
 		const spyPlantillas = vi.spyOn(usePlantillasSeguimientoStore.getState(), "cargarPlantillas");
 		const spyClases = vi.spyOn(useClasesDocenteStore.getState(), "cargarClases");

@@ -36,7 +36,7 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 		generando,
 		cargarTemasDeClase,
 		ejecutarGeneracion,
-	} = useGenerarActividad(abierto);
+	} = useGenerarActividad(true);
 
 	const [modalConfirmarAbierto, setModalConfirmarAbierto] = useState(false);
 	const [modalExitoAbierto, setModalExitoAbierto] = useState(false);

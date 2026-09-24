@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button.tsx";
 import { Card, CardContent } from "@/components/ui/Card.tsx";
 import { ModalGenerarActividad } from "@/features/actividades/components/ModalGenerarActividad.tsx";
+import { useClasesDocenteStore } from "@/features/actividades/store/useClasesDocenteStore.ts";
+import { usePlantillasSeguimientoStore } from "@/features/actividades/store/usePlantillasSeguimientoStore.ts";
 import {
 	esConfiguracionListaParaActividades,
 	useConfiguracionStore,
@@ -37,6 +39,17 @@ export function ActividadesSeguimientoPage() {
 			montado = false;
 		};
 	}, [configuracionCargada, cargarConfiguracion]);
+
+	useEffect(() => {
+		usePlantillasSeguimientoStore
+			.getState()
+			.cargarPlantillas()
+			.catch(() => {});
+		useClasesDocenteStore
+			.getState()
+			.cargarClases()
+			.catch(() => {});
+	}, []);
 
 	if (cargando) {
 		return <ActividadesSeguimientoSkeleton />;

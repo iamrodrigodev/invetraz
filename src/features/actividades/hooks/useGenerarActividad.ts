@@ -19,7 +19,7 @@ export type CarpetaDriveInfo = {
 	nombre: string;
 };
 
-export function useGenerarActividad(activo = false) {
+export function useGenerarActividad(activo = true) {
 	const {
 		credenciales,
 		estadoConexion,

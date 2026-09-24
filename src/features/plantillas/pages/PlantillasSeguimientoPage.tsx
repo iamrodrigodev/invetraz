@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { Alert } from "@/components/ui/Alert.tsx";
 import { Button } from "@/components/ui/Button.tsx";
 import { Card, CardContent } from "@/components/ui/Card.tsx";
+import { useClasesDocenteStore } from "@/features/actividades/store/useClasesDocenteStore.ts";
+import { usePlantillasSeguimientoStore } from "@/features/actividades/store/usePlantillasSeguimientoStore.ts";
 import { useConfiguracionStore } from "@/features/configuracion/store/useConfiguracionStore.ts";
 import {
 	type EstadoCarpetaDrive,
@@ -60,6 +62,17 @@ export const PlantillasSeguimientoPage: React.FC = () => {
 			});
 		}
 	}, [configuracionCargada, cargarConfiguracion]);
+
+	useEffect(() => {
+		usePlantillasSeguimientoStore
+			.getState()
+			.cargarPlantillas()
+			.catch(() => {});
+		useClasesDocenteStore
+			.getState()
+			.cargarClases()
+			.catch(() => {});
+	}, []);
 
 	const totalPlantillas = datos?.plantillas?.length ?? 0;
 	const totalPaginas = Math.max(1, Math.ceil(totalPlantillas / ITEMS_POR_PAGINA));
