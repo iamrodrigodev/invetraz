@@ -1,13 +1,8 @@
 import { z } from "zod";
 
-const fallbackApiLocal = "http://localhost:8080/api/v1";
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-const apiBaseUrlNormalizada =
-	apiBaseUrl && apiBaseUrl !== "undefined"
-		? apiBaseUrl
-		: import.meta.env.DEV
-			? fallbackApiLocal
-			: "";
+const apiBaseUrlLocal = "http://localhost:8080/api/v1";
+const apiBaseUrlProduccion = "https://api-investigacion.iamrodrigo.dev/api/v1";
+const apiBaseUrlNormalizada = import.meta.env.PROD ? apiBaseUrlProduccion : apiBaseUrlLocal;
 
 const EntornoSchema = z.object({
 	VITE_API_BASE_URL: z.string(),

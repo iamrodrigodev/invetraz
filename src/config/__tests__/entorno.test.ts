@@ -9,12 +9,23 @@ describe("entorno", () => {
 		expect(typeof entorno.PROD).toBe("boolean");
 	});
 
-	it("no usa localhost como fallback de produccion si no se define una api externa", async () => {
+	it("usa la api productiva cuando la app se compila para produccion", async () => {
 		vi.resetModules();
 		(import.meta.env as unknown as Record<string, unknown>).DEV = false;
-		(import.meta.env as unknown as Record<string, unknown>).VITE_API_BASE_URL = undefined;
+		(import.meta.env as unknown as Record<string, unknown>).PROD = true;
+
 		const mod = await import("@/config/entorno.ts");
-		expect(mod.entorno.VITE_API_BASE_URL).toBe("");
-		expect(() => mod.asegurarApiConfigurada()).toThrow("El servidor no responde");
+
+		expect(mod.entorno.VITE_API_BASE_URL).toBe("https://api-investigacion.iamrodrigo.dev/api/v1");
+	});
+
+	it("usa la api local cuando la app no se compila para produccion", async () => {
+		vi.resetModules();
+		(import.meta.env as unknown as Record<string, unknown>).DEV = true;
+		(import.meta.env as unknown as Record<string, unknown>).PROD = false;
+
+		const mod = await import("@/config/entorno.ts");
+
+		expect(mod.entorno.VITE_API_BASE_URL).toBe("http://localhost:8080/api/v1");
 	});
 });
