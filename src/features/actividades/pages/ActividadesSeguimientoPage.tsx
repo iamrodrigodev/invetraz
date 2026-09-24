@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/Button.tsx";
 import { Card, CardContent } from "@/components/ui/Card.tsx";
 import { BadgeNotificacionEnvio } from "@/features/actividades/components/BadgeNotificacionEnvio.tsx";
 import { ModalGenerarActividad } from "@/features/actividades/components/ModalGenerarActividad.tsx";
-import { useClasesDocenteStore } from "@/features/actividades/store/useClasesDocenteStore.ts";
-import { usePlantillasSeguimientoStore } from "@/features/actividades/store/usePlantillasSeguimientoStore.ts";
 import {
 	esConfiguracionListaParaActividades,
 	useConfiguracionStore,
@@ -20,8 +18,6 @@ export function ActividadesSeguimientoPage() {
 		cargado: configuracionCargada,
 		cargarConfiguracion,
 	} = useConfiguracionStore();
-	const { cargarPlantillas } = usePlantillasSeguimientoStore();
-	const { cargarClases } = useClasesDocenteStore();
 	const [cargando, setCargando] = useState(!configuracionCargada);
 	const [modalGenerarAbierto, setModalGenerarAbierto] = useState(false);
 	const [notificacionEnvio, setNotificacionEnvio] = useState<{
@@ -38,12 +34,9 @@ export function ActividadesSeguimientoPage() {
 		let montado = true;
 		const iniciar = async () => {
 			try {
-				await Promise.all([
-					configuracionCargada ? Promise.resolve() : cargarConfiguracion(),
-					cargarPlantillas().catch(() => []),
-					cargarClases().catch(() => []),
-					new Promise((resolve) => setTimeout(resolve, 200)),
-				]);
+				if (!configuracionCargada) {
+					await cargarConfiguracion();
+				}
 			} catch {}
 			if (montado) {
 				setCargando(false);
@@ -53,7 +46,7 @@ export function ActividadesSeguimientoPage() {
 		return () => {
 			montado = false;
 		};
-	}, [configuracionCargada, cargarConfiguracion, cargarPlantillas, cargarClases]);
+	}, [configuracionCargada, cargarConfiguracion]);
 
 	if (cargando) {
 		return <ActividadesSeguimientoSkeleton />;

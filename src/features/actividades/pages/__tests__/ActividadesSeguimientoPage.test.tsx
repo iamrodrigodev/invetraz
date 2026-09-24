@@ -48,8 +48,6 @@ describe("ActividadesSeguimientoPage", () => {
 		});
 
 		expect(cargarConfiguracion).toHaveBeenCalled();
-		expect(cargarPlantillas).toHaveBeenCalled();
-		expect(cargarClases).toHaveBeenCalled();
 		expect(screen.getByText("Actividades de seguimiento")).toBeDefined();
 		expect(screen.getByText("No hay actividades de seguimiento registradas")).toBeDefined();
 	});
