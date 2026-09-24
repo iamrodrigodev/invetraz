@@ -21,6 +21,49 @@ const DocumentacionPage = lazy(
 	() => import("@/features/documentacion/pages/DocumentacionPage.tsx"),
 );
 
+function PantallaErrorConexion({
+	mensaje,
+	alReintentar,
+}: {
+	mensaje: string;
+	alReintentar: () => void;
+}) {
+	return (
+		<main
+			role="alert"
+			className="grid min-h-screen w-full place-items-center bg-slate-50 px-4 py-10 font-sans text-slate-800"
+		>
+			<section className="flex w-full max-w-125 flex-col items-center text-center">
+				<div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-red-100 bg-red-50 text-red-600">
+					<span aria-hidden="true" className="font-semibold text-2xl leading-none">
+						!
+					</span>
+				</div>
+				<h1 className="mb-2 font-semibold text-slate-950 text-xl">Servidor no disponible</h1>
+				<p className="max-w-md text-slate-600 text-sm leading-6">{mensaje}</p>
+				<div className="mt-6 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
+					<button
+						type="button"
+						className="min-h-11 cursor-pointer rounded-lg bg-primary px-5 font-medium text-sm text-white transition-colors hover:bg-primary-700"
+						onClick={alReintentar}
+					>
+						Reintentar
+					</button>
+					<button
+						type="button"
+						className="min-h-11 cursor-pointer rounded-lg border border-slate-300 bg-white px-5 font-medium text-slate-700 text-sm transition-colors hover:bg-slate-100"
+						onClick={() => {
+							useAppStore.setState({ configurado: true });
+						}}
+					>
+						Continuar en Modo Offline (Demo)
+					</button>
+				</div>
+			</section>
+		</main>
+	);
+}
+
 export function AppRouter() {
 	const configurado = useAppStore((state) => state.configurado);
 	const autenticado = useAppStore((state) => state.autenticado);
@@ -34,32 +77,10 @@ export function AppRouter() {
 
 	if (estadoVerificado && configurado === null) {
 		return (
-			<div
-				role="alert"
-				className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-50 p-6 text-center text-slate-800"
-			>
-				<p className="max-w-md text-slate-600 text-sm">
-					{errorVerificacion || "No se pudo verificar el estado del sistema."}
-				</p>
-				<div className="flex flex-wrap items-center justify-center gap-3">
-					<button
-						type="button"
-						className="cursor-pointer rounded-lg bg-primary px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-primary-700"
-						onClick={verificarEstadoGlobal}
-					>
-						Reintentar
-					</button>
-					<button
-						type="button"
-						className="cursor-pointer rounded-lg border border-slate-300 bg-white px-4 py-2 font-medium text-slate-700 text-sm transition-colors hover:bg-slate-100"
-						onClick={() => {
-							useAppStore.setState({ configurado: true });
-						}}
-					>
-						Continuar en Modo Offline (Demo)
-					</button>
-				</div>
-			</div>
+			<PantallaErrorConexion
+				mensaje={errorVerificacion || "No se pudo verificar el estado del sistema."}
+				alReintentar={verificarEstadoGlobal}
+			/>
 		);
 	}
 

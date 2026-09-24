@@ -50,7 +50,7 @@ export const useAppStore = create<AppState>((set) => ({
 	configurado: sesionPreviaActiva || configuradoCacheado ? true : null,
 	autenticado: sesionPreviaActiva,
 	usuarioEmail: usuarioEmailCacheado,
-	estadoVerificado: Boolean(sesionPreviaActiva || configuradoCacheado),
+	estadoVerificado: false,
 	errorVerificacion: null,
 	verificarEstadoGlobal: () => {
 		if (verificacionEnCurso) {

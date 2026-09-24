@@ -126,6 +126,20 @@ describe("AppRouter", () => {
 		expect(container.querySelector(".animate-pulse")).toBeDefined();
 	});
 
+	it("no monta el dashboard real antes de completar la verificacion inicial", () => {
+		vi.spyOn(sesionUtils, "esSesionValida").mockReturnValue(true);
+		window.history.pushState({}, "", "/actividades");
+		useAppStore.setState({
+			configurado: true,
+			autenticado: true,
+			estadoVerificado: false,
+		});
+
+		render(<AppRouter />);
+
+		expect(screen.queryByTestId("dashboard-layout")).toBeNull();
+	});
+
 	it("navega a /setup cuando el sistema no esta configurado", () => {
 		window.history.pushState({}, "", "/setup");
 		useAppStore.setState({
