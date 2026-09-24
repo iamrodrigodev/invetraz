@@ -114,7 +114,7 @@ describe("AppRouter", () => {
 		expect(container.querySelector(".animate-pulse")).toBeDefined();
 	});
 
-	it("muestra DashboardSkeleton cuando no esta verificado pero tiene sesion previa y no es ruta auth", () => {
+	it("muestra verificacion neutra cuando no esta verificado pero tiene sesion previa", () => {
 		vi.spyOn(sesionUtils, "esSesionValida").mockReturnValue(true);
 		window.history.pushState({}, "", "/actividades");
 
@@ -122,8 +122,9 @@ describe("AppRouter", () => {
 			estadoVerificado: false,
 		});
 
-		const { container } = render(<AppRouter />);
-		expect(container.querySelector(".animate-pulse")).toBeDefined();
+		render(<AppRouter />);
+		expect(screen.getByLabelText("Verificando conexión")).toBeDefined();
+		expect(screen.queryByTestId("dashboard-layout")).toBeNull();
 	});
 
 	it("no monta el dashboard real antes de completar la verificacion inicial", () => {

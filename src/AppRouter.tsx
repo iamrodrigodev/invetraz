@@ -1,8 +1,8 @@
 import { lazy, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthGuard } from "@/components/guards/AuthGuard.tsx";
+import { Skeleton } from "@/components/ui/Skeleton.tsx";
 import { AuthCardSkeleton } from "@/components/ui/skeletons/AuthCardSkeleton.tsx";
-import { DashboardSkeleton } from "@/components/ui/skeletons/DashboardSkeleton.tsx";
 import { ActividadesSeguimientoPage } from "@/features/actividades/pages/ActividadesSeguimientoPage.tsx";
 import { LoginPage } from "@/features/auth/pages/LoginPage.tsx";
 import { SetupPage } from "@/features/setup/pages/SetupPage.tsx";
@@ -64,6 +64,22 @@ function PantallaErrorConexion({
 	);
 }
 
+function PantallaVerificacionConexion() {
+	return (
+		<main className="grid min-h-screen w-full place-items-center bg-slate-50 px-4 py-10 font-sans text-slate-800">
+			<section
+				aria-label="Verificando conexión"
+				className="flex w-full max-w-95 flex-col items-center text-center"
+			>
+				<Skeleton className="mb-5 h-14 w-14 rounded-2xl" />
+				<Skeleton className="mb-3 h-5 w-52 rounded-md" />
+				<Skeleton className="mb-2 h-4 w-72 max-w-full rounded-md" />
+				<Skeleton className="h-4 w-56 max-w-full rounded-md" />
+			</section>
+		</main>
+	);
+}
+
 export function AppRouter() {
 	const configurado = useAppStore((state) => state.configurado);
 	const autenticado = useAppStore((state) => state.autenticado);
@@ -104,7 +120,7 @@ export function AppRouter() {
 			return <AuthCardSkeleton esSetup={esSetup} />;
 		}
 
-		return <DashboardSkeleton />;
+		return <PantallaVerificacionConexion />;
 	}
 
 	return (
