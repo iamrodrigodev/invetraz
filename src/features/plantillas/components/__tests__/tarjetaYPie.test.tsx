@@ -20,12 +20,13 @@ describe("Plantillas Components", () => {
 			ultimaModificacion: "2026-05-15T14:30:00Z",
 		};
 
-		it("renderiza datos de archivo XLSX y abre enlace web", () => {
+		it("renderiza datos de archivo XLSX, frecuencia de uso y abre enlace web", () => {
 			const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
-			render(<TarjetaPlantilla plantilla={plantillaMock} />);
+			render(<TarjetaPlantilla plantilla={{ ...plantillaMock, frecuenciaUso: 3 }} />);
 
 			expect(screen.getByText("Plantilla 1.xlsx")).toBeDefined();
 			expect(screen.getByText("XLSX")).toBeDefined();
+			expect(screen.getByText("Usada 3 veces")).toBeDefined();
 			expect(screen.getByText("2 KB")).toBeDefined();
 
 			const btnAbrir = screen.getByRole("button", { name: /abrir plantilla/iu });
@@ -40,7 +41,7 @@ describe("Plantillas Components", () => {
 			openSpy.mockRestore();
 		});
 
-		it("renderiza datos de Google Sheets sin tamano ni fecha", () => {
+		it("renderiza datos de Google Sheets sin tamano ni fecha y frecuencia 1 o 0", () => {
 			const sheetMock: PlantillaXlsx = {
 				id: "sheet-1",
 				nombre: "Plantilla Sheets",
@@ -49,12 +50,17 @@ describe("Plantillas Components", () => {
 				enlaceDescarga: null,
 				tamanoBytes: 0,
 				ultimaModificacion: null,
+				frecuenciaUso: 1,
 			};
 
-			render(<TarjetaPlantilla plantilla={sheetMock} />);
+			const { rerender } = render(<TarjetaPlantilla plantilla={sheetMock} />);
 			expect(screen.getByText("Google Sheets")).toBeDefined();
+			expect(screen.getByText("Usada 1 vez")).toBeDefined();
 			expect(screen.getByText("Hoja de cálculo en nube")).toBeDefined();
 			expect(screen.getByText("Sin fecha registrada")).toBeDefined();
+
+			rerender(<TarjetaPlantilla plantilla={{ ...sheetMock, frecuenciaUso: 0 }} />);
+			expect(screen.getByText("Sin usos")).toBeDefined();
 		});
 
 		it("maneja error en formateo de fecha retornando string original", () => {

@@ -8,6 +8,7 @@ export const PlantillaXlsxSchema = z.object({
 	enlaceDescarga: z.string().nullable().optional(),
 	tamanoBytes: z.number().nullable().optional(),
 	ultimaModificacion: z.string().nullable().optional(),
+	frecuenciaUso: z.number().nullable().optional(),
 });
 
 export type PlantillaXlsx = z.infer<typeof PlantillaXlsxSchema>;

@@ -115,14 +115,18 @@ export function useGenerarActividad(activo = true) {
 			}
 			setGenerando(true);
 			try {
-				return await generarActividadSeguimientoApi(datos);
+				const exito = await generarActividadSeguimientoApi(datos);
+				if (exito) {
+					cargarPlantillas(true).catch(() => {});
+				}
+				return exito;
 			} catch {
 				return false;
 			} finally {
 				setGenerando(false);
 			}
 		},
-		[configuracionValida],
+		[configuracionValida, cargarPlantillas],
 	);
 
 	const carpetaDrive: CarpetaDriveInfo = {

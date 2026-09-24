@@ -93,7 +93,21 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 		}
 
 		try {
-			const exito = await ejecutarGeneracion(valoresActuales);
+			const claseObj = clases.find((c) => c.idClassroom === valoresActuales.idClase);
+			const plantillaObj = plantillas.find((p) => p.id === valoresActuales.idPlantilla);
+			const temaObj = temas.find((t) => t.idTema === valoresActuales.idTema);
+
+			const exito = await ejecutarGeneracion({
+				...valoresActuales,
+				nombreClase: claseObj?.nombre,
+				nombrePlantilla: plantillaObj?.nombre,
+				enlacePlantilla:
+					plantillaObj?.enlaceWeb ||
+					(valoresActuales.idPlantilla
+						? `https://drive.google.com/open?id=${valoresActuales.idPlantilla}`
+						: undefined),
+				nombreTema: temaObj?.nombre,
+			});
 			if (exito) {
 				setModalConfirmarAbierto(false);
 				setModalExitoAbierto(true);

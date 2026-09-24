@@ -24,12 +24,19 @@ export const TemaClassroomDtoSchema = z.object({
 export const TareaClassroomDtoSchema = z.object({
 	idTarea: z.string(),
 	idClase: z.string().optional(),
+	nombreClase: z.string().nullable().optional(),
 	titulo: z.string(),
-	descripcion: z.string().optional(),
+	descripcion: z.string().nullable().optional(),
 	estado: z.string().optional(),
-	enlaceTarea: z.string().optional(),
+	enlaceTarea: z.string().nullable().optional(),
 	fechaLimite: z.string().nullable().optional(),
 	puntajeMaximo: z.number().nullable().optional(),
+	idTema: z.string().nullable().optional(),
+	nombreTema: z.string().nullable().optional(),
+	idPlantilla: z.string().nullable().optional(),
+	nombrePlantilla: z.string().nullable().optional(),
+	enlacePlantilla: z.string().nullable().optional(),
+	fechaCreacion: z.string().nullable().optional(),
 });
 export type TareaClassroomDto = z.infer<typeof TareaClassroomDtoSchema>;
 
@@ -40,7 +47,11 @@ export const CrearTareaPeticionDtoSchema = z.object({
 	fechaLimite: z.string().optional(),
 	estado: z.string().optional(),
 	idTema: z.string().optional(),
+	nombreTema: z.string().optional(),
 	idPlantilla: z.string().optional(),
+	nombrePlantilla: z.string().optional(),
+	enlacePlantilla: z.string().optional(),
+	nombreClase: z.string().optional(),
 });
 export type CrearTareaPeticionDto = z.infer<typeof CrearTareaPeticionDtoSchema>;
 
@@ -78,7 +89,7 @@ export async function obtenerClasesDocente(): Promise<ClaseDocente[]> {
 export async function obtenerPlantillasParaFormulario(): Promise<PlantillaSeguimientoOpcion[]> {
 	const res = await obtenerPlantillas();
 
-	const plantillasDrive = res.plantillas.map((p) => {
+	const plantillasDrive: PlantillaSeguimientoOpcion[] = res.plantillas.map((p) => {
 		const estructuraValida = !p.nombre.toLowerCase().includes("invalida");
 
 		return {
@@ -86,7 +97,7 @@ export async function obtenerPlantillasParaFormulario(): Promise<PlantillaSeguim
 			nombre: p.nombre.replace(/\.(xlsx|xls|gsheet)$/iu, ""),
 			tipoMime: p.tipoMime,
 			enlaceWeb: p.enlaceWeb ?? null,
-			frecuenciaUso: 0,
+			frecuenciaUso: p.frecuenciaUso ?? 0,
 			estructuraValida,
 			mensajeErrorEstructura: estructuraValida
 				? undefined
@@ -99,6 +110,10 @@ export async function obtenerPlantillasParaFormulario(): Promise<PlantillaSeguim
 					],
 		};
 	});
+
+	plantillasDrive.sort(
+		(a, b) => b.frecuenciaUso - a.frecuenciaUso || a.nombre.localeCompare(b.nombre, "es"),
+	);
 
 	return [...plantillasDrive, PLANTILLA_MOCK_INVALIDA];
 }
@@ -113,6 +128,26 @@ export async function obtenerTemasClase(idClase: string): Promise<TemaClase[]> {
 	);
 }
 
+export async function obtenerActividadesSeguimiento(): Promise<TareaClassroomDto[]> {
+	const apiBaseUrl = obtenerApiBaseUrl();
+	return ejecutarPeticion(
+		`${apiBaseUrl}/actividades-seguimiento`,
+		{ method: "GET" },
+		z.array(TareaClassroomDtoSchema),
+		"Error al consultar las actividades de seguimiento",
+	);
+}
+
+export async function sincronizarActividadesSeguimiento(): Promise<TareaClassroomDto[]> {
+	const apiBaseUrl = obtenerApiBaseUrl();
+	return ejecutarPeticion(
+		`${apiBaseUrl}/actividades-seguimiento/sincronizar`,
+		{ method: "POST" },
+		z.array(TareaClassroomDtoSchema),
+		"Error al sincronizar las actividades de seguimiento con Google Classroom",
+	);
+}
+
 export async function generarActividadSeguimientoApi(
 	datos: FormGenerarActividadValores,
 ): Promise<boolean> {
@@ -120,7 +155,11 @@ export async function generarActividadSeguimientoApi(
 		titulo: datos.titulo,
 		descripcion: datos.descripcion || undefined,
 		idTema: datos.idTema || undefined,
+		nombreTema: datos.nombreTema || undefined,
 		idPlantilla: datos.idPlantilla || undefined,
+		nombrePlantilla: datos.nombrePlantilla || undefined,
+		enlacePlantilla: datos.enlacePlantilla || undefined,
+		nombreClase: datos.nombreClase || undefined,
 		fechaLimite: datos.fechaVencimiento
 			? `${datos.fechaVencimiento}T${datos.horaVencimiento || "23:59"}:00`
 			: undefined,

@@ -40,6 +40,7 @@ function formatearFecha(fechaIso?: string | null): string {
 
 export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({ plantilla }) => {
 	const etiquetaFormato = obtenerEtiquetaFormatoPlantilla(plantilla);
+	const usos = plantilla.frecuenciaUso ?? 0;
 
 	return (
 		<Card className="border-slate-200/90 bg-white shadow-xs">
@@ -63,6 +64,16 @@ export const TarjetaPlantilla: React.FC<TarjetaPlantillaProps> = ({ plantilla })
 				</div>
 
 				<div className="space-y-3 border-slate-100 border-t pt-3 text-slate-600 text-xs">
+					<div className="flex items-center justify-between gap-3">
+						<span>Frecuencia de uso</span>
+						<Badge
+							variant={usos > 0 ? "primary" : "slate"}
+							className="px-2 py-0 font-semibold text-[10.5px]"
+						>
+							{usos > 0 ? `Usada ${usos} ${usos === 1 ? "vez" : "veces"}` : "Sin usos"}
+						</Badge>
+					</div>
+
 					<div className="flex items-center justify-between gap-3">
 						<span>Tamaño</span>
 						<span className="truncate text-right font-medium text-slate-800">

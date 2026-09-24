@@ -23,12 +23,16 @@ export type PlantillaSeguimientoOpcion = {
 
 export type FormGenerarActividadValores = {
 	idClase: string;
+	nombreClase?: string | undefined;
 	titulo: string;
 	fechaVencimiento: string;
 	idPlantilla: string;
+	nombrePlantilla?: string | undefined;
+	enlacePlantilla?: string | null | undefined;
 	descripcion?: string | undefined;
 	horaVencimiento?: string | undefined;
 	idTema?: string | undefined;
+	nombreTema?: string | undefined;
 };
 
 export type ResumenConfirmacionActividad = {
@@ -50,18 +54,29 @@ export type CrearTareaPeticionDto = {
 	fechaLimite?: string | undefined;
 	estado?: string | undefined;
 	idTema?: string | undefined;
+	nombreTema?: string | undefined;
 	idPlantilla?: string | undefined;
+	nombrePlantilla?: string | undefined;
+	enlacePlantilla?: string | undefined;
+	nombreClase?: string | undefined;
 };
 
 export type TareaRespuestaDto = {
 	idTarea: string;
 	idClase?: string | undefined;
+	nombreClase?: string | null | undefined;
 	titulo: string;
-	descripcion?: string | undefined;
+	descripcion?: string | null | undefined;
 	estado?: string | undefined;
-	enlaceTarea?: string | undefined;
+	enlaceTarea?: string | null | undefined;
 	fechaLimite?: string | null | undefined;
 	puntajeMaximo?: number | null | undefined;
+	idTema?: string | null | undefined;
+	nombreTema?: string | null | undefined;
+	idPlantilla?: string | null | undefined;
+	nombrePlantilla?: string | null | undefined;
+	enlacePlantilla?: string | null | undefined;
+	fechaCreacion?: string | null | undefined;
 };
 
 export const TiposActividades = true;

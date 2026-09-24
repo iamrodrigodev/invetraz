@@ -1,17 +1,37 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import * as actividadesApi from "@/features/actividades/api/actividades.api.ts";
 import { ActividadesSeguimientoPage } from "@/features/actividades/pages/ActividadesSeguimientoPage.tsx";
 import { useClasesDocenteStore } from "@/features/actividades/store/useClasesDocenteStore.ts";
 import { usePlantillasSeguimientoStore } from "@/features/actividades/store/usePlantillasSeguimientoStore.ts";
 import { useConfiguracionStore } from "@/features/configuracion/store/useConfiguracionStore.ts";
 
 vi.mock("@/features/actividades/components/ModalGenerarActividad", () => ({
-	ModalGenerarActividad: ({ abierto, alCerrar }: { abierto: boolean; alCerrar: () => void }) =>
+	ModalGenerarActividad: ({
+		abierto,
+		alCerrar,
+		onActividadGenerada,
+	}: {
+		abierto: boolean;
+		alCerrar: () => void;
+		onActividadGenerada?: () => void;
+	}) =>
 		abierto ? (
 			<div data-testid="modal-generar">
 				<span>Modal Abierto</span>
 				<button type="button" onClick={alCerrar}>
 					Cerrar Modal
+				</button>
+				<button
+					type="button"
+					onClick={() => {
+						alCerrar();
+						if (onActividadGenerada) {
+							onActividadGenerada();
+						}
+					}}
+				>
+					Completar Generacion
 				</button>
 			</div>
 		) : null,
@@ -23,6 +43,8 @@ describe("ActividadesSeguimientoPage", () => {
 		useConfiguracionStore.getState().limpiar();
 		usePlantillasSeguimientoStore.getState().limpiar();
 		useClasesDocenteStore.getState().limpiar();
+		vi.spyOn(actividadesApi, "obtenerActividadesSeguimiento").mockResolvedValue([]);
+		vi.spyOn(actividadesApi, "sincronizarActividadesSeguimiento").mockResolvedValue([]);
 	});
 
 	it("muestra skeleton mientras carga la configuracion inicial y luego el estado vacio", async () => {
@@ -42,6 +64,8 @@ describe("ActividadesSeguimientoPage", () => {
 		});
 
 		render(<ActividadesSeguimientoPage />);
+
+		expect(screen.getByTestId("actividades-seguimiento-skeleton")).toBeDefined();
 
 		await act(async () => {
 			await new Promise((r) => setTimeout(r, 250));
@@ -129,6 +153,80 @@ describe("ActividadesSeguimientoPage", () => {
 		expect(screen.queryByTestId("modal-generar")).toBeNull();
 	});
 
+	it("muestra skeleton -> Actividades de seguimiento al generar una nueva actividad y al sincronizar", async () => {
+		const cargarPlantillas = vi.fn().mockResolvedValue([]);
+		useConfiguracionStore.setState({
+			cargado: true,
+			estadoConexion: "conectado",
+			credenciales: {
+				googleClientId: "id",
+				googleClientSecret: "sec",
+				googleRefreshToken: "tok",
+				googleVerificado: true,
+				googleDriveFolderId: "folder",
+				driveVerificado: true,
+			},
+		});
+		usePlantillasSeguimientoStore.setState({
+			cargado: true,
+			cargarPlantillas,
+		});
+
+		render(<ActividadesSeguimientoPage />);
+
+		await act(async () => {
+			await new Promise((r) => setTimeout(r, 100));
+		});
+
+		let resolverActividades!: (valor: actividadesApi.TareaClassroomDto[]) => void;
+		vi.spyOn(actividadesApi, "obtenerActividadesSeguimiento").mockReturnValueOnce(
+			new Promise((resolve) => {
+				resolverActividades = resolve;
+			}),
+		);
+
+		fireEvent.click(screen.getByRole("button", { name: /^Generar$/iu }));
+		fireEvent.click(screen.getByRole("button", { name: "Completar Generacion" }));
+
+		expect(screen.getByTestId("actividades-seguimiento-skeleton")).toBeDefined();
+
+		await act(async () => {
+			resolverActividades([
+				{
+					idTarea: "t-nueva-1",
+					idClase: "c-101",
+					nombreClase: "Tesis I",
+					titulo: "Avance de Matriz de Consistencia",
+					nombrePlantilla: "Matriz.xlsx",
+					estado: "PUBLISHED",
+					enlaceTarea: "https://classroom.google.com/c/1/a/1",
+				},
+			]);
+		});
+
+		expect(screen.getByTestId("lista-actividades-seguimiento")).toBeDefined();
+		expect(screen.getByText("Avance de Matriz de Consistencia")).toBeDefined();
+		expect(cargarPlantillas).toHaveBeenCalledWith(true);
+
+		vi.spyOn(actividadesApi, "sincronizarActividadesSeguimiento").mockResolvedValueOnce([
+			{
+				idTarea: "t-nueva-1",
+				idClase: "c-101",
+				nombreClase: "Tesis I",
+				titulo: "Avance Sincronizado",
+				nombrePlantilla: "Matriz.xlsx",
+				estado: "PUBLISHED",
+			},
+		]);
+
+		const btnSincronizar = screen.getByRole("button", { name: /sincronizar/iu });
+		await act(async () => {
+			fireEvent.click(btnSincronizar);
+		});
+
+		expect(screen.getByText("Avance Sincronizado")).toBeDefined();
+	});
+
 	it("captura errores de inicializacion sin interrumpir", async () => {
 		useConfiguracionStore.setState({
 			cargado: false,
@@ -137,6 +235,9 @@ describe("ActividadesSeguimientoPage", () => {
 		usePlantillasSeguimientoStore.setState({
 			cargarPlantillas: vi.fn().mockRejectedValue(new Error("Fallo plantillas")),
 		});
+		vi.spyOn(actividadesApi, "obtenerActividadesSeguimiento").mockRejectedValueOnce(
+			new Error("Fallo red"),
+		);
 
 		render(<ActividadesSeguimientoPage />);
 
