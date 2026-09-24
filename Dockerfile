@@ -14,7 +14,12 @@ FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN apk add --no-cache tzdata && \
+    cp /usr/share/zoneinfo/America/Lima /etc/localtime && \
+    echo "America/Lima" > /etc/timezone && \
+    addgroup -S appgroup && adduser -S appuser -G appgroup
+
+ENV TZ=America/Lima
 
 COPY --chown=appuser:appgroup --from=builder /app/target/*.jar app.jar
 
@@ -22,4 +27,4 @@ USER appuser
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-Djava.net.preferIPv4Stack=true", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Duser.timezone=America/Lima", "-Djava.security.egd=file:/dev/./urandom", "-Djava.net.preferIPv4Stack=true", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]

@@ -16,6 +16,8 @@ public class SistemaDeInvestigacion {
     }
 
     public static void main(String[] args) {
+        TimeZone.setDefault(TimeZone.getTimeZone("America/Lima"));
+        System.setProperty("user.timezone", "America/Lima");
         System.setProperty("java.net.preferIPv4Stack", "true");
         System.setProperty("java.net.preferIPv6Addresses", "false");
         System.setProperty("http.maxConnections", "30");
