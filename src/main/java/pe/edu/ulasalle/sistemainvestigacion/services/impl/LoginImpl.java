@@ -3,9 +3,9 @@ package pe.edu.ulasalle.sistemainvestigacion.services.impl;
 import java.util.Locale;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.ExcepcionDeNegocio;
 import pe.edu.ulasalle.sistemainvestigacion.core.exceptions.MensajesDeError;
 import pe.edu.ulasalle.sistemainvestigacion.core.security.ConstantesSeguridad;
@@ -25,23 +25,20 @@ public class LoginImpl implements CasoUsoLogin {
     private final PasswordEncoder passwordEncoder;
     private final ServicioJwt servicioJwt;
     private final ServicioLimitadorIntentos servicioLimitadorIntentos;
-    private final boolean actualizarPasswordEnLogin;
 
     public LoginImpl(
             UsuarioRepository usuarioRepository,
             PasswordEncoder passwordEncoder,
             ServicioJwt servicioJwt,
-            ServicioLimitadorIntentos servicioLimitadorIntentos,
-            @Value("${app.security.upgrade-password-on-login:false}")
-                    boolean actualizarPasswordEnLogin) {
+            ServicioLimitadorIntentos servicioLimitadorIntentos) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.servicioJwt = servicioJwt;
         this.servicioLimitadorIntentos = servicioLimitadorIntentos;
-        this.actualizarPasswordEnLogin = actualizarPasswordEnLogin;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public LoginRespuesta ejecutar(LoginPeticion peticion) {
         long tInicio = System.currentTimeMillis();
 
@@ -54,9 +51,6 @@ public class LoginImpl implements CasoUsoLogin {
 
         long t0 = System.currentTimeMillis();
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(emailNormalizado);
-        if (usuarioOpt.isEmpty()) {
-            usuarioOpt = usuarioRepository.findByEmailIgnoreCase(emailNormalizado);
-        }
         long tDb = System.currentTimeMillis() - t0;
 
         if (usuarioOpt.isEmpty()) {
@@ -88,14 +82,6 @@ public class LoginImpl implements CasoUsoLogin {
         long tHash = System.currentTimeMillis() - t1;
 
         servicioLimitadorIntentos.limpiarIntentos(claveRateLimit);
-
-        if (actualizarPasswordEnLogin && passwordEncoder.upgradeEncoding(usuario.getPassword())) {
-            usuario.setPassword(passwordEncoder.encode(peticion.password()));
-            usuarioRepository.save(usuario);
-            log.debug(
-                    "Password de usuario {} actualizado transparentemente a BCrypt",
-                    emailNormalizado);
-        }
 
         long t2 = System.currentTimeMillis();
         String token =

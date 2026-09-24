@@ -45,11 +45,7 @@ class LoginImplTest {
         servicioLimitadorIntentos = new ServicioLimitadorIntentos();
         loginService =
                 new LoginImpl(
-                        usuarioRepository,
-                        passwordEncoder,
-                        servicioJwt,
-                        servicioLimitadorIntentos,
-                        false);
+                        usuarioRepository, passwordEncoder, servicioJwt, servicioLimitadorIntentos);
     }
 
     @Test
@@ -81,8 +77,6 @@ class LoginImplTest {
     @Test
     void ejecutar_usuarioNoExiste_lanzaExcepcionInmediatamente() {
         when(usuarioRepository.findByEmail("noexiste@ulasalle.edu.pe"))
-                .thenReturn(Optional.empty());
-        when(usuarioRepository.findByEmailIgnoreCase("noexiste@ulasalle.edu.pe"))
                 .thenReturn(Optional.empty());
 
         LoginPeticion peticion = new LoginPeticion("noexiste@ulasalle.edu.pe", "ClaveInvalida123");
@@ -120,45 +114,7 @@ class LoginImplTest {
     }
 
     @Test
-    void ejecutar_upgradeEncodingNecesarioConFlagActivo_actualizaPasswordYRetornaToken() {
-        loginService =
-                new LoginImpl(
-                        usuarioRepository,
-                        passwordEncoder,
-                        servicioJwt,
-                        servicioLimitadorIntentos,
-                        true);
-        UUID idUsuario = UUID.randomUUID();
-        String rawPassword = "Password123";
-        String legacyHash = "$argon2id$v=19$m=1024,t=1,p=1$oldhash";
-        String nuevoBcrypt = "$2a$10$newhash";
-
-        Usuario usuario =
-                Usuario.builder()
-                        .id(idUsuario)
-                        .email("admin@ulasalle.edu.pe")
-                        .password(legacyHash)
-                        .build();
-
-        when(usuarioRepository.findByEmail("admin@ulasalle.edu.pe"))
-                .thenReturn(Optional.of(usuario));
-        when(passwordEncoder.matches(rawPassword, legacyHash)).thenReturn(true);
-        when(passwordEncoder.upgradeEncoding(legacyHash)).thenReturn(true);
-        when(passwordEncoder.encode(rawPassword)).thenReturn(nuevoBcrypt);
-        when(servicioJwt.generarTokenAcceso(idUsuario, ConstantesSeguridad.ROL_ADMIN))
-                .thenReturn("token-upgrade");
-
-        LoginPeticion peticion = new LoginPeticion("admin@ulasalle.edu.pe", rawPassword);
-        LoginRespuesta respuesta = loginService.ejecutar(peticion);
-
-        assertNotNull(respuesta);
-        assertEquals("token-upgrade", respuesta.tokenAcceso());
-        assertEquals(nuevoBcrypt, usuario.getPassword());
-        verify(usuarioRepository).save(usuario);
-    }
-
-    @Test
-    void ejecutar_upgradeEncodingNecesarioConFlagInactivo_noActualizaPassword() {
+    void ejecutar_hashLegacyValido_noActualizaPasswordDuranteLogin() {
         UUID idUsuario = UUID.randomUUID();
         String rawPassword = "Password123";
         String legacyHash = "$argon2id$v=19$m=1024,t=1,p=1$oldhash";
@@ -190,8 +146,6 @@ class LoginImplTest {
     void ejecutar_superaLimiteIntentos_lanzaExcepcion429() {
         when(usuarioRepository.findByEmail("bloqueado@ulasalle.edu.pe"))
                 .thenReturn(Optional.empty());
-        when(usuarioRepository.findByEmailIgnoreCase("bloqueado@ulasalle.edu.pe"))
-                .thenReturn(Optional.empty());
 
         LoginPeticion peticion = new LoginPeticion("bloqueado@ulasalle.edu.pe", "ClaveErrada123");
 
@@ -217,7 +171,7 @@ class LoginImplTest {
     }
 
     @Test
-    void ejecutar_usuarioAntiguoConEmailMixto_usaFallbackIgnoreCase() {
+    void ejecutar_normalizaEmailAntesDeBuscar() {
         UUID idUsuario = UUID.randomUUID();
         String rawPassword = "Password123";
         String encodedPassword = "$2a$10$hashedpassword";
@@ -228,18 +182,16 @@ class LoginImplTest {
                         .password(encodedPassword)
                         .build();
 
-        when(usuarioRepository.findByEmail("admin@ulasalle.edu.pe")).thenReturn(Optional.empty());
-        when(usuarioRepository.findByEmailIgnoreCase("admin@ulasalle.edu.pe"))
+        when(usuarioRepository.findByEmail("admin@ulasalle.edu.pe"))
                 .thenReturn(Optional.of(usuario));
         when(passwordEncoder.matches(rawPassword, encodedPassword)).thenReturn(true);
         when(servicioJwt.generarTokenAcceso(idUsuario, ConstantesSeguridad.ROL_ADMIN))
-                .thenReturn("token-fallback");
+                .thenReturn("token-normalizado");
 
         LoginPeticion peticion = new LoginPeticion("Admin@ulasalle.edu.pe", rawPassword);
         LoginRespuesta respuesta = loginService.ejecutar(peticion);
 
-        assertEquals("token-fallback", respuesta.tokenAcceso());
+        assertEquals("token-normalizado", respuesta.tokenAcceso());
         verify(usuarioRepository).findByEmail("admin@ulasalle.edu.pe");
-        verify(usuarioRepository).findByEmailIgnoreCase("admin@ulasalle.edu.pe");
     }
 }
