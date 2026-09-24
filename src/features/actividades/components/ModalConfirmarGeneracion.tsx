@@ -4,14 +4,17 @@ import {
 	Calendar,
 	Check,
 	CheckCircle2,
+	Clock,
 	ExternalLink,
 	FileSpreadsheet,
 	GraduationCap,
+	Loader2,
 	RefreshCw,
 	Tag,
 	X,
 } from "lucide-react";
 import type React from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/Badge.tsx";
 import { Button } from "@/components/ui/Button.tsx";
 import { Modal } from "@/components/ui/Modal.tsx";
@@ -69,6 +72,24 @@ function formatearFechaVencimiento(fechaStr: string, horaStr?: string): string {
 	return horaFormateada ? `${fechaStr} a las ${horaFormateada}` : fechaStr;
 }
 
+const ETAPAS_PROGRESO = [
+	{
+		id: 1,
+		titulo: "Validando datos y permisos",
+		descripcion: "Comprobando conexión con Google Classroom y Drive",
+	},
+	{
+		id: 2,
+		titulo: "Vinculando plantilla de seguimiento",
+		descripcion: "Preparando copias individuales de la plantilla para los alumnos",
+	},
+	{
+		id: 3,
+		titulo: "Asignando actividad a los alumnos",
+		descripcion: "Creando tarea y publicando en Google Classroom",
+	},
+];
+
 export const ModalConfirmarGeneracion: React.FC<ModalConfirmarGeneracionProps> = ({
 	abierto,
 	cargando,
@@ -76,6 +97,32 @@ export const ModalConfirmarGeneracion: React.FC<ModalConfirmarGeneracionProps> =
 	alConfirmar,
 	alCerrar,
 }) => {
+	const [pasoProgreso, setPasoProgreso] = useState<number>(1);
+
+	useEffect(() => {
+		if (!cargando) {
+			setPasoProgreso(1);
+			return;
+		}
+
+		setPasoProgreso(1);
+
+		// Paso 2 a los 700ms
+		const timerPaso2 = setTimeout(() => {
+			setPasoProgreso(2);
+		}, 700);
+
+		// Paso 3 a los 1900ms
+		const timerPaso3 = setTimeout(() => {
+			setPasoProgreso(3);
+		}, 1900);
+
+		return () => {
+			clearTimeout(timerPaso2);
+			clearTimeout(timerPaso3);
+		};
+	}, [cargando]);
+
 	if (!resumen) {
 		return null;
 	}
@@ -100,6 +147,65 @@ export const ModalConfirmarGeneracion: React.FC<ModalConfirmarGeneracionProps> =
 				<p className="-mt-2 text-slate-600 text-sm">
 					Revisa la información antes de generar la actividad de seguimiento.
 				</p>
+
+				{cargando && (
+					<div
+						data-testid="indicador-progreso-actividad"
+						className="space-y-3 rounded-lg border border-primary/20 bg-slate-50/80 p-3.5 shadow-xs"
+					>
+						<div className="flex items-center justify-between">
+							<span className="font-semibold text-primary text-xs uppercase tracking-wider">
+								Progreso de creación
+							</span>
+							<span className="text-slate-500 text-xs">Paso {pasoProgreso} de 3</span>
+						</div>
+
+						<div className="space-y-2.5">
+							{ETAPAS_PROGRESO.map((etapa) => {
+								const estaCompletado = etapa.id < pasoProgreso;
+								const estaActivo = etapa.id === pasoProgreso;
+
+								return (
+									<div key={etapa.id} className="flex items-start gap-2.5">
+										<div className="mt-0.5 shrink-0">
+											{estaCompletado ? (
+												<div className="flex h-4.5 w-4.5 items-center justify-center rounded-full bg-emerald-600 text-white">
+													<Check size={11} strokeWidth={3} />
+												</div>
+											) : estaActivo ? (
+												<div className="flex h-4.5 w-4.5 items-center justify-center rounded-full bg-primary text-white">
+													<Loader2 size={11} className="animate-spin" />
+												</div>
+											) : (
+												<div className="flex h-4.5 w-4.5 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-400">
+													<Clock size={10} />
+												</div>
+											)}
+										</div>
+										<div className="min-w-0 flex-1">
+											<p
+												className={`text-xs ${
+													estaActivo
+														? "font-semibold text-slate-900"
+														: estaCompletado
+															? "font-medium text-slate-700"
+															: "text-slate-400"
+												}`}
+											>
+												{etapa.titulo}
+											</p>
+											{estaActivo && (
+												<p className="animate-fadeIn text-[11px] text-slate-500">
+													{etapa.descripcion}
+												</p>
+											)}
+										</div>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+				)}
 
 				<div className="space-y-3.5 pt-1">
 					<div className="flex items-start gap-3">
