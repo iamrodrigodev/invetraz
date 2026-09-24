@@ -6,7 +6,10 @@ import { ModalConfirmarGeneracion } from "@/features/actividades/components/Moda
 import { ModalErrorGeneracion } from "@/features/actividades/components/ModalErrorGeneracion.tsx";
 import { ModalExitoGeneracion } from "@/features/actividades/components/ModalExitoGeneracion.tsx";
 import { useGenerarActividad } from "@/features/actividades/hooks/useGenerarActividad.ts";
-import type { GenerarActividadSchemaTipo } from "@/features/actividades/schemas/actividades.schemas.ts";
+import {
+	GenerarActividadSchema,
+	type GenerarActividadSchemaTipo,
+} from "@/features/actividades/schemas/actividades.schemas.ts";
 import type { ResumenConfirmacionActividad } from "@/features/actividades/types/actividades.types.ts";
 import { esFormatoGoogleSheet } from "@/utils/formatoPlantilla.ts";
 
@@ -82,6 +85,14 @@ export const ModalGenerarActividad: React.FC<ModalGenerarActividadProps> = ({
 		if (!valoresActuales) {
 			return;
 		}
+
+		// Revalidar en tiempo real por si la hora ingresada expiró mientras el modal estaba abierto
+		const validacionFresca = GenerarActividadSchema.safeParse(valoresActuales);
+		if (!validacionFresca.success) {
+			setModalConfirmarAbierto(false);
+			return;
+		}
+
 		try {
 			const exito = await ejecutarGeneracion(valoresActuales);
 			if (exito) {

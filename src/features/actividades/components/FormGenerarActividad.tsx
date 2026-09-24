@@ -107,12 +107,40 @@ export const FormGenerarActividad: React.FC<FormGenerarActividadProps> = ({
 
 	const idClaseSeleccionada = watch("idClase");
 	const idPlantillaSeleccionada = watch("idPlantilla");
+	const fechaVencimientoSeleccionada = watch("fechaVencimiento");
+	const horaVencimientoSeleccionada = watch("horaVencimiento");
 
 	useEffect(() => {
 		if (onCambioClase) {
 			onCambioClase(idClaseSeleccionada);
 		}
 	}, [idClaseSeleccionada, onCambioClase]);
+
+	// Revalidación reactiva en tiempo real mientras el formulario sigue abierto
+	useEffect(() => {
+		if (!(fechaVencimientoSeleccionada && horaVencimientoSeleccionada)) {
+			return;
+		}
+
+		const [anio, mes, dia] = fechaVencimientoSeleccionada.split("-").map(Number);
+		if (!(anio && mes && dia)) {
+			return;
+		}
+
+		const ahora = new Date();
+		const esHoy =
+			anio === ahora.getFullYear() && mes === ahora.getMonth() + 1 && dia === ahora.getDate();
+
+		if (!esHoy) {
+			return;
+		}
+
+		const intervalo = setInterval(() => {
+			trigger("horaVencimiento");
+		}, 30_000);
+
+		return () => clearInterval(intervalo);
+	}, [fechaVencimientoSeleccionada, horaVencimientoSeleccionada, trigger]);
 
 	const [validandoPlantilla, setValidandoPlantilla] = useState(false);
 	const idPlantillaPreviaRef = useRef<string | undefined>(
