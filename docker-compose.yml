@@ -1,0 +1,77 @@
+# ==============================================================================
+# SisInv (Sistema de Investigación) - Docker Compose para Producción / Evaluación
+# Despliegue All-in-One con PostgreSQL y Contenedor Unificado SisInv
+# ==============================================================================
+
+services:
+  # ----------------------------------------------------------------------------
+  # Servicio de Base de Datos: PostgreSQL 16
+  # ----------------------------------------------------------------------------
+  db:
+    image: postgres:16-alpine
+    container_name: sisinv-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-sistema_investigacion}
+      POSTGRES_USER: ${DB_USER:-investigacion}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres_password_segura}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - datos_postgres:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-investigacion} -d ${DB_NAME:-sistema_investigacion}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - red-sisinv
+
+  # ----------------------------------------------------------------------------
+  # Servicio de Aplicación: SisInv (Frontend SPA React + Backend FastAPI)
+  # ----------------------------------------------------------------------------
+  sisinv:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sisinv:latest
+    container_name: sisinv-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      PORT: 8080
+      HOST: 0.0.0.0
+      DEBUG: ${DEBUG:-false}
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-sistema_investigacion}
+      DB_USER: ${DB_USER:-investigacion}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres_password_segura}
+      APP_JWT_SECRET: ${APP_JWT_SECRET:-clave_secreta_jwt_para_entorno_local_segura_32_bytes}
+      APP_MASTER_KEY: ${APP_MASTER_KEY:-clave_maestra_aes_gcm_32_caracteres_minimo_segura!}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      APP_CORS_ORIGINS: ${APP_CORS_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}
+      DIR_ESTATICOS_FRONTEND: /app/frontend/dist
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    networks:
+      - red-sisinv
+
+volumes:
+  datos_postgres:
+    name: sisinv_datos_postgres
+
+networks:
+  red-sisinv:
+    name: red_sisinv
+    driver: bridge

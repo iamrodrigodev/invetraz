@@ -14,7 +14,19 @@ sistema-de-investigacion-front-end/
 .env.*.local
 *.env
 
-# Java / Maven (Backend)
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+.pytest_cache/
+backend/.venv/
+.venv/
+venv/
+ENV/
+
+# Java / Maven (Legacy)
 backend/target/
 **/target/
 *.class

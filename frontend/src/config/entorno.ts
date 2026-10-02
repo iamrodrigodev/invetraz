@@ -1,8 +1,13 @@
 import { z } from "zod";
 
 const apiBaseUrlLocal = "http://localhost:8080/api/v1";
-const apiBaseUrlProduccion = "https://api-investigacion.iamrodrigo.dev/api/v1";
-const apiBaseUrlNormalizada = import.meta.env.PROD ? apiBaseUrlProduccion : apiBaseUrlLocal;
+const apiBaseUrlProduccion =
+	typeof import.meta.env.VITE_API_BASE_URL === "string"
+		? import.meta.env.VITE_API_BASE_URL
+		: "https://api-investigacion.iamrodrigo.dev/api/v1";
+const apiBaseUrlNormalizada = import.meta.env.PROD
+	? apiBaseUrlProduccion
+	: (import.meta.env.VITE_API_BASE_URL || apiBaseUrlLocal);
 
 const EntornoSchema = z.object({
 	VITE_API_BASE_URL: z.string(),

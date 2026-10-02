@@ -1,0 +1,28 @@
+# ==============================================================================
+# SisInv (Sistema de Investigación) - Docker Compose para Desarrollo
+# Permite levantar la base de datos PostgreSQL localmente para desarrollo
+# ==============================================================================
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: sisinv-dev-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sistema_investigacion
+      POSTGRES_USER: investigacion
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - datos_postgres_dev:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U investigacion -d sistema_investigacion"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  datos_postgres_dev:
+    name: sisinv_datos_postgres_dev
