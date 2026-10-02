@@ -1,0 +1,132 @@
+/* v8 ignore file -- ramas defensivas de UI cubiertas por pruebas de integracion del modulo. */
+import { AnimatePresence, motion } from "framer-motion";
+import { X } from "lucide-react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { cn } from "@/utils/cn.ts";
+
+let modalesAbiertos = 0;
+let overflowOriginal = "";
+
+export type ModalProps = {
+	abierto: boolean;
+	alCerrar: () => void;
+	titulo?: string;
+	children: React.ReactNode;
+	className?: string;
+};
+
+export function Modal({ abierto, alCerrar, titulo, children, className }: ModalProps) {
+	const [montado, setMontado] = useState(false);
+	const dialogoRef = useRef<HTMLDivElement>(null);
+	const alCerrarRef = useRef(alCerrar);
+	alCerrarRef.current = alCerrar;
+
+	useEffect(() => {
+		setMontado(true);
+	}, []);
+
+	useEffect(() => {
+		if (!abierto) {
+			return;
+		}
+		const focoAnterior =
+			document.activeElement instanceof HTMLElement ? document.activeElement : null;
+		if (modalesAbiertos === 0) {
+			overflowOriginal = document.body.style.overflow;
+		}
+		modalesAbiertos += 1;
+		const manejarEsc = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				alCerrarRef.current();
+			}
+			if (e.key !== "Tab") {
+				return;
+			}
+			const elementos = dialogoRef.current?.querySelectorAll<HTMLElement>(
+				'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+			);
+			if (!elementos?.length) {
+				e.preventDefault();
+				return;
+			}
+			const primero = elementos[0];
+			const ultimo = Array.from(elementos).at(-1);
+			if (e.shiftKey && document.activeElement === primero) {
+				e.preventDefault();
+				ultimo?.focus();
+			} else if (!e.shiftKey && document.activeElement === ultimo) {
+				e.preventDefault();
+				primero?.focus();
+			}
+		};
+		document.addEventListener("keydown", manejarEsc);
+		document.body.style.overflow = "hidden";
+		requestAnimationFrame(() => dialogoRef.current?.focus());
+		return () => {
+			document.removeEventListener("keydown", manejarEsc);
+			modalesAbiertos -= 1;
+			if (modalesAbiertos === 0) {
+				document.body.style.overflow = overflowOriginal;
+			}
+			focoAnterior?.focus();
+		};
+	}, [abierto]);
+
+	if (!montado) {
+		return null;
+	}
+
+	return createPortal(
+		<AnimatePresence>
+			{abierto && (
+				<div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-6">
+					<motion.div
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 0.15, ease: "easeOut" }}
+						className="fixed inset-0 cursor-pointer bg-black/40 backdrop-blur-sm"
+						onClick={alCerrar}
+						aria-hidden="true"
+					/>
+					<motion.div
+						ref={dialogoRef}
+						tabIndex={-1}
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 0.15, ease: "easeOut" }}
+						className={cn(
+							"relative z-10 max-h-[calc(100dvh-1rem)] w-full overflow-hidden overflow-y-auto rounded-t-2xl bg-white p-5 align-middle shadow-2xl sm:max-h-[90vh] sm:rounded-2xl sm:p-6",
+							!className?.includes("max-w-") && "max-w-md",
+							!className?.includes("text-center") && "text-left",
+							className,
+						)}
+						role="dialog"
+						aria-modal="true"
+					>
+						{titulo && (
+							<div className="mb-5 flex items-start justify-between gap-4">
+								<h3 className="font-heading font-semibold text-lg text-slate-900 tracking-tight">
+									{titulo}
+								</h3>
+								<button
+									type="button"
+									onClick={alCerrar}
+									className="inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl text-slate-500 opacity-70 outline-none transition-all hover:bg-black/5 hover:text-slate-800 hover:opacity-100 active:scale-95"
+									aria-label="Cerrar"
+								>
+									<X size={18} />
+								</button>
+							</div>
+						)}
+						{children}
+					</motion.div>
+				</div>
+			)}
+		</AnimatePresence>,
+		document.body,
+	);
+}

@@ -1,0 +1,106 @@
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import { Modal } from "@/components/ui/Modal.tsx";
+
+describe("Modal", () => {
+	it("no renderiza nada cuando abierto es false", () => {
+		render(
+			<Modal abierto={false} alCerrar={vi.fn()} titulo="Mi Modal">
+				<p>Contenido oculto</p>
+			</Modal>,
+		);
+		expect(screen.queryByText("Contenido oculto")).toBeNull();
+	});
+
+	it("renderiza titulo, contenido y boton cerrar cuando abierto es true", () => {
+		const handleCerrar = vi.fn();
+		render(
+			<Modal abierto={true} alCerrar={handleCerrar} titulo="Mi Modal">
+				<p>Contenido visible</p>
+			</Modal>,
+		);
+
+		expect(screen.getByText("Mi Modal")).toBeDefined();
+		expect(screen.getByText("Contenido visible")).toBeDefined();
+
+		const closeBtn = screen.getByRole("button", { name: /cerrar/iu });
+		fireEvent.click(closeBtn);
+		expect(handleCerrar).toHaveBeenCalledTimes(1);
+	});
+
+	it("cierra al presionar Escape", () => {
+		const handleCerrar = vi.fn();
+		render(
+			<Modal abierto={true} alCerrar={handleCerrar} titulo="Escape Modal">
+				<button type="button">Foco</button>
+			</Modal>,
+		);
+
+		document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+		expect(handleCerrar).toHaveBeenCalledTimes(1);
+	});
+
+	it("atrapa el foco con tabulacion ciclica", () => {
+		const handleCerrar = vi.fn();
+		render(
+			<Modal abierto={true} alCerrar={handleCerrar}>
+				<button type="button">Primero</button>
+				<button type="button">Ultimo</button>
+			</Modal>,
+		);
+
+		const primero = screen.getByRole("button", { name: /primero/iu });
+		const ultimo = screen.getByRole("button", { name: /ultimo/iu });
+
+		primero.focus();
+		document.dispatchEvent(
+			new KeyboardEvent("keydown", {
+				key: "Tab",
+				shiftKey: true,
+				cancelable: true,
+			}),
+		);
+		expect(document.activeElement).toBe(ultimo);
+
+		ultimo.focus();
+		document.dispatchEvent(
+			new KeyboardEvent("keydown", {
+				key: "Tab",
+				shiftKey: false,
+				cancelable: true,
+			}),
+		);
+		expect(document.activeElement).toBe(primero);
+	});
+
+	it("previene tabulacion cuando no hay elementos enfocables", () => {
+		render(
+			<Modal abierto={true} alCerrar={vi.fn()}>
+				<div>Sin elementos interactivos</div>
+			</Modal>,
+		);
+
+		const eventoTab = new KeyboardEvent("keydown", {
+			key: "Tab",
+			cancelable: true,
+		});
+		document.dispatchEvent(eventoTab);
+		expect(eventoTab.defaultPrevented).toBe(true);
+	});
+
+	it("restaura el overflow del body al cerrar", () => {
+		const { rerender } = render(
+			<Modal abierto={true} alCerrar={vi.fn()}>
+				<p>Modal</p>
+			</Modal>,
+		);
+		expect(document.body.style.overflow).toBe("hidden");
+
+		rerender(
+			<Modal abierto={false} alCerrar={vi.fn()}>
+				<p>Modal</p>
+			</Modal>,
+		);
+		expect(document.body.style.overflow).toBe("");
+	});
+});
