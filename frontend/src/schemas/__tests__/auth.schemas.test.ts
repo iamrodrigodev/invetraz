@@ -11,9 +11,9 @@ import {
 
 describe("auth.schemas", () => {
 	describe("emailInstitucionalSchema", () => {
-		it("normaliza y valida correos institucionales validos", () => {
-			expect(emailInstitucionalSchema.parse(" admin@ulasalle.edu.pe ")).toBe(
-				"admin@ulasalle.edu.pe",
+		it("normaliza y valida correos validos", () => {
+			expect(emailInstitucionalSchema.parse(" admin@institucion.edu ")).toBe(
+				"admin@institucion.edu",
 			);
 		});
 
@@ -29,10 +29,12 @@ describe("auth.schemas", () => {
 			);
 		});
 
-		it("rechaza dominio no institucional", () => {
-			expect(
-				emailInstitucionalSchema.safeParse("admin@ejemplo.com").error?.issues[0]?.message,
-			).toBe("Debe ser un correo institucional (@ulasalle.edu.pe)");
+		it("acepta correos de cualquier dominio valido", () => {
+			expect(emailInstitucionalSchema.parse("admin@ejemplo.com")).toBe("admin@ejemplo.com");
+			expect(emailInstitucionalSchema.parse("usuario@gmail.com")).toBe("usuario@gmail.com");
+			expect(emailInstitucionalSchema.parse("investigador@organizacion.org")).toBe(
+				"investigador@organizacion.org",
+			);
 		});
 
 		it("rechaza correos que excedan 150 caracteres", () => {

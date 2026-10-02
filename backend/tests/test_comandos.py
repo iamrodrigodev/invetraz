@@ -42,15 +42,15 @@ def test_flujo_setup_y_creacion_admin(db_sesion):
     cmd_estado = ComandoObtenerEstadoSetup(repo_usuarios)
     assert cmd_estado.run().admin_configurado is False
 
-    # 2. Crear administrador exitosamente
+    # 2. Crear administrador exitosamente con cualquier dominio (sin restricción institucional)
     cmd_crear = ComandoCrearAdmin(
-        email="admin@ulasalle.edu.pe",
+        email="admin@cualquiera.org",
         password="claveSegura123",
         repo_usuarios=repo_usuarios,
         servicio_hash=hasher,
     )
     admin = cmd_crear.run()
-    assert admin.email == "admin@ulasalle.edu.pe"
+    assert admin.email == "admin@cualquiera.org"
     assert hasher.verificar("claveSegura123", admin.password) is True
 
     # 3. Ahora adminConfigurado debe ser verdadero
@@ -58,7 +58,7 @@ def test_flujo_setup_y_creacion_admin(db_sesion):
 
     # 4. Intentar crear otro admin debe fallar con ADMIN_YA_CONFIGURADO
     cmd_duplicado = ComandoCrearAdmin(
-        email="otro@ulasalle.edu.pe",
+        email="otro@dominio.com",
         password="claveSegura123",
         repo_usuarios=repo_usuarios,
         servicio_hash=hasher,

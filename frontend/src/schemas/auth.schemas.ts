@@ -1,17 +1,16 @@
 import { z } from "zod";
 import { VALIDATION_LIMITS } from "@/constants/validations.ts";
 
-export const emailInstitucionalSchema = z
+export const emailSchema = z
 	.string()
 	.trim()
 	.min(1, { message: "El correo es obligatorio" })
 	.max(VALIDATION_LIMITS.MAX_EMAIL, {
 		message: `El correo no puede exceder los ${VALIDATION_LIMITS.MAX_EMAIL} caracteres`,
 	})
-	.pipe(z.email({ error: "Correo inválido" }))
-	.refine((email) => email.endsWith("@ulasalle.edu.pe"), {
-		message: "Debe ser un correo institucional (@ulasalle.edu.pe)",
-	});
+	.pipe(z.email({ error: "Correo inválido" }));
+
+export const emailInstitucionalSchema = emailSchema;
 
 export const passwordSeguroSchema = z
 	.string()

@@ -108,7 +108,7 @@ def db_migrate(mensaje: str):
 
 
 @cli.command("create-admin")
-@click.option("--email", prompt="Correo del Administrador", help="Correo institucional del administrador.")
+@click.option("--email", prompt="Correo del Administrador", help="Correo electrónico del administrador.")
 @click.option(
     "--password",
     prompt="Contraseña",
