@@ -1,12 +1,12 @@
 # ==============================================================================
-# SisInv (Sistema de Investigación) - Docker Compose para Desarrollo
+# Inveli (Plataforma de Gestión y Seguimiento de Investigación) - Docker Compose para Desarrollo
 # Permite levantar la base de datos PostgreSQL localmente para desarrollo
 # ==============================================================================
 
 services:
   db:
     image: postgres:16-alpine
-    container_name: sisinv-dev-db
+    container_name: inveli-dev-db
     restart: unless-stopped
     environment:
       POSTGRES_DB: sistema_investigacion
@@ -25,4 +25,4 @@ services:
 
 volumes:
   datos_postgres_dev:
-    name: sisinv_datos_postgres_dev
+    name: inveli_datos_postgres_dev

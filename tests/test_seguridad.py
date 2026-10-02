@@ -2,10 +2,10 @@
 
 import uuid
 import pytest
-from sisinv.dominio.excepciones.base import CodigosDeError, ExcepcionDominio
-from sisinv.infraestructura.seguridad.servicio_password import AdaptadorHashPassword
-from sisinv.infraestructura.seguridad.servicio_jwt import AdaptadorTokenJwt
-from sisinv.infraestructura.seguridad.limitador_intentos import AdaptadorLimitadorIntentos
+from inveli.dominio.excepciones.base import CodigosDeError, ExcepcionDominio
+from inveli.infraestructura.seguridad.servicio_password import AdaptadorHashPassword
+from inveli.infraestructura.seguridad.servicio_jwt import AdaptadorTokenJwt
+from inveli.infraestructura.seguridad.limitador_intentos import AdaptadorLimitadorIntentos
 
 
 def test_hashing_y_verificacion_password():

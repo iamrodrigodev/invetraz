@@ -1,17 +1,17 @@
-# Guía de Contribución a SisInv (Sistema de Investigación)
+# Guía de Contribución a Inveli (Sistema de Investigación)
 
-¡Gracias por tu interés en contribuir a **SisInv**! Este es un proyecto de código abierto bajo licencia Apache 2.0 enfocado en proporcionar una solución integral, robusta y soberana para la gestión y seguimiento de investigación académica con integración profunda a Google Workspace (Classroom y Drive).
+¡Gracias por tu interés en contribuir a **Inveli**! Este es un proyecto de código abierto bajo licencia Apache 2.0 enfocado en proporcionar una solución integral, robusta y soberana para la gestión y seguimiento de investigación académica con integración profunda a Google Workspace (Classroom y Drive).
 
 ---
 
 ## 1. Principios de Diseño y Arquitectura
 
-SisInv sigue estándares arquitectónicos estrictos:
+Inveli sigue estándares arquitectónicos estrictos:
 
 - **Arquitectura Hexagonal (Ports & Adapters)**:
-  - **Dominio (`sisinv/dominio`)**: Entidades puras y reglas de negocio, libres de dependencias externas.
-  - **Aplicación (`sisinv/aplicacion`)**: Casos de uso implementados como *Comandos* (patrón Command de Apache Superset) y puertos de entrada/salida (`Protocol` de typing).
-  - **Infraestructura (`sisinv/infraestructura`)**: Adaptadores para SQLAlchemy 2.0 ORM, seguridad criptográfica, APIs de Google y FastAPI.
+  - **Dominio (`inveli/dominio`)**: Entidades puras y reglas de negocio, libres de dependencias externas.
+  - **Aplicación (`inveli/aplicacion`)**: Casos de uso implementados como *Comandos* (patrón Command de Apache Superset) y puertos de entrada/salida (`Protocol` de typing).
+  - **Infraestructura (`inveli/infraestructura`)**: Adaptadores para SQLAlchemy 2.0 ORM, seguridad criptográfica, APIs de Google y FastAPI.
 - **Principios SOLID**:
   - Responsabilidad única por comando y servicio.
   - Inversión de dependencias mediante interfaces explícitas.
@@ -33,8 +33,8 @@ SisInv sigue estándares arquitectónicos estrictos:
 
 1. **Clonar el repositorio**:
    ```bash
-   git clone https://github.com/iamrodrigodev/sisinv.git
-   cd sisinv
+   git clone https://github.com/iamrodrigodev/inveli.git
+   cd inveli
    ```
 
 2. **Levantar la base de datos PostgreSQL**:
@@ -53,17 +53,17 @@ SisInv sigue estándares arquitectónicos estrictos:
 
 4. **Inicializar la Base de Datos**:
    ```bash
-   sisinv init
+   inveli init
    ```
 
 5. **Crear Administrador de Desarrollo**:
    ```bash
-   sisinv create-admin --email admin@ejemplo.com
+   inveli create-admin --email admin@ejemplo.com
    ```
 
-6. **Configurar el Frontend (sisinv-frontend)**:
+6. **Configurar el Frontend (inveli-frontend)**:
    ```bash
-   cd sisinv-frontend
+   cd inveli-frontend
    npm ci
    npm run dev
    ```
@@ -82,7 +82,7 @@ Toda contribución debe mantener el 100% de las pruebas pasando.
 
 - **Pruebas del Frontend (Vitest)**:
    ```bash
-   cd sisinv-frontend
+   cd inveli-frontend
    npm test
    ```
 

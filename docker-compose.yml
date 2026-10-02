@@ -1,6 +1,6 @@
 # ==============================================================================
-# SisInv (Sistema de Investigación) - Docker Compose para Producción / Evaluación
-# Despliegue All-in-One con PostgreSQL y Contenedor Unificado SisInv
+# Inveli (Sistema de Investigación) - Docker Compose para Producción / Evaluación
+# Despliegue All-in-One con PostgreSQL y Contenedor Unificado Inveli
 # ==============================================================================
 
 services:
@@ -9,7 +9,7 @@ services:
   # ----------------------------------------------------------------------------
   db:
     image: postgres:16-alpine
-    container_name: sisinv-db
+    container_name: inveli-db
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME:-sistema_investigacion}
@@ -27,17 +27,17 @@ services:
       retries: 5
       start_period: 10s
     networks:
-      - red-sisinv
+      - red-inveli
 
   # ----------------------------------------------------------------------------
-  # Servicio de Aplicación: SisInv (Frontend SPA React + Backend FastAPI)
+  # Servicio de Aplicación: Inveli (Frontend SPA React + Backend FastAPI)
   # ----------------------------------------------------------------------------
-  sisinv:
+  inveli:
     build:
       context: .
       dockerfile: Dockerfile
-    image: sisinv:latest
-    container_name: sisinv-app
+    image: inveli:latest
+    container_name: inveli-app
     restart: unless-stopped
     depends_on:
       db:
@@ -57,7 +57,7 @@ services:
       APP_MASTER_KEY: ${APP_MASTER_KEY:-clave_maestra_aes_gcm_32_caracteres_minimo_segura!}
       COOKIE_SECURE: ${COOKIE_SECURE:-false}
       APP_CORS_ORIGINS: ${APP_CORS_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}
-      DIR_ESTATICOS_FRONTEND: /app/sisinv-frontend/dist
+      DIR_ESTATICOS_FRONTEND: /app/inveli-frontend/dist
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 30s
@@ -65,13 +65,13 @@ services:
       retries: 3
       start_period: 15s
     networks:
-      - red-sisinv
+      - red-inveli
 
 volumes:
   datos_postgres:
-    name: sisinv_datos_postgres
+    name: inveli_datos_postgres
 
 networks:
-  red-sisinv:
-    name: red_sisinv
+  red-inveli:
+    name: red_inveli
     driver: bridge

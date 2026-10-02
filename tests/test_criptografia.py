@@ -1,7 +1,7 @@
 """Pruebas unitarias para el módulo de cifrado AES-256-GCM."""
 
 import pytest
-from sisinv.infraestructura.seguridad.encriptador_aes_gcm import AdaptadorCriptografiaAesGcm
+from inveli.infraestructura.seguridad.encriptador_aes_gcm import AdaptadorCriptografiaAesGcm
 
 CLAVE_MAESTRA = "super_secret_master_key_for_aes_encryption_long"
 

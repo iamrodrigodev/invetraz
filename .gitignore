@@ -37,10 +37,10 @@ backend/target/
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
-# Node / Frontend (sisinv-frontend)
-sisinv-frontend/node_modules/
+# Node / Frontend (inveli-frontend)
+inveli-frontend/node_modules/
 **/node_modules/
-sisinv-frontend/dist/
+inveli-frontend/dist/
 **/dist/
 npm-debug.log*
 yarn-debug.log*

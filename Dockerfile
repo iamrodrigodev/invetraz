@@ -1,29 +1,29 @@
 # ==============================================================================
-# SisInv (Sistema de Investigación) - Dockerfile Unificado All-in-One
+# Inveli (Sistema de Investigación) - Dockerfile Unificado All-in-One
 # Arquitectura y estructura idéntica a Apache Superset
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
-# Etapa 1: Compilación de Frontend (sisinv-frontend: React 19 + TypeScript + Vite)
+# Etapa 1: Compilación de Frontend (inveli-frontend: React 19 + TypeScript + Vite)
 # ------------------------------------------------------------------------------
 FROM node:22-alpine AS frontend-builder
 
-WORKDIR /app/sisinv-frontend
+WORKDIR /app/inveli-frontend
 
 # Copiar manifiestos de dependencias
-COPY sisinv-frontend/package.json sisinv-frontend/package-lock.json ./
+COPY inveli-frontend/package.json inveli-frontend/package-lock.json ./
 
 # Instalar dependencias limpias
 RUN npm ci --prefer-offline --no-audit
 
 # Copiar el código fuente del frontend
-COPY sisinv-frontend/ ./
+COPY inveli-frontend/ ./
 
 # Argumento para URL base de API (mismo origen por defecto en el contenedor)
 ARG VITE_API_BASE_URL=/api/v1
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
-# Compilar producción (genera sisinv-frontend/dist)
+# Compilar producción (genera inveli-frontend/dist)
 RUN npm run build
 
 
@@ -32,10 +32,10 @@ RUN npm run build
 # ------------------------------------------------------------------------------
 FROM python:3.12-slim AS runner
 
-LABEL org.opencontainers.image.title="SisInv - Sistema de Investigación" \
+LABEL org.opencontainers.image.title="Inveli - Sistema de Investigación" \
       org.opencontainers.image.description="Plataforma integral de gestión y seguimiento de investigación académica con integración Google Classroom & Drive" \
       org.opencontainers.image.version="1.0.0" \
-      org.opencontainers.image.authors="Equipo SisInv <contacto@sisinv.org>" \
+      org.opencontainers.image.authors="Equipo Inveli <contacto@inveli.org>" \
       org.opencontainers.image.licenses="Apache-2.0"
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -44,7 +44,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONPATH=/app \
     PORT=8080 \
     HOST=0.0.0.0 \
-    DIR_ESTATICOS_FRONTEND=/app/sisinv-frontend/dist
+    DIR_ESTATICOS_FRONTEND=/app/inveli-frontend/dist
 
 # Instalar dependencias mínimas del sistema
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -54,8 +54,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Crear usuario de sistema no privilegiado para ejecutar la aplicación
-RUN groupadd -g 10001 sisinv && \
-    useradd -u 10001 -g sisinv -s /bin/bash -m sisinv
+RUN groupadd -g 10001 inveli && \
+    useradd -u 10001 -g inveli -s /bin/bash -m inveli
 
 WORKDIR /app
 
@@ -69,22 +69,22 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY pyproject.toml ./
 COPY alembic.ini ./
 COPY alembic/ ./alembic/
-COPY sisinv/ ./sisinv/
+COPY inveli/ ./inveli/
 COPY docker/ ./docker/
 COPY sql/ ./sql/
 
-# Instalar paquete sisinv en modo editable/paquete
+# Instalar paquete inveli en modo editable/paquete
 RUN pip install --no-cache-dir -e .
 
 # Copiar estáticos del frontend compilados en Etapa 1
-COPY --from=frontend-builder /app/sisinv-frontend/dist /app/sisinv-frontend/dist
+COPY --from=frontend-builder /app/inveli-frontend/dist /app/inveli-frontend/dist
 
 # Permisos para scripts y archivos
 RUN chmod +x /app/docker/*.sh && \
-    chown -R sisinv:sisinv /app
+    chown -R inveli:inveli /app
 
 # Cambiar a usuario no root
-USER sisinv
+USER inveli
 
 # Exponer el puerto HTTP
 EXPOSE 8080

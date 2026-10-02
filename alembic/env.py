@@ -1,9 +1,9 @@
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
-from sisinv.config import get_settings
-from sisinv.infraestructura.base_de_datos.sesion import Base
-import sisinv.infraestructura.base_de_datos.modelos  # Importa todos los modelos
+from inveli.config import get_settings
+from inveli.infraestructura.base_de_datos.sesion import Base
+import inveli.infraestructura.base_de_datos.modelos  # Importa todos los modelos
 
 config = context.config
 
