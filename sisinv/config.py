@@ -48,8 +48,8 @@ class Settings(BaseSettings):
         validation_alias="APP_CORS_ORIGINS",
     )
 
-    # Directorio de frontend estático
-    static_dir: str = Field(default="frontend/dist", validation_alias="DIR_ESTATICOS_FRONTEND")
+    # Directorio de frontend estático (estilo superset-frontend)
+    static_dir: str = Field(default="sisinv-frontend/dist", validation_alias="DIR_ESTATICOS_FRONTEND")
 
     @property
     def database_url(self) -> str:

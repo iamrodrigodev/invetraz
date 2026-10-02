@@ -75,36 +75,46 @@ flowchart TD
 
 ---
 
-## 📁 Estructura del Monorepo
+## 📁 Estructura del Monorepo (Idéntica a Apache Superset)
 
 ```
 gccinv/
-├── Dockerfile                   # Construcción multi-stage de la imagen unificada
-├── docker-compose.yml           # Despliegue con PostgreSQL y SisInv
-├── docker-compose.dev.yml       # Entorno local para base de datos aislada
-├── .env.example                 # Variables de entorno documentadas
+├── sisinv/                      # Backend Python (paquete núcleo en la raíz, como superset/)
+│   ├── dominio/                 # Entidades y excepciones puras
+│   ├── aplicacion/              # Casos de uso (Comandos) y Puertos
+│   ├── infraestructura/         # Adaptadores (SQLAlchemy, Google APIs, Cripto, API REST)
+│   ├── fabrica_aplicacion.py    # Fábrica FastAPI create_app()
+│   ├── cli.py                   # Herramienta CLI de administración
+│   └── config.py                # Configuración Pydantic Settings
+├── sisinv-frontend/             # Frontend SPA React 19 (como superset-frontend/)
+│   ├── src/                     # Código fuente React + TypeScript
+│   ├── package.json             # Dependencias del cliente Vite
+│   └── vite.config.ts           # Configuración del bundler
+├── docker/                      # Scripts y configuraciones Docker (como en Superset)
+│   ├── docker-entrypoint.sh     # Script de entrada para el contenedor
+│   └── docker-init.sh           # Script de inicialización de BD y admin
+├── requirements/                # Dependencias segmentadas (como en Superset)
+│   ├── base.txt                 # Dependencias base de producción
+│   ├── testing.txt              # Dependencias para pruebas
+│   └── local.txt                # Dependencias para desarrollo local
+├── tests/                       # Pruebas automatizadas de Python (Pytest) en la raíz
 ├── sql/                         # Scripts DDL para esquemas PostgreSQL
 │   ├── 00_esquemas.sql
 │   ├── 01_estructura.sql
 │   ├── 02_agregar_carpeta_drive.sql
 │   ├── 03_agregar_estados_configuracion.sql
 │   └── 04_crear_actividades_seguimiento.sql
-├── backend/                     # Backend Python (FastAPI + SQLAlchemy 2.0)
-│   ├── alembic/                 # Control de versiones de base de datos
-│   ├── alembic.ini              # Configuración de Alembic
-│   ├── pyproject.toml           # Manifiesto y punto de entrada CLI (sisinv)
-│   ├── requirements.txt         # Dependencias de producción
-│   ├── tests/                   # Pruebas automatizadas (Pytest)
-│   └── sisinv/                  # Paquete principal en español
-│       ├── dominio/             # Entidades y excepciones puras
-│       ├── aplicacion/          # Casos de uso (Comandos) y Puertos
-│       ├── infraestructura/     # ORM, Seguridad, Google APIs y API REST
-│       ├── fabrica_aplicacion.py# Fábrica FastAPI create_app()
-│       └── cli.py               # Línea de comandos Click
-└── frontend/                    # Frontend React 19 + TypeScript + Vite
-    ├── src/                     # Código fuente modular
-    ├── vite.config.ts           # Configuración del bundler
-    └── package.json             # Dependencias del cliente
+├── alembic/                     # Migraciones de base de datos
+├── alembic.ini                  # Configuración de migraciones
+├── pyproject.toml               # Manifiesto y punto de entrada CLI (sisinv)
+├── requirements.txt             # Dependencias consolidadas
+├── Dockerfile                   # Construcción multi-stage all-in-one
+├── docker-compose.yml           # Despliegue de producción con PostgreSQL
+├── docker-compose.dev.yml       # Base de datos aislada para desarrollo
+├── .env.example                 # Variables de entorno documentadas
+├── CONTRIBUTING.md              # Guía de contribución
+├── LICENSE                      # Licencia Apache 2.0
+└── README.md                    # Documentación principal
 ```
 
 ---
@@ -166,26 +176,25 @@ Si prefieres desarrollar localmente sin Docker para los servicios de aplicación
 docker compose -f docker-compose.dev.yml up -d
 ```
 
-### Paso 2: Configurar y ejecutar el Backend
+### Paso 2: Configurar y ejecutar el Backend (desde la raíz)
 ```bash
-cd backend
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 pip install -e .
 
-# Inicializar base de datos y crear admin
+# Inicializar base de datos y crear admin inicial
 sisinv init
-sisinv create-admin --email admin@institucion.edu.pe
+sisinv create-admin --email admin@ejemplo.com
 
-# Ejecutar con recarga en caliente
+# Ejecutar servidor FastAPI con recarga en caliente
 sisinv run --reload --port 8080
 ```
 
-### Paso 3: Configurar y ejecutar el Frontend
+### Paso 3: Configurar y ejecutar el Frontend (sisinv-frontend)
 En otra terminal:
 ```bash
-cd frontend
+cd sisinv-frontend
 npm ci
 npm run dev
 ```
@@ -199,14 +208,14 @@ El proyecto cuenta con una cobertura integral de pruebas automatizadas:
 
 ### Pruebas del Backend (Pytest)
 ```bash
-cd backend
-.venv/bin/python -m pytest -v
+# Desde la raíz del repositorio
+pytest -v
 ```
 - ✅ **17 pruebas unitarias y de integración** cubriendo criptografía AES-GCM, seguridad JWT/BCrypt, limitadores de tasa, comandos de aplicación y endpoints REST FastAPI.
 
 ### Pruebas del Frontend (Vitest)
 ```bash
-cd frontend
+cd sisinv-frontend
 npm test
 ```
 - ✅ **498 pruebas unitarias y de interfaz** cubriendo stores Zustand, componentes React, validaciones Zod y flujos de autenticación.

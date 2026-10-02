@@ -15,10 +15,11 @@ def configurar_servidor_estaticos(app: FastAPI) -> None:
 
     posibles_rutas_estaticas = [
         Path(settings.static_dir),
+        Path("/app/sisinv-frontend/dist"),
+        Path("sisinv-frontend/dist"),
+        Path("../sisinv-frontend/dist"),
         Path("/app/frontend/dist"),
         Path("frontend/dist"),
-        Path("../frontend/dist"),
-        Path("app/static"),
         Path("static"),
     ]
 

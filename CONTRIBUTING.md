@@ -42,9 +42,8 @@ SisInv sigue estándares arquitectónicos estrictos:
    docker compose -f docker-compose.dev.yml up -d
    ```
 
-3. **Configurar el Backend**:
+3. **Configurar el Backend (desde la raíz)**:
    ```bash
-   cd backend
    python3 -m venv .venv
    source .venv/bin/activate
    pip install --upgrade pip
@@ -59,12 +58,12 @@ SisInv sigue estándares arquitectónicos estrictos:
 
 5. **Crear Administrador de Desarrollo**:
    ```bash
-   sisinv create-admin --email admin@institucion.edu.pe
+   sisinv create-admin --email admin@ejemplo.com
    ```
 
-6. **Configurar el Frontend**:
+6. **Configurar el Frontend (sisinv-frontend)**:
    ```bash
-   cd ../frontend
+   cd sisinv-frontend
    npm ci
    npm run dev
    ```
@@ -76,16 +75,16 @@ SisInv sigue estándares arquitectónicos estrictos:
 Toda contribución debe mantener el 100% de las pruebas pasando.
 
 - **Pruebas del Backend (Pytest)**:
-  ```bash
-  cd backend
-  pytest -v
-  ```
+   ```bash
+   # Desde la raíz del repositorio
+   pytest -v
+   ```
 
 - **Pruebas del Frontend (Vitest)**:
-  ```bash
-  cd frontend
-  npm test
-  ```
+   ```bash
+   cd sisinv-frontend
+   npm test
+   ```
 
 - **Compilación de Producción del Frontend**:
   ```bash

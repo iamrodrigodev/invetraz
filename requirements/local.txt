@@ -1,0 +1,4 @@
+# Dependencias de desarrollo local para SisInv
+-r base.txt
+-r testing.txt
+watchfiles>=0.20

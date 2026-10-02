@@ -57,7 +57,7 @@ services:
       APP_MASTER_KEY: ${APP_MASTER_KEY:-clave_maestra_aes_gcm_32_caracteres_minimo_segura!}
       COOKIE_SECURE: ${COOKIE_SECURE:-false}
       APP_CORS_ORIGINS: ${APP_CORS_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}
-      DIR_ESTATICOS_FRONTEND: /app/frontend/dist
+      DIR_ESTATICOS_FRONTEND: /app/sisinv-frontend/dist
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 30s
