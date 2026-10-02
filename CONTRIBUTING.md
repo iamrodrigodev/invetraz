@@ -1,17 +1,17 @@
-# Guía de Contribución a Inveli (Sistema de Investigación)
+# Guía de Contribución a Invetraz (Sistema de Investigación)
 
-¡Gracias por tu interés en contribuir a **Inveli**! Este es un proyecto de código abierto bajo licencia Apache 2.0 enfocado en proporcionar una solución integral, robusta y soberana para la gestión y seguimiento de investigación académica con integración profunda a Google Workspace (Classroom y Drive).
+¡Gracias por tu interés en contribuir a **Invetraz**! Este es un proyecto de código abierto bajo licencia Apache 2.0 enfocado en proporcionar una solución integral, robusta y soberana para la gestión y seguimiento de investigación académica con integración profunda a Google Workspace (Classroom y Drive).
 
 ---
 
 ## 1. Principios de Diseño y Arquitectura
 
-Inveli sigue estándares arquitectónicos estrictos:
+Invetraz sigue estándares arquitectónicos estrictos:
 
 - **Arquitectura Hexagonal (Ports & Adapters)**:
-  - **Dominio (`inveli/dominio`)**: Entidades puras y reglas de negocio, libres de dependencias externas.
-  - **Aplicación (`inveli/aplicacion`)**: Casos de uso implementados como *Comandos* (patrón Command de Apache Superset) y puertos de entrada/salida (`Protocol` de typing).
-  - **Infraestructura (`inveli/infraestructura`)**: Adaptadores para SQLAlchemy 2.0 ORM, seguridad criptográfica, APIs de Google y FastAPI.
+  - **Dominio (`invetraz/dominio`)**: Entidades puras y reglas de negocio, libres de dependencias externas.
+  - **Aplicación (`invetraz/aplicacion`)**: Casos de uso implementados como *Comandos* (patrón Command de Apache Superset) y puertos de entrada/salida (`Protocol` de typing).
+  - **Infraestructura (`invetraz/infraestructura`)**: Adaptadores para SQLAlchemy 2.0 ORM, seguridad criptográfica, APIs de Google y FastAPI.
 - **Principios SOLID**:
   - Responsabilidad única por comando y servicio.
   - Inversión de dependencias mediante interfaces explícitas.
@@ -33,8 +33,8 @@ Inveli sigue estándares arquitectónicos estrictos:
 
 1. **Clonar el repositorio**:
    ```bash
-   git clone https://github.com/iamrodrigodev/inveli.git
-   cd inveli
+   git clone https://github.com/iamrodrigodev/invetraz.git
+   cd invetraz
    ```
 
 2. **Levantar la base de datos PostgreSQL**:
@@ -53,17 +53,17 @@ Inveli sigue estándares arquitectónicos estrictos:
 
 4. **Inicializar la Base de Datos**:
    ```bash
-   inveli init
+   invetraz init
    ```
 
 5. **Crear Administrador de Desarrollo**:
    ```bash
-   inveli create-admin --email admin@ejemplo.com
+   invetraz create-admin --email admin@ejemplo.com
    ```
 
-6. **Configurar el Frontend (inveli-frontend)**:
+6. **Configurar el Frontend (invetraz-frontend)**:
    ```bash
-   cd inveli-frontend
+   cd invetraz-frontend
    npm ci
    npm run dev
    ```
@@ -82,7 +82,7 @@ Toda contribución debe mantener el 100% de las pruebas pasando.
 
 - **Pruebas del Frontend (Vitest)**:
    ```bash
-   cd inveli-frontend
+   cd invetraz-frontend
    npm test
    ```
 

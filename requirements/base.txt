@@ -1,4 +1,4 @@
-# Dependencias base para SisInv (Sistema de Investigación)
+# Dependencias base para Invetraz (Sistema de Investigación)
 # Similar a la estructura de dependencias de Apache Superset
 
 alembic>=1.14.0

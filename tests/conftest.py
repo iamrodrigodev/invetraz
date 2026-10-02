@@ -6,11 +6,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 from fastapi.testclient import TestClient
-from inveli.fabrica_aplicacion import create_app
-from inveli.infraestructura.base_de_datos.sesion import Base, obtener_sesion_db
-from inveli.infraestructura.base_de_datos.repositorios import RepositorioUsuariosSqlAlchemy
-from inveli.infraestructura.seguridad import AdaptadorCriptografiaAesGcm, AdaptadorHashPassword
-from inveli.dominio.entidades.usuario import Usuario
+from invetraz.fabrica_aplicacion import create_app
+from invetraz.infraestructura.base_de_datos.sesion import Base, obtener_sesion_db
+from invetraz.infraestructura.base_de_datos.repositorios import RepositorioUsuariosSqlAlchemy
+from invetraz.infraestructura.seguridad import AdaptadorCriptografiaAesGcm, AdaptadorHashPassword
+from invetraz.dominio.entidades.usuario import Usuario
 
 CLAVE_MAESTRA_TEST = "clave_maestra_de_prueba_con_mas_de_32_caracteres_12345"
 

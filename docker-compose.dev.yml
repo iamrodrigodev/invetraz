@@ -1,12 +1,12 @@
 # ==============================================================================
-# Inveli (Plataforma de Gestión y Seguimiento de Investigación) - Docker Compose para Desarrollo
+# Invetraz (Plataforma de Gestión y Seguimiento de Investigación) - Docker Compose para Desarrollo
 # Permite levantar la base de datos PostgreSQL localmente para desarrollo
 # ==============================================================================
 
 services:
   db:
     image: postgres:16-alpine
-    container_name: inveli-dev-db
+    container_name: invetraz-dev-db
     restart: unless-stopped
     environment:
       POSTGRES_DB: sistema_investigacion
@@ -25,4 +25,4 @@ services:
 
 volumes:
   datos_postgres_dev:
-    name: inveli_datos_postgres_dev
+    name: invetraz_datos_postgres_dev

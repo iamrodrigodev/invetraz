@@ -1,29 +1,29 @@
 # ==============================================================================
-# Inveli (Sistema de Investigación) - Dockerfile Unificado All-in-One
+# Invetraz (Sistema de Investigación) - Dockerfile Unificado All-in-One
 # Arquitectura y estructura idéntica a Apache Superset
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
-# Etapa 1: Compilación de Frontend (inveli-frontend: React 19 + TypeScript + Vite)
+# Etapa 1: Compilación de Frontend (invetraz-frontend: React 19 + TypeScript + Vite)
 # ------------------------------------------------------------------------------
 FROM node:22-alpine AS frontend-builder
 
-WORKDIR /app/inveli-frontend
+WORKDIR /app/invetraz-frontend
 
 # Copiar manifiestos de dependencias
-COPY inveli-frontend/package.json inveli-frontend/package-lock.json ./
+COPY invetraz-frontend/package.json invetraz-frontend/package-lock.json ./
 
 # Instalar dependencias limpias
 RUN npm ci --prefer-offline --no-audit
 
 # Copiar el código fuente del frontend
-COPY inveli-frontend/ ./
+COPY invetraz-frontend/ ./
 
 # Argumento para URL base de API (mismo origen por defecto en el contenedor)
 ARG VITE_API_BASE_URL=/api/v1
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
-# Compilar producción (genera inveli-frontend/dist)
+# Compilar producción (genera invetraz-frontend/dist)
 RUN npm run build
 
 
@@ -32,10 +32,10 @@ RUN npm run build
 # ------------------------------------------------------------------------------
 FROM python:3.12-slim AS runner
 
-LABEL org.opencontainers.image.title="Inveli - Sistema de Investigación" \
+LABEL org.opencontainers.image.title="Invetraz - Sistema de Investigación" \
       org.opencontainers.image.description="Plataforma integral de gestión y seguimiento de investigación académica con integración Google Classroom & Drive" \
       org.opencontainers.image.version="1.0.0" \
-      org.opencontainers.image.authors="Equipo Inveli <contacto@inveli.org>" \
+      org.opencontainers.image.authors="Equipo Invetraz <contacto@invetraz.org>" \
       org.opencontainers.image.licenses="Apache-2.0"
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -44,7 +44,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONPATH=/app \
     PORT=8080 \
     HOST=0.0.0.0 \
-    DIR_ESTATICOS_FRONTEND=/app/inveli-frontend/dist
+    DIR_ESTATICOS_FRONTEND=/app/invetraz-frontend/dist
 
 # Instalar dependencias mínimas del sistema
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -54,8 +54,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Crear usuario de sistema no privilegiado para ejecutar la aplicación
-RUN groupadd -g 10001 inveli && \
-    useradd -u 10001 -g inveli -s /bin/bash -m inveli
+RUN groupadd -g 10001 invetraz && \
+    useradd -u 10001 -g invetraz -s /bin/bash -m invetraz
 
 WORKDIR /app
 
@@ -69,22 +69,22 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY pyproject.toml ./
 COPY alembic.ini ./
 COPY alembic/ ./alembic/
-COPY inveli/ ./inveli/
+COPY invetraz/ ./invetraz/
 COPY docker/ ./docker/
 COPY sql/ ./sql/
 
-# Instalar paquete inveli en modo editable/paquete
+# Instalar paquete invetraz en modo editable/paquete
 RUN pip install --no-cache-dir -e .
 
 # Copiar estáticos del frontend compilados en Etapa 1
-COPY --from=frontend-builder /app/inveli-frontend/dist /app/inveli-frontend/dist
+COPY --from=frontend-builder /app/invetraz-frontend/dist /app/invetraz-frontend/dist
 
 # Permisos para scripts y archivos
 RUN chmod +x /app/docker/*.sh && \
-    chown -R inveli:inveli /app
+    chown -R invetraz:invetraz /app
 
 # Cambiar a usuario no root
-USER inveli
+USER invetraz
 
 # Exponer el puerto HTTP
 EXPOSE 8080

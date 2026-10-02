@@ -3,32 +3,32 @@
 import uuid
 import pytest
 from unittest.mock import MagicMock
-from inveli.aplicacion.comandos.autenticacion import (
+from invetraz.aplicacion.comandos.autenticacion import (
     ComandoCambiarPassword,
     ComandoLogin,
     ComandoVerificarPassword,
 )
-from inveli.aplicacion.comandos.configuracion import (
+from invetraz.aplicacion.comandos.configuracion import (
     ComandoGuardarConfiguracion,
     ComandoObtenerConfiguracion,
 )
-from inveli.aplicacion.comandos.setup import (
+from invetraz.aplicacion.comandos.setup import (
     ComandoCrearAdmin,
     ComandoObtenerEstadoSetup,
 )
-from inveli.aplicacion.comandos.plantillas import ComandoVincularCarpetaDrive
-from inveli.dominio.excepciones.base import CodigosDeError, ExcepcionDominio
-from inveli.infraestructura.base_de_datos.repositorios import (
+from invetraz.aplicacion.comandos.plantillas import ComandoVincularCarpetaDrive
+from invetraz.dominio.excepciones.base import CodigosDeError, ExcepcionDominio
+from invetraz.infraestructura.base_de_datos.repositorios import (
     RepositorioConfiguracionSqlAlchemy,
     RepositorioUsuariosSqlAlchemy,
 )
-from inveli.infraestructura.seguridad import (
+from invetraz.infraestructura.seguridad import (
     AdaptadorCriptografiaAesGcm,
     AdaptadorHashPassword,
     AdaptadorLimitadorIntentos,
     AdaptadorTokenJwt,
 )
-from inveli.dominio.entidades.configuracion import ConfiguracionSistema
+from invetraz.dominio.entidades.configuracion import ConfiguracionSistema
 
 
 CLAVE_MAESTRA = "super_secret_master_key_for_aes_encryption_long"
