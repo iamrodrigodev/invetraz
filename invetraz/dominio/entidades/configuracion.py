@@ -1,9 +1,6 @@
-"""Entidad de dominio ConfiguracionSistema."""
-
 from dataclasses import dataclass
 from typing import Optional
 import uuid
-
 
 @dataclass
 class ConfiguracionSistema:

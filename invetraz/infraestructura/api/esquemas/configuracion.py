@@ -1,15 +1,11 @@
-"""Esquemas Pydantic v2 para peticiones y respuestas de Configuración."""
-
 from typing import Optional
 import uuid
 from pydantic import BaseModel, Field
-
 
 class ActualizarCredencialesPeticion(BaseModel):
     clientId: Optional[str] = Field(default=None, alias="clientId")
     clientSecret: Optional[str] = Field(default=None, alias="clientSecret")
     refreshToken: Optional[str] = Field(default=None, alias="refreshToken")
-
 
 class ConfiguracionSistemaDTO(BaseModel):
     id: uuid.UUID

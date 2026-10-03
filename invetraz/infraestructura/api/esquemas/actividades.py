@@ -1,10 +1,7 @@
-"""Esquemas Pydantic v2 para peticiones y respuestas de Actividades de Seguimiento."""
-
 from datetime import datetime
 from typing import Optional
 import uuid
 from pydantic import BaseModel, Field
-
 
 class ActividadSeguimientoDto(BaseModel):
     id: uuid.UUID

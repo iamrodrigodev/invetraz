@@ -1,5 +1,3 @@
-"""Inyección de dependencias para FastAPI."""
-
 from typing import Annotated, Optional
 import uuid
 from fastapi import Cookie, Depends, Header, Request
@@ -27,7 +25,6 @@ from invetraz.infraestructura.google import (
 
 _settings = get_settings()
 
-# Singletons de seguridad e integraciones
 _criptografia = AdaptadorCriptografiaAesGcm(_settings.app_master_key)
 _jwt = AdaptadorTokenJwt(_settings.app_jwt_secret, _settings.jwt_expiration_seconds)
 _hash_password = AdaptadorHashPassword()
@@ -36,34 +33,26 @@ _cache_classroom = CacheClassroom()
 _google_classroom = AdaptadorGoogleClassroom(_cache_classroom)
 _google_drive = AdaptadorGoogleDrive()
 
-
 def obtener_servicio_criptografia() -> AdaptadorCriptografiaAesGcm:
     return _criptografia
-
 
 def obtener_servicio_jwt() -> AdaptadorTokenJwt:
     return _jwt
 
-
 def obtener_servicio_password() -> AdaptadorHashPassword:
     return _hash_password
-
 
 def obtener_servicio_limitador() -> AdaptadorLimitadorIntentos:
     return _limitador
 
-
 def obtener_servicio_classroom() -> AdaptadorGoogleClassroom:
     return _google_classroom
-
 
 def obtener_servicio_drive() -> AdaptadorGoogleDrive:
     return _google_drive
 
-
 def obtener_repo_usuarios(db: Session = Depends(obtener_sesion_db)) -> RepositorioUsuariosSqlAlchemy:
     return RepositorioUsuariosSqlAlchemy(db)
-
 
 def obtener_repo_configuracion(
     db: Session = Depends(obtener_sesion_db),
@@ -71,17 +60,14 @@ def obtener_repo_configuracion(
 ) -> RepositorioConfiguracionSqlAlchemy:
     return RepositorioConfiguracionSqlAlchemy(db, crypto)
 
-
 def obtener_repo_actividades(db: Session = Depends(obtener_sesion_db)) -> RepositorioActividadesSqlAlchemy:
     return RepositorioActividadesSqlAlchemy(db)
-
 
 def obtener_ip_cliente(request: Request) -> str:
     forwarded = request.headers.get("x-forwarded-for")
     if forwarded:
         return forwarded.split(",")[0].strip()
     return request.client.host if request.client else "127.0.0.1"
-
 
 def obtener_usuario_actual(
     jwt_cookie: Optional[str] = Cookie(None, alias="jwt"),
@@ -114,8 +100,6 @@ def obtener_usuario_actual(
 
     return usuario
 
-
-# Type aliases para Annotated dependencies
 SesionDB = Annotated[Session, Depends(obtener_sesion_db)]
 RepoUsuariosDep = Annotated[RepositorioUsuariosSqlAlchemy, Depends(obtener_repo_usuarios)]
 RepoConfigDep = Annotated[RepositorioConfiguracionSqlAlchemy, Depends(obtener_repo_configuracion)]

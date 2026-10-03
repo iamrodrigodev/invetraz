@@ -1,5 +1,3 @@
-"""Rutas de Plantillas y Google Drive."""
-
 from typing import List
 from fastapi import APIRouter
 from invetraz.aplicacion.comandos.plantillas import (
@@ -20,7 +18,6 @@ from invetraz.infraestructura.api.esquemas import (
 )
 
 enrutador = APIRouter(prefix="/plantillas", tags=["Plantillas"])
-
 
 @enrutador.get("", response_model=ApiRespuesta[List[PlantillaXlsxDto]])
 def listar_plantillas(
@@ -48,7 +45,6 @@ def listar_plantillas(
     ]
     return ApiRespuesta.exitoso(mensaje="Plantillas obtenidas exitosamente", datos=datos)
 
-
 @enrutador.post("/verificar", response_model=ApiRespuesta[CarpetaPlantillasRespuestaDto])
 def verificar_carpeta(
     peticion: VincularCarpetaDrivePeticion,
@@ -69,7 +65,6 @@ def verificar_carpeta(
             nombreCarpeta=resultado.nombre_carpeta,
         ),
     )
-
 
 @enrutador.post("/carpeta", response_model=ApiRespuesta[CarpetaPlantillasRespuestaDto])
 def vincular_carpeta(

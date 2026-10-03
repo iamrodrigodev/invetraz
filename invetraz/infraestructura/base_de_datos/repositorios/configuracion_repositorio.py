@@ -1,5 +1,3 @@
-"""Adaptador de persistencia para ConfiguracionSistema con cifrado transparente."""
-
 from typing import Optional
 import uuid
 from sqlalchemy import select
@@ -7,7 +5,6 @@ from sqlalchemy.orm import Session
 from invetraz.dominio.entidades.configuracion import ConfiguracionSistema
 from invetraz.infraestructura.base_de_datos.modelos.configuracion_modelo import ConfiguracionSistemaModelo
 from invetraz.aplicacion.puertos.seguridad import PuertoCriptografia
-
 
 class RepositorioConfiguracionSqlAlchemy:
     def __init__(self, sesion: Session, encriptador: PuertoCriptografia):

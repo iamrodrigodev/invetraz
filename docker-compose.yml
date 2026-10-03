@@ -1,12 +1,4 @@
-# ==============================================================================
-# Invetraz (Sistema de Investigación) - Docker Compose para Producción / Evaluación
-# Despliegue All-in-One con PostgreSQL y Contenedor Unificado Invetraz
-# ==============================================================================
-
 services:
-  # ----------------------------------------------------------------------------
-  # Servicio de Base de Datos: PostgreSQL 16
-  # ----------------------------------------------------------------------------
   db:
     image: postgres:16-alpine
     container_name: invetraz-db
@@ -29,9 +21,6 @@ services:
     networks:
       - red-invetraz
 
-  # ----------------------------------------------------------------------------
-  # Servicio de Aplicación: Invetraz (Frontend SPA React + Backend FastAPI)
-  # ----------------------------------------------------------------------------
   invetraz:
     build:
       context: .

@@ -1,9 +1,6 @@
-"""Entidades de integración con Google Classroom."""
-
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
-
 
 @dataclass
 class ClaseClassroom:
@@ -14,7 +11,6 @@ class ClaseClassroom:
     sala: Optional[str] = None
     enlace: Optional[str] = None
     estado: str = "ACTIVA"
-
 
 @dataclass
 class TareaClassroom:
@@ -27,7 +23,6 @@ class TareaClassroom:
     puntaje_maximo: Optional[float] = None
     estado: str = "PUBLISHED"
     enlace: Optional[str] = None
-
 
 @dataclass
 class TemaClassroom:

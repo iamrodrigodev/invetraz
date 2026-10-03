@@ -1,10 +1,7 @@
-"""Modelo ORM SQLAlchemy 2.0 para la tabla auth.usuarios."""
-
 import uuid
 from sqlalchemy import String, Uuid
 from sqlalchemy.orm import Mapped, mapped_column
 from invetraz.infraestructura.base_de_datos.sesion import Base
-
 
 class UsuarioModelo(Base):
     __tablename__ = "usuarios"

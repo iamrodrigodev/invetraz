@@ -1,11 +1,8 @@
-"""Modelo ORM SQLAlchemy 2.0 para la tabla configuracion.configuracion_sistema."""
-
 from typing import Optional
 import uuid
 from sqlalchemy import Boolean, String, Uuid
 from sqlalchemy.orm import Mapped, mapped_column
 from invetraz.infraestructura.base_de_datos.sesion import Base
-
 
 class ConfiguracionSistemaModelo(Base):
     __tablename__ = "configuracion_sistema"

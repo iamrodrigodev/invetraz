@@ -1,4 +1,3 @@
-/* v8 ignore file -- ramas defensivas de UI cubiertas por pruebas de integracion del modulo. */
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";

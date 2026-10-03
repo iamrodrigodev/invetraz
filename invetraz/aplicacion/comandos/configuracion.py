@@ -1,5 +1,3 @@
-"""Comandos para la gestión de credenciales y configuración del sistema."""
-
 from dataclasses import dataclass
 from typing import Optional
 import uuid
@@ -8,7 +6,6 @@ from invetraz.aplicacion.puertos.repositorios import PuertoRepositorioConfigurac
 from invetraz.aplicacion.puertos.google import PuertoGoogleDrive
 from invetraz.dominio.entidades.configuracion import ConfiguracionSistema
 from invetraz.dominio.excepciones.base import CodigosDeError, ExcepcionDominio
-
 
 @dataclass
 class DtoConfiguracionSistema:
@@ -20,7 +17,6 @@ class DtoConfiguracionSistema:
     google_drive_folder_name: Optional[str]
     google_verificado: bool
     drive_verificado: bool
-
 
 class ComandoObtenerConfiguracion(ComandoBase[Optional[DtoConfiguracionSistema]]):
     def __init__(self, repo_config: PuertoRepositorioConfiguracion):
@@ -40,7 +36,6 @@ class ComandoObtenerConfiguracion(ComandoBase[Optional[DtoConfiguracionSistema]]
             google_verificado=config.google_verificado,
             drive_verificado=config.drive_verificado,
         )
-
 
 class ComandoGuardarConfiguracion(ComandoBase[DtoConfiguracionSistema]):
     def __init__(
@@ -77,7 +72,6 @@ class ComandoGuardarConfiguracion(ComandoBase[DtoConfiguracionSistema]):
             google_verificado=guardada.google_verificado,
             drive_verificado=guardada.drive_verificado,
         )
-
 
 class ComandoVerificarConexionGoogle(ComandoBase[bool]):
     def __init__(

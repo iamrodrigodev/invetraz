@@ -1,28 +1,17 @@
-"""Migración inicial: creación de esquemas y tablas del Sistema de Investigación
-
-Revision ID: 0001_inicial
-Revises: 
-Create Date: 2026-10-01
-"""
-
 from typing import Sequence, Union
 from alembic import op
 import sqlalchemy as sa
-
 
 revision: str = '0001_inicial'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
-
 def upgrade() -> None:
-    # 1. Crear esquemas
     op.execute("CREATE SCHEMA IF NOT EXISTS auth;")
     op.execute("CREATE SCHEMA IF NOT EXISTS configuracion;")
     op.execute("CREATE SCHEMA IF NOT EXISTS seguimiento;")
 
-    # 2. Tabla auth.usuarios
     op.create_table(
         'usuarios',
         sa.Column('id', sa.Uuid(), nullable=False),
@@ -33,7 +22,6 @@ def upgrade() -> None:
         schema='auth',
     )
 
-    # 3. Tabla configuracion.configuracion_sistema
     op.create_table(
         'configuracion_sistema',
         sa.Column('id', sa.Uuid(), nullable=False),
@@ -48,7 +36,6 @@ def upgrade() -> None:
         schema='configuracion',
     )
 
-    # 4. Tabla seguimiento.actividades_seguimiento
     op.create_table(
         'actividades_seguimiento',
         sa.Column('id', sa.Uuid(), nullable=False),
@@ -85,7 +72,6 @@ def upgrade() -> None:
         unique=False,
         schema='seguimiento',
     )
-
 
 def downgrade() -> None:
     op.drop_table('actividades_seguimiento', schema='seguimiento')

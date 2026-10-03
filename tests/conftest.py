@@ -1,5 +1,3 @@
-"""Configuración y fixtures para pruebas con pytest."""
-
 import uuid
 import pytest
 from sqlalchemy import create_engine
@@ -14,17 +12,14 @@ from invetraz.dominio.entidades.usuario import Usuario
 
 CLAVE_MAESTRA_TEST = "clave_maestra_de_prueba_con_mas_de_32_caracteres_12345"
 
-
 @pytest.fixture(name="db_sesion")
 def fixture_db_sesion():
-    # SQLite en memoria para tests unitarios
     motor = create_engine(
         "sqlite:///:memory:",
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
 
-    # SQLite no maneja esquemas nativos como PostgreSQL, así que quitamos schema para los tests en memoria
     for tabla in Base.metadata.tables.values():
         tabla.schema = None
 
@@ -38,7 +33,6 @@ def fixture_db_sesion():
         sesion.close()
         Base.metadata.drop_all(bind=motor)
 
-
 @pytest.fixture(name="cliente_http")
 def fixture_cliente_http(db_sesion: Session):
     app = create_app()
@@ -46,7 +40,6 @@ def fixture_cliente_http(db_sesion: Session):
     with TestClient(app) as cliente:
         yield cliente
     app.dependency_overrides.clear()
-
 
 @pytest.fixture(name="usuario_admin")
 def fixture_usuario_admin(db_sesion: Session):

@@ -1,9 +1,4 @@
-"""Módulo de hashing y verificación de contraseñas con BCrypt.
-Compatible con los hashes generados por Spring Security BCryptPasswordEncoder.
-"""
-
 import bcrypt
-
 
 class PasswordService:
     @staticmethod

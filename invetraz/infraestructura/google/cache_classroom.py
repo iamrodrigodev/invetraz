@@ -1,8 +1,5 @@
-"""Caché en memoria con tiempo de vida (TTL) para consultas a Google Classroom."""
-
 from typing import Any, Dict, Optional
 from cachetools import TTLCache
-
 
 class CacheClassroom:
     """Almacena en memoria las listas de clases durante 60 segundos."""

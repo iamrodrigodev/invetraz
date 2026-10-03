@@ -66,7 +66,7 @@ export const TarjetaDocOAuthPlayground: React.FC = () => {
 					<li>
 						En <strong>Step 2</strong>, haz clic en{" "}
 						<strong>Exchange authorization code for tokens</strong> y copia el valor del campo{" "}
-						<strong>Refresh token</strong> (comienza usualmente con <code>1{/* 04... */}</code>).
+						<strong>Refresh token</strong> (comienza usualmente con <code>1</code>).
 					</li>
 					<li>
 						Pega las 3 credenciales en la pantalla de Configuración y haz clic en{" "}

@@ -1,5 +1,3 @@
-"""Adaptador para Google Drive API implementando PuertoGoogleDrive."""
-
 import re
 from typing import List, Optional
 from googleapiclient.errors import HttpError
@@ -7,7 +5,6 @@ from invetraz.dominio.entidades.configuracion import ConfiguracionSistema
 from invetraz.dominio.entidades.plantilla import PlantillaXlsx
 from invetraz.dominio.excepciones.base import CodigosDeError, ExcepcionDominio
 from invetraz.infraestructura.google.fabrica_clientes import FabricaClientesGoogle
-
 
 class AdaptadorGoogleDrive:
     """Implementa operaciones con Google Drive API para carpetas y plantillas Excel."""
@@ -29,7 +26,6 @@ class AdaptadorGoogleDrive:
         if coincidencia_id:
             return coincidencia_id.group(1)
 
-        # Si no tiene barras ni parámetros, tomar directamente como ID
         if "/" not in texto and "?" not in texto:
             return texto
 

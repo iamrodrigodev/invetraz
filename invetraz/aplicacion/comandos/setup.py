@@ -1,5 +1,3 @@
-"""Comandos de configuración inicial (Setup) del sistema."""
-
 from dataclasses import dataclass
 import uuid
 from invetraz.aplicacion.comandos.base import ComandoBase
@@ -8,11 +6,9 @@ from invetraz.aplicacion.puertos.seguridad import PuertoHashPassword
 from invetraz.dominio.entidades.usuario import Usuario
 from invetraz.dominio.excepciones.base import CodigosDeError, ExcepcionDominio
 
-
 @dataclass
 class EstadoSetup:
     admin_configurado: bool
-
 
 class ComandoObtenerEstadoSetup(ComandoBase[EstadoSetup]):
     def __init__(self, repo_usuarios: PuertoRepositorioUsuarios):
@@ -21,7 +17,6 @@ class ComandoObtenerEstadoSetup(ComandoBase[EstadoSetup]):
     def ejecutar(self) -> EstadoSetup:
         configurado = self.repo_usuarios.existe_algun_usuario()
         return EstadoSetup(admin_configurado=configurado)
-
 
 class ComandoCrearAdmin(ComandoBase[Usuario]):
     def __init__(

@@ -1,5 +1,3 @@
-"""Comandos de autenticación y gestión de credenciales de usuario."""
-
 from dataclasses import dataclass
 import uuid
 from invetraz.aplicacion.comandos.base import ComandoBase
@@ -11,12 +9,10 @@ from invetraz.aplicacion.puertos.seguridad import (
 )
 from invetraz.dominio.excepciones.base import CodigosDeError, ExcepcionDominio
 
-
 @dataclass
 class ResultadoLogin:
     token: str
     email: str
-
 
 class ComandoLogin(ComandoBase[ResultadoLogin]):
     def __init__(
@@ -50,7 +46,6 @@ class ComandoLogin(ComandoBase[ResultadoLogin]):
         token = self.servicio_jwt.generar_token(usuario.id, rol="ADMIN")
         return ResultadoLogin(token=token, email=usuario.email)
 
-
 class ComandoVerificarPassword(ComandoBase[None]):
     def __init__(
         self,
@@ -78,7 +73,6 @@ class ComandoVerificarPassword(ComandoBase[None]):
             raise ExcepcionDominio(CodigosDeError.CONTRASENA_ACTUAL_INCORRECTA)
 
         self.limitador.limpiar_intentos(clave_bloqueo)
-
 
 class ComandoCambiarPassword(ComandoBase[None]):
     def __init__(

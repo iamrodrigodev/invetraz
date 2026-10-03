@@ -1,12 +1,9 @@
-"""Adaptador de persistencia para Usuarios utilizando SQLAlchemy 2.0."""
-
 from typing import Optional
 import uuid
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 from invetraz.dominio.entidades.usuario import Usuario
 from invetraz.infraestructura.base_de_datos.modelos.usuario_modelo import UsuarioModelo
-
 
 class RepositorioUsuariosSqlAlchemy:
     def __init__(self, sesion: Session):

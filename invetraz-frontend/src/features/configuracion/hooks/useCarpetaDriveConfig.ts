@@ -1,4 +1,3 @@
-/* v8 ignore file -- ramas defensivas de UI cubiertas por pruebas de integracion del modulo. */
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { VALIDATION_LIMITS } from "@/constants/validations.ts";

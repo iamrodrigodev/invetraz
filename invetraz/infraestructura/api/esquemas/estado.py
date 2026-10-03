@@ -1,7 +1,4 @@
-"""Esquemas Pydantic v2 para Estado y Readiness."""
-
 from pydantic import BaseModel, Field
-
 
 class ReadinessRespuesta(BaseModel):
     listo: bool

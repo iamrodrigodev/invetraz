@@ -1,8 +1,5 @@
-"""Entidad de dominio Usuario."""
-
 from dataclasses import dataclass
 import uuid
-
 
 @dataclass
 class Usuario:

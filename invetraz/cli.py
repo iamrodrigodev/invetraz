@@ -1,7 +1,3 @@
-"""Interfaz de Línea de Comandos (CLI) de Invetraz.
-Inspirado en la herramienta de CLI de Apache Superset.
-"""
-
 import click
 import uvicorn
 from sqlalchemy import text
@@ -12,12 +8,10 @@ from invetraz.infraestructura.base_de_datos.sesion import FabricaSesion, motor_d
 from invetraz.infraestructura.base_de_datos.repositorios import RepositorioUsuariosSqlAlchemy
 from invetraz.infraestructura.seguridad import AdaptadorHashPassword
 
-
 @click.group()
 def cli():
     """Herramienta de administración y gestión para Invetraz (Sistema de Investigación)."""
     pass
-
 
 @cli.command("run")
 @click.option("--host", default=None, help="Dirección IP del servidor.")
@@ -40,7 +34,6 @@ def ejecutar_servidor(host: str | None, port: int | None, reload: bool, workers:
         workers=workers if not reload else 1,
     )
 
-
 def _obtener_config_alembic():
     from pathlib import Path
     from alembic.config import Config
@@ -53,7 +46,6 @@ def _obtener_config_alembic():
         if ruta.is_file():
             return Config(str(ruta))
     return Config("alembic.ini")
-
 
 @cli.command("init")
 def inicializar_base_de_datos():
@@ -79,12 +71,10 @@ def inicializar_base_de_datos():
         Base.metadata.create_all(bind=motor_db)
         click.echo("✅ Tablas sincronizadas con SQLAlchemy.")
 
-
 @cli.group("db")
 def grupo_db():
     """Comandos para gestión de migraciones de base de datos."""
     pass
-
 
 @grupo_db.command("upgrade")
 def db_upgrade():
@@ -95,7 +85,6 @@ def db_upgrade():
     command.upgrade(cfg, "head")
     click.echo("✅ Base de datos actualizada a 'head'.")
 
-
 @grupo_db.command("migrate")
 @click.option("-m", "--mensaje", required=True, help="Descripción del cambio.")
 def db_migrate(mensaje: str):
@@ -105,7 +94,6 @@ def db_migrate(mensaje: str):
     click.echo(f"📝 Generando migración: {mensaje}...")
     command.revision(cfg, autogenerate=True, message=mensaje)
     click.echo("✅ Migración generada.")
-
 
 @cli.command("create-admin")
 @click.option("--email", prompt="Correo del Administrador", help="Correo electrónico del administrador.")
@@ -132,10 +120,8 @@ def crear_admin(email: str, password: str):
     finally:
         sesion.close()
 
-
 def main():
     cli()
-
 
 if __name__ == "__main__":
     main()

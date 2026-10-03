@@ -1,17 +1,12 @@
-"""Esquemas Pydantic v2 para peticiones y respuestas de Plantillas y Google Drive."""
-
 from typing import Optional
 from pydantic import BaseModel, Field
-
 
 class VincularCarpetaDrivePeticion(BaseModel):
     carpetaId: str = Field(alias="carpetaId")
 
-
 class CarpetaPlantillasRespuestaDto(BaseModel):
     carpetaId: str = Field(serialization_alias="carpetaId")
     nombreCarpeta: str = Field(serialization_alias="nombreCarpeta")
-
 
 class PlantillaXlsxDto(BaseModel):
     id: str

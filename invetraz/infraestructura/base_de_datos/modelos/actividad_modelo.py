@@ -1,12 +1,9 @@
-"""Modelo ORM SQLAlchemy 2.0 para la tabla seguimiento.actividades_seguimiento."""
-
 from datetime import datetime
 from typing import Optional
 import uuid
 from sqlalchemy import DateTime, Float, Index, String, Uuid, func
 from sqlalchemy.orm import Mapped, mapped_column
 from invetraz.infraestructura.base_de_datos.sesion import Base
-
 
 class ActividadSeguimientoModelo(Base):
     __tablename__ = "actividades_seguimiento"

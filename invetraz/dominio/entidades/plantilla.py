@@ -1,8 +1,5 @@
-"""Entidad de dominio PlantillaXlsx de Google Drive."""
-
 from dataclasses import dataclass
 from typing import Optional
-
 
 @dataclass
 class PlantillaXlsx:

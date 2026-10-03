@@ -1,4 +1,3 @@
-/* v8 ignore file -- ramas defensivas de UI cubiertas por pruebas de integracion del modulo. */
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { Alert } from "@/components/ui/Alert.tsx";

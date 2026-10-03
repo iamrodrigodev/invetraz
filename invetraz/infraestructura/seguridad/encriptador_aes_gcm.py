@@ -1,12 +1,7 @@
-"""Adaptador de Criptografía AES-256-GCM.
-Totalmente compatible a nivel binario con AttributeEncryptor de Spring Boot.
-"""
-
 import base64
 import os
 from typing import Optional
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-
 
 class AdaptadorCriptografiaAesGcm:
     """Implementa PuertoCriptografia con AES-256-GCM y nonce de 12 bytes."""
@@ -20,7 +15,7 @@ class AdaptadorCriptografiaAesGcm:
     def encriptar(self, texto_plano: Optional[str]) -> Optional[str]:
         if texto_plano is None:
             return None
-        iv = os.urandom(12)  # 12 bytes IV
+        iv = os.urandom(12)
         datos = texto_plano.encode("utf-8")
         cifrado_y_tag = self._aesgcm.encrypt(iv, datos, None)
         cifrado_con_iv = iv + cifrado_y_tag
@@ -31,7 +26,7 @@ class AdaptadorCriptografiaAesGcm:
             return None
         try:
             crudo = base64.b64decode(texto_cifrado)
-            if len(crudo) < 28:  # 12 bytes IV + 16 bytes tag
+            if len(crudo) < 28:
                 raise ValueError("Longitud de texto cifrado insuficiente.")
             iv = crudo[:12]
             cifrado_y_tag = crudo[12:]

@@ -1,5 +1,3 @@
-"""Comandos para gestión y sincronización de Actividades de Seguimiento."""
-
 from datetime import datetime
 from typing import List, Optional
 import uuid
@@ -12,14 +10,12 @@ from invetraz.aplicacion.puertos.google import PuertoGoogleClassroom, PuertoGoog
 from invetraz.dominio.entidades.actividad import ActividadSeguimiento
 from invetraz.dominio.excepciones.base import CodigosDeError, ExcepcionDominio
 
-
 class ComandoListarActividades(ComandoBase[List[ActividadSeguimiento]]):
     def __init__(self, repo_actividades: PuertoRepositorioActividades):
         self.repo_actividades = repo_actividades
 
     def ejecutar(self) -> List[ActividadSeguimiento]:
         return self.repo_actividades.listar_todas_ordenadas()
-
 
 class ComandoSincronizarActividades(ComandoBase[List[ActividadSeguimiento]]):
     def __init__(
@@ -42,32 +38,25 @@ class ComandoSincronizarActividades(ComandoBase[List[ActividadSeguimiento]]):
         if not config.google_drive_folder_id:
             return self.repo_actividades.listar_todas_ordenadas()
 
-        # 1. Obtener plantillas disponibles en Google Drive para correlacionar IDs
         plantillas = self.servicio_drive.listar_plantillas_xlsx(config.google_drive_folder_id, config)
         mapa_plantillas = {p.id: p for p in plantillas}
 
-        # 2. Obtener clases donde es docente
         clases = self.servicio_classroom.listar_clases_como_docente(config)
 
         actividades_a_guardar: List[ActividadSeguimiento] = []
 
         for clase in clases:
-            # Temas de la clase
             temas = self.servicio_classroom.listar_temas_de_clase(clase.id, config)
             mapa_temas = {t.id: t.nombre for t in temas}
 
-            # Tareas de la clase
             tareas = self.servicio_classroom.listar_tareas_de_clase(clase.id, config)
             for tarea in tareas:
-                # Buscar si la tarea ya fue registrada o si corresponde a una actividad
                 existente = self.repo_actividades.obtener_por_id_tarea(tarea.id)
                 id_plantilla = existente.id_plantilla_drive if existente else ""
                 nombre_plantilla = existente.nombre_plantilla if existente else None
                 enlace_plantilla = existente.enlace_plantilla if existente else None
 
-                # Si no tiene plantilla vinculada pero hay coincidencia en plantillas
                 if not id_plantilla and plantillas:
-                    # Por defecto o primera plantilla encontrada
                     id_plantilla = plantillas[0].id
                     nombre_plantilla = plantillas[0].nombre
                     enlace_plantilla = plantillas[0].enlace_web

@@ -1,4 +1,3 @@
-/* v8 ignore file -- ramas defensivas de UI cubiertas por pruebas de integracion del modulo. */
 import { FileSpreadsheet, FolderGit2, RefreshCw, Settings } from "lucide-react";
 import type React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";

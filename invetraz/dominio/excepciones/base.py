@@ -1,10 +1,5 @@
-"""Módulo de excepciones del dominio.
-Define los códigos de error estándar y la excepción personalizada del sistema.
-"""
-
 from enum import Enum
 from typing import Any
-
 
 class CodigosDeError(Enum):
     """Catálogo de errores con mensaje en español y código de estado HTTP."""
@@ -109,7 +104,6 @@ class CodigosDeError(Enum):
     @property
     def codigo(self) -> int:
         return self.value[1]
-
 
 class ExcepcionDominio(Exception):
     """Excepción base del dominio para reglas de negocio."""

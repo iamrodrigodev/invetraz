@@ -1,10 +1,7 @@
-"""Pruebas unitarias para el módulo de cifrado AES-256-GCM."""
-
 import pytest
 from invetraz.infraestructura.seguridad.encriptador_aes_gcm import AdaptadorCriptografiaAesGcm
 
 CLAVE_MAESTRA = "super_secret_master_key_for_aes_encryption_long"
-
 
 def test_encriptar_y_desencriptar_correctamente():
     encriptador = AdaptadorCriptografiaAesGcm(CLAVE_MAESTRA)
@@ -17,18 +14,15 @@ def test_encriptar_y_desencriptar_correctamente():
     desencriptado = encriptador.desencriptar(cifrado)
     assert desencriptado == texto_original
 
-
 def test_manejo_de_nulos_y_vacios():
     encriptador = AdaptadorCriptografiaAesGcm(CLAVE_MAESTRA)
     assert encriptador.encriptar(None) is None
     assert encriptador.desencriptar(None) is None
     assert encriptador.desencriptar("") is None
 
-
 def test_error_con_clave_corta():
     with pytest.raises(ValueError, match="al menos 32 caracteres"):
         AdaptadorCriptografiaAesGcm("corta")
-
 
 def test_error_con_texto_cifrado_corrupto():
     encriptador = AdaptadorCriptografiaAesGcm(CLAVE_MAESTRA)

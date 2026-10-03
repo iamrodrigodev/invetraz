@@ -1,13 +1,7 @@
-"""Módulo de cifrado AES-256-GCM.
-Totalmente compatible a nivel binario con el AttributeEncryptor de Spring Boot.
-Permite leer y escribir los tokens de Google encriptados en la base de datos sin alterar ningún dato existente.
-"""
-
 import base64
 import os
 from typing import Optional
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-
 
 class AttributeEncryptor:
     """Encriptador y desencriptador simétrico AES-256-GCM idéntico a Java."""
@@ -15,7 +9,6 @@ class AttributeEncryptor:
     def __init__(self, master_key: str):
         if not master_key or len(master_key) < 32:
             raise ValueError("La llave maestra debe tener al menos 32 caracteres.")
-        # Utilizar exactamente los primeros 32 bytes en codificación UTF-8
         self._key = master_key[:32].encode("utf-8")
         self._aesgcm = AESGCM(self._key)
 
@@ -23,7 +16,7 @@ class AttributeEncryptor:
         """Encripta una cadena de texto en formato Base64(IV_12_bytes + Ciphertext + Tag_16_bytes)."""
         if plain_text is None:
             return None
-        iv = os.urandom(12)  # 12 bytes nonce/IV
+        iv = os.urandom(12)
         data = plain_text.encode("utf-8")
         ciphertext_and_tag = self._aesgcm.encrypt(iv, data, None)
         cipher_with_iv = iv + ciphertext_and_tag
@@ -35,7 +28,7 @@ class AttributeEncryptor:
             return None
         try:
             raw = base64.b64decode(encrypted_b64)
-            if len(raw) < 28:  # 12 bytes IV + 16 bytes tag mínimo
+            if len(raw) < 28:
                 raise ValueError("Payload cifrado demasiado corto.")
             iv = raw[:12]
             ciphertext_and_tag = raw[12:]

@@ -1,10 +1,5 @@
-"""Excepciones de dominio y catálogo de códigos de error de Invetraz.
-Preserva exactamente los códigos de estado HTTP y los mensajes del sistema para compatibilidad con el frontend.
-"""
-
 from enum import Enum
 from typing import Any
-
 
 class CodigosDeError(Enum):
     ADMIN_YA_CONFIGURADO = ("El administrador ya ha sido configurado previamente", 403)
@@ -107,7 +102,6 @@ class CodigosDeError(Enum):
     @property
     def codigo(self) -> int:
         return self.value[1]
-
 
 class ExcepcionPersonalizada(Exception):
     """Excepción de dominio que transporta un código de error tipado."""

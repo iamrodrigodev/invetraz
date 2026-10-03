@@ -1,5 +1,3 @@
-"""Comandos para gestión de plantillas de Google Drive."""
-
 from dataclasses import dataclass
 from typing import List
 from invetraz.aplicacion.comandos.base import ComandoBase
@@ -11,12 +9,10 @@ from invetraz.aplicacion.puertos.google import PuertoGoogleDrive
 from invetraz.dominio.entidades.plantilla import PlantillaXlsx
 from invetraz.dominio.excepciones.base import CodigosDeError, ExcepcionDominio
 
-
 @dataclass
 class CarpetaPlantillasInfo:
     id_carpeta: str
     nombre_carpeta: str
-
 
 class ComandoVincularCarpetaDrive(ComandoBase[CarpetaPlantillasInfo]):
     def __init__(
@@ -43,7 +39,6 @@ class ComandoVincularCarpetaDrive(ComandoBase[CarpetaPlantillasInfo]):
         self.repo_config.guardar(config)
 
         return CarpetaPlantillasInfo(id_carpeta=id_limpio, nombre_carpeta=nombre_carpeta)
-
 
 class ComandoListarPlantillas(ComandoBase[List[PlantillaXlsx]]):
     def __init__(

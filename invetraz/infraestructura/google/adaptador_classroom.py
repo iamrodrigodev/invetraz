@@ -1,5 +1,3 @@
-"""Adaptador para Google Classroom API implementando PuertoGoogleClassroom."""
-
 from datetime import datetime
 import re
 from typing import Any, List, Optional
@@ -9,7 +7,6 @@ from invetraz.dominio.entidades.configuracion import ConfiguracionSistema
 from invetraz.dominio.excepciones.base import CodigosDeError, ExcepcionDominio
 from invetraz.infraestructura.google.fabrica_clientes import FabricaClientesGoogle
 from invetraz.infraestructura.google.cache_classroom import CacheClassroom
-
 
 class AdaptadorGoogleClassroom:
     """Implementa las operaciones de Google Classroom con manejo de errores y caché."""

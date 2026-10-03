@@ -1,11 +1,8 @@
-"""Fábrica de credenciales y clientes oficiales de Google API en Python."""
-
 from typing import Any
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from invetraz.dominio.entidades.configuracion import ConfiguracionSistema
 from invetraz.dominio.excepciones.base import CodigosDeError, ExcepcionDominio
-
 
 class FabricaClientesGoogle:
     """Crea clientes autenticados para Google Classroom y Google Drive."""

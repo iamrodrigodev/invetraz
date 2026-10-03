@@ -1,5 +1,3 @@
-"""Rutas de Google Classroom."""
-
 from typing import List
 from fastapi import APIRouter, Body
 from invetraz.aplicacion.comandos.clases import (
@@ -24,7 +22,6 @@ from invetraz.infraestructura.api.esquemas import (
 )
 
 enrutador = APIRouter(prefix="/clases", tags=["Clases"])
-
 
 @enrutador.get("/como-docente", response_model=ApiRespuesta[List[ClaseRespuesta]])
 def listar_como_docente(
@@ -51,7 +48,6 @@ def listar_como_docente(
     ]
     return ApiRespuesta.exitoso(mensaje="Clases como docente obtenidas exitosamente", datos=datos)
 
-
 @enrutador.get("/como-estudiante", response_model=ApiRespuesta[List[ClaseRespuesta]])
 def listar_como_estudiante(
     _usuario: UsuarioActualDep,
@@ -76,7 +72,6 @@ def listar_como_estudiante(
         for c in clases
     ]
     return ApiRespuesta.exitoso(mensaje="Clases como estudiante obtenidas exitosamente", datos=datos)
-
 
 @enrutador.get("/{id_clase}/tareas", response_model=ApiRespuesta[List[TareaRespuesta]])
 def listar_tareas(
@@ -107,7 +102,6 @@ def listar_tareas(
     ]
     return ApiRespuesta.exitoso(mensaje="Tareas de la clase obtenidas exitosamente", datos=datos)
 
-
 @enrutador.get("/{id_clase}/temas", response_model=ApiRespuesta[List[TemaRespuesta]])
 def listar_temas(
     id_clase: str,
@@ -126,7 +120,6 @@ def listar_temas(
         for t in temas
     ]
     return ApiRespuesta.exitoso(mensaje="Temas de la clase obtenidos exitosamente", datos=datos)
-
 
 @enrutador.post("/{id_clase}/tareas", response_model=ApiRespuesta[TareaRespuesta])
 def crear_tarea(
@@ -160,7 +153,6 @@ def crear_tarea(
         enlace=creada.enlace,
     )
     return ApiRespuesta.exitoso(mensaje="Tarea creada exitosamente", datos=dto, codigo=201)
-
 
 @enrutador.post("", response_model=ApiRespuesta[None])
 def archivar_clase(

@@ -1,8 +1,5 @@
-"""Puertos de Seguridad, Criptografía y Control de Acceso."""
-
 from typing import Any, Dict, Optional, Protocol
 import uuid
-
 
 class PuertoCriptografia(Protocol):
     """Contrato para cifrado simétrico de datos sensibles (tokens OAuth)."""
@@ -13,7 +10,6 @@ class PuertoCriptografia(Protocol):
     def desencriptar(self, texto_cifrado: Optional[str]) -> Optional[str]:
         ...
 
-
 class PuertoTokenJwt(Protocol):
     """Contrato para generación y validación de tokens JWT."""
 
@@ -23,7 +19,6 @@ class PuertoTokenJwt(Protocol):
     def validar_y_obtener_payload(self, token: str) -> Optional[Dict[str, Any]]:
         ...
 
-
 class PuertoHashPassword(Protocol):
     """Contrato para verificación y hash seguro de contraseñas."""
 
@@ -32,7 +27,6 @@ class PuertoHashPassword(Protocol):
 
     def verificar(self, password_plana: str, password_hash: str) -> bool:
         ...
-
 
 class PuertoLimitadorIntentos(Protocol):
     """Contrato para control de tasa (Rate Limiting) en autenticación."""

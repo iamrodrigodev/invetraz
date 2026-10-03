@@ -1,11 +1,8 @@
-"""Adaptador para generación y validación de tokens JWT."""
-
 import base64
 import time
 from typing import Any, Dict, Optional
 import uuid
 import jwt
-
 
 class AdaptadorTokenJwt:
     """Implementa PuertoTokenJwt firmando tokens con HMAC-SHA256."""

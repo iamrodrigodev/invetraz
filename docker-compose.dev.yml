@@ -1,8 +1,3 @@
-# ==============================================================================
-# Invetraz (Plataforma de Gestión y Seguimiento de Investigación) - Docker Compose para Desarrollo
-# Permite levantar la base de datos PostgreSQL localmente para desarrollo
-# ==============================================================================
-
 services:
   db:
     image: postgres:16-alpine

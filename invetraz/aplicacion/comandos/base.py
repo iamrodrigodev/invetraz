@@ -1,12 +1,7 @@
-"""Clase base para todos los Comandos de la Capa de Aplicación.
-Inspirado en el patrón Command de Apache Superset.
-"""
-
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
 T = TypeVar("T")
-
 
 class ComandoBase(ABC, Generic[T]):
     """Define el contrato de ejecución y validación de una acción de negocio."""

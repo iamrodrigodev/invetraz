@@ -1,5 +1,3 @@
-"""Rutas de verificación de estado y readiness de Invetraz."""
-
 from fastapi import APIRouter
 from invetraz.aplicacion.comandos.estado import ComandoVerificarReadiness
 from invetraz.infraestructura.api.dependencias import RepoConfigDep
@@ -7,13 +5,11 @@ from invetraz.infraestructura.api.esquemas import ApiRespuesta, ReadinessRespues
 
 enrutador = APIRouter(prefix="/estado", tags=["Estado"])
 
-
 @enrutador.get("", response_model=ApiRespuesta[None])
 def verificar_estado():
     return ApiRespuesta.exitoso(
         mensaje="El sistema de investigacion esta funcionando correctamente."
     )
-
 
 @enrutador.get("/readiness", response_model=ApiRespuesta[ReadinessRespuesta])
 def verificar_readiness(repo_config: RepoConfigDep):

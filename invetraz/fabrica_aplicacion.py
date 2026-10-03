@@ -1,7 +1,3 @@
-"""Fábrica de Aplicación (create_app) para Invetraz.
-Inspirado en el patrón create_app de Apache Superset.
-"""
-
 from contextlib import asynccontextmanager
 import time
 import uuid
@@ -14,14 +10,9 @@ from invetraz.dominio.excepciones.base import CodigosDeError, ExcepcionDominio
 from invetraz.infraestructura.api.v1.enrutador_principal import enrutador_v1
 from invetraz.infraestructura.servidor_estaticos import configurar_servidor_estaticos
 
-
 @asynccontextmanager
 async def ciclo_de_vida(app: FastAPI):
-    # Inicialización al arrancar
     yield
-    # Limpieza al detener
-
-
 def create_app() -> FastAPI:
     settings = get_settings()
 
@@ -32,7 +23,6 @@ def create_app() -> FastAPI:
         lifespan=ciclo_de_vida,
     )
 
-    # Middleware de Trace ID y Tiempo de Respuesta
     @app.middleware("http")
     async def middleware_rastreo(request: Request, call_next):
         id_rastreo = request.headers.get("x-trace-id", str(uuid.uuid4()))
@@ -44,7 +34,6 @@ def create_app() -> FastAPI:
         response.headers["x-response-time"] = f"{duracion_ms:.2f}ms"
         return response
 
-    # Configuración de CORS
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins_list,
@@ -53,7 +42,6 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    # Manejo de Excepciones de Dominio
     @app.exception_handler(ExcepcionDominio)
     async def manejador_excepcion_dominio(request: Request, exc: ExcepcionDominio):
         id_rastreo = getattr(request.state, "id_rastreo", None)
@@ -68,7 +56,6 @@ def create_app() -> FastAPI:
             },
         )
 
-    # Manejo de Errores de Validación de Pydantic
     @app.exception_handler(RequestValidationError)
     async def manejador_error_validacion(request: Request, exc: RequestValidationError):
         id_rastreo = getattr(request.state, "id_rastreo", None)
@@ -83,7 +70,6 @@ def create_app() -> FastAPI:
             },
         )
 
-    # Manejo de Errores Internos Inesperados
     @app.exception_handler(Exception)
     async def manejador_error_general(request: Request, exc: Exception):
         id_rastreo = getattr(request.state, "id_rastreo", None)
@@ -98,10 +84,8 @@ def create_app() -> FastAPI:
             },
         )
 
-    # Incluir enrutador de API v1
     app.include_router(enrutador_v1)
 
-    # Configurar servidor de SPA y archivos estáticos
     configurar_servidor_estaticos(app)
 
     return app

@@ -1,5 +1,3 @@
-"""Rutas de Actividades de Seguimiento."""
-
 from typing import List
 from fastapi import APIRouter
 from invetraz.aplicacion.comandos.actividades import (
@@ -19,7 +17,6 @@ from invetraz.infraestructura.api.esquemas import (
 )
 
 enrutador = APIRouter(prefix="/actividades-seguimiento", tags=["Actividades de Seguimiento"])
-
 
 @enrutador.get("", response_model=ApiRespuesta[List[ActividadSeguimientoDto]])
 def listar_actividades(
@@ -50,7 +47,6 @@ def listar_actividades(
         for a in actividades
     ]
     return ApiRespuesta.exitoso(mensaje="Actividades obtenidas exitosamente", datos=datos)
-
 
 @enrutador.post("/sincronizar", response_model=ApiRespuesta[List[ActividadSeguimientoDto]])
 def sincronizar_actividades(

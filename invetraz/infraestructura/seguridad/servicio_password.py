@@ -1,7 +1,4 @@
-"""Adaptador para hashing de contraseñas con BCrypt."""
-
 import bcrypt
-
 
 class AdaptadorHashPassword:
     """Implementa PuertoHashPassword utilizando BCrypt."""

@@ -1,10 +1,7 @@
-"""Puertos de Integración con servicios de Google."""
-
 from typing import List, Optional, Protocol
 from invetraz.dominio.entidades.clase import ClaseClassroom, TareaClassroom, TemaClassroom
 from invetraz.dominio.entidades.plantilla import PlantillaXlsx
 from invetraz.dominio.entidades.configuracion import ConfiguracionSistema
-
 
 class PuertoGoogleClassroom(Protocol):
     """Contrato para interactuar con Google Classroom API."""
@@ -36,7 +33,6 @@ class PuertoGoogleClassroom(Protocol):
 
     def archivar_clase(self, id_clase: str, config: ConfiguracionSistema) -> None:
         ...
-
 
 class PuertoGoogleDrive(Protocol):
     """Contrato para interactuar con Google Drive API."""

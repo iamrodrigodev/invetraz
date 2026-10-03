@@ -1,5 +1,3 @@
-"""Enrutador principal de la API v1 de Invetraz."""
-
 from fastapi import APIRouter
 from invetraz.infraestructura.api.v1.auth_rutas import enrutador as enrutador_auth
 from invetraz.infraestructura.api.v1.setup_rutas import enrutador as enrutador_setup

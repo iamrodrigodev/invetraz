@@ -1,4 +1,3 @@
-/* v8 ignore file -- ramas defensivas de UI cubiertas por pruebas de integracion del modulo. */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { TipoEstadoConexion } from "@/features/configuracion/components/EstadoConexionBadge.tsx";
 

@@ -1,12 +1,9 @@
-"""Comandos para interactuar con clases, tareas y temas de Google Classroom."""
-
 from typing import List, Optional
 from invetraz.aplicacion.comandos.base import ComandoBase
 from invetraz.aplicacion.puertos.repositorios import PuertoRepositorioConfiguracion
 from invetraz.aplicacion.puertos.google import PuertoGoogleClassroom
 from invetraz.dominio.entidades.clase import ClaseClassroom, TareaClassroom, TemaClassroom
 from invetraz.dominio.excepciones.base import CodigosDeError, ExcepcionDominio
-
 
 class ComandoListarClasesDocente(ComandoBase[List[ClaseClassroom]]):
     def __init__(
@@ -23,7 +20,6 @@ class ComandoListarClasesDocente(ComandoBase[List[ClaseClassroom]]):
             raise ExcepcionDominio(CodigosDeError.CREDENCIALES_GOOGLE_NO_VERIFICADAS)
         return self.servicio_classroom.listar_clases_como_docente(config)
 
-
 class ComandoListarClasesAlumno(ComandoBase[List[ClaseClassroom]]):
     def __init__(
         self,
@@ -38,7 +34,6 @@ class ComandoListarClasesAlumno(ComandoBase[List[ClaseClassroom]]):
         if not config or not config.google_verificado:
             raise ExcepcionDominio(CodigosDeError.CREDENCIALES_GOOGLE_NO_VERIFICADAS)
         return self.servicio_classroom.listar_clases_como_estudiante(config)
-
 
 class ComandoListarTareas(ComandoBase[List[TareaClassroom]]):
     def __init__(
@@ -57,7 +52,6 @@ class ComandoListarTareas(ComandoBase[List[TareaClassroom]]):
             raise ExcepcionDominio(CodigosDeError.CREDENCIALES_GOOGLE_NO_VERIFICADAS)
         return self.servicio_classroom.listar_tareas_de_clase(self.id_clase, config)
 
-
 class ComandoListarTemas(ComandoBase[List[TemaClassroom]]):
     def __init__(
         self,
@@ -74,7 +68,6 @@ class ComandoListarTemas(ComandoBase[List[TemaClassroom]]):
         if not config or not config.google_verificado:
             raise ExcepcionDominio(CodigosDeError.CREDENCIALES_GOOGLE_NO_VERIFICADAS)
         return self.servicio_classroom.listar_temas_de_clase(self.id_clase, config)
-
 
 class ComandoCrearTarea(ComandoBase[TareaClassroom]):
     def __init__(
@@ -114,7 +107,6 @@ class ComandoCrearTarea(ComandoBase[TareaClassroom]):
             puntaje_maximo=self.puntaje_maximo,
             config=config,
         )
-
 
 class ComandoArchivarClase(ComandoBase[None]):
     def __init__(

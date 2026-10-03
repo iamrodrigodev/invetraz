@@ -1,13 +1,8 @@
-"""Puertos de Repositorio (Interfaces secundarias de persistencia).
-Permiten desacoplar la lógica de aplicación del ORM SQLAlchemy.
-"""
-
 from typing import List, Optional, Protocol
 import uuid
 from invetraz.dominio.entidades.usuario import Usuario
 from invetraz.dominio.entidades.configuracion import ConfiguracionSistema
 from invetraz.dominio.entidades.actividad import ActividadSeguimiento
-
 
 class PuertoRepositorioUsuarios(Protocol):
     """Contrato para la persistencia de usuarios administradores."""
@@ -27,7 +22,6 @@ class PuertoRepositorioUsuarios(Protocol):
     def actualizar_password(self, id_usuario: uuid.UUID, nueva_password_hash: str) -> None:
         ...
 
-
 class PuertoRepositorioConfiguracion(Protocol):
     """Contrato para la persistencia de la configuración del sistema (Singleton)."""
 
@@ -36,7 +30,6 @@ class PuertoRepositorioConfiguracion(Protocol):
 
     def guardar(self, configuracion: ConfiguracionSistema) -> ConfiguracionSistema:
         ...
-
 
 class PuertoRepositorioActividades(Protocol):
     """Contrato para la persistencia de actividades de seguimiento."""

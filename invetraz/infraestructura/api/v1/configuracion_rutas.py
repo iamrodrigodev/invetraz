@@ -1,5 +1,3 @@
-"""Rutas de Configuración del Sistema."""
-
 from typing import Optional
 from fastapi import APIRouter
 from invetraz.aplicacion.comandos.configuracion import (
@@ -19,7 +17,6 @@ from invetraz.infraestructura.api.esquemas import (
 )
 
 enrutador = APIRouter(prefix="/configuracion", tags=["Configuración"])
-
 
 @enrutador.get("", response_model=ApiRespuesta[Optional[ConfiguracionSistemaDTO]])
 def obtener_configuracion(
@@ -42,7 +39,6 @@ def obtener_configuracion(
         driveVerificado=res.drive_verificado,
     )
     return ApiRespuesta.exitoso(mensaje="Configuración consultada", datos=dto)
-
 
 @enrutador.post("", response_model=ApiRespuesta[ConfiguracionSistemaDTO])
 def guardar_configuracion(
@@ -68,7 +64,6 @@ def guardar_configuracion(
         driveVerificado=res.drive_verificado,
     )
     return ApiRespuesta.exitoso(mensaje="Configuración guardada exitosamente", datos=dto)
-
 
 @enrutador.post("/verificar", response_model=ApiRespuesta[bool])
 def verificar_conexion_google(

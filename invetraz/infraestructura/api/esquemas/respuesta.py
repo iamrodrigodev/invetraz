@@ -1,11 +1,8 @@
-"""Envoltorio estándar de respuesta JSON compatible con ApiRespuesta del Frontend."""
-
 from datetime import datetime
 from typing import Any, Generic, Optional, TypeVar
 from pydantic import BaseModel, Field
 
 T = TypeVar("T")
-
 
 class ApiRespuesta(BaseModel, Generic[T]):
     """Envoltorio estándar idéntico al que espera el frontend React."""

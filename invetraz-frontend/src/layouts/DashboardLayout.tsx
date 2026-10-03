@@ -92,7 +92,7 @@ export function DashboardLayout({
 
 	return (
 		<div className="flex h-screen w-full overflow-hidden bg-slate-50 font-sans text-slate-800">
-			{/* Drawer móvil con animación Framer Motion */}
+			
 			<AnimatePresence>
 				{menuLateralAbierto && (
 					<div className="fixed inset-0 z-40 md:hidden">
@@ -138,7 +138,7 @@ export function DashboardLayout({
 				)}
 			</AnimatePresence>
 
-			{/* Barra lateral para Tablet y Desktop */}
+			
 			<aside
 				className={cn(
 					"hidden h-full shrink-0 transition-[width] duration-300 ease-in-out md:flex",

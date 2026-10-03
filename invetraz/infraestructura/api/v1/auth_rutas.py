@@ -1,5 +1,3 @@
-"""Rutas de Autenticación de Invetraz."""
-
 from typing import Optional
 from fastapi import APIRouter, Cookie, Depends, Header, Response
 from invetraz.aplicacion.comandos.autenticacion import (
@@ -29,7 +27,6 @@ from invetraz.infraestructura.api.esquemas import (
 
 enrutador = APIRouter(prefix="/auth", tags=["Autenticación"])
 
-
 @enrutador.post("/login", response_model=ApiRespuesta[LoginRespuesta])
 def login(
     peticion: LoginPeticion,
@@ -54,7 +51,6 @@ def login(
     from invetraz.config import get_settings
     settings = get_settings()
 
-    # Asignar cookie HTTP-Only 'jwt'
     respuesta_http.set_cookie(
         key="jwt",
         value=resultado.token,
@@ -70,7 +66,6 @@ def login(
         datos=LoginRespuesta(email=resultado.email),
     )
 
-
 @enrutador.post("/logout", response_model=ApiRespuesta[None])
 def logout(respuesta_http: Response):
     respuesta_http.set_cookie(
@@ -83,7 +78,6 @@ def logout(respuesta_http: Response):
         path="/",
     )
     return ApiRespuesta.exitoso(mensaje="Sesión cerrada correctamente")
-
 
 @enrutador.get("/me", response_model=ApiRespuesta[VerificarAutenticacionRespuesta])
 def verificar_me(
@@ -132,7 +126,6 @@ def verificar_me(
         datos=VerificarAutenticacionRespuesta(autenticado=True, email=usuario.email),
     )
 
-
 @enrutador.post("/verificar-password", response_model=ApiRespuesta[None])
 def verificar_password(
     peticion: VerificarPasswordPeticion,
@@ -152,7 +145,6 @@ def verificar_password(
     )
     comando.run()
     return ApiRespuesta.exitoso(mensaje="Contraseña correcta")
-
 
 @enrutador.put("/cambiar-password", response_model=ApiRespuesta[None])
 def cambiar_password(

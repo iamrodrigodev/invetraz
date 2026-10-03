@@ -1,9 +1,6 @@
-"""Comandos para verificación de estado y readiness del sistema."""
-
 from dataclasses import dataclass
 from invetraz.aplicacion.comandos.base import ComandoBase
 from invetraz.aplicacion.puertos.repositorios import PuertoRepositorioConfiguracion
-
 
 @dataclass
 class EstadoReadiness:
@@ -11,7 +8,6 @@ class EstadoReadiness:
     base_de_datos: bool
     google_cloud: bool
     google_drive: bool
-
 
 class ComandoVerificarReadiness(ComandoBase[EstadoReadiness]):
     def __init__(self, repo_config: PuertoRepositorioConfiguracion):

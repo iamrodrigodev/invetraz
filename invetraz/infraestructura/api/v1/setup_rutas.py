@@ -1,5 +1,3 @@
-"""Rutas de inicialización y setup de Invetraz."""
-
 from fastapi import APIRouter
 from invetraz.aplicacion.comandos.setup import ComandoCrearAdmin, ComandoObtenerEstadoSetup
 from invetraz.infraestructura.api.dependencias import RepoUsuariosDep, ServicioHashDep
@@ -11,7 +9,6 @@ from invetraz.infraestructura.api.esquemas import (
 
 enrutador = APIRouter(prefix="/setup", tags=["Setup"])
 
-
 @enrutador.get("/estado", response_model=ApiRespuesta[EstadoSetupRespuesta])
 def obtener_estado_setup(repo_usuarios: RepoUsuariosDep):
     comando = ComandoObtenerEstadoSetup(repo_usuarios=repo_usuarios)
@@ -20,7 +17,6 @@ def obtener_estado_setup(repo_usuarios: RepoUsuariosDep):
         mensaje="Estado del sistema consultado",
         datos=EstadoSetupRespuesta(adminConfigurado=resultado.admin_configurado),
     )
-
 
 @enrutador.post("/crear-admin", response_model=ApiRespuesta[None])
 def crear_admin(

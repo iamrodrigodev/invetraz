@@ -1,12 +1,9 @@
-"""Adaptador de persistencia para Actividades de Seguimiento con SQLAlchemy 2.0."""
-
 from typing import List, Optional
 import uuid
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 from invetraz.dominio.entidades.actividad import ActividadSeguimiento
 from invetraz.infraestructura.base_de_datos.modelos.actividad_modelo import ActividadSeguimientoModelo
-
 
 class RepositorioActividadesSqlAlchemy:
     def __init__(self, sesion: Session):

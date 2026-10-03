@@ -1,20 +1,14 @@
-"""Adaptador en memoria para limitación de tasa de intentos (Rate Limiter).
-Réplica exacta del comportamiento de ServicioLimitadorIntentos de Java.
-"""
-
 from dataclasses import dataclass
 import threading
 import time
 from typing import Dict
 from invetraz.dominio.excepciones.base import CodigosDeError, ExcepcionDominio
 
-
 @dataclass
 class _RegistroIntento:
     intentos: int
     inicio_ventana: float
     bloqueado_hasta: float
-
 
 class AdaptadorLimitadorIntentos:
     """Implementa PuertoLimitadorIntentos con ventana deslizante thread-safe."""
